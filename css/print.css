@@ -1,0 +1,95 @@
+/* ==========================================================================
+   HIGH-PRECISION PRINT STYLESHEET
+   Matches reference image for pixel-perfect A4 PDF / Print
+   ========================================================================== */
+
+@page {
+  size: A4 portrait;
+  margin: 15mm 15mm 15mm 15mm;
+}
+
+@media print {
+  /* Hide UI elements */
+  .app-nav,
+  .sidebar-panel,
+  .btn-upload-logo-text,
+  .btn-del-line,
+  .btn-add-line-plain,
+  .btn-remove-logo,
+  .col-action,
+  .toast-notice,
+  .app-footer-clean,
+  .no-print {
+    display: none !important;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #1f2937 !important;
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .app-container {
+    display: block !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .invoice-paper {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Form inputs appear as plain printed text */
+  input, textarea, select {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    resize: none !important;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: transparent !important;
+  }
+
+  /* Preserve reference header table background */
+  .ref-table thead tr {
+    background-color: #383838 !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Preserve Balance Due Gray Bar */
+  .balance-due-banner {
+    background-color: #f3f4f6 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .ref-table th.col-action,
+  .ref-table td:last-child {
+    display: none !important;
+  }
+
+  .paper-top-row,
+  .billing-section-row,
+  .ref-table tr,
+  .paper-bottom-grid {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}

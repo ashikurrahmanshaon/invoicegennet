@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Invoice-Gen.net - Empowering Global Invoicing Since 2016</title>
+  <meta name="description" content="Learn about Invoice-Gen.net, established in 2016. Discover our mission to provide fast, private, client-side vector invoicing for freelancers and businesses worldwide.">
+  <link rel="canonical" href="https://invoice-gen.net/about.html">
+  <meta name="theme-color" content="#00c875">
+
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=fallback" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+  <style>
+    .about-card-stat {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 28px 24px;
+      text-align: center;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .about-card-stat:hover {
+      transform: translateY(-2px);
+      border-color: #cbd5e1;
+    }
+    .stat-number {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-size: 0.875rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+    .about-content-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 40px;
+      margin-bottom: 32px;
+    }
+    .about-content-section h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .about-content-section p {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .about-feature-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .about-feature-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .about-feature-box h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .about-feature-box p {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-bottom: 0;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Authentic SaaS Top Navigation -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="38" height="38">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+                  <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+                  <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <div class="mobile-lang-wrap"></div>
+        <a href="login.html" class="btn-login" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" data-i18n="btn_signup">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-container">
+
+    <!-- Hero Header -->
+    <div class="page-hero-wrap">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        ESTABLISHED 2016 • INVOICE INNOVATION
+      </div>
+      <h1 class="hero-title" style="font-size: 2.75rem; margin-top: 14px;">
+        Simplifying Global Invoicing Since 2016
+      </h1>
+      <p class="hero-subtitle" style="max-width: 680px; margin: 16px auto 0;">
+        Invoice-Gen.net was founded with a singular purpose: to give freelancers, consultants, and growing businesses a blisteringly fast, privacy-first invoice generator with zero bloated fees or invasive tracking.
+      </p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 48px;">
+      <div class="about-card-stat">
+        <div class="stat-number">2016 - 2026</div>
+        <div class="stat-label">10 Years of Continuous Operation</div>
+      </div>
+      <div class="about-card-stat">
+        <div class="stat-number">190+</div>
+        <div class="stat-label">Countries &amp; Territories Reached</div>
+      </div>
+      <div class="about-card-stat">
+        <div class="stat-number">30+</div>
+        <div class="stat-label">Global Currencies Supported</div>
+      </div>
+      <div class="about-card-stat">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Client-Side Privacy Architecture</div>
+      </div>
+    </div>
+
+    <!-- Section 1: Our Story -->
+    <div class="about-content-section" id="story">
+      <h2>Our Story &amp; Vision</h2>
+      <p>
+        In 2016, creating a clean invoice online meant either installing heavy desktop software or signing up for predatory SaaS subscriptions that held customer documents hostage behind monthly paywalls.
+      </p>
+      <p>
+        Invoice-Gen.net changed that by pioneering an effortless web-first experience: open the site, enter your line items, choose your currency, and immediately download a razor-sharp vector PDF. No forced sign-up, no hidden fees, and zero server logging of sensitive trade details.
+      </p>
+
+      <div class="about-feature-row">
+        <div class="about-feature-box">
+          <div class="box-icon-frame" style="margin-bottom: 12px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h4>Privacy by Design</h4>
+          <p>Your client list, invoice balances, and bank details are computed directly in your browser without ever being uploaded to unauthorized databases.</p>
+        </div>
+        <div class="about-feature-box">
+          <div class="box-icon-frame" style="margin-bottom: 12px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h4>Instant Vector Rendering</h4>
+          <p>Our PDF layout engine delivers pixel-perfect, crisp vector documents formatted to universal A4 standard for professional printing and emailing.</p>
+        </div>
+        <div class="about-feature-box">
+          <div class="box-icon-frame" style="margin-bottom: 12px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h4>Modern Gateway Integration</h4>
+          <p>Seamlessly generate invoices pre-configured for Stripe card payments (Visa, Mastercard, Amex) and PayPal Express checkout.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Core Values -->
+    <div class="about-content-section" id="mission">
+      <h2>Our Core Values</h2>
+      <p>
+        We believe independent creators and small enterprises are the backbone of the modern global digital economy. Our platform exists to protect their time and safeguard their financial autonomy.
+      </p>
+      <ul style="color: #475569; font-size: 0.95rem; line-height: 1.8; padding-left: 20px;">
+        <li><strong>Speed First:</strong> You shouldn't spend more than 60 seconds generating and sending a professional bill.</li>
+        <li><strong>Zero Data Hostage:</strong> All your invoice templates and saved state remain under your control in local browser storage.</li>
+        <li><strong>Fair &amp; Transparent:</strong> A permanently free tier for everyone, complemented by optional Pro and Lifetime upgrades for teams requiring multi-template branding.</li>
+      </ul>
+    </div>
+
+    <!-- Section 3: Contact & Support -->
+    <div class="about-content-section" id="contact">
+      <h2>Contact &amp; Support</h2>
+      <p>
+        Have questions about custom template integrations, payment gateways, or enterprise setups? Our dedicated support team is available worldwide.
+      </p>
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">General &amp; Technical Inquiries:</div>
+          <a href="mailto:support@invoice-gen.net" style="color: #00c875; font-weight: 600; text-decoration: none;">support@invoice-gen.net</a>
+        </div>
+        <div>
+          <a href="index.html" class="btn-signup-free" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            Create an Invoice Now
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer-saas">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="38" height="38">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p data-i18n="footer_tagline">
+            The modern, private, and effortless online invoice generator. Helping freelancers and businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
+            <a href="templates.html" data-i18n="nav_templates">Templates</a>
+            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
+            <a href="payments.html">Payments Hub</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html" style="color: #00c875; font-weight: 700;">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/google-auth.js"></script>
+  <script src="js/instant-nav.js"></script>
+</body>
+</html>

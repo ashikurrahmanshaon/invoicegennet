@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
+  <defs>
+    <!-- Vibrant Green Gradient -->
+    <linearGradient id="docGrad" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00D07E" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <!-- Folded Corner Shadow -->
+    <linearGradient id="foldGrad" x1="30" y1="6" x2="35" y2="16" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00A860" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+
+  <!-- Clean Document Body (Zero Background Glow) -->
+  <path d="M11 6C9.34315 6 8 7.34315 8 9V39C8 40.6569 9.34315 42 11 42H37C38.6569 42 40 40.6569 40 39V17L29 6H11Z" fill="url(#docGrad)" />
+
+  <!-- Folded Corner Flap -->
+  <path d="M29 6V15C29 16.1046 29.8954 17 31 17H40L29 6Z" fill="url(#foldGrad)" />
+  <path d="M29 6L40 17H31C29.8954 17 29 16.1046 29 15V6Z" fill="#FFFFFF" fill-opacity="0.2" />
+
+  <!-- Document Lines (Rounded White Bars) -->
+  <rect x="14" y="22" width="16" height="3" rx="1.5" fill="#FFFFFF" />
+  <rect x="14" y="28" width="20" height="3" rx="1.5" fill="#FFFFFF" />
+  <rect x="14" y="34" width="14" height="3" rx="1.5" fill="#FFFFFF" />
+</svg>

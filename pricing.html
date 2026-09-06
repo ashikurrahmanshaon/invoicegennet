@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100% Free Forever | Invoice-Gen.net Pricing</title>
+  <meta name="description" content="InvoiceGen is 100% free forever. No credit cards, no monthly subscription fees, and no limits on the number of invoices you can create.">
+  <link rel="canonical" href="https://invoice-gen.net/pricing.html">
+  <meta name="theme-color" content="#00c875">
+
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=fallback" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+</head>
+<body>
+
+  <!-- Authentic SaaS Top Navigation -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="38" height="38">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+                  <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="nav-link-item active" data-i18n="nav_pricing">Pricing</a>
+      </nav>
+
+      <!-- Right Header Actions (Clean Minimalist Auth & Language Switcher) -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html?redirect=pricing" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html?redirect=pricing" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+                  <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="mobile-nav-item active" data-i18n="nav_pricing">Pricing</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html?redirect=pricing" class="btn-login" id="btnMobileLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html?redirect=pricing" class="btn-signup-free" id="btnMobileSignup" data-i18n="btn_signup">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Pricing Page Content -->
+  <main class="page-container">
+
+    <!-- Hero Header -->
+    <section class="page-hero-wrap">
+      <h1 class="page-hero-title" data-i18n="pricing_hero_title">
+        Simple, Transparent Pricing
+      </h1>
+      <p class="page-hero-sub" data-i18n="pricing_hero_sub">
+        Start free, upgrade to Pro for just $5/month, or own everything forever for $70.
+      </p>
+    </section>
+
+    <!-- Billing Switcher (Reference Image 2) -->
+    <div class="pricing-billing-switch-wrap">
+      <div class="pricing-billing-switch" role="tablist" aria-label="Billing frequency">
+        <button type="button" class="billing-switch-btn active" id="btnBillingMonthly" data-billing="monthly">
+          Monthly Billing
+        </button>
+        <button type="button" class="billing-switch-btn" id="btnBillingLifetime" data-billing="lifetime">
+          Lifetime Deal
+          <span class="billing-save-pill">Pay Once &bull; Save 80%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 3-Card Pricing Comparison Grid (Reference Image 1) -->
+    <section class="pricing-grid-3" id="pricingGrid">
+
+      <!-- Plan 1: Starter Plan ($0/mo) -->
+      <div class="pricing-v2-card" id="cardStarter">
+        <div class="pricing-v2-price">
+          <span class="pricing-v2-amount">$0</span>
+          <span class="pricing-v2-period">/ month</span>
+        </div>
+        
+        <div class="pricing-badge-row">
+          <span class="pricing-v2-badge badge-starter">Starter Plan</span>
+        </div>
+        
+        <p class="pricing-v2-sub">
+          For freelancers and individuals that want to create quick invoices.
+        </p>
+
+        <ul class="pricing-v2-features">
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Unlimited Classic invoices</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Instant vector PDF download</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>150+ Global currencies</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Local browser privacy &amp; auto-save</span>
+          </li>
+          <li class="pricing-v2-item item-disabled">
+            <span class="check-circle unchecked"></span>
+            <span>All 6 Pro templates</span>
+          </li>
+          <li class="pricing-v2-item item-disabled">
+            <span class="check-circle unchecked"></span>
+            <span>Cloud sync &amp; multi-device</span>
+          </li>
+          <li class="pricing-v2-item item-disabled">
+            <span class="check-circle unchecked"></span>
+            <span>Zero InvoiceGen watermark</span>
+          </li>
+        </ul>
+
+        <a href="index.html" class="btn-v2-plan btn-plan-outline">
+          Choose Plan
+        </a>
+      </div>
+
+      <!-- Plan 2: Basic Pro Plan ($5/mo) - [FEATURED CENTER CARD MATCHING IMAGE 1] -->
+      <div class="pricing-v2-card card-featured" id="cardPro">
+        <div class="pricing-v2-price">
+          <span class="pricing-v2-amount">$5</span>
+          <span class="pricing-v2-period">/ month</span>
+        </div>
+
+        <div class="pricing-badge-row">
+          <span class="pricing-v2-badge badge-pro-pill">Pro Plan</span>
+          <span class="pricing-v2-badge badge-popular-pill">Popular!</span>
+        </div>
+
+        <p class="pricing-v2-sub">
+          For growing businesses that want all templates and cloud sync.
+        </p>
+
+        <ul class="pricing-v2-features">
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-white">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Unlimited invoice generation</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-white">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>All 6 Pro templates unlocked</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-white">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Your personal dashboard</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-white">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Cloud sync &amp; multi-device backup</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-white">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Custom logo &amp; payment QR codes</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-white">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Zero ads, zero watermarks</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-white">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Fast chat &amp; priority email support</span>
+          </li>
+        </ul>
+
+        <a href="signup.html?plan=pro" class="btn-v2-plan btn-plan-featured">
+          Choose Plan
+        </a>
+      </div>
+
+      <!-- Plan 3: Lifetime Access ($70 one-time) -->
+      <div class="pricing-v2-card" id="cardLifetime">
+        <div class="pricing-v2-price">
+          <span class="pricing-v2-amount">$70</span>
+          <span class="pricing-v2-period">/ lifetime</span>
+        </div>
+
+        <div class="pricing-badge-row">
+          <span class="pricing-v2-badge badge-lifetime">Lifetime Plan</span>
+          <span class="pricing-v2-badge badge-save-pill">Pay Once</span>
+        </div>
+
+        <p class="pricing-v2-sub">
+          Pay once, own everything forever. Zero recurring monthly fees.
+        </p>
+
+        <ul class="pricing-v2-features">
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Everything in Pro included</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Pay once &bull; Zero monthly subscriptions</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>All future templates &amp; tools unlocked</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Unlimited cloud invoices storage</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Commercial client invoice rights</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>150+ Global currencies &amp; tax presets</span>
+          </li>
+          <li class="pricing-v2-item">
+            <span class="check-circle checked-emerald">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </span>
+            <span>Lifetime VIP updates &amp; priority queue</span>
+          </li>
+        </ul>
+
+        <a href="signup.html?plan=lifetime" class="btn-v2-plan btn-plan-outline">
+          Choose Plan
+        </a>
+      </div>
+
+    </section>
+
+
+    <!-- FAQ Section -->
+    <section style="max-width: 800px; margin: 0 auto;">
+      <h2 style="font-size: 1.75rem; font-weight: 800; text-align: center; margin-bottom: 28px; color: #0f172a; letter-spacing: -0.02em;">
+        Frequently Asked Questions
+      </h2>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="feature-box-card">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #0f172a;">How does the $70 Lifetime Deal work?</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6;">
+            You make a single one-time payment of $70. You receive permanent access to all Pro features, all current and future invoice templates, unlimited cloud storage, and priority support without ever paying another recurring fee.
+          </p>
+        </div>
+
+        <div class="feature-box-card">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #0f172a;">What is included in the $5/month plan?</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6;">
+            The $5/month plan gives you full access to all 6 Pro invoice templates, cloud server syncing, and PDF generation on a flexible month-to-month basis with no long-term contracts. You can cancel anytime with one click.
+          </p>
+        </div>
+
+        <div class="feature-box-card">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #0f172a;">Is the Classic invoice generator still free?</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6;">
+            Yes! The Classic Emerald generator is 100% free with zero sign-up or login required. You can generate and download unlimited PDF invoices immediately.
+          </p>
+        </div>
+
+        <div class="feature-box-card">
+          <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #0f172a;">Can I upgrade from $5/month to Lifetime later?</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6;">
+            Yes, you can upgrade from the $5/month subscription to the $70 Lifetime plan whenever you are ready directly from your account.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Call To Action -->
+    <section class="cta-banner-card" style="margin-top: 50px;">
+      <h2>Ready to Send Your First Professional Invoice?</h2>
+      <p>
+        Start generating clean, client-ready PDF invoices in seconds.
+      </p>
+      <a href="index.html" class="btn-cta-primary">
+        Open Invoice Generator &rarr;
+      </a>
+    </section>
+
+  </main>
+
+  <!-- Complete SaaS Footer -->
+  <footer class="saas-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="38" height="38">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p data-i18n="footer_tagline">
+            The modern, private, and effortless online invoice generator. Helping freelancers, designers, and growing businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
+            <a href="templates.html" data-i18n="nav_templates">Templates</a>
+            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
+            <a href="payments.html">Payments Hub</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true">
+    <div class="auth-modal-card">
+      <button type="button" class="btn-close-modal" id="btnCloseAuthModal" aria-label="Close modal">&times;</button>
+      <div class="auth-header">
+        <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo">
+        <h3 class="auth-title">Welcome to InvoiceGen</h3>
+        <p class="auth-sub">Sign in to save invoices and sync across devices</p>
+      </div>
+      <button type="button" class="btn-oauth-google" onclick="alert('Signed in with Google!')">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+        Continue with Google
+      </button>
+      <div class="oauth-divider"><span>OR EMAIL</span></div>
+      <form onsubmit="event.preventDefault(); alert('Signed in!'); document.getElementById('authModal').classList.remove('active');">
+        <div class="form-group">
+          <label class="form-label" for="authEmailModal">Work Email</label>
+          <input type="email" id="authEmailModal" class="form-input" placeholder="you@company.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="authPassModal">Password</label>
+          <input type="password" id="authPassModal" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-auth-submit">Continue</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Auth Continuity & Header Session Sync
+    function syncLoggedInUser() {
+      try {
+        const stored = localStorage.getItem('invoicegen_user');
+        if (stored) {
+          const user = JSON.parse(stored);
+          if (!user || !user.email || user.isDemo || user.email === 'user@company.com' || user.email === 'google.user@gmail.com' || user.email.includes('alex.') || user.email.includes('sarah.')) {
+            localStorage.removeItem('invoicegen_user');
+            return;
+          }
+
+          const loginBtn = document.getElementById('btnHeaderLogin');
+          const signupBtn = document.getElementById('btnHeaderSignup');
+          const mobileLogin = document.getElementById('btnMobileLogin');
+          const mobileSignup = document.getElementById('btnMobileSignup');
+
+          if (loginBtn) {
+            loginBtn.textContent = `My Account (${user.name ? user.name.split(' ')[0] : 'User'})`;
+            loginBtn.href = '#';
+            loginBtn.onclick = (e) => {
+              e.preventDefault();
+              if (confirm(`Signed in as: ${user.name || 'User'} (${user.email || ''})\n\nSign out?`)) {
+                localStorage.removeItem('invoicegen_user');
+                window.location.reload();
+              }
+            };
+          }
+          if (signupBtn) signupBtn.style.display = 'none';
+          if (mobileLogin) {
+            mobileLogin.textContent = `My Account (${user.name ? user.name.split(' ')[0] : 'User'})`;
+            mobileLogin.href = '#';
+            mobileLogin.onclick = (e) => {
+              e.preventDefault();
+              if (confirm(`Signed in as: ${user.name || 'User'}\nSign out?`)) {
+                localStorage.removeItem('invoicegen_user');
+                window.location.reload();
+              }
+            };
+          }
+          if (mobileSignup) mobileSignup.style.display = 'none';
+        }
+      } catch (e) {}
+    }
+    syncLoggedInUser();
+
+    // Mobile nav toggle
+    const mobileBtn = document.getElementById('btnMobileNavToggle');
+    const mobileDrawer = document.getElementById('mobileNavDrawer');
+    mobileBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mobileDrawer?.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+      if (mobileDrawer && !mobileDrawer.contains(e.target) && !mobileBtn?.contains(e.target)) {
+        mobileDrawer.classList.remove('active');
+      }
+    });
+
+    // Billing Switcher Interaction
+    const btnBillingMonthly = document.getElementById('btnBillingMonthly');
+    const btnBillingLifetime = document.getElementById('btnBillingLifetime');
+    const cardPro = document.getElementById('cardPro');
+    const cardLifetime = document.getElementById('cardLifetime');
+
+    if (btnBillingMonthly && btnBillingLifetime) {
+      btnBillingMonthly.addEventListener('click', () => {
+        btnBillingMonthly.classList.add('active');
+        btnBillingLifetime.classList.remove('active');
+        cardLifetime?.classList.remove('card-highlight-lifetime');
+        cardPro?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      btnBillingLifetime.addEventListener('click', () => {
+        btnBillingLifetime.classList.add('active');
+        btnBillingMonthly.classList.remove('active');
+        cardLifetime?.classList.add('card-highlight-lifetime');
+        cardLifetime?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+  </script>
+  <script src="js/i18n.js"></script>
+  <script src="js/google-auth.js"></script>
+  <script src="js/instant-nav.js"></script>
+</body>
+</html>

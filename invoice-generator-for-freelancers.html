@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Generator for Freelancers - Free Online Invoicing | Invoice-Gen.net</title>
+  <meta name="description" content="Free invoice generator built specifically for freelancers, consultants, and contractors. Bill hourly or per-project, embed Stripe and PayPal links, and get paid 2x faster.">
+  <meta name="keywords" content="invoice generator for freelancers, freelance invoice generator, contractor invoice generator, freelance invoice maker, freelance billing software, invoice template for freelancers">
+  <link rel="canonical" href="https://invoice-gen.net/invoice-generator-for-freelancers.html">
+  <meta name="theme-color" content="#00c875">
+
+  <!-- Open Graph / SEO Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://invoice-gen.net/invoice-generator-for-freelancers.html">
+  <meta property="og:title" content="Invoice Generator for Freelancers - Free Online Invoicing">
+  <meta property="og:description" content="The modern, zero-fee invoice generator for freelancers. Fast vector PDFs, hourly billing, and instant payment links.">
+  <meta property="og:image" content="https://invoice-gen.net/assets/icons/logo.svg">
+
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=fallback" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+
+  <!-- JSON-LD Structured Data for Google Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "InvoiceGen Freelancer Invoice Generator",
+        "operatingSystem": "All (Web-based)",
+        "applicationCategory": "BusinessApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Tailor-made online invoice generator for freelancers, contractors, and solopreneurs. Supports hourly rates, milestones, and card checkouts."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://invoice-gen.net/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog & Resources",
+            "item": "https://invoice-gen.net/blog.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Freelancer Invoice Generator",
+            "item": "https://invoice-gen.net/invoice-generator-for-freelancers.html"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What should a freelancer invoice always include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A standard freelance invoice must include your business name/contact, client contact details, unique invoice number, issue date, payment due date (e.g. Net 14), itemized hourly or milestone breakdown, accepted payment methods (e.g. Stripe card or PayPal), and your tax ID or VAT number."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I bill international clients in their local currency?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! InvoiceGen supports over 30 global currencies including USD, EUR, GBP, CAD, AUD, JPY, and BDT. You can switch currencies with one click."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What are the best payment terms for freelancers to avoid late payments?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We recommend Net 14 (due in 14 days) or Due Upon Receipt with an embedded Stripe credit card link. Net 30 often results in clients deprioritizing your invoice."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Invoice-Gen.net free for commercial freelance client billing?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Freelancers can generate unlimited commercial invoices, export unbranded PDFs, and accept payments with 100% free core functionality."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .seo-article {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 44px 48px;
+      margin-bottom: 36px;
+    }
+    @media (max-width: 640px) {
+      .seo-article { padding: 24px 20px; }
+    }
+    .seo-article h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 36px;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+    .seo-article h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .seo-article p {
+      color: #475569;
+      font-size: 0.96rem;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .seo-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin: 28px 0;
+    }
+    .seo-feature-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 22px;
+    }
+    .seo-feature-card h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .seo-feature-card p {
+      font-size: 0.875rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+    .seo-step-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .seo-step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .cta-hero-box {
+      background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+      border-radius: 8px;
+      padding: 36px;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .freelance-tips-box {
+      background: #ecfdf5;
+      border-left: 4px solid #00c875;
+      padding: 20px 24px;
+      border-radius: 0 8px 8px 0;
+      margin: 24px 0;
+    }
+    .freelance-tips-box h4 {
+      color: #065f46;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .freelance-tips-box p {
+      color: #047857;
+      font-size: 0.92rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .seo-hub-nav {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 32px;
+    }
+    .seo-hub-nav h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .seo-hub-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .seo-hub-links a {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e293b;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .seo-hub-links a:hover {
+      border-color: #00c875;
+      color: #065f46;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Authentic SaaS Top Navigation -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="38" height="38">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+                  <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item active" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+                  <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item active" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <div class="mobile-lang-wrap"></div>
+        <a href="login.html" class="btn-login" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" data-i18n="btn_signup">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-container" style="max-width: 920px;">
+
+    <!-- Hero Header -->
+    <div class="page-hero-wrap">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        BUILT FOR FREELANCERS, CONTRACTORS &amp; CONSULTANTS
+      </div>
+      <h1 class="hero-title" style="font-size: 2.75rem; margin-top: 14px;">
+        Invoice Generator for Freelancers
+      </h1>
+      <p class="hero-subtitle" style="margin: 16px auto 0;">
+        Send sleek, professional invoices that command respect. Track hourly rates, milestone deliverables, and accept direct card payments without recurring software subscriptions.
+      </p>
+    </div>
+
+    <!-- Fast Action Hero Banner -->
+    <div class="cta-hero-box">
+      <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 12px; color: #ffffff;">Create Your Freelance Invoice (Free)</h2>
+      <p style="color: #a7f3d0; max-width: 580px; margin: 0 auto 24px; font-size: 0.95rem;">
+        Add your hourly tasks or fixed-price milestones and download a branded, watermark-free vector PDF in seconds.
+      </p>
+      <a href="index.html" class="btn-signup-free" style="background: #00c875; border-color: #00c875; color: #022c22; font-weight: 800; font-size: 1.05rem; padding: 12px 28px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        Start Freelancer Invoice Now
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- SEO Content Article -->
+    <article class="seo-article">
+      <h2>Why Freelancers Need a Dedicated Invoicing Solution</h2>
+      <p>
+        As an independent professional, your invoice isn't just a billing request — it represents your brand, sets your working expectations, and directly impacts how quickly cash hits your bank account.
+      </p>
+      <p>
+        Traditional accounting tools like QuickBooks and FreshBooks charge $20 to $50 each month just to send a handful of invoices, while basic spreadsheet templates look unprofessional and are prone to calculation errors.
+      </p>
+      <p>
+        <strong>Invoice-Gen.net</strong> provides the best of both worlds: free, automated, pixel-perfect calculations paired with high-converting payment links.
+      </p>
+
+      <div class="seo-feature-grid">
+        <div class="seo-feature-card">
+          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          <h4>Hourly &amp; Milestone Billing</h4>
+          <p>Seamlessly bill clients by the hour (quantity &times; hourly rate) or flat-rate milestones for project phases.</p>
+        </div>
+        <div class="seo-feature-card">
+          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <h4>Multi-Currency Support</h4>
+          <p>Charge US clients in USD, European clients in EUR, and UK clients in GBP with automated currency formatting.</p>
+        </div>
+        <div class="seo-feature-card">
+          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+          <h4>Integrated Payment Links</h4>
+          <p>Add clickable Stripe payment links or PayPal accounts so clients can pay your invoice immediately via credit card.</p>
+        </div>
+        <div class="seo-feature-card">
+          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <h4>Zero Cloud Data Leakage</h4>
+          <p>Your client rates, project scopes, and financial agreements stay on your device without server tracking.</p>
+        </div>
+      </div>
+
+      <div class="freelance-tips-box">
+        <h4>Pro-Tip for Faster Client Payments: Use Net 14 Terms</h4>
+        <p>
+          Data across thousands of invoices shows that invoices marked "Net 30" frequently sit in accounting queues until day 29. By using "Net 14" with an instant Stripe payment link, freelance professionals receive settlement an average of 11 days sooner.
+        </p>
+      </div>
+
+      <h2>What to Include on Every Freelance Invoice</h2>
+      <p>
+        To ensure smooth processing and prevent accounting disputes with enterprise or small business clients, always include these critical fields:
+      </p>
+
+      <div style="margin: 24px 0;">
+        <div class="seo-step-row">
+          <div class="seo-step-num">1</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Clear Contact &amp; Legal Info</h4>
+            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Include your full legal or trading name, business email, portfolio or website URL, and your tax registration number (SSN, EIN, or VAT ID).</p>
+          </div>
+        </div>
+
+        <div class="seo-step-row">
+          <div class="seo-step-num">2</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Itemized Deliverables &amp; Timesheets</h4>
+            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Instead of generic lines like "Design work", specify: "UI Design Sprint 2: Mobile Checkout Prototype (16 hrs @ $75/hr)". Transparent breakdowns prevent client pushback.</p>
+          </div>
+        </div>
+
+        <div class="seo-step-row">
+          <div class="seo-step-num">3</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Structured Sequential Invoice ID</h4>
+            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Use structured numbers like <code>FL-2026-004</code>. This helps client finance departments track records and simplifies your annual tax reconciliation.</p>
+          </div>
+        </div>
+
+        <div class="seo-step-row">
+          <div class="seo-step-num">4</div>
+          <div>
+            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Clear Settlement Instructions</h4>
+            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Include both your electronic payment link (Stripe / PayPal) and direct bank account details (IBAN, Swift, or Routing/Account) in the payment notes section.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin: 36px 0; text-align: center;">
+        <a href="index.html" class="btn-signup-free" style="padding: 12px 28px; font-weight: 800; font-size: 1rem; text-decoration: none;">Launch Freelance Invoice Generator &rarr;</a>
+      </div>
+
+      <h2>Frequently Asked Questions for Freelancers</h2>
+      <div style="margin-top: 20px;">
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">How do I handle revisions or late fees on invoices?</h4>
+          <p style="font-size: 0.92rem; color: #475569; margin: 0;">You can add a brief terms clause in the Notes section, e.g., "Payments past 14 days accrue a 1.5% monthly late assessment. Project scope includes two rounds of revision."</p>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Do I have to charge sales tax or VAT as a freelancer?</h4>
+          <p style="font-size: 0.92rem; color: #475569; margin: 0;">This depends on your country of tax residence and whether you exceed statutory VAT/GST thresholds. In InvoiceGen, you can set custom tax percentages from 0% to any standard rate with automatic line calculation.</p>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Can I save my client details so I don't have to re-enter them every month?</h4>
+          <p style="font-size: 0.92rem; color: #475569; margin: 0;">Yes! InvoiceGen's client storage stores your client roster in your browser, enabling 1-click invoice generation for recurring monthly retainer clients.</p>
+        </div>
+      </div>
+
+      <!-- Hub Interlinking -->
+      <div class="seo-hub-nav">
+        <h4>Explore Invoicing Tools &amp; Guides:</h4>
+        <div class="seo-hub-links">
+          <a href="free-invoice-generator.html">Free Invoice Generator</a>
+          <a href="pdf-invoice-generator.html">PDF Invoice Generator</a>
+          <a href="how-to-make-an-invoice.html">How to Make an Invoice</a>
+          <a href="best-invoice-generator.html">Best Invoice Generators 2026</a>
+          <a href="gst-invoice-generator.html">GST / Tax Invoice Generator</a>
+          <a href="invoice-number-generator.html">Invoice Number Generator</a>
+          <a href="templates.html">Free Invoice Templates</a>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer-saas">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="38" height="38">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p data-i18n="footer_tagline">
+            The modern, private, and effortless online invoice generator. Helping freelancers and businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
+            <a href="templates.html" data-i18n="nav_templates">Templates</a>
+            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
+            <a href="payments.html">Payments Hub</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/google-auth.js"></script>
+  <script src="js/instant-nav.js"></script>
+</body>
+</html>

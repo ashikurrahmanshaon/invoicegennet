@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security &amp; Architecture | Invoice-Gen.net - Client-Side Protection</title>
+  <meta name="description" content="Explore the security architecture of Invoice-Gen.net. Zero-knowledge client-side computation, no server data storage, PCI-DSS payment compliance, and GDPR privacy by design.">
+  <link rel="canonical" href="https://invoice-gen.net/security.html">
+  <meta name="theme-color" content="#00c875">
+
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=fallback" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+  <style>
+    .security-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 28px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .security-card:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-2px);
+    }
+    .security-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .security-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .security-desc {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .security-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .spec-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .spec-item strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .spec-item span {
+      color: #64748b;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Authentic SaaS Top Navigation -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="38" height="38">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+                  <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+                  <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <div class="mobile-lang-wrap"></div>
+        <a href="login.html" class="btn-login" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" data-i18n="btn_signup">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-container">
+
+    <!-- Hero Header -->
+    <div class="page-hero-wrap">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        SECURITY &amp; COMPLIANCE ARCHITECTURE
+      </div>
+      <h1 class="hero-title" style="font-size: 2.75rem; margin-top: 14px;">
+        Security Built Into Every Layer
+      </h1>
+      <p class="hero-subtitle" style="max-width: 680px; margin: 16px auto 0;">
+        Invoice-Gen.net was engineered with a security philosophy: the safest customer data is data we never store. Learn how our client-side architecture keeps your business financial records completely private.
+      </p>
+    </div>
+
+    <!-- Security Cards Feed -->
+    <div style="max-width: 960px; margin: 0 auto;">
+
+      <!-- Pillar 1 -->
+      <div class="security-card">
+        <div class="box-icon-frame" style="margin-bottom: 14px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <span class="security-badge">Architecture Principle #1</span>
+        <h2 class="security-title">Zero-Server Data Transmission</h2>
+        <p class="security-desc">
+          When you compose an invoice on Invoice-Gen.net, your client's name, billing address, line items, rates, taxes, and bank instructions are processed exclusively within your web browser runtime using JavaScript and HTML5 Canvas. No payload containing your invoice content is ever dispatched to our web servers.
+        </p>
+        <div class="security-specs-grid">
+          <div class="spec-item">
+            <strong>Browser Sandboxing</strong>
+            <span>Isolated in your browser's local sandbox with zero cross-origin leakages.</span>
+          </div>
+          <div class="spec-item">
+            <strong>Client-Side PDF Engine</strong>
+            <span>Generates raw binary vector PDF files on-device without remote rendering API calls.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="security-card">
+        <div class="box-icon-frame" style="margin-bottom: 14px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        </div>
+        <span class="security-badge">Architecture Principle #2</span>
+        <h2 class="security-title">Payment Gateway Tokenization (PCI-DSS)</h2>
+        <p class="security-desc">
+          When integrating or settling invoices with payment gateways like Stripe or PayPal, your credit card and financial credentials never pass through or touch Invoice-Gen.net servers. Payments are handled via iframe/direct SDK tokenization directly to Stripe (PCI Service Provider Level 1) and PayPal.
+        </p>
+        <div class="security-specs-grid">
+          <div class="spec-item">
+            <strong>Stripe Card Security</strong>
+            <span>256-bit AES encryption with 3D Secure 2 (3DS) two-factor biometric verification.</span>
+          </div>
+          <div class="spec-item">
+            <strong>PayPal Express Protection</strong>
+            <span>Encrypted token handshakes ensuring buyers and sellers never expose raw financial accounts.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="security-card">
+        <div class="box-icon-frame" style="margin-bottom: 14px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="security-badge">Architecture Principle #3</span>
+        <h2 class="security-title">GDPR &amp; CCPA Privacy by Design</h2>
+        <p class="security-desc">
+          We strictly follow Article 25 of the European Union General Data Protection Regulation (GDPR) — Data Protection by Design and by Default. Because we do not store customer databases of invoices, there is zero risk of your trade secrets or customer lists appearing in third-party server leaks or breaches.
+        </p>
+        <div class="security-specs-grid">
+          <div class="spec-item">
+            <strong>No Third-Party Ad Trackers</strong>
+            <span>Zero behavioral tracking pixels, zero invasive ad scripts, and zero cookie selling.</span>
+          </div>
+          <div class="spec-item">
+            <strong>Total Data Ownership</strong>
+            <span>Clear your browser cache or click 'Reset Invoice' at any time to instantly destroy all local data.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vulnerability Reporting -->
+      <div class="security-card" style="background: #f8fafc;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 10px;">Security Vulnerability Disclosures</h3>
+        <p style="color: #64748b; font-size: 0.9rem; line-height: 1.6; margin-bottom: 14px;">
+          We take security research and responsible disclosure seriously. If you believe you have discovered a vulnerability or security flaw in Invoice-Gen.net, please contact our security team immediately at:
+        </p>
+        <a href="mailto:security@invoice-gen.net" style="color: #00c875; font-weight: 700; text-decoration: none; font-size: 0.95rem;">security@invoice-gen.net</a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="saas-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="38" height="38">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p data-i18n="footer_tagline">
+            The modern, private, and effortless online invoice generator. Helping freelancers and businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
+            <a href="templates.html" data-i18n="nav_templates">Templates</a>
+            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
+            <a href="payments.html">Payments Hub</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html" style="color: #00c875; font-weight: 700;">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/google-auth.js"></script>
+  <script src="js/instant-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GST Invoice Generator Online - Free Tax &amp; VAT Invoicing | Invoice-Gen.net</title>
+  <meta name="description" content="Free GST and Tax Invoice Generator. Create ATO-compliant Australian GST invoices, UK VAT bills, and global tax invoices with automated tax rates and vector PDF exports.">
+  <meta name="keywords" content="gst invoice generator, invoice generator australia, invoice generator uk, tax invoice generator, vat invoice generator, free tax invoice maker">
+  <link rel="canonical" href="https://invoice-gen.net/gst-invoice-generator.html">
+  <meta name="theme-color" content="#00c875">
+
+  <!-- Open Graph / SEO Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://invoice-gen.net/gst-invoice-generator.html">
+  <meta property="og:title" content="GST Invoice Generator Online - Free Tax &amp; VAT Invoicing">
+  <meta property="og:description" content="Create compliant GST, VAT, and Sales Tax invoices in seconds. Auto-calculates tax percentages, exports clean vector PDFs, and costs $0.">
+  <meta property="og:image" content="https://invoice-gen.net/assets/icons/logo.svg">
+
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=fallback" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+
+  <!-- JSON-LD Structured Data for Google Rich Snippets -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "InvoiceGen GST & Tax Invoice Generator",
+        "operatingSystem": "All (Web-based)",
+        "applicationCategory": "BusinessApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Tax-compliant invoice generator supporting Australian GST, UK VAT, Indian GST, and global value-added tax systems."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://invoice-gen.net/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog & Resources",
+            "item": "https://invoice-gen.net/blog.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "GST Invoice Generator",
+            "item": "https://invoice-gen.net/gst-invoice-generator.html"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What makes an invoice a valid Tax Invoice under Australian ATO rules?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Under ATO guidelines, an invoice must state 'Tax Invoice', display your Australian Business Number (ABN), specify the issue date, itemize taxable items, and clearly display the GST amount or note that the total is inclusive of 10% GST."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does InvoiceGen support UK VAT invoicing requirements?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! You can specify your UK VAT registration number, apply the standard 20% or reduced 5% VAT rate, and itemize net amounts, VAT amounts, and total gross balances."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I calculate taxes automatically on my invoices?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Simply input your tax percentage in the Tax field (e.g., 10% for Australian GST, 20% for UK VAT). InvoiceGen instantly computes line totals, total tax amounts, and final payable balances."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    .seo-article {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 44px 48px;
+      margin-bottom: 36px;
+    }
+    @media (max-width: 640px) {
+      .seo-article { padding: 24px 20px; }
+    }
+    .seo-article h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 36px;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+    .seo-article h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+    .seo-article p {
+      color: #475569;
+      font-size: 0.96rem;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .tax-box-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      margin: 24px 0;
+    }
+    .tax-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .tax-box h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .tax-box p {
+      font-size: 0.875rem;
+      color: #64748b;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .cta-hero-box {
+      background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+      border-radius: 8px;
+      padding: 36px;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .seo-hub-nav {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 32px;
+    }
+    .seo-hub-nav h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .seo-hub-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .seo-hub-links a {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1e293b;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .seo-hub-links a:hover {
+      border-color: #00c875;
+      color: #065f46;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Authentic SaaS Top Navigation -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="38" height="38">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+                  <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item active" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+                  <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item active" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <div class="mobile-lang-wrap"></div>
+        <a href="login.html" class="btn-login" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" data-i18n="btn_signup">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-container" style="max-width: 920px;">
+
+    <!-- Hero Header -->
+    <div class="page-hero-wrap">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        TAX-COMPLIANT INVOICING • AUSTRALIA, UK &amp; GLOBAL
+      </div>
+      <h1 class="hero-title" style="font-size: 2.75rem; margin-top: 14px;">
+        GST &amp; Tax Invoice Generator
+      </h1>
+      <p class="hero-subtitle" style="margin: 16px auto 0;">
+        Create legally compliant GST and VAT tax invoices for Australia, the United Kingdom, and international cross-border trade. Accurate tax calculations and instant vector PDF downloads.
+      </p>
+    </div>
+
+    <!-- Fast Action Hero Banner -->
+    <div class="cta-hero-box">
+      <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 12px; color: #ffffff;">Generate a Compliant Tax Invoice Now</h2>
+      <p style="color: #a7f3d0; max-width: 580px; margin: 0 auto 24px; font-size: 0.95rem;">
+        Add your business tax registration number, set your local GST/VAT rate, and export an unbranded PDF for free.
+      </p>
+      <a href="index.html" class="btn-signup-free" style="background: #00c875; border-color: #00c875; color: #022c22; font-weight: 800; font-size: 1.05rem; padding: 12px 28px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        Create Tax Invoice Online
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+
+    <!-- SEO Content Article -->
+    <article class="seo-article">
+      <h2>Understanding GST &amp; Tax Invoice Requirements</h2>
+      <p>
+        In many jurisdictions, issuing a simple billing slip is insufficient for clients who intend to claim back input tax credits or business expenses. Government revenue services enforce strict legal criteria regarding what constitutes a valid "Tax Invoice".
+      </p>
+      <p>
+        Using an outdated or non-compliant format can lead to tax audit penalties, rejected deductions, or delayed payments. <strong>Invoice-Gen.net</strong> is specifically calibrated to handle international tax regimes seamlessly.
+      </p>
+
+      <h2>Global Tax Regimes Supported</h2>
+
+      <div class="tax-box-grid">
+        <div class="tax-box">
+          <h4>Australia (ATO GST)</h4>
+          <p>Features ABN (Australian Business Number) display, 10% Goods and Services Tax computation, and designated "Tax Invoice" document labeling.</p>
+        </div>
+        <div class="tax-box">
+          <h4>United Kingdom (HMRC VAT)</h4>
+          <p>Supports UK VAT registration numbering, standard 20% rate, reduced rates, and net versus gross subtotal breakdowns.</p>
+        </div>
+        <div class="tax-box">
+          <h4>India (GSTIN &amp; HSN)</h4>
+          <p>Add your 15-digit GSTIN, client state code, and itemize CGST, SGST, or integrated IGST for inter-state deliveries.</p>
+        </div>
+        <div class="tax-box">
+          <h4>European Union (VAT)</h4>
+          <p>Facilitates cross-border B2B invoicing with reverse-charge notes, VIES validation notes, and multi-currency billing.</p>
+        </div>
+      </div>
+
+      <h2>Mandatory Elements on a Valid Tax Invoice</h2>
+      <p>
+        According to international tax authorities (such as the Australian Taxation Office and HM Revenue &amp; Customs), an invoice must contain:
+      </p>
+      <ul style="color: #475569; font-size: 0.95rem; line-height: 1.75; padding-left: 20px; margin-bottom: 24px;">
+        <li><strong>Official Document Label:</strong> The document header must explicitly state "Tax Invoice".</li>
+        <li><strong>Tax Registration Identifier:</strong> Your registered ABN, VAT Number, or GSTIN clearly displayed alongside your trading name.</li>
+        <li><strong>Transaction Date:</strong> The date the invoice is issued to establish the applicable tax accounting period.</li>
+        <li><strong>Granular Itemization:</strong> Detailed breakdown of what was sold, quantity, and whether each item is taxable or tax-exempt.</li>
+        <li><strong>Tax Total &amp; Currency:</strong> Distinct line for the exact GST/VAT amount charged, presented in the legal trading currency.</li>
+      </ul>
+
+      <h2>How InvoiceGen Calculates Taxes Automatically</h2>
+      <p>
+        Instead of manually crunching tax figures on a calculator and risking rounding discrepancies, InvoiceGen handles calculations dynamically:
+      </p>
+      <p>
+        <code>Tax Amount = Subtotal &times; (Tax Percentage / 100)</code><br>
+        <code>Total Balance = Subtotal + Tax Amount - Discount</code>
+      </p>
+      <p>
+        Whether your local rate is 5%, 10%, 15%, 20%, or custom, simply enter the percentage in the editor and your invoice balances update in real-time.
+      </p>
+
+      <div style="margin: 36px 0; text-align: center;">
+        <a href="index.html" class="btn-signup-free" style="padding: 12px 28px; font-weight: 800; font-size: 1rem; text-decoration: none;">Launch GST Invoice Generator &rarr;</a>
+      </div>
+
+      <h2>Frequently Asked Questions About GST Invoices</h2>
+      <div style="margin-top: 20px;">
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Do I need to charge GST if I am not registered?</h4>
+          <p style="font-size: 0.92rem; color: #475569; margin: 0;">No. If your turnover is below your national registration threshold (e.g. $75,000 in Australia or &pound;90,000 in the UK) and you are unregistered, you must NOT charge GST/VAT. In InvoiceGen, you can leave the Tax field at 0%.</p>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Can I include both ABN and bank transfer details?</h4>
+          <p style="font-size: 0.92rem; color: #475569; margin: 0;">Yes. You can add your ABN directly in the business address block and include your BSB and Account number or Stripe link in the Payment Notes section.</p>
+        </div>
+      </div>
+
+      <!-- Hub Interlinking -->
+      <div class="seo-hub-nav">
+        <h4>Explore Invoicing Tools &amp; Guides:</h4>
+        <div class="seo-hub-links">
+          <a href="free-invoice-generator.html">Free Invoice Generator</a>
+          <a href="pdf-invoice-generator.html">PDF Invoice Generator</a>
+          <a href="invoice-generator-for-freelancers.html">Invoice Generator for Freelancers</a>
+          <a href="how-to-make-an-invoice.html">How to Make an Invoice</a>
+          <a href="best-invoice-generator.html">Best Invoice Generators 2026</a>
+          <a href="invoice-number-generator.html">Invoice Number Generator</a>
+          <a href="templates.html">Free Invoice Templates</a>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer-saas">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="38" height="38">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p data-i18n="footer_tagline">
+            The modern, private, and effortless online invoice generator. Helping freelancers and businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
+            <a href="templates.html" data-i18n="nav_templates">Templates</a>
+            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
+            <a href="payments.html">Payments Hub</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/google-auth.js"></script>
+  <script src="js/instant-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supported Currencies & Payment Gateways (Stripe & PayPal) | Invoice-Gen.net</title>
+  <meta name="description" content="Explore Invoice-Gen.net supported international currencies and payment gateways. Accept client payments with Stripe cards (Visa, Mastercard, Amex) and PayPal.">
+  <link rel="canonical" href="https://invoice-gen.net/payments.html">
+  <meta name="theme-color" content="#00c875">
+
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=fallback" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+
+  <style>
+    /* Specialized Styling for Payments & Currency Hub */
+    .payments-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #059669;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      margin-bottom: 16px;
+    }
+
+    .gateway-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+      margin-bottom: 56px;
+    }
+
+    .gateway-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 32px 28px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+    }
+
+    .gateway-card:hover {
+      transform: translateY(-2px);
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.06);
+    }
+
+    .gateway-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .gateway-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gateway-badge {
+      font-size: 0.6875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .card-brands-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 24px;
+    }
+
+    .card-chip {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Live Payment Simulator Box */
+    .simulator-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: auto;
+    }
+
+    .simulator-title {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sim-input {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 9px 12px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: #0f172a;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .sim-input:focus {
+      outline: none;
+      border-color: #00c875;
+      box-shadow: none;
+    }
+
+    .sim-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-sim-pay-stripe {
+      width: 100%;
+      background: #635bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .btn-sim-pay-stripe:hover {
+      background: #4b45c6;
+      transform: translateY(-1px);
+    }
+
+    .btn-sim-pay-stripe:active {
+      transform: scale(0.98);
+    }
+
+    .btn-sim-pay-paypal {
+      width: 100%;
+      background: #ffc439;
+      color: #003087;
+      border: 1px solid #e0a800;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 800;
+      font-size: 0.875rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    .btn-sim-pay-paypal:hover {
+      background: #f4b628;
+      transform: translateY(-1px);
+    }
+
+    .btn-sim-pay-paypal:active {
+      transform: scale(0.98);
+    }
+
+    /* Currency Grid */
+    .currency-search-bar {
+      display: flex;
+      gap: 12px;
+      max-width: 540px;
+      margin: 0 auto 32px;
+    }
+
+    .currency-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    .currency-pill-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      transition: border-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .currency-pill-card:hover {
+      border-color: #00c875;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.06);
+    }
+
+    .currency-flag-code {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .currency-flag {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .currency-code-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #0f172a;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+
+    .currency-name {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .currency-sample {
+      font-size: 0.75rem;
+      color: #64748b;
+      font-family: var(--font-mono);
+    }
+
+    .currency-btn-use {
+      margin-top: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #00c875;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .currency-btn-use:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Authentic SaaS Top Navigation -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="38" height="38">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+                  <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+      </nav>
+
+      <!-- Right Header Actions (Clean Minimalist Boxy SaaS Auth & Language Switcher) -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+                  <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnMobileLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" data-i18n="btn_signup">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Payments Page Content -->
+  <main class="page-container">
+
+    <!-- Hero Header -->
+    <section class="page-hero-wrap">
+      <div class="payments-hero-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        <span>Stripe Cards &amp; PayPal Integration</span>
+      </div>
+      <h1 class="page-hero-title">
+        Global Payments &amp; <span class="accent">Supported Currencies</span>
+      </h1>
+      <p class="page-hero-sub">
+        Seamlessly bill clients in 30+ international currencies with direct checkout via Stripe-supported cards and PayPal Express.
+      </p>
+    </section>
+
+    <!-- 2 Column Payment Gateways Showcase with Interactive Demo Checkouts -->
+    <div class="gateway-cards-grid">
+
+      <!-- Gateway 1: Stripe -->
+      <div class="gateway-card" id="stripe">
+        <div class="gateway-header">
+          <div class="gateway-logo-wrap">
+            <div style="background: #635bff; color: #ffffff; font-weight: 900; font-size: 1.15rem; width: 42px; height: 42px; border-radius: 8px; display: flex; align-items: center; justify-content: center; letter-spacing: -0.05em;">
+              S
+            </div>
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">Stripe Gateway</h2>
+              <div style="font-size: 0.8125rem; color: #64748b;">Credit &amp; Debit Card Infrastructure</div>
+            </div>
+          </div>
+          <span class="gateway-badge" style="background: #f0fdf4; color: #059669; font-weight: 800;">Verified PCI-DSS</span>
+        </div>
+
+        <p style="font-size: 0.875rem; color: #475569; line-height: 1.6; margin-bottom: 12px;">
+          Accept payments from clients anywhere in the world. Stripe handles currency conversion, anti-fraud checks, and direct settlement into your bank account.
+        </p>
+
+        <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">
+          Supported Card Networks:
+        </div>
+        <div class="card-brands-row">
+          <span class="card-chip">Visa</span>
+          <span class="card-chip">Mastercard</span>
+          <span class="card-chip">American Express</span>
+          <span class="card-chip">Discover</span>
+          <span class="card-chip">UnionPay</span>
+          <span class="card-chip"> Apple Pay</span>
+          <span class="card-chip">G Google Pay</span>
+        </div>
+
+        <!-- Interactive Stripe Payment Simulator -->
+        <div class="simulator-box">
+          <div class="simulator-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#635bff" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            Test Client Card Checkout
+          </div>
+          <form id="stripeSimForm" onsubmit="event.preventDefault(); window.simulateStripePay();">
+            <input type="text" class="sim-input" id="simCardNumber" placeholder="4242 •••• •••• 4242" value="4242 4242 4242 4242" required maxlength="19">
+            <div class="sim-row">
+              <input type="text" class="sim-input" placeholder="MM / YY" value="12/28" required maxlength="5">
+              <input type="text" class="sim-input" placeholder="CVC" value="888" required maxlength="4">
+            </div>
+            <button type="submit" class="btn-sim-pay-stripe" id="btnStripePay">
+              <span>Pay Invoice $150.00 via Stripe</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Gateway 2: PayPal -->
+      <div class="gateway-card" id="paypal">
+        <div class="gateway-header">
+          <div class="gateway-logo-wrap">
+            <div style="background: #003087; color: #0079c1; font-weight: 900; font-size: 1.15rem; width: 42px; height: 42px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #eef2ff;">
+              </div>
+            <div>
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0;">PayPal Express</h2>
+              <div style="font-size: 0.8125rem; color: #64748b;">Instant Global Wallet Checkout</div>
+            </div>
+          </div>
+          <span class="gateway-badge" style="background: #eff6ff; color: #1d4ed8; font-weight: 800;">Instant Payout</span>
+        </div>
+
+        <p style="font-size: 0.875rem; color: #475569; line-height: 1.6; margin-bottom: 12px;">
+          Enable your clients to pay in seconds using their PayPal balance, linked bank account, or flexible "Pay in 4" monthly installments.
+        </p>
+
+        <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">
+          PayPal Features:
+        </div>
+        <div class="card-brands-row">
+          <span class="card-chip">1-Click Express Checkout</span>
+          <span class="card-chip">Bank Direct Debit</span>
+          <span class="card-chip">Pay in 4 Installments</span>
+          <span class="card-chip">Buyer &amp; Seller Protection</span>
+        </div>
+
+        <!-- Interactive PayPal Payment Simulator -->
+        <div class="simulator-box">
+          <div class="simulator-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#003087" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+            Test PayPal Express Flow
+          </div>
+          <div style="font-size: 0.8125rem; color: #64748b; margin-bottom: 14px;">
+            Simulate a client paying an invoice of <strong>$150.00 USD</strong> or local currency with zero fees:
+          </div>
+          <button type="button" class="btn-sim-pay-paypal" id="btnPayPalPay" onclick="window.simulatePayPalPay();">
+            <span style="font-style: italic; font-weight: 900; color: #003087;">Pay</span><span style="font-style: italic; font-weight: 900; color: #0079c1;">Pal</span>
+            <span style="font-weight: 700; font-size: 0.8125rem; margin-left: 4px;">Checkout Demo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Supported Currencies Directory -->
+    <section id="currencies">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 8px;">
+          Supported World Currencies (30+)
+        </h2>
+        <p style="font-size: 0.9375rem; color: #64748b; max-width: 560px; margin: 0 auto;">
+          Invoice your clients with standard international currency symbols, digit grouping, and decimal accuracy.
+        </p>
+      </div>
+
+      <!-- Currency Search Bar -->
+      <div class="currency-search-bar">
+        <input 
+          type="text" 
+          id="currencySearchInput" 
+          class="sim-input" 
+          placeholder="Search by currency name, code, or country (e.g. BDT, USD, Euro, Taka, Rupee)..."
+          style="margin-bottom: 0;"
+        >
+      </div>
+
+      <!-- Currency Grid -->
+      <div class="currency-grid-container" id="currencyGrid">
+        <!-- Dynamically rendered via JS -->
+      </div>
+    </section>
+
+    <!-- 3-Step Guide: How to Accept Payments on Invoices -->
+    <section style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 36px 32px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); margin-bottom: 60px;">
+      <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 24px; text-align: center;">
+        How to Collect Payments with Invoice-Gen.net
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;">
+        
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #f0fdf4; color: #00c875; font-weight: 900; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+            1
+          </div>
+          <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0;">Add Payment Links in Notes</h4>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6; margin: 0;">
+            Paste your Stripe payment link, bank IBAN, or PayPal.me URL in the <strong>Notes &amp; Payment Instructions</strong> box in the invoice editor.
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #f0fdf4; color: #00c875; font-weight: 900; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+            2
+          </div>
+          <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0;">Export &amp; Send Clean PDF</h4>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6; margin: 0;">
+            Download your vector PDF or click <strong>Send via Email</strong>. Your clickable payment links are preserved inside the PDF document.
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: #f0fdf4; color: #00c875; font-weight: 900; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">
+            3
+          </div>
+          <h4 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0;">Get Paid Directly</h4>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6; margin: 0;">
+            Your client clicks to pay with credit card or PayPal. 100% of the funds go straight into your account with zero platform commission.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Complete, High-End SaaS Footer -->
+  <footer class="saas-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="38" height="38">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p data-i18n="footer_tagline">
+            The modern, private, and effortless online invoice generator. Helping freelancers, designers, and growing businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
+            <a href="templates.html" data-i18n="nav_templates">Templates</a>
+            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
+            <a href="payments.html" style="color: #00c875; font-weight: 700;">Payments Hub</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notice -->
+  <div class="toast-notice" id="toastNotice"></div>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script>
+    // -------------------------------------------------------------------------
+    // 1. Currencies Directory Data
+    // -------------------------------------------------------------------------
+    const CURRENCIES = [
+      { code: 'USD', name: 'US Dollar', symbol: '$', sample: '$1,250.00' },
+      { code: 'EUR', name: 'Euro', symbol: '€', sample: '€1.250,00' },
+      { code: 'GBP', name: 'British Pound', symbol: '£', sample: '£1,250.00' },
+      { code: 'BDT', name: 'Bangladeshi Taka', symbol: '৳', sample: '৳12,500.00' },
+      { code: 'INR', name: 'Indian Rupee', symbol: '₹', sample: '₹12,500.00' },
+      { code: 'CAD', name: 'Canadian Dollar', symbol: 'CA$', sample: 'CA$1,250.00' },
+      { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', sample: 'A$1,250.00' },
+      { code: 'JPY', name: 'Japanese Yen', symbol: '¥', sample: '¥125,000' },
+      { code: 'AED', name: 'UAE Dirham', symbol: 'AED', sample: 'AED 4,500' },
+      { code: 'SAR', name: 'Saudi Riyal', symbol: 'SAR', sample: 'SAR 4,500' },
+      { code: 'SGD', name: 'Singapore Dollar', symbol: 'S$', sample: 'S$1,250.00' },
+      { code: 'CHF', name: 'Swiss Franc', symbol: 'CHF', sample: 'CHF 1,250.00' },
+      { code: 'NZD', name: 'New Zealand Dollar', symbol: 'NZ$', sample: 'NZ$1,250.00' },
+      { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'RM', sample: 'RM 1,250.00' },
+      { code: 'BRL', name: 'Brazilian Real', symbol: 'R$', sample: 'R$ 1.250,00' },
+      { code: 'ZAR', name: 'South African Rand', symbol: 'R', sample: 'R 12,500.00' },
+      { code: 'PKR', name: 'Pakistani Rupee', symbol: '₨', sample: '₨ 25,000' },
+      { code: 'PHP', name: 'Philippine Peso', symbol: '₱', sample: '₱12,500.00' }
+    ];
+
+    function renderCurrencies(filter = '') {
+      const grid = document.getElementById('currencyGrid');
+      if (!grid) return;
+      
+      const query = filter.toLowerCase().trim();
+      const filtered = CURRENCIES.filter(c => 
+        c.code.toLowerCase().includes(query) || 
+        c.name.toLowerCase().includes(query) ||
+        c.symbol.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 32px; color: #94a3b8;">No currencies match "${filter}"</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(c => `
+        <div class="currency-pill-card">
+          <div class="currency-flag-code">
+            <span class="currency-code-badge" style="background: #0f172a; color: #ffffff; font-weight: 800; padding: 3px 8px; border-radius: 4px;">${c.code}</span>
+            <span class="currency-code-badge">${c.symbol}</span>
+          </div>
+          <div class="currency-name">${c.name}</div>
+          <div class="currency-sample">Sample: ${c.sample}</div>
+          <a href="index.html?currency=${c.code}" class="currency-btn-use">Create Invoice in ${c.code} &rarr;</a>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('currencySearchInput')?.addEventListener('input', (e) => {
+      renderCurrencies(e.target.value);
+    });
+
+    renderCurrencies();
+
+    // -------------------------------------------------------------------------
+    // 2. Toast Notification Helper
+    // -------------------------------------------------------------------------
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toastNotice');
+      if (!toast) return;
+      toast.className = `toast-notice toast-${type} show`;
+      let icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+      if (type === 'info') {
+        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+      }
+      toast.innerHTML = `<span class="toast-icon-badge">${icon}</span><span class="toast-text">${msg}</span>`;
+      toast.onclick = () => toast.classList.remove('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // -------------------------------------------------------------------------
+    // 3. Interactive Payment Simulators (Stripe & PayPal)
+    // -------------------------------------------------------------------------
+    window.simulateStripePay = function() {
+      const btn = document.getElementById('btnStripePay');
+      if (!btn) return;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<span>Processing Stripe Token...</span>`;
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.innerHTML = `<span>Payment Authorized!</span>`;
+        btn.style.background = '#00c875';
+        showToast('Stripe Card Payment of $150.00 Authorized Successfully! Receipt sent to client.', 'success');
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = '';
+          btn.disabled = false;
+        }, 3000);
+      }, 1200);
+    };
+
+    window.simulatePayPalPay = function() {
+      const btn = document.getElementById('btnPayPalPay');
+      if (!btn) return;
+      btn.disabled = true;
+      btn.innerHTML = `<span>Connecting to PayPal Express...</span>`;
+
+      setTimeout(() => {
+        btn.innerHTML = `<span>PayPal Verified &amp; Paid!</span>`;
+        showToast('PayPal Express Checkout Completed: $150.00 deposited instantly!', 'success');
+        setTimeout(() => {
+          btn.innerHTML = `<span style="font-style: italic; font-weight: 900; color: #003087;">Pay</span><span style="font-style: italic; font-weight: 900; color: #0079c1;">Pal</span> <span style="font-weight: 700; font-size: 0.8125rem; margin-left: 4px;">Checkout Demo</span>`;
+          btn.disabled = false;
+        }, 3000);
+      }, 1000);
+    };
+
+    // Card formatting
+    document.getElementById('simCardNumber')?.addEventListener('input', function(e) {
+      let v = e.target.value.replace(/\D/g, '').substring(0, 16);
+      e.target.value = v.replace(/(\d{4})/g, '$1 ').trim();
+    });
+
+    // Sync session
+    try {
+      const u = JSON.parse(localStorage.getItem('invoicegen_user'));
+      if (u && u.name) {
+        const loginBtn = document.getElementById('btnHeaderLogin');
+        const signupBtn = document.getElementById('btnHeaderSignup');
+        if (loginBtn) {
+          loginBtn.textContent = `My Account (${u.name.split(' ')[0]})`;
+          loginBtn.href = '#';
+          loginBtn.onclick = (e) => {
+            e.preventDefault();
+            if (confirm(`Signed in as ${u.name}\nLog out?`)) {
+              localStorage.removeItem('invoicegen_user');
+              window.location.reload();
+            }
+          };
+        }
+        if (signupBtn) signupBtn.style.display = 'none';
+      }
+    } catch(e){}
+
+    // Mobile nav toggle
+    const mobileBtn = document.getElementById('btnMobileNavToggle');
+    const mobileDrawer = document.getElementById('mobileNavDrawer');
+    mobileBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mobileDrawer?.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+      if (mobileDrawer && !mobileDrawer.contains(e.target) && !mobileBtn?.contains(e.target)) {
+        mobileDrawer.classList.remove('active');
+      }
+    });
+  </script>
+  <script src="js/google-auth.js"></script>
+  <script src="js/instant-nav.js"></script>
+</body>
+</html>
