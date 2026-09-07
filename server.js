@@ -31,7 +31,8 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
   '.txt': 'text/plain; charset=utf-8',
-  '.xml': 'application/xml; charset=utf-8'
+  '.xml': 'application/xml; charset=utf-8',
+  '.xsl': 'application/xslt+xml; charset=utf-8'
 };
 
 function readInvoicesFromDisk() {
@@ -208,14 +209,22 @@ const server = http.createServer((req, res) => {
           return serveFile(htmlFallback);
         }
 
-        const notFoundPath = path.join(__dirname, '404.html');
-        fs.readFile(notFoundPath, (nfErr, nfData) => {
-          res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
-          if (!nfErr && nfData) {
-            res.end(nfData);
-          } else {
-            res.end('<h1>404 - Page Not Found</h1>');
+        // Check XML fallback (e.g. /sitemap -> sitemap.xml)
+        const xmlFallback = filePath + '.xml';
+        fs.stat(xmlFallback, (xmlErr, xmlStats) => {
+          if (!xmlErr && xmlStats.isFile()) {
+            return serveFile(xmlFallback);
           }
+
+          const notFoundPath = path.join(__dirname, '404.html');
+          fs.readFile(notFoundPath, (nfErr, nfData) => {
+            res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+            if (!nfErr && nfData) {
+              res.end(nfData);
+            } else {
+              res.end('<h1>404 - Page Not Found</h1>');
+            }
+          });
         });
       });
     });

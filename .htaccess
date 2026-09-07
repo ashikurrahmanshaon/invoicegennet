@@ -13,10 +13,21 @@
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Clean URLs: Serve .html automatically without showing .html extension
+  # 1a. Sitemap rewrites
+  RewriteRule ^sitemap\.xml$ sitemap.xml [L]
+  RewriteRule ^sitemap$ sitemap.html [L]
+
+  # 1b. Clean HTML URLs
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}\.html -f
   RewriteRule ^(.*)$ $1.html [L]
 </IfModule>
+
+# MIME Types for XML & XSL Stylesheets
+AddType application/xml .xml
+AddType text/xml .xml
+AddType application/xslt+xml .xsl
+
 
 # 2. Custom 404 Error Page
 ErrorDocument 404 /404.html

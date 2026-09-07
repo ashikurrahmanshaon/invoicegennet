@@ -92,11 +92,11 @@
         <!-- Sender Block (Left) -->
         <div class="sender-info-box">
           <!-- Logo Uploader -->
-          <div>
+          <div class="logo-slot-wrap">
             <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
             <div class="logo-uploader-card" id="btnUploadLogo">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              <span>+ Add Company Logo</span>
+              <span>+ Add your logo</span>
             </div>
             <div class="logo-preview-container" id="logoPreviewBox">
               <img src="" alt="Uploaded Logo" id="logoImg">
@@ -104,14 +104,14 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="senderName">Your Business / Sender Name</label>
-            <input type="text" id="senderName" class="form-input" placeholder="e.g. Your Business / Studio Name">
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="senderName">From (Your Business)</label>
+            <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="Your Business or Studio Name">
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="senderAddress">Your Address & Contact Info</label>
-            <textarea id="senderAddress" class="form-textarea" rows="2" placeholder="Street address, City, Postal Code, Country"></textarea>
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="senderAddress">Address &amp; Contact</label>
+            <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Street address, City, Postal Code, Country&#10;Email, Phone or Tax ID"></textarea>
           </div>
         </div>
 
@@ -121,13 +121,13 @@
 
           <div class="meta-inputs-grid">
             <span class="meta-field-label">Invoice #:</span>
-            <input type="text" id="invoiceNumber" class="form-input" placeholder="e.g. 001">
+            <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="e.g. 001">
 
             <span class="meta-field-label">Date:</span>
-            <input type="text" id="invoiceDate" class="form-input" placeholder="e.g. Sep 7, 2026">
+            <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="e.g. Sep 7, 2026">
 
             <span class="meta-field-label">Terms:</span>
-            <select id="paymentTerms" class="form-select">
+            <select id="paymentTerms" class="form-select sheet-paper-select">
               <option value="Due on Receipt">Due on Receipt</option>
               <option value="Net 15 Days">Net 15 Days</option>
               <option value="Net 30 Days">Net 30 Days</option>
@@ -135,13 +135,13 @@
             </select>
 
             <span class="meta-field-label due-date-field-row" style="display: none;">Due Date:</span>
-            <input type="text" id="dueDateInput" class="form-input due-date-field-row" placeholder="e.g. Sep 21, 2026" style="display: none;">
+            <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="e.g. Sep 21, 2026" style="display: none;">
 
             <!-- PO Number (Toggleable) -->
             <span class="meta-field-label po-field-row" style="display: none;">PO Number:</span>
-            <input type="text" id="poNumber" class="form-input po-field-row" placeholder="Optional PO#" style="display: none;">
+            <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="Optional PO#" style="display: none;">
 
-            <!-- Dedicated Gray Balance Due Strip -->
+            <!-- Dedicated Balance Due Strip -->
             <div class="balance-due-strip">
               <span class="strip-label" data-i18n="lbl_balance_due">Balance Due:</span>
               <span class="strip-val" id="balanceDueDisplay">$0.00</span>
@@ -151,44 +151,42 @@
 
       </div>
 
-      <!-- Middle Section: Bill To & Ship To Side-by-Side -->
+      <!-- Middle Section: Bill To & Ship To Side-by-Side (Clean Stationery Typography) -->
       <div class="sheet-billing-row">
 
         <!-- Bill To -->
-        <div class="billing-card-panel">
-          <div class="billing-panel-title">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            Bill To (Client Details)
+        <div class="sheet-billing-col" id="billToCol">
+          <div class="sheet-col-header">
+            <span class="sheet-col-title">Bill To</span>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="clientName">Client Name / Company</label>
-            <input type="text" id="clientName" class="form-input" placeholder="e.g. Client / Company Name">
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="clientName">Client / Company Name</label>
+            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="Who is this invoice to?">
           </div>
-          <div class="form-group">
-            <label class="form-label" for="clientAddress">Client Address (Optional)</label>
-            <textarea id="clientAddress" class="form-textarea" rows="2" placeholder="Client street address, City, Country"></textarea>
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="clientAddress">Billing Address</label>
+            <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Client street address, City, Country&#10;Email, Phone or Tax ID"></textarea>
           </div>
         </div>
 
         <!-- Ship To (Optional or Default) -->
-        <div class="billing-card-panel" id="shipToCardPanel">
-          <div class="billing-panel-title">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-            Ship To (Destination Address)
+        <div class="sheet-billing-col" id="shipToCardPanel">
+          <div class="sheet-col-header">
+            <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="shipToName">Recipient Name / Attention</label>
-            <input type="text" id="shipToName" class="form-input" placeholder="e.g. Destination Name">
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="shipToName">Recipient Name</label>
+            <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Destination Name">
           </div>
-          <div class="form-group">
-            <label class="form-label" for="shipToAddress">Shipping Destination</label>
-            <textarea id="shipToAddress" class="form-textarea" rows="2" placeholder="Shipping destination address"></textarea>
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="shipToAddress">Shipping Destination</label>
+            <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Shipping destination address, City, Country"></textarea>
           </div>
         </div>
 
       </div>
 
-      <!-- Items Table (Dark Header) -->
+      <!-- Items Table (Modern Crisp Ledger) -->
       <div class="table-wrapper-box">
         <table class="invoice-items-table" id="refTable">
           <thead>
@@ -221,19 +219,19 @@
       <div class="sheet-bottom-section">
 
         <!-- Left: Notes, Bank Details, IBAN, VAT & Signature -->
-        <div>
-          <div class="form-group">
-            <label class="form-label" for="invoiceNotes">
-              Payment Details & Notes (Bank Info / IBAN / SWIFT / VAT)
+        <div class="sheet-notes-col">
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="invoiceNotes">
+              Payment Terms &amp; Notes
             </label>
-            <textarea id="invoiceNotes" class="form-textarea" rows="5" placeholder="Bank: Silicon Valley Bank&#10;IBAN / Swift: SVBUS6S&#10;Thank you for your business!"></textarea>
+            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="5" placeholder="Bank: Silicon Valley Bank&#10;IBAN / Swift: SVBUS6S&#10;Thank you for your business!"></textarea>
           </div>
 
           <!-- Digital Signature Line (Toggleable) -->
           <div class="signature-block-wrap" id="signatureBlockWrap" style="display: none; margin-top: 16px;">
-            <label class="form-label">Authorized Signature</label>
+            <label class="sheet-field-label">Authorized Signature</label>
             <div style="border-top: 1px solid #cbd5e1; width: 220px; padding-top: 6px;">
-              <input type="text" id="signatureInput" class="form-input" placeholder="Signer Full Name" style="border: none; padding: 4px 0; font-weight: 700;">
+              <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer Full Name" style="border: none; padding: 4px 0; font-weight: 700;">
               <div style="font-size: 0.75rem; color: #94a3b8;">Authorized Representative</div>
             </div>
           </div>
@@ -250,7 +248,7 @@
           <div class="total-line discount-line-row" id="discountLineRow" style="display: none;">
             <div class="discount-edit-group">
               <span data-i18n="opt_discount">Discount</span>
-              (<input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0">%):
+              <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0"><i>%</i></span>
             </div>
             <span class="val" id="discountAmountDisplay">-$0.00</span>
           </div>
@@ -258,7 +256,7 @@
           <div class="total-line">
             <div class="tax-edit-group">
               <span data-i18n="lbl_tax">Tax / VAT</span>
-              (<input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0">%):
+              <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0"><i>%</i></span>
             </div>
             <span class="val" id="taxAmountDisplay">$0.00</span>
           </div>
@@ -279,19 +277,18 @@
 
     </div>
 
-    <!-- Right Sidebar Controls (Holds Download, Print, Custom Styles, Currency & Options) -->
-    <aside class="action-sidebar-panel">
+    <!-- Right Sidebar: Unified Studio Inspector Panel -->
+    <aside class="action-sidebar-panel studio-inspector">
 
-      <!-- Card 1: Primary Export & Form Actions -->
-      <div class="sidebar-card-box">
-        <span class="sidebar-card-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          Export &amp; Actions
-        </span>
+      <!-- Section 1: Hero Export & Quick Tools -->
+      <div class="inspector-section inspector-hero-section">
+        <div class="inspector-section-header">
+          <span class="inspector-eyebrow">Document Actions</span>
+        </div>
 
-        <!-- Primary Green Download Button -->
+        <!-- Primary Emerald Gradient Download Button -->
         <button type="button" class="btn-generate-pdf" id="btnDownloadPDF">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -299,10 +296,10 @@
           <span data-i18n="btn_download_pdf">Download PDF</span>
         </button>
 
-        <!-- Secondary Actions Row: Print & Send Email -->
-        <div class="sidebar-action-grid-2">
-          <button type="button" class="btn-sidebar-secondary" id="btnPrintSidebar">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <!-- Secondary Actions 4-Button Utility Toolbar -->
+        <div class="inspector-toolbar-grid">
+          <button type="button" class="inspector-tool-btn" id="btnPrintSidebar" title="Print Invoice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 6 2 18 2 18 9"></polyline>
               <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
               <rect x="6" y="14" width="12" height="8"></rect>
@@ -310,43 +307,53 @@
             <span data-i18n="btn_print">Print</span>
           </button>
 
-          <button type="button" class="btn-sidebar-secondary" id="btnOpenSendEmail">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <button type="button" class="inspector-tool-btn" id="btnOpenSendEmail" title="Send via Email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
             <span data-i18n="btn_send_email">Email</span>
           </button>
-        </div>
 
-        <!-- Presets Row: Demo Sample & Clear Form -->
-        <div class="sidebar-preset-actions-grid">
-          <button type="button" class="btn-preset-action btn-preset-sample" id="btnLoadSample" title="Pre-fill invoice with realistic demo data">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            <span data-i18n="btn_sample_demo">Demo Sample</span>
+          <button type="button" class="inspector-tool-btn" id="btnLoadSample" title="Load Sample Invoice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span data-i18n="btn_sample_demo">Sample</span>
           </button>
-          <button type="button" class="btn-preset-action btn-preset-clear" id="btnClearInvoice" title="Clear all invoice fields to blank sheet">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            <span data-i18n="btn_reset_form">Clear Form</span>
+
+          <button type="button" class="inspector-tool-btn tool-btn-danger" id="btnClearInvoice" title="Clear All Fields">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span data-i18n="btn_reset_form">Clear</span>
           </button>
         </div>
       </div>
 
-      <!-- Card 2: Customize Style, Theme & Currency -->
-      <div class="sidebar-card-box">
-        <span class="sidebar-card-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-          Style &amp; Currency
-        </span>
+      <div class="inspector-divider"></div>
 
-        <!-- Style Templates -->
-        <div class="style-pills-wrap">
+      <!-- Section 2: Style, Palette & Currency -->
+      <div class="inspector-section">
+        <div class="inspector-section-header">
+          <span class="inspector-eyebrow">Design &amp; Currency</span>
+        </div>
+
+        <!-- Segmented Template Style Track -->
+        <div class="inspector-segmented-track">
           <button type="button" class="style-pill-btn" data-style="emerald">Emerald</button>
           <button type="button" class="style-pill-btn" data-style="navy">Corporate</button>
           <button type="button" class="style-pill-btn active" data-style="charcoal">Minimal</button>
           <button type="button" class="style-pill-btn" data-style="indigo">Creative</button>
         </div>
 
-        <!-- Color Accent Swatches -->
-        <div style="margin-top: 8px;">
-          <label class="form-label" style="font-size: 0.6875rem;">Color Accent</label>
+        <!-- Color Accent Strip -->
+        <div class="inspector-inline-control" style="margin-top: 14px;">
+          <span class="inspector-control-label">Accent Theme</span>
           <div class="swatches-row">
             <div class="color-swatch swatch-emerald" data-color="emerald" title="Emerald Green"></div>
             <div class="color-swatch swatch-navy" data-color="navy" title="Classic Navy"></div>
@@ -355,68 +362,76 @@
           </div>
         </div>
 
-        <!-- Billing Currency -->
-        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
-          <label for="currencySelector" class="form-label" style="font-size: 0.6875rem;">Billing Currency</label>
-          <select id="currencySelector" class="form-select" style="font-weight: 700;">
-            <option value="USD">USD ($) - US Dollar</option>
-            <option value="EUR">EUR (€) - Euro</option>
-            <option value="GBP">GBP (£) - British Pound</option>
-            <option value="BDT">BDT (৳) - Bangladeshi Taka</option>
-            <option value="INR">INR (₹) - Indian Rupee</option>
-            <option value="CAD">CAD (CA$) - Canadian Dollar</option>
-            <option value="AUD">AUD (AU$) - Australian Dollar</option>
-            <option value="JPY">JPY (¥) - Japanese Yen</option>
-            <option value="AED">AED (د.إ) - UAE Dirham</option>
-          </select>
+        <!-- Billing Currency Dropdown -->
+        <div class="inspector-inline-control" style="margin-top: 14px; flex-direction: column; align-items: stretch; gap: 6px;">
+          <label for="currencySelector" class="inspector-control-label">Currency</label>
+          <div class="custom-currency-wrap">
+            <select id="currencySelector" class="custom-currency-select">
+              <option value="USD">USD ($) — US Dollar</option>
+              <option value="EUR">EUR (€) — Euro</option>
+              <option value="GBP">GBP (£) — British Pound</option>
+              <option value="BDT">BDT (৳) — Bangladeshi Taka</option>
+              <option value="INR">INR (₹) — Indian Rupee</option>
+              <option value="CAD">CAD (CA$) — Canadian Dollar</option>
+              <option value="AUD">AUD (AU$) — Australian Dollar</option>
+              <option value="JPY">JPY (¥) — Japanese Yen</option>
+              <option value="AED">AED (د.إ) — UAE Dirham</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      <!-- Card 3: Document Fields (Customize Toggles) -->
-      <div class="sidebar-card-box">
-        <span class="sidebar-card-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-          Customize Document Fields
-        </span>
+      <div class="inspector-divider"></div>
 
-        <div class="doc-options-stack">
-          <label class="switch-toggle-row">
-            <span>Show Shipping Details</span>
+      <!-- Section 3: Document Fields & Toggles (Clean, modern Linear-style list with NO BOXES) -->
+      <div class="inspector-section">
+        <div class="inspector-section-header">
+          <span class="inspector-eyebrow">Document Options</span>
+        </div>
+
+        <div class="inspector-toggle-list">
+          <label class="inspector-toggle-row" for="toggleShipTo">
+            <span class="toggle-text">Shipping details</span>
             <div class="switch-box">
               <input type="checkbox" id="toggleShipTo" checked>
               <span class="switch-slider"></span>
             </div>
           </label>
-          <label class="switch-toggle-row">
-            <span>Show P.O. Number</span>
+
+          <label class="inspector-toggle-row" for="togglePoNumber">
+            <span class="toggle-text">Purchase Order (PO#)</span>
             <div class="switch-box">
               <input type="checkbox" id="togglePoNumber">
               <span class="switch-slider"></span>
             </div>
           </label>
-          <label class="switch-toggle-row">
-            <span>Show Due Date</span>
+
+          <label class="inspector-toggle-row" for="toggleDueDate">
+            <span class="toggle-text">Payment Due Date</span>
             <div class="switch-box">
               <input type="checkbox" id="toggleDueDate">
               <span class="switch-slider"></span>
             </div>
           </label>
-          <label class="switch-toggle-row">
-            <span>Show Discount (% off)</span>
+
+          <label class="inspector-toggle-row" for="toggleDiscount">
+            <span class="toggle-text">Discount percentage</span>
             <div class="switch-box">
               <input type="checkbox" id="toggleDiscount">
               <span class="switch-slider"></span>
             </div>
           </label>
-          <label class="switch-toggle-row">
-            <span>Show Amount Paid</span>
+
+          <label class="inspector-toggle-row" for="toggleAmountPaid">
+            <span class="toggle-text">Deposit / Amount paid</span>
             <div class="switch-box">
               <input type="checkbox" id="toggleAmountPaid">
               <span class="switch-slider"></span>
             </div>
           </label>
-          <label class="switch-toggle-row">
-            <span>Show Signature Line</span>
+
+          <label class="inspector-toggle-row" for="toggleSignature">
+            <span class="toggle-text">Signature line</span>
             <div class="switch-box">
               <input type="checkbox" id="toggleSignature">
               <span class="switch-slider"></span>
@@ -533,6 +548,7 @@
             <a href="templates.html" data-i18n="nav_templates">Templates</a>
             <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
             <a href="payments.html">Payments Hub</a>
+            <a href="sitemap.html">Sitemap</a>
           </div>
         </div>
 

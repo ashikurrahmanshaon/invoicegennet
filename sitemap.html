@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Sitemap | Invoice-Gen.net</title>
+  <meta name="description" content="Explore all pages, tools, invoice templates, guides, and resources available on Invoice-Gen.net.">
+  <link rel="canonical" href="https://invoice-gen.net/sitemap.html">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    .sitemap-hero {
+      padding: 60px 0 40px;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .sitemap-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #047857;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      margin-bottom: 16px;
+    }
+    .sitemap-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .sitemap-subtitle {
+      font-size: 1.05rem;
+      color: #64748b;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .sitemap-body {
+      padding: 50px 0 80px;
+    }
+    .sitemap-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 768px) {
+      .sitemap-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .sitemap-card {
+      background: #ffffff;
+      border: 1px solid #e8ecf1;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+      transition: all 0.2s ease;
+    }
+    .sitemap-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .card-icon-frame {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: #f0fdf4;
+      color: #00c875;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+    .sitemap-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .sitemap-links-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sitemap-link {
+      color: #334155;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: color 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sitemap-link:hover {
+      color: #00c875;
+    }
+    .sitemap-link-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #64748b;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .xml-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .xml-text {
+      font-size: 0.9rem;
+      color: #475569;
+    }
+    .xml-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .xml-btn:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top SaaS Header -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="38" height="38">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+      <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item">Templates</a>
+        <a href="features.html" class="nav-link-item">Features</a>
+        <a href="pricing.html" class="nav-link-item">Pricing</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions-wrap">
+        <a href="login.html" class="btn-login">Log In</a>
+        <a href="signup.html" class="btn-signup-free">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="sitemap-hero">
+    <div class="container">
+      <span class="sitemap-tag">Overview &amp; Directory</span>
+      <h1 class="sitemap-title">Website Sitemap</h1>
+      <p class="sitemap-subtitle">Quick access to all generators, template designs, guides, and legal pages on Invoice-Gen.net.</p>
+    </div>
+  </section>
+
+  <!-- Body -->
+  <div class="sitemap-body">
+    <div class="container">
+      <div class="sitemap-grid">
+
+        <!-- Card 1: Generator & Tools -->
+        <div class="sitemap-card">
+          <div class="card-header">
+            <div class="card-icon-frame">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <h2 class="card-title">Invoicing Generators</h2>
+          </div>
+          <ul class="sitemap-links-list">
+            <li>
+              <a href="index.html" class="sitemap-link">Main Invoice Generator</a>
+              <span class="sitemap-link-tag">Core App</span>
+            </li>
+            <li>
+              <a href="free-invoice-generator.html" class="sitemap-link">Free Invoice Generator</a>
+              <span class="sitemap-link-tag">Popular</span>
+            </li>
+            <li>
+              <a href="pdf-invoice-generator.html" class="sitemap-link">PDF Invoice Generator</a>
+              <span class="sitemap-link-tag">High-Res</span>
+            </li>
+            <li>
+              <a href="invoice-generator-for-freelancers.html" class="sitemap-link">Freelancer Invoice Generator</a>
+              <span class="sitemap-link-tag">Freelance</span>
+            </li>
+            <li>
+              <a href="gst-invoice-generator.html" class="sitemap-link">GST Invoice Generator</a>
+              <span class="sitemap-link-tag">Tax / GST</span>
+            </li>
+            <li>
+              <a href="invoice-number-generator.html" class="sitemap-link">Invoice Number Generator</a>
+              <span class="sitemap-link-tag">Utility</span>
+            </li>
+            <li>
+              <a href="best-invoice-generator.html" class="sitemap-link">Best Invoice Generator 2026</a>
+              <span class="sitemap-link-tag">Comparison</span>
+            </li>
+            <li>
+              <a href="how-to-make-an-invoice.html" class="sitemap-link">How to Make an Invoice</a>
+              <span class="sitemap-link-tag">Tutorial</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Products & Platform -->
+        <div class="sitemap-card">
+          <div class="card-header">
+            <div class="card-icon-frame">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            </div>
+            <h2 class="card-title">Product &amp; Features</h2>
+          </div>
+          <ul class="sitemap-links-list">
+            <li>
+              <a href="templates.html" class="sitemap-link">Professional Invoice Templates</a>
+              <span class="sitemap-link-tag">Designs</span>
+            </li>
+            <li>
+              <a href="pricing.html" class="sitemap-link">Transparent Pricing</a>
+              <span class="sitemap-link-tag">Plans</span>
+            </li>
+            <li>
+              <a href="payments.html" class="sitemap-link">Payments Hub</a>
+              <span class="sitemap-link-tag">Stripe / PayPal</span>
+            </li>
+            <li>
+              <a href="features.html" class="sitemap-link">Platform Features &amp; Capabilities</a>
+              <span class="sitemap-link-tag">Overview</span>
+            </li>
+            <li>
+              <a href="security.html" class="sitemap-link">Security &amp; Client-Side Privacy</a>
+              <span class="sitemap-link-tag">100% Private</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Guides & Resources -->
+        <div class="sitemap-card">
+          <div class="card-header">
+            <div class="card-icon-frame">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            </div>
+            <h2 class="card-title">Guides &amp; Articles</h2>
+          </div>
+          <ul class="sitemap-links-list">
+            <li>
+              <a href="blog.html" class="sitemap-link">Blog &amp; Knowledge Hub</a>
+              <span class="sitemap-link-tag">Articles</span>
+            </li>
+            <li>
+              <a href="invoicing-guide.html" class="sitemap-link">Complete Invoicing Guide 2026</a>
+              <span class="sitemap-link-tag">Guide</span>
+            </li>
+            <li>
+              <a href="getting-paid-faster.html" class="sitemap-link">Getting Paid Faster: 7 Proven Tips</a>
+              <span class="sitemap-link-tag">Finance</span>
+            </li>
+            <li>
+              <a href="stripe-vs-paypal.html" class="sitemap-link">Stripe vs PayPal for Invoicing</a>
+              <span class="sitemap-link-tag">Payments</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Card 4: Company & Legal -->
+        <div class="sitemap-card">
+          <div class="card-header">
+            <div class="card-icon-frame">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h2 class="card-title">Company &amp; Legal</h2>
+          </div>
+          <ul class="sitemap-links-list">
+            <li>
+              <a href="about.html" class="sitemap-link">Company Story &amp; Mission</a>
+              <span class="sitemap-link-tag">About</span>
+            </li>
+            <li>
+              <a href="contact.html" class="sitemap-link">Contact &amp; Support</a>
+              <span class="sitemap-link-tag">Help</span>
+            </li>
+            <li>
+              <a href="privacy.html" class="sitemap-link">Privacy Policy</a>
+              <span class="sitemap-link-tag">Legal</span>
+            </li>
+            <li>
+              <a href="terms.html" class="sitemap-link">Terms of Service</a>
+              <span class="sitemap-link-tag">Legal</span>
+            </li>
+            <li>
+              <a href="refunds.html" class="sitemap-link">Refund Policy</a>
+              <span class="sitemap-link-tag">Billing</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Raw XML Box -->
+      <div class="xml-box">
+        <div>
+          <strong style="color: #0f172a; font-size: 1rem; display: block; margin-bottom: 4px;">Looking for the Machine-Readable XML Feed?</strong>
+          <span class="xml-text">We maintain a real-time standard XML sitemap for Google Search Console, Bing Webmaster Tools, and web spiders.</span>
+        </div>
+        <a href="sitemap.xml" class="xml-btn" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          View XML Sitemap Feed
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Complete SaaS Footer -->
+  <footer class="saas-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="44" height="44">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p>
+            The modern, private, and effortless online invoice generator. Helping freelancers and businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html">Invoice Generator</a>
+            <a href="templates.html">Templates</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="payments.html">Payments Hub</a>
+            <a href="sitemap.html">Sitemap</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
