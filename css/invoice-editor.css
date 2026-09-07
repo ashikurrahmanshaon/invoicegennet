@@ -572,7 +572,7 @@
    ========================================================================== */
 .action-sidebar-panel {
   position: sticky;
-  top: 80px;
+  top: 86px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -874,21 +874,22 @@
 }
 
 /* ==========================================================================
-   ENHANCED SAAS NAVBAR WITH LOGIN / SIGNUP
+   ENHANCED SAAS NAVBAR WITH LOGIN / SIGNUP (70px Luxury SaaS Tier)
    ========================================================================== */
 .navbar-saas {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e2e8f0;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
 }
 
 .navbar-saas .container {
-  height: 64px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -897,18 +898,18 @@
 .brand-wrapper {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   text-decoration: none;
   transition: opacity 0.15s ease;
 }
 
 .brand-wrapper:hover {
-  opacity: 0.92;
+  opacity: 0.94;
 }
 
 .brand-logo-frame {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -920,25 +921,15 @@
 }
 
 .brand-icon-svg {
-  width: 38px;
-  height: 38px;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
   display: block;
   flex-shrink: 0;
   transform: translateZ(0);
   backface-visibility: hidden;
   image-rendering: -webkit-optimize-contrast;
-}
-
-.brand-wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  transition: opacity 0.15s ease;
-}
-
-.brand-wrapper:hover {
-  opacity: 0.92;
 }
 
 .brand-text-block {
@@ -949,10 +940,10 @@
 
 .brand-name {
   font-family: 'Plus Jakarta Sans', var(--font-sans), sans-serif;
-  font-size: 1.34rem;
+  font-size: 1.46rem;
   font-weight: 800;
   color: #0f172a;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -961,26 +952,27 @@
 .brand-name .accent {
   display: inline-flex;
   align-items: center;
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 800;
   font-family: 'JetBrains Mono', var(--font-mono), monospace;
-  color: #059669;
-  background: #ecfdf5;
+  color: #047857;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
   border: 1px solid #a7f3d0;
-  padding: 2px 7px;
-  border-radius: 6px;
-  margin-left: 6px;
-  letter-spacing: 0.01em;
-  line-height: 1.25;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
   text-transform: lowercase;
-  box-shadow: 0 1px 2px rgba(16, 185, 129, 0.06);
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.12);
+  transition: all 0.2s ease;
 }
 
 .brand-wrapper:hover .brand-name .accent {
-  background: #d1fae5;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
   border-color: #6ee7b7;
-  color: #047857;
+  color: #065f46;
+  transform: translateY(-0.5px);
 }
 
 .brand-tagline {
@@ -991,11 +983,15 @@
   text-transform: uppercase;
 }
 
-/* Nav Links in Center */
+/* Nav Links in Center (Modern Floating Segmented Dock) */
 .nav-center-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 2px;
+  background: rgba(241, 245, 249, 0.75);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
   white-space: nowrap;
 }
 
@@ -1007,30 +1003,29 @@
 
 .nav-link-item {
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #475569;
+  font-weight: 600;
+  color: #64748b;
   text-decoration: none;
   white-space: nowrap;
-  padding: 6px 0;
+  padding: 6px 16px;
+  border-radius: 7px;
   border: none;
-  border-radius: 0;
   background: transparent;
   box-shadow: none;
-  transition: color 150ms ease;
+  transition: all 150ms ease;
   line-height: 1.4;
 }
 
 .nav-link-item:hover {
   color: #0f172a;
-  background-color: transparent;
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .nav-link-item.active {
-  color: #00c875;
-  font-weight: 600;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
+  color: #0f172a;
+  background: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 /* Header Right Actions (Clean Minimalist Auth) */
@@ -1236,27 +1231,28 @@
 .btn-signup-free {
   background: #0f172a;
   color: #ffffff;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  padding: 0 16px;
-  height: 36px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0 18px;
+  height: 38px;
   box-sizing: border-box;
-  border-radius: 6px;
-  border: 1px solid #0f172a;
+  border-radius: 8px;
+  border: 1px solid #1e293b;
   cursor: pointer;
-  transition: background-color 150ms ease, border-color 150ms ease;
+  transition: all 150ms ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1), 0 2px 6px -1px rgba(15, 23, 42, 0.15);
   letter-spacing: -0.01em;
 }
 
 .btn-signup-free:hover {
   background: #1e293b;
-  border-color: #1e293b;
+  border-color: #334155;
   color: #ffffff;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.2);
 }
 
 .btn-signup-free.active-auth-nav {

@@ -1,56 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
   <defs>
-    <!-- Vibrant FinTech Emerald Gradient -->
-    <linearGradient id="emSquircle" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#00E887" />
-      <stop offset="45%" stop-color="#00C06F" />
+    <!-- Background Shadow Card -->
+    <linearGradient id="backSheet" x1="6" y1="4" x2="34" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.28" />
+    </linearGradient>
+
+    <!-- Foreground Luminous Emerald Gradient -->
+    <linearGradient id="mainSheet" x1="11" y1="3" x2="41" y2="43" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00F59B" />
+      <stop offset="45%" stop-color="#00C472" />
       <stop offset="100%" stop-color="#047857" />
     </linearGradient>
 
-    <!-- Subtle Top Rim Highlight -->
-    <linearGradient id="rimGrad" x1="4" y1="4" x2="44" y2="24" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.08" />
+    <!-- Folded Corner Gradient -->
+    <linearGradient id="flapGrad" x1="29" y1="3" x2="41" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E6FDF3" />
+      <stop offset="100%" stop-color="#34D399" />
     </linearGradient>
 
-    <!-- Floating Document Depth Gradient -->
-    <linearGradient id="docGrad" x1="13" y1="8" x2="35" y2="40" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FFFFFF" />
-      <stop offset="100%" stop-color="#F8FAFC" />
-    </linearGradient>
-
-    <!-- Folded Corner Depth -->
-    <linearGradient id="foldGrad" x1="26" y1="8" x2="35" y2="17" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#E2E8F0" />
-      <stop offset="100%" stop-color="#CBD5E1" />
-    </linearGradient>
-
-    <!-- Crisp Soft Drop Shadow on Document -->
-    <filter id="docShadow" x="9" y="6" width="30" height="36" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#022C1B" flood-opacity="0.28" />
+    <!-- Drop Shadow -->
+    <filter id="cardShadow" x="5" y="2" width="41" height="45" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2.5" stdDeviation="2" flood-color="#043825" flood-opacity="0.26" />
     </filter>
   </defs>
 
-  <!-- Base Rounded Squircle (rx=11) -->
-  <rect x="3" y="3" width="42" height="42" rx="11" fill="url(#emSquircle)" />
-  <rect x="3.5" y="3.5" width="41" height="41" rx="10.5" stroke="url(#rimGrad)" stroke-width="1" />
+  <!-- Back Layer: Dimensional Secondary Sheet -->
+  <path d="M7 9C7 7.34315 8.34315 6 10 6H26L34 14V36C34 37.6569 32.6569 39 31 39H10C8.34315 39 7 37.6569 7 36V9Z" fill="url(#backSheet)" />
 
-  <!-- Floating Pristine Invoice Sheet -->
-  <g filter="url(#docShadow)">
-    <path d="M13 11C13 9.34315 14.3431 8 16 8H26L35 17V37C35 38.6569 33.6569 40 32 40H16C14.3431 40 13 38.6569 13 37V11Z" fill="url(#docGrad)" />
+  <!-- Front Layer: Primary Emerald Invoice Sheet -->
+  <g filter="url(#cardShadow)">
+    <path d="M12 5C12 3.34315 13.3431 2 15 2H30L41 13V39C41 40.6569 39.6569 42 38 42H15C13.3431 42 12 40.6569 12 39V5Z" fill="url(#mainSheet)" />
     <!-- Folded Corner Flap -->
-    <path d="M26 8V14.5C26 15.8807 27.1193 17 28.5 17H35L26 8Z" fill="url(#foldGrad)" />
+    <path d="M30 2V11C30 12.1046 30.8954 13 32 13H41L30 2Z" fill="url(#flapGrad)" />
   </g>
 
-  <!-- Modern Financial Ledger Elements (High-contrast, razor-sharp) -->
-  <!-- Header Accent Pill (Emerald) -->
-  <rect x="17.5" y="13.5" width="6" height="2.5" rx="1.25" fill="#00B86B" />
+  <!-- Inside Document Details -->
+  <!-- Top Meta / Status Bar -->
+  <rect x="17" y="14" width="7" height="3" rx="1.5" fill="#FFFFFF" />
+  
+  <!-- Line Item Rows -->
+  <rect x="17" y="20" width="16" height="2.5" rx="1.25" fill="#FFFFFF" fill-opacity="0.95" />
+  <rect x="17" y="25" width="11" height="2.5" rx="1.25" fill="#FFFFFF" fill-opacity="0.8" />
 
-  <!-- Ledger Rows (Slate 700 & Slate 400) -->
-  <rect x="17.5" y="19.5" width="13" height="2.2" rx="1.1" fill="#334155" />
-  <rect x="17.5" y="24" width="8.5" height="2.2" rx="1.1" fill="#64748B" />
-  <rect x="17.5" y="28.5" width="11" height="2.2" rx="1.1" fill="#94A3B8" />
-
-  <!-- Verified Total Badge / Summary Row (Bold Obsidian Slate) -->
-  <rect x="17.5" y="33.5" width="13" height="2.5" rx="1.25" fill="#0F172A" />
+  <!-- Verified Paid Seal / Checkmark Badge -->
+  <circle cx="31.5" cy="33.5" r="5.5" fill="#FFFFFF" />
+  <path d="M29 33.5L30.8 35.3L34.2 31.8" stroke="#047857" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
 </svg>
