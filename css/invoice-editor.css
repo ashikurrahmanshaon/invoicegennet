@@ -475,12 +475,14 @@
   overflow-x: auto;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
+  background-color: #ffffff;
 }
 
 .invoice-items-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 580px;
+  table-layout: fixed;
 }
 
 .invoice-items-table thead tr {
@@ -502,11 +504,13 @@
 .invoice-items-table th.col-rate,
 .invoice-items-table th.col-amount {
   text-align: right;
+  padding-right: 14px;
 }
 
 .invoice-items-table th.col-action {
-  width: 44px;
+  width: 46px;
   text-align: center;
+  padding: 12px 4px;
 }
 
 .invoice-items-table tbody tr {
@@ -519,15 +523,25 @@
 }
 
 .invoice-items-table td {
-  padding: 6px 8px;
+  padding: 8px 6px;
   vertical-align: middle;
+}
+
+.invoice-items-table td.col-desc {
+  padding-left: 10px;
+}
+
+.invoice-items-table td.col-action {
+  text-align: center;
+  padding-right: 10px;
 }
 
 .table-input-field {
   width: 100%;
+  height: 40px;
   padding: 8px 12px;
   border: 1.5px solid #cbd5e1;
-  border-radius: 7px;
+  border-radius: 8px;
   font-size: 0.875rem;
   color: #0f172a;
   background-color: #ffffff;
@@ -553,22 +567,27 @@
   font-weight: 500;
 }
 
-/* Distinct Computed Output Amount Badge */
+/* Distinct Computed Output Amount Box */
 .table-amount-val {
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  background-color: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 700;
   font-family: var(--font-mono);
   color: #0f172a;
   text-align: right;
   white-space: nowrap;
-  padding: 8px 12px;
-  background-color: #f1f5f9;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 7px;
-  display: block;
   box-sizing: border-box;
   letter-spacing: -0.01em;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.02);
 }
 
 .btn-trash-row {
@@ -576,12 +595,15 @@
   border: 1px solid transparent;
   color: #94a3b8;
   cursor: pointer;
-  padding: 7px;
-  border-radius: 6px;
-  display: flex;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
+  margin: 0 auto;
 }
 
 .btn-trash-row:hover {

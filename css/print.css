@@ -76,6 +76,14 @@
     color: transparent !important;
   }
 
+  .table-amount-val {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    height: auto !important;
+  }
+
   /* Force table headers to print in dark/contrast background */
   .invoice-items-table thead tr,
   #refTable thead tr {

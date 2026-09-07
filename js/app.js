@@ -197,17 +197,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const itemTotal = (parseFloat(item.quantity) || 0) * (parseFloat(item.rate) || 0);
 
       row.innerHTML = `
-        <td>
+        <td class="col-desc">
           <input type="text" class="table-input-field item-desc-field" placeholder="e.g. Website Development / Consulting service" value="${escapeHtml(item.description || '')}">
         </td>
-        <td>
+        <td class="col-qty">
           <input type="number" min="0" step="any" class="table-input-field item-qty-field" style="text-align: right;" value="${item.quantity}">
         </td>
-        <td>
+        <td class="col-rate">
           <input type="number" min="0" step="0.01" class="table-input-field item-rate-field" style="text-align: right;" value="${item.rate}">
         </td>
-        <td class="table-amount-val item-amount-col">
-          ${store.formatMoney(itemTotal)}
+        <td class="col-amount">
+          <div class="table-amount-val item-amount-col">${store.formatMoney(itemTotal)}</div>
         </td>
         <td class="col-action">
           <button type="button" class="btn-trash-row" title="Delete Row" data-id="${item.id}">

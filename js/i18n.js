@@ -263,14 +263,14 @@
       zh: '清空重置'
     },
     btn_add_item: {
-      en: '+ Add Line Item',
-      bn: '+ নতুন আইটেম যোগ করুন',
-      es: '+ Agregar Artículo',
-      fr: '+ Ajouter une Ligne',
-      de: '+ Position Hinzufügen',
-      ar: '+ إضافة عنصر',
-      hi: '+ नया आइटम जोड़ें',
-      zh: '+ 添加商品明细'
+      en: 'Add Line Item',
+      bn: 'নতুন আইটেম যোগ করুন',
+      es: 'Agregar Artículo',
+      fr: 'Ajouter une Ligne',
+      de: 'Position Hinzufügen',
+      ar: 'إضافة عنصر',
+      hi: 'नया आइटम जोड़ें',
+      zh: '添加商品明细'
     },
 
     // Invoice Form Fields
