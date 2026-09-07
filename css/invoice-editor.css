@@ -1177,10 +1177,10 @@
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.1875rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: #090d16;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -1194,21 +1194,23 @@
   font-weight: 800;
 }
 
+.brand-name .tld-net,
+.brand-name .dot-net,
 .brand-name .brand-badge,
 .brand-name .badge-net {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.625rem;
-  font-weight: 700;
-  color: #059669;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.22);
-  border-radius: 4px;
-  padding: 1.5px 5px;
-  margin-left: 5px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  vertical-align: middle;
-  line-height: 1.2;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: -0.01em;
+  margin-left: 2px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  text-transform: lowercase;
+  vertical-align: baseline;
+  line-height: 1;
+  -webkit-text-fill-color: initial;
 }
 
 /* 2. Floating Segmented Navigation Capsule */

@@ -522,10 +522,10 @@ ul, ol {
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.1875rem !important;
+  font-size: 1.25rem !important;
   font-weight: 800 !important;
   color: #090d16 !important;
-  letter-spacing: -0.035em !important;
+  letter-spacing: -0.04em !important;
   line-height: 1 !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -539,21 +539,22 @@ ul, ol {
   font-weight: 800 !important;
 }
 
+.brand-name .tld-net,
+.brand-name .dot-net,
 .brand-name .brand-badge,
 .brand-name .badge-net {
-  font-family: var(--font-mono, monospace);
-  font-size: 0.625rem !important;
-  font-weight: 700 !important;
-  color: #059669 !important;
-  background: rgba(16, 185, 129, 0.08) !important;
-  border: 1px solid rgba(16, 185, 129, 0.22) !important;
-  border-radius: 4px !important;
-  padding: 1.5px 5px !important;
-  margin-left: 5px !important;
-  letter-spacing: 0.04em !important;
-  text-transform: uppercase !important;
-  vertical-align: middle !important;
-  line-height: 1.2 !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #94a3b8 !important;
+  letter-spacing: -0.01em !important;
+  margin-left: 2px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  text-transform: lowercase !important;
+  vertical-align: baseline !important;
+  line-height: 1 !important;
   -webkit-text-fill-color: initial !important;
 }
 
