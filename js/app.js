@@ -73,9 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnLoadSample = document.getElementById('btnLoadSample');
   const btnClearInvoice = document.getElementById('btnClearInvoice');
 
-  // DOM Elements - Sidebar Customizer (Styles & Colors)
-  const stylePillBtns = document.querySelectorAll('.style-pill-btn');
-  const colorSwatches = document.querySelectorAll('.color-swatch');
+  // DOM Elements - Sidebar Customizer (Theme Palette)
+  const themePalettePills = document.querySelectorAll('.theme-palette-pill, .style-pill-btn, .color-swatch');
 
   // DOM Elements - Sidebar Document Field Toggles
   const toggleShipTo = document.getElementById('toggleShipTo');
@@ -410,21 +409,12 @@ document.addEventListener('DOMContentLoaded', () => {
       invoicePaper.classList.add(`theme-${themeName}`);
     }
 
-    // Sync active style pills
-    stylePillBtns.forEach(btn => {
-      if (btn.dataset.style === themeName) {
+    // Sync active theme pills
+    themePalettePills.forEach(btn => {
+      if (btn.dataset.style === themeName || btn.dataset.color === themeName) {
         btn.classList.add('active');
       } else {
         btn.classList.remove('active');
-      }
-    });
-
-    // Sync active color swatches
-    colorSwatches.forEach(swatch => {
-      if (swatch.dataset.color === themeName) {
-        swatch.classList.add('active');
-      } else {
-        swatch.classList.remove('active');
       }
     });
 
@@ -432,17 +422,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.pdfEngine) window.pdfEngine.showToast(`Applied ${displayName} invoice style`);
   }
 
-  stylePillBtns.forEach(btn => {
+  themePalettePills.forEach(btn => {
     btn.addEventListener('click', () => {
-      const style = btn.dataset.style || 'emerald';
+      const style = btn.dataset.style || btn.dataset.color || 'emerald';
       applyTheme(style);
-    });
-  });
-
-  colorSwatches.forEach(swatch => {
-    swatch.addEventListener('click', () => {
-      const color = swatch.dataset.color || 'emerald';
-      applyTheme(color);
     });
   });
 

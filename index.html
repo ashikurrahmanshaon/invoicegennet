@@ -343,28 +343,29 @@
           <span class="inspector-eyebrow">Design &amp; Currency</span>
         </div>
 
-        <!-- Segmented Template Style Track -->
-        <div class="inspector-segmented-track">
-          <button type="button" class="style-pill-btn" data-style="emerald">Emerald</button>
-          <button type="button" class="style-pill-btn" data-style="navy">Corporate</button>
-          <button type="button" class="style-pill-btn active" data-style="charcoal">Minimal</button>
-          <button type="button" class="style-pill-btn" data-style="indigo">Creative</button>
-        </div>
-
-        <!-- Color Accent Strip -->
-        <div class="inspector-inline-control" style="margin-top: 14px;">
-          <span class="inspector-control-label">Accent Theme</span>
-          <div class="swatches-row">
-            <div class="color-swatch swatch-emerald" data-color="emerald" title="Emerald Green"></div>
-            <div class="color-swatch swatch-navy" data-color="navy" title="Classic Navy"></div>
-            <div class="color-swatch swatch-charcoal active" data-color="charcoal" title="Slate Charcoal"></div>
-            <div class="color-swatch swatch-indigo" data-color="indigo" title="Royal Indigo"></div>
-          </div>
+        <!-- Unified Theme Palette Selector -->
+        <div class="inspector-theme-grid">
+          <button type="button" class="theme-palette-pill active" data-style="charcoal" data-color="charcoal" title="Slate Minimal theme">
+            <span class="palette-swatch-dot swatch-charcoal"></span>
+            <span class="palette-swatch-name">Minimal</span>
+          </button>
+          <button type="button" class="theme-palette-pill" data-style="emerald" data-color="emerald" title="Emerald Green theme">
+            <span class="palette-swatch-dot swatch-emerald"></span>
+            <span class="palette-swatch-name">Emerald</span>
+          </button>
+          <button type="button" class="theme-palette-pill" data-style="navy" data-color="navy" title="Corporate Navy theme">
+            <span class="palette-swatch-dot swatch-navy"></span>
+            <span class="palette-swatch-name">Corporate</span>
+          </button>
+          <button type="button" class="theme-palette-pill" data-style="indigo" data-color="indigo" title="Creative Indigo theme">
+            <span class="palette-swatch-dot swatch-indigo"></span>
+            <span class="palette-swatch-name">Creative</span>
+          </button>
         </div>
 
         <!-- Billing Currency Dropdown -->
-        <div class="inspector-inline-control" style="margin-top: 14px; flex-direction: column; align-items: stretch; gap: 6px;">
-          <label for="currencySelector" class="inspector-control-label">Currency</label>
+        <div class="inspector-inline-control" style="margin-top: 12px; flex-direction: column; align-items: stretch; gap: 6px;">
+          <label for="currencySelector" class="inspector-control-label">Billing Currency</label>
           <div class="custom-currency-wrap">
             <select id="currencySelector" class="custom-currency-select">
               <option value="USD">USD ($) — US Dollar</option>
@@ -447,28 +448,30 @@
   <!-- Login & Sign Up Modal -->
   <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true">
     <div class="auth-modal-card">
-      <button type="button" class="btn-close-modal" id="btnCloseAuthModal" aria-label="Close modal">&times;</button>
+      <button type="button" class="btn-close-modal" id="btnCloseAuthModal" aria-label="Close modal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
       
       <div class="auth-header">
         <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo">
         <h3 class="auth-title" id="authModalTitle">Welcome to InvoiceGen</h3>
-        <p class="auth-sub" id="authModalSub">Create a free account or sign in</p>
+        <p class="auth-sub" id="authModalSub">Create a free account or sign in to save invoices</p>
       </div>
 
-      <!-- Google OAuth Mockup -->
+      <!-- Google OAuth Button -->
       <button type="button" class="btn-oauth-google" id="btnGoogleAuth">
         <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
         Continue with Google
       </button>
 
       <div class="oauth-divider">
-        <span>OR EMAIL</span>
+        <span>OR WITH EMAIL</span>
       </div>
 
       <form id="authForm" onsubmit="event.preventDefault(); window.handleAuthSubmit();">
         <div class="form-group">
           <label class="form-label" for="authEmail">Work Email</label>
-          <input type="email" id="authEmail" class="form-input" placeholder="you@company.com" required>
+          <input type="email" id="authEmail" class="form-input" placeholder="name@company.com" required>
         </div>
 
         <div class="form-group">
@@ -488,12 +491,17 @@
 
   <!-- Send via Email Modal -->
   <div class="modal-overlay" id="sendEmailModal" role="dialog" aria-modal="true">
-    <div class="auth-modal-card">
-      <button type="button" class="btn-close-modal" id="btnCloseSendEmail" aria-label="Close modal">&times;</button>
+    <div class="auth-modal-card send-email-card">
+      <button type="button" class="btn-close-modal" id="btnCloseSendEmail" aria-label="Close modal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
       
       <div class="auth-header">
+        <div class="modal-badge-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        </div>
         <h3 class="auth-title">Send Invoice via Email</h3>
-        <p class="auth-sub">Send this invoice directly to your client</p>
+        <p class="auth-sub">Directly launch your mail client with recipient and invoice details pre-filled</p>
       </div>
 
       <form id="sendEmailForm" onsubmit="event.preventDefault(); window.handleSendEmailSubmit();">
@@ -508,11 +516,14 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="emailMessage">Message</label>
+          <label class="form-label" for="emailMessage">Message Note</label>
           <textarea id="emailMessage" class="form-textarea" rows="3">Hi, please find attached your invoice. Thank you for your business!</textarea>
         </div>
 
-        <button type="submit" class="btn-auth-submit">Create Email Message</button>
+        <button type="submit" class="btn-auth-submit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          Compose in Email Client
+        </button>
       </form>
     </div>
   </div>
