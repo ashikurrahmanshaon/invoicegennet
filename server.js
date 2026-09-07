@@ -187,11 +187,11 @@ const server = http.createServer((req, res) => {
       const contentType = MIME_TYPES[ext] || 'application/octet-stream';
       const headers = { 'Content-Type': contentType };
 
-      // Favicons, static images, and fonts can stay cached to prevent layout/tab flicker
-      if (['.ico', '.svg', '.png', '.jpg', '.jpeg', '.woff2', '.woff'].includes(ext)) {
+      // Fonts can stay cached to prevent font flicker
+      if (['.woff2', '.woff'].includes(ext)) {
         headers['Cache-Control'] = 'public, max-age=31536000, immutable';
       } else {
-        // HTML, CSS, JS, JSON: Disable caching completely so reloads and edits take effect instantly
+        // HTML, CSS, JS, SVG, ICO, JSON: Disable caching completely so reloads and edits take effect instantly
         headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
         headers['Pragma'] = 'no-cache';
         headers['Expires'] = '0';
