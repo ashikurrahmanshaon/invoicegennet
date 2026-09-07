@@ -110,7 +110,7 @@ class PDFEngine {
     const discountRate = getVal('discountRate', store.discountValue || '0');
 
     const taxAmt = getText('taxAmountDisplay', '+$0.00');
-    const taxRate = getVal('taxRateInput', store.taxRate || '0');
+    const taxRate = getVal('taxRate', getVal('taxRateInput', store.taxRate || '0'));
 
     const shippingLine = document.getElementById('shippingLineRow');
     const hasShipping = shippingLine && window.getComputedStyle(shippingLine).display !== 'none';
@@ -220,15 +220,15 @@ class PDFEngine {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 12px;
       line-height: 1.5;
-      padding: 6px 4px;
+      padding: 10px 8px;
       -webkit-font-smoothing: antialiased;
     `;
 
-    // Table rows HTML
+    // Table rows HTML - Clean minimalist layout matching reference (No heavy borders!)
     let tableRowsHtml = '';
     if (items.length === 0) {
       tableRowsHtml = `
-        <tr style="border-bottom: 1px solid #f1f5f9;">
+        <tr style="border: none;">
           <td colspan="4" style="padding: 16px 14px; text-align: center; color: #9ca3af; font-style: italic;">
             No items listed.
           </td>
@@ -237,20 +237,20 @@ class PDFEngine {
     } else {
       items.forEach((item) => {
         tableRowsHtml += `
-          <tr style="border-bottom: 1px solid #f1f5f9;">
-            <td style="padding: 10px 14px; vertical-align: top;">
+          <tr style="border: none;">
+            <td style="padding: 12px 14px; vertical-align: top;">
               <div style="font-weight: 500; font-size: 12.5px; color: #111827; line-height: 1.4;">
-                ${this.escapeHtml(item.desc || 'Item Description')}
+                ${this.escapeHtml(item.desc || '')}
               </div>
               ${item.subtext ? `<div style="font-size: 11px; color: #6b7280; margin-top: 2px; line-height: 1.35;">${this.escapeHtml(item.subtext)}</div>` : ''}
             </td>
-            <td style="padding: 10px 14px; text-align: right; vertical-align: top; font-size: 12px; color: #111827;">
+            <td style="padding: 12px 14px; text-align: right; vertical-align: top; font-size: 12px; color: #111827;">
               ${this.escapeHtml(item.qty)}
             </td>
-            <td style="padding: 10px 14px; text-align: right; vertical-align: top; font-size: 12px; color: #111827;">
+            <td style="padding: 12px 14px; text-align: right; vertical-align: top; font-size: 12px; color: #111827;">
               ${this.escapeHtml(item.rate)}
             </td>
-            <td style="padding: 10px 14px; text-align: right; vertical-align: top; font-size: 12px; font-weight: 500; color: #111827;">
+            <td style="padding: 12px 14px; text-align: right; vertical-align: top; font-size: 12px; font-weight: 500; color: #111827;">
               ${this.escapeHtml(item.amount)}
             </td>
           </tr>
@@ -279,17 +279,15 @@ class PDFEngine {
           <div style="font-size: 14px; font-weight: 700; color: #111827; line-height: 1.3; margin-bottom: 3px;">
             ${this.escapeHtml(senderName || 'Your Business Name')}
           </div>
-          <div style="font-size: 11.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.55;">
-            ${this.escapeHtml(senderAddress || '')}
-          </div>
+          <div style="font-size: 11.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.55;">${this.escapeHtml(senderAddress || '')}</div>
         </div>
 
         <!-- Right: Title & Invoice Number -->
         <div style="text-align: right;">
-          <div style="font-size: 38px; font-weight: 400; color: #111827; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1; margin-bottom: 6px;">
+          <div style="font-size: 34px; font-weight: 400; color: #111827; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; margin-bottom: 5px;">
             ${this.escapeHtml(invoiceTitle)}
           </div>
-          <div style="font-size: 15px; font-weight: 400; color: #4b5563; line-height: 1.3;">
+          <div style="font-size: 14px; font-weight: 400; color: #6b7280; line-height: 1.3;">
             # ${this.escapeHtml(invoiceNumber)}
           </div>
         </div>
@@ -301,63 +299,59 @@ class PDFEngine {
         <!-- Left: Bill To & Optional Ship To -->
         <div style="display: flex; gap: 36px; max-width: 460px;">
           <div>
-            <div style="font-size: 11px; font-weight: 600; color: #6b7280; margin-bottom: 4px;">
+            <div style="font-size: 11px; font-weight: 500; color: #6b7280; margin-bottom: 4px;">
               Bill To:
             </div>
             <div style="font-size: 12.5px; font-weight: 700; color: #111827; margin-bottom: 2px;">
               ${this.escapeHtml(clientName || 'Client Name')}
             </div>
-            <div style="font-size: 11.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.5;">
-              ${this.escapeHtml(clientAddress || '')}
-            </div>
+            <div style="font-size: 11.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.5;">${this.escapeHtml(clientAddress || '')}</div>
           </div>
 
           ${(isShipToVisible && (shipToName || shipToAddress)) ? `
             <div>
-              <div style="font-size: 11px; font-weight: 600; color: #6b7280; margin-bottom: 4px;">
+              <div style="font-size: 11px; font-weight: 500; color: #6b7280; margin-bottom: 4px;">
                 Ship To:
               </div>
               <div style="font-size: 12.5px; font-weight: 700; color: #111827; margin-bottom: 2px;">
                 ${this.escapeHtml(shipToName || '')}
               </div>
-              <div style="font-size: 11.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.5;">
-                ${this.escapeHtml(shipToAddress || '')}
-              </div>
+              <div style="font-size: 11.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.5;">${this.escapeHtml(shipToAddress || '')}</div>
             </div>
           ` : ''}
         </div>
 
         <!-- Right: Date, Terms, & Balance Due Bar -->
         <div style="text-align: right; min-width: 250px;">
-          <table style="margin-left: auto; border-collapse: collapse; font-size: 11.5px; color: #4b5563; text-align: right; margin-bottom: 6px;">
+          <table style="margin-left: auto; border-collapse: collapse; font-size: 11.5px; color: #4b5563; text-align: right; margin-bottom: 8px;">
             <tr>
-              <td style="padding: 2px 10px 2px 0; color: #6b7280;">Date:</td>
+              <td style="padding: 2px 12px 2px 0; color: #6b7280; font-weight: 400;">Date:</td>
               <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(invoiceDate)}</td>
             </tr>
             ${paymentTerms ? `
               <tr>
-                <td style="padding: 2px 10px 2px 0; color: #6b7280;">Terms:</td>
+                <td style="padding: 2px 12px 2px 0; color: #6b7280; font-weight: 400;">Terms:</td>
                 <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(paymentTerms)}</td>
               </tr>
             ` : ''}
             ${dueDate ? `
               <tr>
-                <td style="padding: 2px 10px 2px 0; color: #6b7280;">Due Date:</td>
+                <td style="padding: 2px 12px 2px 0; color: #6b7280; font-weight: 400;">Due Date:</td>
                 <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(dueDate)}</td>
               </tr>
             ` : ''}
             ${poNumber ? `
               <tr>
-                <td style="padding: 2px 10px 2px 0; color: #6b7280;">PO Number:</td>
+                <td style="padding: 2px 12px 2px 0; color: #6b7280; font-weight: 400;">PO Number:</td>
                 <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(poNumber)}</td>
               </tr>
             ` : ''}
           </table>
 
           <!-- Gray Balance Due Bar (Matches reference image) -->
-          <div style="background-color: #f3f4f6; border-radius: 4px; padding: 7px 16px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 12px; font-weight: 700; color: #374151;">Balance Due:</span>
-            <span style="font-size: 13px; font-weight: 700; color: ${themeAccent};">${this.escapeHtml(balanceDue)}</span>
+          <div style="background-color: #f3f4f6; border-radius: 4px; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: 600; color: #1f2937;">Balance Due:</span>
+            <span style="font-size: 13.5px; font-weight: 700; color: ${themeAccent};">${this.escapeHtml(balanceDue)}</span>
           </div>
         </div>
 
@@ -368,16 +362,16 @@ class PDFEngine {
         <table style="width: 100%; border-collapse: collapse;">
           <thead>
             <tr style="background-color: ${tableHeaderBg}; color: #ffffff;">
-              <th style="width: 52%; text-align: left; padding: 8px 14px; font-size: 11.5px; font-weight: 600; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
+              <th style="width: 52%; text-align: left; padding: 9px 14px; font-size: 11.5px; font-weight: 500; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
                 Item
               </th>
-              <th style="width: 16%; text-align: right; padding: 8px 14px; font-size: 11.5px; font-weight: 600;">
+              <th style="width: 16%; text-align: right; padding: 9px 14px; font-size: 11.5px; font-weight: 500;">
                 Quantity
               </th>
-              <th style="width: 16%; text-align: right; padding: 8px 14px; font-size: 11.5px; font-weight: 600;">
+              <th style="width: 16%; text-align: right; padding: 9px 14px; font-size: 11.5px; font-weight: 500;">
                 Rate
               </th>
-              <th style="width: 16%; text-align: right; padding: 8px 14px; font-size: 11.5px; font-weight: 600; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
+              <th style="width: 16%; text-align: right; padding: 9px 14px; font-size: 11.5px; font-weight: 500; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
                 Amount
               </th>
             </tr>
@@ -388,39 +382,39 @@ class PDFEngine {
         </table>
       </div>
 
-      <!-- Bottom Financial Breakdown (Right-Aligned Totals) -->
-      <div style="margin-left: auto; width: 240px; margin-bottom: 28px;">
+      <!-- Bottom Financial Breakdown (Right-Aligned Clean Totals, No Horizontal Cut Lines) -->
+      <div style="margin-left: auto; width: 250px; margin-bottom: 28px;">
         <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
           <tr>
-            <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 500;">Subtotal:</td>
-            <td style="padding: 4px 0 4px 16px; text-align: right; font-weight: 600; color: #111827;">${this.escapeHtml(subtotal)}</td>
+            <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 400;">Subtotal:</td>
+            <td style="padding: 4px 0 4px 18px; text-align: right; font-weight: 500; color: #111827;">${this.escapeHtml(subtotal)}</td>
           </tr>
           ${hasDiscount ? `
             <tr>
-              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 500;">Discount (${this.escapeHtml(discountRate)}%):</td>
-              <td style="padding: 4px 0 4px 16px; text-align: right; font-weight: 600; color: #111827;">${this.escapeHtml(discountAmt)}</td>
+              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 400;">Discount (${this.escapeHtml(discountRate)}%):</td>
+              <td style="padding: 4px 0 4px 18px; text-align: right; font-weight: 500; color: #111827;">${this.escapeHtml(discountAmt)}</td>
             </tr>
           ` : ''}
           ${parseFloat(taxRate) > 0 ? `
             <tr>
-              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 500;">Tax (${this.escapeHtml(taxRate)}%):</td>
-              <td style="padding: 4px 0 4px 16px; text-align: right; font-weight: 600; color: #111827;">${this.escapeHtml(taxAmt)}</td>
+              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 400;">Tax (${this.escapeHtml(taxRate)}%):</td>
+              <td style="padding: 4px 0 4px 18px; text-align: right; font-weight: 500; color: #111827;">${this.escapeHtml(taxAmt)}</td>
             </tr>
           ` : ''}
           ${hasShipping ? `
             <tr>
-              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 500;">Shipping:</td>
-              <td style="padding: 4px 0 4px 16px; text-align: right; font-weight: 600; color: #111827;">${this.escapeHtml(shippingAmt)}</td>
+              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 400;">Shipping:</td>
+              <td style="padding: 4px 0 4px 18px; text-align: right; font-weight: 500; color: #111827;">${this.escapeHtml(shippingAmt)}</td>
             </tr>
           ` : ''}
-          <tr style="border-top: 1px solid #e5e7eb;">
-            <td style="padding: 8px 0; font-weight: 700; font-size: 13px; color: #111827; text-align: right;">Total:</td>
-            <td style="padding: 8px 0 8px 16px; text-align: right; font-weight: 700; font-size: 13px; color: #111827;">${this.escapeHtml(grandTotal)}</td>
+          <tr>
+            <td style="padding: 6px 0; font-weight: 700; font-size: 13px; color: #111827; text-align: right;">Total:</td>
+            <td style="padding: 6px 0 6px 18px; text-align: right; font-weight: 700; font-size: 13px; color: #111827;">${this.escapeHtml(grandTotal)}</td>
           </tr>
           ${hasAmountPaid ? `
             <tr>
-              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 500;">Amount Paid:</td>
-              <td style="padding: 4px 0 4px 16px; text-align: right; font-weight: 600; color: #111827;">${this.escapeHtml(amountPaidAmt)}</td>
+              <td style="padding: 4px 0; color: #6b7280; text-align: right; font-weight: 400;">Amount Paid:</td>
+              <td style="padding: 4px 0 4px 18px; text-align: right; font-weight: 500; color: #111827;">${this.escapeHtml(amountPaidAmt)}</td>
             </tr>
           ` : ''}
         </table>
@@ -432,9 +426,7 @@ class PDFEngine {
           <div style="font-size: 11px; font-weight: 600; color: #6b7280; margin-bottom: 4px;">
             Notes:
           </div>
-          <div style="font-size: 11.5px; color: #374151; white-space: pre-wrap; line-height: 1.55;">
-            ${this.escapeHtml(notes)}
-          </div>
+          <div style="font-size: 11.5px; color: #374151; white-space: pre-wrap; line-height: 1.55;">${this.escapeHtml(notes)}</div>
         </div>
       ` : ''}
 
@@ -498,7 +490,7 @@ class PDFEngine {
 
       // ISO A4 exact calibration (210mm x 297mm) with 10mm print margins
       const opt = {
-        margin: [10, 10, 10, 10],
+        margin: [12, 14, 12, 14],
         filename: filename,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
