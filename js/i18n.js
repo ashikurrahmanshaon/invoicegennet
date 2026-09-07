@@ -20,6 +20,26 @@
 
   const TRANSLATIONS = {
     // Navigation
+    nav_home: {
+      en: 'Home',
+      bn: 'হোম',
+      es: 'Inicio',
+      fr: 'Accueil',
+      de: 'Startseite',
+      ar: 'الرئيسية',
+      hi: 'होम',
+      zh: '首页'
+    },
+    tag_invoice_maker: {
+      en: 'Free Invoice Maker',
+      bn: 'ফ্রি ইনভয়েস মেকার',
+      es: 'Creador Gratis',
+      fr: 'Créateur Gratuit',
+      de: 'Kostenlos Ersteller',
+      ar: 'صانع الفواتير',
+      hi: 'मुफ़्त इनवॉइस',
+      zh: '免费发票'
+    },
     nav_generator: {
       en: 'Invoice Generator',
       bn: 'ইনভয়েস জেনারেটর',
