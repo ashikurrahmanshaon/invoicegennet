@@ -475,12 +475,25 @@ ul, ol {
   view-transition-name: main-navbar;
 }
 
-/* Rock-Solid Brand & Favicon Stabilization (Zero Shaking/Jitter on Page Click) */
+/* Rock-Solid Brand & Favicon Stabilization (Futuristic Minimalist Identity) */
+.brand-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+.brand-wrapper:hover {
+  opacity: 0.95;
+}
+
 .brand-logo-frame {
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-  min-height: 38px !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -491,30 +504,57 @@ ul, ol {
 }
 
 .brand-icon-svg {
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-  min-height: 38px !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
   display: block !important;
   flex-shrink: 0 !important;
   transform: translateZ(0);
   backface-visibility: hidden;
-  image-rendering: -webkit-optimize-contrast;
-  filter: drop-shadow(0 2px 4px rgba(0, 200, 117, 0.2));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.28));
+}
+
+.brand-wrapper:hover .brand-icon-svg {
+  transform: scale(1.06) rotate(-2deg);
 }
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.42rem !important;
+  font-size: 1.1875rem !important;
   font-weight: 800 !important;
-  color: #0f172a !important;
-  letter-spacing: -0.03em !important;
+  color: #090d16 !important;
+  letter-spacing: -0.035em !important;
   line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
 
-.brand-name .accent {
-  color: #00c875 !important;
+.brand-name .accent,
+.brand-name .brand-accent {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
   font-weight: 800 !important;
+}
+
+.brand-name .brand-badge,
+.brand-name .badge-net {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.625rem !important;
+  font-weight: 700 !important;
+  color: #059669 !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+  border: 1px solid rgba(16, 185, 129, 0.22) !important;
+  border-radius: 4px !important;
+  padding: 1.5px 5px !important;
+  margin-left: 5px !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  vertical-align: middle !important;
+  line-height: 1.2 !important;
+  -webkit-text-fill-color: initial !important;
 }
 
 /* ==========================================================================

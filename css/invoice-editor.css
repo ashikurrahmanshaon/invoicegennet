@@ -1114,18 +1114,18 @@
    ENHANCED SAAS NAVBAR WITH LOGIN / SIGNUP
    ========================================================================== */
 .navbar-saas {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
 }
 
 .navbar-saas .container {
-  height: 64px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1134,18 +1134,19 @@
 .brand-wrapper {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
+  user-select: none;
   transition: opacity 0.15s ease;
 }
 
 .brand-wrapper:hover {
-  opacity: 0.92;
+  opacity: 0.95;
 }
 
 .brand-logo-frame {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1157,51 +1158,71 @@
 }
 
 .brand-icon-svg {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   display: block;
   flex-shrink: 0;
-  filter: drop-shadow(0 2px 4px rgba(0, 200, 117, 0.2));
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.28));
 }
 
 .brand-wrapper:hover .brand-icon-svg {
-  transform: translateY(-1px);
+  transform: scale(1.06) rotate(-2deg);
 }
 
 .brand-text-block {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.42rem;
+  font-size: 1.1875rem;
   font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.03em;
+  color: #090d16;
+  letter-spacing: -0.035em;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
-.brand-name .accent {
-  color: #00c875;
+.brand-name .accent,
+.brand-name .brand-accent {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 800;
 }
 
-.brand-tagline {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: #64748b;
+.brand-name .brand-badge,
+.brand-name .badge-net {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #059669;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 4px;
+  padding: 1.5px 5px;
+  margin-left: 5px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  vertical-align: middle;
+  line-height: 1.2;
 }
 
-/* Nav Links in Center */
+/* 2. Floating Segmented Navigation Capsule */
 .nav-center-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 3px;
+  background: rgba(241, 245, 249, 0.75);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 9999px;
+  padding: 3.5px 4px;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   white-space: nowrap;
 }
 
@@ -1212,116 +1233,134 @@
 }
 
 .nav-link-item {
-  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
   font-weight: 500;
-  color: #475569;
+  color: #64748b;
   text-decoration: none;
   white-space: nowrap;
-  padding: 6px 0;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  transition: color 150ms ease;
-  line-height: 1.4;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  line-height: 1.3;
 }
 
 .nav-link-item:hover {
   color: #0f172a;
-  background-color: transparent;
+  background: rgba(255, 255, 255, 0.65);
 }
 
 .nav-link-item.active {
-  color: #00c875;
+  color: #0f172a;
   font-weight: 600;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
-/* Header Right Actions (Clean Minimalist Auth) */
+.nav-link-item.active::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  flex-shrink: 0;
+}
+
+/* 3. Header Right Actions Wrap */
 .nav-actions-wrap {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   white-space: nowrap;
 }
 
-/* ==========================================================================
-   HEADER LANGUAGE SWITCHER COMPONENT
-   ========================================================================== */
+/* Language Switcher Pill (Super Minimalist Globe + ISO Badge) */
 .lang-switcher-wrap {
   position: relative;
   display: inline-block;
 }
 
-.btn-lang-toggle {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+.btn-lang-toggle.btn-lang-pill {
+  height: 34px;
+  padding: 0 11px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(226, 232, 240, 0.9);
   color: #334155;
   font-family: inherit;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  padding: 0 10px;
-  height: 36px;
-  box-sizing: border-box;
-  border-radius: 6px;
-  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  cursor: pointer;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-  transition: all 150ms ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   user-select: none;
 }
 
-.btn-lang-toggle:hover {
-  background: #f8fafc;
+.btn-lang-toggle.btn-lang-pill:hover {
+  background: #ffffff;
   border-color: #cbd5e1;
   color: #0f172a;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
 }
 
-.btn-lang-toggle[aria-expanded="true"] {
+.btn-lang-toggle.btn-lang-pill[aria-expanded="true"] {
+  background: #ffffff;
   border-color: #0f172a;
-  background: #f8fafc;
   color: #0f172a;
   box-shadow: 0 0 0 1px #0f172a;
 }
 
-.lang-current-flag {
-  font-size: 0.95rem;
-  line-height: 1;
-}
-
-.lang-current-code {
-  letter-spacing: -0.01em;
-}
-
-.lang-chevron {
+.lang-globe-icon {
   color: #64748b;
-  transition: transform 160ms ease;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
 }
 
-.btn-lang-toggle[aria-expanded="true"] .lang-chevron {
+.btn-lang-toggle.btn-lang-pill:hover .lang-globe-icon,
+.btn-lang-toggle.btn-lang-pill[aria-expanded="true"] .lang-globe-icon {
+  color: #059669;
+}
+
+.lang-code-text {
+  letter-spacing: 0.03em;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.lang-chevron-icon {
+  color: #94a3b8;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.btn-lang-toggle.btn-lang-pill[aria-expanded="true"] .lang-chevron-icon {
   transform: rotate(180deg);
   color: #0f172a;
 }
 
-/* Minimalist Boxy Dropdown Menu */
+/* Floating Glass Dropdown Menu */
 .lang-dropdown-menu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   right: 0;
-  width: 220px;
+  width: 224px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px -6px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.04);
   padding: 6px;
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 150ms ease, visibility 150ms ease;
+  transform: translateY(-4px) scale(0.98);
+  transition: opacity 180ms ease, visibility 180ms ease, transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
 }
@@ -1329,6 +1368,7 @@
 .lang-dropdown-menu.active {
   opacity: 1;
   visibility: visible;
+  transform: translateY(0) scale(1);
 }
 
 .lang-dropdown-header {
@@ -1358,7 +1398,7 @@
   padding: 7px 10px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-family: inherit;
   text-align: left;
   cursor: pointer;
@@ -1374,14 +1414,27 @@
 }
 
 .lang-dropdown-item.active {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: rgba(16, 185, 129, 0.08);
+  color: #059669;
   font-weight: 700;
 }
 
-.lang-item-flag {
-  font-size: 1.05rem;
+.lang-item-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  color: #475569;
   line-height: 1;
+}
+
+.lang-dropdown-item.active .lang-item-badge {
+  background: #10b981;
+  border-color: #059669;
+  color: #ffffff;
 }
 
 .lang-item-name {
@@ -1397,104 +1450,150 @@
 
 .lang-item-check {
   display: none;
-  color: #0f172a;
+  color: #059669;
 }
 
 .lang-dropdown-item.active .lang-item-check {
   display: inline-flex;
 }
 
-/* ==========================================================================
-   PURE POLISHED BOXY SAAS AUTH BUTTONS
-   Minimalist, Zero Glow, Elite Micro-Bevel Aesthetics
-   ========================================================================== */
+/* 4. Auth Buttons: Super Minimalist Ghost & Obsidian Futuristic Capsule */
 .btn-login {
   background: transparent;
   border: none;
   color: #475569;
-  font-size: 0.84375rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 0 12px;
-  height: 36px;
+  padding: 0 14px;
+  height: 34px;
   box-sizing: border-box;
-  border-radius: 6px;
-  transition: color 150ms ease, background-color 150ms ease;
+  border-radius: 9999px;
+  transition: all 0.18s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: none;
   letter-spacing: -0.01em;
 }
 
 .btn-login:hover {
   color: #0f172a;
-  background-color: #f1f5f9;
+  background: rgba(15, 23, 42, 0.05);
 }
 
 .btn-login.active-auth-nav {
   color: #0f172a;
-  background: #f1f5f9;
+  background: rgba(15, 23, 42, 0.08);
   font-weight: 700;
 }
 
 .btn-signup-free {
-  background: #0f172a;
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 9999px;
+  background: #090d16;
   color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 0.8125rem;
   font-weight: 600;
-  padding: 0 16px;
-  height: 36px;
-  box-sizing: border-box;
-  border-radius: 6px;
-  border: 1px solid #0f172a;
-  cursor: pointer;
-  transition: background-color 150ms ease, border-color 150ms ease;
+  letter-spacing: -0.01em;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
-  letter-spacing: -0.01em;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.btn-signup-free::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .btn-signup-free:hover {
-  background: #1e293b;
-  border-color: #1e293b;
+  background: #111827;
   color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
 }
 
 .btn-signup-free.active-auth-nav {
-  background: #020617;
-  border-color: #000000;
+  background: #000000;
+  border-color: #10b981;
 }
 
-
+/* Mobile Nav Toggle (Ultra Sleek Minimalist Capsule) */
 .btn-mobile-nav-toggle {
   display: none;
-  background: transparent;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(226, 232, 240, 0.9);
   color: #0f172a;
-  padding: 6px;
-  border-radius: 6px;
+  padding: 6px 9px;
+  border-radius: 9999px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  height: 36px;
+  height: 34px;
   width: 36px;
   box-sizing: border-box;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .btn-mobile-nav-toggle:hover {
-  background-color: #f1f5f9;
+  background: #ffffff;
   border-color: #cbd5e1;
 }
 
 @media (max-width: 840px) {
   .btn-mobile-nav-toggle {
     display: inline-flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-saas .container {
+    padding: 0 14px;
+    height: 56px;
+  }
+  .brand-name .badge-net,
+  .brand-name .brand-badge {
+    display: none !important;
+  }
+  .btn-login {
+    display: none;
+  }
+  .btn-signup-free {
+    padding: 0 12px;
+    font-size: 0.75rem;
+    height: 32px;
+  }
+  .btn-lang-toggle.btn-lang-pill {
+    padding: 0 8px;
+    height: 32px;
+    font-size: 0.72rem;
+  }
+  .btn-mobile-nav-toggle {
+    height: 32px;
+    width: 32px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-signup-free {
+    display: none;
   }
 }
 

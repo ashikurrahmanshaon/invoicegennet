@@ -809,13 +809,10 @@
 
   function updateSwitcherUI() {
     const toggles = document.querySelectorAll('.btn-lang-toggle');
-    const meta = LANGUAGES[currentLang] || LANGUAGES.en;
 
     toggles.forEach(toggle => {
-      const flagSpan = toggle.querySelector('.lang-current-flag');
-      const textSpan = toggle.querySelector('.lang-current-code');
-      if (flagSpan) flagSpan.textContent = meta.flag;
-      if (textSpan) textSpan.textContent = meta.native;
+      const codeSpan = toggle.querySelector('.lang-code-text, .lang-current-code');
+      if (codeSpan) codeSpan.textContent = currentLang.toUpperCase();
     });
 
     document.querySelectorAll('.lang-dropdown-item').forEach(item => {
@@ -829,27 +826,33 @@
   }
 
   function renderLanguageSwitcher() {
-    // Generate dropdown HTML
+    // Generate dropdown HTML with clean, high-tech styling
     const optionsHtml = Object.entries(LANGUAGES).map(([code, data]) => `
       <button type="button" class="lang-dropdown-item ${code === currentLang ? 'active' : ''}" data-lang="${code}">
-        <span class="lang-item-flag">${data.flag}</span>
+        <span class="lang-item-badge">${code.toUpperCase()}</span>
         <span class="lang-item-name">${data.native}</span>
-        <span class="lang-item-en">(${data.name})</span>
+        <span class="lang-item-en">${data.name}</span>
         <span class="lang-item-check">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </span>
       </button>
     `).join('');
 
     const switcherHtml = `
       <div class="lang-switcher-wrap" id="langSwitcherWrap">
-        <button type="button" class="btn-lang-toggle" id="btnLangToggle" aria-haspopup="true" aria-expanded="false" title="Switch Language">
-          <span class="lang-current-flag">${LANGUAGES[currentLang].flag}</span>
-          <span class="lang-current-code">${LANGUAGES[currentLang].native}</span>
-          <svg class="lang-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <button type="button" class="btn-lang-toggle btn-lang-pill" id="btnLangToggle" aria-haspopup="true" aria-expanded="false" title="Switch Language">
+          <svg class="lang-globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="lang-code-text">${currentLang.toUpperCase()}</span>
+          <svg class="lang-chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
         </button>
         <div class="lang-dropdown-menu" id="langDropdownMenu" role="menu">
-          <div class="lang-dropdown-header">Select Language / ভাষা</div>
+          <div class="lang-dropdown-header">Language / ভাষা</div>
           <div class="lang-options-list">
             ${optionsHtml}
           </div>
