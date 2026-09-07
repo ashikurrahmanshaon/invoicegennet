@@ -187,11 +187,14 @@ const server = http.createServer((req, res) => {
       const contentType = MIME_TYPES[ext] || 'application/octet-stream';
       const headers = { 'Content-Type': contentType };
 
-      // Cache favicons, icons, images, and fonts permanently to eliminate browser tab shaking/re-fetching
+      // Favicons, static images, and fonts can stay cached to prevent layout/tab flicker
       if (['.ico', '.svg', '.png', '.jpg', '.jpeg', '.woff2', '.woff'].includes(ext)) {
         headers['Cache-Control'] = 'public, max-age=31536000, immutable';
-      } else if (['.css', '.js'].includes(ext)) {
-        headers['Cache-Control'] = 'public, max-age=86400';
+      } else {
+        // HTML, CSS, JS, JSON: Disable caching completely so reloads and edits take effect instantly
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+        headers['Pragma'] = 'no-cache';
+        headers['Expires'] = '0';
       }
 
       res.writeHead(200, headers);

@@ -16,40 +16,10 @@
   }
   pinFavicon();
 
-  // 2. Lightweight On-Demand Hover/Touch Prefetch (Fast, zero background bloat)
-  const prefetched = new Set();
-
-  function prefetchUrl(url) {
-    if (!url || prefetched.has(url)) return;
-    try {
-      const parsed = new URL(url, window.location.href);
-      if (parsed.origin !== window.location.origin) return;
-      if (parsed.pathname === window.location.pathname) return;
-      if (parsed.pathname.endsWith('.pdf') || parsed.pathname.endsWith('.xml') || parsed.pathname.endsWith('.txt')) return;
-
-      prefetched.add(url);
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.href = parsed.pathname;
-      document.head.appendChild(link);
-    } catch (e) {}
+  // 2. Prefetching disabled to ensure browser always serves fresh content on reload/navigate
+  function prefetchUrl() {
+    // Disabled intentionally to prevent browser cache retention
   }
-
-  // Listen for pointerover on internal links
-  document.addEventListener('pointerover', (e) => {
-    const a = e.target.closest('a[href]');
-    if (a && a.href && !a.target && !a.hasAttribute('download')) {
-      prefetchUrl(a.getAttribute('href'));
-    }
-  }, { passive: true });
-
-  // Also prefetch on touchstart for mobile instant tap
-  document.addEventListener('touchstart', (e) => {
-    const a = e.target.closest('a[href]');
-    if (a && a.href && !a.target && !a.hasAttribute('download')) {
-      prefetchUrl(a.getAttribute('href'));
-    }
-  }, { passive: true });
 
   // 4. Subtle, high-performance top progress feedback on navigation click
   let progressBar = null;
