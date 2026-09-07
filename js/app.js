@@ -479,13 +479,96 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ---------------------------------------------------------------------------
-  // 8. Sidebar Document Field Toggles
+  // 8. Right Inspector Tabs & Modern Controls
   // ---------------------------------------------------------------------------
+  const settingsTabBtns = document.querySelectorAll('.settings-tab-btn');
+  const settingsTabPanes = {
+    design: document.getElementById('tabPaneDesign'),
+    settings: document.getElementById('tabPaneSettings'),
+    payment: document.getElementById('tabPanePayment')
+  };
+
+  settingsTabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+      settingsTabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      Object.keys(settingsTabPanes).forEach(tabKey => {
+        if (settingsTabPanes[tabKey]) {
+          if (tabKey === targetTab) {
+            settingsTabPanes[tabKey].classList.add('active');
+          } else {
+            settingsTabPanes[tabKey].classList.remove('active');
+          }
+        }
+      });
+    });
+  });
+
+  // Template Style Thumbnail Cards
+  const templateThumbCards = document.querySelectorAll('.template-thumb-card');
+  templateThumbCards.forEach(card => {
+    card.addEventListener('click', () => {
+      templateThumbCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const style = card.dataset.style || card.dataset.template || 'charcoal';
+      applyTheme(style);
+    });
+  });
+
+  // Accent Color Swatches
+  const colorSwatchCircles = document.querySelectorAll('.color-swatch-circle');
+  colorSwatchCircles.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      colorSwatchCircles.forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      const color = swatch.dataset.color || '#00c875';
+      document.documentElement.style.setProperty('--theme-accent', color);
+      document.documentElement.style.setProperty('--theme-accent-dark', color);
+      if (window.pdfEngine) window.pdfEngine.showToast('Accent color updated');
+    });
+  });
+
+  // Document Field Toggles
+  const toggleLogo = document.getElementById('toggleLogo');
+  const logoSlotWrap = document.getElementById('logoSlotWrap');
+  if (toggleLogo && logoSlotWrap) {
+    toggleLogo.addEventListener('change', (e) => {
+      logoSlotWrap.style.display = e.target.checked ? 'block' : 'none';
+    });
+  }
+
+  const toggleShipToHeader = document.getElementById('toggleShipToHeader');
+  if (toggleShipToHeader) {
+    toggleShipToHeader.addEventListener('change', (e) => {
+      if (toggleShipTo) toggleShipTo.checked = e.target.checked;
+      if (shipToCardPanel) shipToCardPanel.style.display = e.target.checked ? 'block' : 'none';
+    });
+  }
+
   if (toggleShipTo) {
     toggleShipTo.addEventListener('change', (e) => {
+      if (toggleShipToHeader) toggleShipToHeader.checked = e.target.checked;
       if (shipToCardPanel) {
         shipToCardPanel.style.display = e.target.checked ? 'block' : 'none';
       }
+    });
+  }
+
+  const toggleTax = document.getElementById('toggleTax');
+  const taxLineRow = document.getElementById('taxLineRow');
+  if (toggleTax && taxLineRow) {
+    toggleTax.addEventListener('change', (e) => {
+      taxLineRow.style.display = e.target.checked ? 'flex' : 'none';
+    });
+  }
+
+  const togglePaymentDetails = document.getElementById('togglePaymentDetails');
+  const notesColumnBlock = document.getElementById('notesColumnBlock');
+  if (togglePaymentDetails && notesColumnBlock) {
+    togglePaymentDetails.addEventListener('change', (e) => {
+      notesColumnBlock.style.display = e.target.checked ? 'block' : 'none';
     });
   }
 
@@ -527,6 +610,40 @@ document.addEventListener('DOMContentLoaded', () => {
         signatureBlockWrap.style.display = e.target.checked ? 'block' : 'none';
       }
     });
+  }
+
+  // Top Action Bar Handlers
+  const btnActionSaveDraft = document.getElementById('btnActionSaveDraft');
+  const draftStatusPill = document.getElementById('draftStatusPill');
+  if (btnActionSaveDraft) {
+    btnActionSaveDraft.addEventListener('click', () => {
+      store.saveToStorage();
+      if (draftStatusPill) {
+        draftStatusPill.innerHTML = '<span class="status-dot"></span><span class="status-text">Draft saved just now</span>';
+      }
+      if (window.pdfEngine) window.pdfEngine.showToast('Draft saved successfully!');
+    });
+  }
+
+  const btnActionPreview = document.getElementById('btnActionPreview');
+  let isPreviewMode = false;
+  if (btnActionPreview && invoicePaper) {
+    btnActionPreview.addEventListener('click', () => {
+      isPreviewMode = !isPreviewMode;
+      if (isPreviewMode) {
+        invoicePaper.classList.add('preview-mode-active');
+        btnActionPreview.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg><span>Edit Mode</span>';
+        if (window.pdfEngine) window.pdfEngine.showToast('Preview mode active');
+      } else {
+        invoicePaper.classList.remove('preview-mode-active');
+        btnActionPreview.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg><span>Preview</span>';
+      }
+    });
+  }
+
+  const btnCreateInvoice = document.getElementById('btnCreateInvoice');
+  if (btnCreateInvoice) {
+    btnCreateInvoice.addEventListener('click', handleNewInvoice);
   }
 
   // Mobile Navigation Drawer Toggle

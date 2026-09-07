@@ -78,17 +78,17 @@ const SAMPLE_INVOICE = {
   date: 'Sep 4, 2026',
   dueDate: 'Sep 18, 2026',
   poNumber: 'PO-8921',
-  paymentTerms: 'Net 14 Days',
+  paymentTerms: 'Due on Receipt',
 
   sender: {
     name: 'Asif Mehedi',
-    address: 'P.Hans Frankfurthersingel 128, 1060 TN\nAmsterdam, Netherlands',
-    email: 'contact@asifmehedi.com',
-    phone: '+31 20 123 4567'
+    address: 'P.Hans Frankfurthersingel 128, 1060 TN\nAmsterdam, Netherlands\nasif@example.com\n+31 6 1234 5678',
+    email: 'asif@example.com',
+    phone: '+31 6 1234 5678'
   },
 
   client: {
-    name: 'Huize Frankendael',
+    name: 'Huze Frankendael',
     address: 'Middenweg 72\n1097BS Amsterdam',
     email: 'invoices@huizefrankendael.nl',
     phone: '+31 20 987 6543'
@@ -97,14 +97,14 @@ const SAMPLE_INVOICE = {
   shipTo: {
     enabled: true,
     name: 'Middenweg 72',
-    address: '1097BS Amsterdam, Netherlands'
+    address: '1097BS Amsterdam\nNetherlands'
   },
 
   items: [
     {
       id: 1,
       description: 'Web Application Consulting & Development',
-      subtext: 'Component architecture, responsive frontend, and client-side PDF export',
+      subtext: '',
       quantity: 252,
       rate: 20.00
     }
@@ -118,12 +118,12 @@ const SAMPLE_INVOICE = {
 
   currency: 'EUR',
   logo: null,
-  notes: 'KvK: 91435382\nVAT Number: NL004890664B78\nBank A/C Name: A. Mehedi\nIBAN: NL54 ABNA 0125632436'
+  notes: 'KvK: 91435382\nVAT Number: NL004890664B78\nBank A/C Name: A. Mehedi\nIBAN: NL54 ABNA 0125632436\n\nThank you for your business!'
 };
 
 class InvoiceStore {
   constructor() {
-    this.state = this.loadFromStorage() || JSON.parse(JSON.stringify(BLANK_INVOICE));
+    this.state = this.loadFromStorage() || JSON.parse(JSON.stringify(SAMPLE_INVOICE));
     this.listeners = [];
   }
 
