@@ -80,12 +80,12 @@
           </div>
 
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="senderName">From (Your Business)</label>
+            <label class="sheet-field-label" for="senderName">From (Your Business) <span class="badge-io badge-io-input">Input</span></label>
             <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="Your Business or Studio Name">
           </div>
 
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="senderAddress">Address &amp; Contact</label>
+            <label class="sheet-field-label" for="senderAddress">Address &amp; Contact <span class="badge-io badge-io-input">Input</span></label>
             <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Street address, City, Postal Code, Country&#10;Email, Phone or Tax ID"></textarea>
           </div>
         </div>
@@ -95,13 +95,13 @@
           <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename (e.g. INVOICE, ESTIMATE, RECEIPT, QUOTE)">
 
           <div class="meta-inputs-grid">
-            <span class="meta-field-label">Invoice #:</span>
+            <label class="meta-field-label" for="invoiceNumber">Invoice #:</label>
             <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="e.g. 001">
 
-            <span class="meta-field-label">Date:</span>
+            <label class="meta-field-label" for="invoiceDate">Date:</label>
             <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="e.g. Sep 7, 2026">
 
-            <span class="meta-field-label">Terms:</span>
+            <label class="meta-field-label" for="paymentTerms">Terms:</label>
             <select id="paymentTerms" class="form-select sheet-paper-select">
               <option value="Due on Receipt">Due on Receipt</option>
               <option value="Net 15 Days">Net 15 Days</option>
@@ -109,16 +109,19 @@
               <option value="Net 60 Days">Net 60 Days</option>
             </select>
 
-            <span class="meta-field-label due-date-field-row" style="display: none;">Due Date:</span>
+            <label class="meta-field-label due-date-field-row" for="dueDateInput" style="display: none;">Due Date:</label>
             <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="e.g. Sep 21, 2026" style="display: none;">
 
             <!-- PO Number (Toggleable) -->
-            <span class="meta-field-label po-field-row" style="display: none;">PO Number:</span>
+            <label class="meta-field-label po-field-row" for="poNumber" style="display: none;">PO Number:</label>
             <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="Optional PO#" style="display: none;">
 
             <!-- Dedicated Balance Due Strip -->
             <div class="balance-due-strip">
-              <span class="strip-label" data-i18n="lbl_balance_due">Balance Due:</span>
+              <div class="strip-label-wrap">
+                <span class="strip-label" data-i18n="lbl_balance_due">Balance Due</span>
+                <span class="badge-io badge-io-output">Auto</span>
+              </div>
               <span class="strip-val" id="balanceDueDisplay">$0.00</span>
             </div>
           </div>
@@ -126,20 +129,21 @@
 
       </div>
 
-      <!-- Middle Section: Bill To & Ship To Side-by-Side (Clean Stationery Typography) -->
+      <!-- Middle Section: Bill To & Ship To Side-by-Side (Clean Stationery Cards) -->
       <div class="sheet-billing-row">
 
         <!-- Bill To -->
         <div class="sheet-billing-col" id="billToCol">
           <div class="sheet-col-header">
             <span class="sheet-col-title">Bill To</span>
+            <span class="badge-io badge-io-input">Client Info</span>
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="clientName">Client / Company Name</label>
+            <label class="sheet-field-label" for="clientName">Client / Company Name <span class="badge-io badge-io-input">Input</span></label>
             <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="Who is this invoice to?">
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="clientAddress">Billing Address</label>
+            <label class="sheet-field-label" for="clientAddress">Billing Address <span class="badge-io badge-io-input">Input</span></label>
             <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Client street address, City, Country&#10;Email, Phone or Tax ID"></textarea>
           </div>
         </div>
@@ -148,28 +152,29 @@
         <div class="sheet-billing-col" id="shipToCardPanel">
           <div class="sheet-col-header">
             <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
+            <span class="badge-io badge-io-input">Shipping</span>
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="shipToName">Recipient Name</label>
+            <label class="sheet-field-label" for="shipToName">Recipient Name <span class="badge-io badge-io-input">Input</span></label>
             <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Destination Name">
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="shipToAddress">Shipping Destination</label>
+            <label class="sheet-field-label" for="shipToAddress">Shipping Destination <span class="badge-io badge-io-input">Input</span></label>
             <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Shipping destination address, City, Country"></textarea>
           </div>
         </div>
 
       </div>
 
-      <!-- Items Table (Modern Crisp Ledger) -->
+      <!-- Items Table (Modern Crisp Ledger with Marked Inputs & Outputs) -->
       <div class="table-wrapper-box">
         <table class="invoice-items-table" id="refTable">
           <thead>
             <tr>
-              <th style="width: 50%;" data-i18n="tbl_item">Item / Service Description</th>
-              <th class="col-qty" style="width: 15%;" data-i18n="tbl_qty">Quantity</th>
-              <th class="col-rate" style="width: 15%;" data-i18n="tbl_rate">Rate / Price</th>
-              <th class="col-amount" style="width: 15%;" data-i18n="tbl_amount">Amount</th>
+              <th style="width: 48%;" data-i18n="tbl_item">Item / Service Description <span class="badge-io badge-io-input-th">Input</span></th>
+              <th class="col-qty" style="width: 14%;" data-i18n="tbl_qty">Quantity <span class="badge-io badge-io-input-th">Input</span></th>
+              <th class="col-rate" style="width: 16%;" data-i18n="tbl_rate">Rate / Price <span class="badge-io badge-io-input-th">Input</span></th>
+              <th class="col-amount" style="width: 17%;" data-i18n="tbl_amount">Amount <span class="badge-io badge-io-output-th">Auto</span></th>
               <th class="col-action" style="width: 5%;"></th>
             </tr>
           </thead>
@@ -197,25 +202,28 @@
         <div class="sheet-notes-col">
           <div class="sheet-field-group">
             <label class="sheet-field-label" for="invoiceNotes">
-              Payment Terms &amp; Notes
+              Payment Terms &amp; Notes <span class="badge-io badge-io-input">Input</span>
             </label>
             <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="5" placeholder="Bank: Silicon Valley Bank&#10;IBAN / Swift: SVBUS6S&#10;Thank you for your business!"></textarea>
           </div>
 
           <!-- Digital Signature Line (Toggleable) -->
           <div class="signature-block-wrap" id="signatureBlockWrap" style="display: none; margin-top: 16px;">
-            <label class="sheet-field-label">Authorized Signature</label>
-            <div style="border-top: 1px solid #cbd5e1; width: 220px; padding-top: 6px;">
-              <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer Full Name" style="border: none; padding: 4px 0; font-weight: 700;">
-              <div style="font-size: 0.75rem; color: #94a3b8;">Authorized Representative</div>
+            <label class="sheet-field-label">Authorized Signature <span class="badge-io badge-io-input">Input</span></label>
+            <div style="border-top: 1.5px solid #cbd5e1; width: 220px; padding-top: 6px;">
+              <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer Full Name" style="padding: 6px 10px; font-weight: 700;">
+              <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Authorized Representative</div>
             </div>
           </div>
         </div>
 
-        <!-- Right: Real-time Totals Breakdown -->
+        <!-- Right: Real-time Totals Breakdown (Distinct Calculated Output Box) -->
         <div class="totals-summary-card">
           <div class="total-line">
-            <span data-i18n="lbl_subtotal">Subtotal:</span>
+            <div class="total-line-label-wrap">
+              <span data-i18n="lbl_subtotal">Subtotal</span>
+              <span class="badge-io badge-io-output">Auto</span>
+            </div>
             <span class="val" id="subtotalDisplay">$0.00</span>
           </div>
 
@@ -224,6 +232,7 @@
             <div class="discount-edit-group">
               <span data-i18n="opt_discount">Discount</span>
               <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0"><i>%</i></span>
+              <span class="badge-io badge-io-input">Input</span>
             </div>
             <span class="val" id="discountAmountDisplay">-$0.00</span>
           </div>
@@ -232,18 +241,25 @@
             <div class="tax-edit-group">
               <span data-i18n="lbl_tax">Tax / VAT</span>
               <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0"><i>%</i></span>
+              <span class="badge-io badge-io-input">Input</span>
             </div>
             <span class="val" id="taxAmountDisplay">$0.00</span>
           </div>
 
           <div class="total-line grand-total-line">
-            <span class="lbl" data-i18n="lbl_total">Total:</span>
+            <div class="total-line-label-wrap">
+              <span class="lbl" data-i18n="lbl_total">Total</span>
+              <span class="badge-io badge-io-output">Auto</span>
+            </div>
             <span class="val" id="grandTotalDisplay">$0.00</span>
           </div>
 
           <!-- Amount Paid Row (Toggleable) -->
           <div class="total-line amount-paid-row" id="amountPaidLineRow" style="display: none;">
-            <span data-i18n="lbl_amount_paid">Amount Paid:</span>
+            <div class="total-line-label-wrap">
+              <span data-i18n="lbl_amount_paid">Amount Paid</span>
+              <span class="badge-io badge-io-input">Input</span>
+            </div>
             <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00">
           </div>
         </div>

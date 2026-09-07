@@ -22,6 +22,7 @@
   .auth-modal-overlay,
   .lang-switcher-container,
   .col-action,
+  .badge-io,
   .no-print {
     display: none !important;
   }
