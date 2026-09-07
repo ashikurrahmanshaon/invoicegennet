@@ -12,7 +12,7 @@ const CURRENCIES = {
   CAD: { code: 'CAD', symbol: 'CA$', position: 'before' },
   AUD: { code: 'AUD', symbol: 'AU$', position: 'before' },
   JPY: { code: 'JPY', symbol: '¥', position: 'before' },
-  AED: { code: 'AED', symbol: 'AED ', position: 'before' },
+  AED: { code: 'AED', symbol: 'د.إ ', position: 'before' },
   SGD: { code: 'SGD', symbol: 'SG$', position: 'before' }
 };
 
