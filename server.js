@@ -190,6 +190,8 @@ const server = http.createServer((req, res) => {
       // Cache favicons, icons, images, and fonts permanently to eliminate browser tab shaking/re-fetching
       if (['.ico', '.svg', '.png', '.jpg', '.jpeg', '.woff2', '.woff'].includes(ext)) {
         headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+      } else if (['.css', '.js'].includes(ext)) {
+        headers['Cache-Control'] = 'public, max-age=86400';
       }
 
       res.writeHead(200, headers);

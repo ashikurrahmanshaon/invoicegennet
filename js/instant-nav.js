@@ -16,38 +16,7 @@
   }
   pinFavicon();
 
-  // 2. Inject Speculation Rules API for modern Chromium browsers (0ms instant prerender)
-  if (HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
-    const specScript = document.createElement('script');
-    specScript.type = 'speculationrules';
-    specScript.textContent = JSON.stringify({
-      prerender: [
-        {
-          where: {
-            and: [
-              { href_matches: '/*' },
-              { not: { href_matches: '/api/*' } }
-            ]
-          },
-          eagerness: 'moderate'
-        }
-      ],
-      prefetch: [
-        {
-          where: {
-            and: [
-              { href_matches: '/*' },
-              { not: { href_matches: '/api/*' } }
-            ]
-          },
-          eagerness: 'moderate'
-        }
-      ]
-    });
-    document.head.appendChild(specScript);
-  }
-
-  // 3. Fallback Instant Hover/Touch Prefetch for all other browsers
+  // 2. Lightweight On-Demand Hover/Touch Prefetch (Fast, zero background bloat)
   const prefetched = new Set();
 
   function prefetchUrl(url) {
