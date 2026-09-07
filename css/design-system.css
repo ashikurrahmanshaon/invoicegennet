@@ -87,8 +87,16 @@
 
 html {
   font-size: 16px;
+  overflow-y: scroll;
   scrollbar-gutter: stable;
   -webkit-text-size-adjust: 100%;
+}
+
+.lang-switcher-container {
+  display: inline-flex;
+  align-items: center;
+  min-width: 76px;
+  min-height: 34px;
 }
 
 body {
@@ -445,34 +453,9 @@ ul, ol {
   display: inline-block;
 }
 
-/* ==========================================================================
-   CROSS-DOCUMENT VIEW TRANSITIONS (Native Butter-Smooth Page Navigations)
-   ========================================================================== */
-@view-transition {
-  navigation: auto;
-}
-
-::view-transition-old(root) {
-  animation: 90ms cubic-bezier(0.16, 1, 0.3, 1) both fadeOut;
-}
-
-::view-transition-new(root) {
-  animation: 140ms cubic-bezier(0.16, 1, 0.3, 1) both fadeIn;
-}
-
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Keep the SaaS navigation bar locked in place without jitter or reload flash */
+/* Rock-Solid Zero-Jitter Navigation (No artificial freeze or snapshot animation) */
 .navbar-saas {
-  view-transition-name: main-navbar;
+  view-transition-name: none;
 }
 
 /* Rock-Solid Brand & Favicon Stabilization (Futuristic Minimalist Identity) */
