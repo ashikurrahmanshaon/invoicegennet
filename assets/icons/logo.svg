@@ -1,26 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
   <defs>
-    <!-- Vibrant Green Gradient -->
-    <linearGradient id="docGrad" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#00D07E" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
-    <!-- Folded Corner Shadow -->
-    <linearGradient id="foldGrad" x1="30" y1="6" x2="35" y2="16" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#00A860" />
+    <!-- Vibrant FinTech Emerald Gradient -->
+    <linearGradient id="emSquircle" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00E887" />
+      <stop offset="45%" stop-color="#00C06F" />
       <stop offset="100%" stop-color="#047857" />
     </linearGradient>
+
+    <!-- Subtle Top Rim Highlight -->
+    <linearGradient id="rimGrad" x1="4" y1="4" x2="44" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.08" />
+    </linearGradient>
+
+    <!-- Floating Document Depth Gradient -->
+    <linearGradient id="docGrad" x1="13" y1="8" x2="35" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <!-- Folded Corner Depth -->
+    <linearGradient id="foldGrad" x1="26" y1="8" x2="35" y2="17" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E2E8F0" />
+      <stop offset="100%" stop-color="#CBD5E1" />
+    </linearGradient>
+
+    <!-- Crisp Soft Drop Shadow on Document -->
+    <filter id="docShadow" x="9" y="6" width="30" height="36" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#022C1B" flood-opacity="0.28" />
+    </filter>
   </defs>
 
-  <!-- Clean Document Body (Zero Background Glow) -->
-  <path d="M11 6C9.34315 6 8 7.34315 8 9V39C8 40.6569 9.34315 42 11 42H37C38.6569 42 40 40.6569 40 39V17L29 6H11Z" fill="url(#docGrad)" />
+  <!-- Base Rounded Squircle (rx=11) -->
+  <rect x="3" y="3" width="42" height="42" rx="11" fill="url(#emSquircle)" />
+  <rect x="3.5" y="3.5" width="41" height="41" rx="10.5" stroke="url(#rimGrad)" stroke-width="1" />
 
-  <!-- Folded Corner Flap -->
-  <path d="M29 6V15C29 16.1046 29.8954 17 31 17H40L29 6Z" fill="url(#foldGrad)" />
-  <path d="M29 6L40 17H31C29.8954 17 29 16.1046 29 15V6Z" fill="#FFFFFF" fill-opacity="0.2" />
+  <!-- Floating Pristine Invoice Sheet -->
+  <g filter="url(#docShadow)">
+    <path d="M13 11C13 9.34315 14.3431 8 16 8H26L35 17V37C35 38.6569 33.6569 40 32 40H16C14.3431 40 13 38.6569 13 37V11Z" fill="url(#docGrad)" />
+    <!-- Folded Corner Flap -->
+    <path d="M26 8V14.5C26 15.8807 27.1193 17 28.5 17H35L26 8Z" fill="url(#foldGrad)" />
+  </g>
 
-  <!-- Document Lines (Rounded White Bars) -->
-  <rect x="14" y="22" width="16" height="3" rx="1.5" fill="#FFFFFF" />
-  <rect x="14" y="28" width="20" height="3" rx="1.5" fill="#FFFFFF" />
-  <rect x="14" y="34" width="14" height="3" rx="1.5" fill="#FFFFFF" />
+  <!-- Modern Financial Ledger Elements (High-contrast, razor-sharp) -->
+  <!-- Header Accent Pill (Emerald) -->
+  <rect x="17.5" y="13.5" width="6" height="2.5" rx="1.25" fill="#00B86B" />
+
+  <!-- Ledger Rows (Slate 700 & Slate 400) -->
+  <rect x="17.5" y="19.5" width="13" height="2.2" rx="1.1" fill="#334155" />
+  <rect x="17.5" y="24" width="8.5" height="2.2" rx="1.1" fill="#64748B" />
+  <rect x="17.5" y="28.5" width="11" height="2.2" rx="1.1" fill="#94A3B8" />
+
+  <!-- Verified Total Badge / Summary Row (Bold Obsidian Slate) -->
+  <rect x="17.5" y="33.5" width="13" height="2.5" rx="1.25" fill="#0F172A" />
 </svg>
