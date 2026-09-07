@@ -140,6 +140,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (discountRateInput) discountRateInput.value = state.discountValue ?? 0;
     if (amountPaidInput) amountPaidInput.value = state.amountPaid ? state.amountPaid : '';
 
+    // Auto-fill from saved business profile if current sender fields are blank
+    if (!state.sender?.name) {
+      try {
+        const rawProfile = localStorage.getItem('invoicegen_business_profile');
+        if (rawProfile) {
+          const bp = JSON.parse(rawProfile);
+          if (bp.businessName && senderName) {
+            senderName.value = bp.businessName;
+            state.sender.name = bp.businessName;
+          }
+          if (bp.address && senderAddress) {
+            senderAddress.value = bp.address;
+            state.sender.address = bp.address;
+          }
+          if (bp.notes && invoiceNotes && !state.notes) {
+            invoiceNotes.value = bp.notes;
+            state.notes = bp.notes;
+          }
+        }
+      } catch (e) {}
+    }
+
     // Currency
     if (currencySelect) currencySelect.value = state.currency || 'USD';
 
@@ -365,6 +387,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.pdfEngine) {
       window.pdfEngine.downloadPDF();
     }
+    // Record to saved invoices in localStorage for Dashboard visibility
+    try {
+      const state = store.getState();
+      const totals = store.calculateTotals();
+      const rawInvoices = localStorage.getItem('invoicegen_invoices');
+      let invoices = rawInvoices ? JSON.parse(rawInvoices) : [];
+      const curSymbol = CURRENCIES[state.currency]?.symbol || '$';
+      const invRecord = {
+        id: 'inv-' + Date.now(),
+        number: `INV-${state.number || '001'}`,
+        clientName: state.client?.name || 'Client',
+        clientEmail: state.client?.email || '',
+        issueDate: state.date || 'Today',
+        dueDate: state.dueDate || 'Upon Receipt',
+        amount: totals.grandTotal || 0,
+        currency: state.currency || 'USD',
+        currencySymbol: curSymbol,
+        status: totals.balanceDue <= 0 ? 'paid' : 'pending'
+      };
+      const existingIdx = invoices.findIndex(i => i.number === invRecord.number);
+      if (existingIdx >= 0) {
+        invoices[existingIdx] = { ...invoices[existingIdx], ...invRecord };
+      } else {
+        invoices.unshift(invRecord);
+      }
+      localStorage.setItem('invoicegen_invoices', JSON.stringify(invoices));
+    } catch (e) {}
   };
 
   const handlePrint = () => {
@@ -561,30 +610,18 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
 
+        const firstName = user.name ? user.name.split(' ')[0] : 'User';
         if (btnHeaderLogin) {
-          btnHeaderLogin.textContent = `My Account (${user.name ? user.name.split(' ')[0] : 'User'})`;
-          btnHeaderLogin.href = '#';
-          btnHeaderLogin.title = `Signed in as ${user.email} (Click to Sign Out)`;
-          btnHeaderLogin.onclick = (e) => {
-            e.preventDefault();
-            if (confirm(`Signed in as: ${user.name || 'User'} (${user.email || ''})\n\nWould you like to sign out?`)) {
-              localStorage.removeItem('invoicegen_user');
-              if (window.pdfEngine) window.pdfEngine.showToast('Successfully signed out');
-              setTimeout(() => window.location.reload(), 400);
-            }
-          };
+          btnHeaderLogin.textContent = `Dashboard (${firstName})`;
+          btnHeaderLogin.href = 'dashboard.html';
+          btnHeaderLogin.title = `Signed in as ${user.email} (Open Dashboard)`;
+          btnHeaderLogin.onclick = null;
         }
         if (btnHeaderSignup) btnHeaderSignup.style.display = 'none';
         if (btnMobileLogin) {
-          btnMobileLogin.textContent = `My Account (${user.name ? user.name.split(' ')[0] : 'User'})`;
-          btnMobileLogin.href = '#';
-          btnMobileLogin.onclick = (e) => {
-            e.preventDefault();
-            if (confirm(`Signed in as: ${user.name || 'User'}\nSign out?`)) {
-              localStorage.removeItem('invoicegen_user');
-              window.location.reload();
-            }
-          };
+          btnMobileLogin.textContent = `Dashboard (${firstName})`;
+          btnMobileLogin.href = 'dashboard.html';
+          btnMobileLogin.onclick = null;
         }
         if (btnMobileSignup) btnMobileSignup.style.display = 'none';
       }

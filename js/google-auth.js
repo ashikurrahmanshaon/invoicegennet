@@ -53,7 +53,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         sessionStorage.removeItem('pending_template');
         window.location.href = `index.html?template=${pendingTpl}`;
       } else if (window.location.pathname.includes('login') || window.location.pathname.includes('signup')) {
-        window.location.href = 'index.html';
+        window.location.href = 'dashboard.html';
       }
     }, 600);
   }
@@ -75,16 +75,10 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
       const btnLogin = document.getElementById('btnHeaderLogin') || document.querySelector('.btn-login');
       const btnSignup = document.getElementById('btnHeaderSignup') || document.querySelector('.btn-signup-free');
       if (btnLogin) {
-        btnLogin.innerHTML = `${avatarHtml}<span>My Account (${firstName})</span>`;
-        btnLogin.href = '#';
-        btnLogin.title = `Signed in as ${user.email} (Click to Sign Out)`;
-        btnLogin.onclick = (e) => {
-          e.preventDefault();
-          if (confirm(`Signed in as: ${user.name || 'User'} (${user.email})\n\nWould you like to sign out?`)) {
-            localStorage.removeItem('invoicegen_user');
-            window.location.reload();
-          }
-        };
+        btnLogin.innerHTML = `${avatarHtml}<span>Dashboard (${firstName})</span>`;
+        btnLogin.href = 'dashboard.html';
+        btnLogin.title = `Signed in as ${user.email} (Open Dashboard)`;
+        btnLogin.onclick = null;
       }
       if (btnSignup) btnSignup.style.display = 'none';
 
@@ -92,15 +86,9 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
       const btnMobileLogin = document.getElementById('btnMobileLogin');
       const btnMobileSignup = document.getElementById('btnMobileSignup');
       if (btnMobileLogin) {
-        btnMobileLogin.innerHTML = `${avatarHtml}<span>My Account (${firstName})</span>`;
-        btnMobileLogin.href = '#';
-        btnMobileLogin.onclick = (e) => {
-          e.preventDefault();
-          if (confirm(`Signed in as: ${user.name || 'User'}\nSign out?`)) {
-            localStorage.removeItem('invoicegen_user');
-            window.location.reload();
-          }
-        };
+        btnMobileLogin.innerHTML = `${avatarHtml}<span>Dashboard (${firstName})</span>`;
+        btnMobileLogin.href = 'dashboard.html';
+        btnMobileLogin.onclick = null;
       }
       if (btnMobileSignup) btnMobileSignup.style.display = 'none';
     } catch (e) {}

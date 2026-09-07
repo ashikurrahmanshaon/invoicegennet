@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard &amp; Profile | Invoice-Gen.net</title>
+  <meta name="description" content="Manage your generated invoices, business profile defaults, clients, and account settings in your InvoiceGen dashboard.">
+  <link rel="canonical" href="https://invoice-gen.net/dashboard.html">
+  <meta name="theme-color" content="#00c875">
+
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=fallback" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/invoice-editor.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar-saas">
+    <div class="container">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="44" height="44">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+        </div>
+      </a>
+
+      <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+        <a href="dashboard.html" class="nav-link-item active">Dashboard</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="dashboard.html" class="btn-login" id="btnHeaderLogin">My Account</a>
+        <a href="index.html" class="btn-signup-free" id="btnHeaderNewInvoice" style="background:#00c875; border-color:#00c875; color:#ffffff;">+ New Invoice</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+      <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
+        <a href="dashboard.html" class="mobile-nav-item active">Dashboard</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <a href="index.html" class="btn-signup-free" style="background:#00c875; color:#ffffff; width:100%; text-align:center;">+ New Invoice</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Workspace -->
+  <main class="dashboard-page-wrap">
+    <div class="dashboard-container">
+
+      <!-- Hero Header & Welcome Bar -->
+      <div class="dashboard-hero">
+        <div class="dashboard-title-group">
+          <h1 class="dashboard-title">Welcome back, <span id="heroUserName">User</span>!</h1>
+          <p class="dashboard-subtitle">Manage your issued invoices, track balances, and update your business profile defaults.</p>
+        </div>
+        <div>
+          <a href="index.html" class="btn-dashboard-cta">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Create New Invoice
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Executive Metrics Grid -->
+      <div class="dashboard-stats-grid">
+        <div class="dashboard-stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Total Invoices</span>
+            <div class="stat-icon-wrap stat-icon-blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
+          </div>
+          <div class="stat-val" id="statTotalInvoices">3</div>
+          <div class="stat-subtext">Issued documents</div>
+        </div>
+
+        <div class="dashboard-stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Total Billed</span>
+            <div class="stat-icon-wrap stat-icon-emerald">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+          </div>
+          <div class="stat-val" id="statTotalBilled">$4,850.00</div>
+          <div class="stat-subtext">Cumulative invoice volume</div>
+        </div>
+
+        <div class="dashboard-stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Paid Invoices</span>
+            <div class="stat-icon-wrap stat-icon-emerald">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+          </div>
+          <div class="stat-val" id="statPaidCount">2</div>
+          <div class="stat-subtext" id="statPaidAmount">$3,650.00 collected</div>
+        </div>
+
+        <div class="dashboard-stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Pending Balance</span>
+            <div class="stat-icon-wrap stat-icon-amber">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+          </div>
+          <div class="stat-val" id="statPendingAmount">$1,200.00</div>
+          <div class="stat-subtext" id="statPendingCount">1 invoice awaiting payment</div>
+        </div>
+      </div>
+
+      <!-- Main Layout: Tabs + Content + Sidebar -->
+      <div class="dashboard-main-grid">
+
+        <!-- Left Column: Tabs & Views -->
+        <div>
+          <div class="dashboard-tab-bar" role="tablist">
+            <button type="button" class="dashboard-tab-btn active" id="tabBtnInvoices" role="tab" aria-selected="true" aria-controls="panelInvoices">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              Invoices &amp; History
+              <span class="dashboard-tab-count" id="tabBadgeCount">3</span>
+            </button>
+            <button type="button" class="dashboard-tab-btn" id="tabBtnProfile" role="tab" aria-selected="false" aria-controls="panelProfile">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              Business Profile &amp; Defaults
+            </button>
+          </div>
+
+          <!-- Tab Panel 1: Invoices List -->
+          <div id="panelInvoices" class="dashboard-card" role="tabpanel">
+            <div class="dashboard-filter-bar">
+              <div class="dashboard-filter-pills" id="filterPillsGroup">
+                <button type="button" class="filter-pill active" data-filter="all">All (<span id="countFilterAll">3</span>)</button>
+                <button type="button" class="filter-pill" data-filter="paid">Paid (<span id="countFilterPaid">2</span>)</button>
+                <button type="button" class="filter-pill" data-filter="pending">Pending (<span id="countFilterPending">1</span>)</button>
+                <button type="button" class="filter-pill" data-filter="draft">Draft (<span id="countFilterDraft">0</span>)</button>
+              </div>
+
+              <div class="dashboard-search-wrap">
+                <input type="text" class="dashboard-search-input" id="searchInvoiceInput" placeholder="Search invoices or clients...">
+              </div>
+            </div>
+
+            <!-- Documents Table -->
+            <div class="dashboard-table-wrap">
+              <table class="dashboard-table" id="invoicesTable">
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Due Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="invoicesTableBody">
+                  <!-- Rendered dynamically by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty State Fallback -->
+            <div class="dashboard-empty-state" id="invoicesEmptyState" style="display: none;">
+              <div class="empty-icon-frame">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              </div>
+              <div class="empty-title">No invoices found</div>
+              <div class="empty-desc">You haven't created any invoices matching this filter yet. Ready to issue your first invoice?</div>
+              <a href="index.html" class="btn-dashboard-cta">+ Create Invoice</a>
+            </div>
+          </div>
+
+          <!-- Tab Panel 2: Business Profile Settings -->
+          <div id="panelProfile" class="dashboard-card" role="tabpanel" style="display: none;">
+            <div style="margin-bottom: 24px;">
+              <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 6px;">Sender Business Profile</h2>
+              <p style="font-size: 0.84rem; color: #64748b; margin: 0;">These details will automatically pre-populate the "From (Your Business)" section whenever you generate a new invoice.</p>
+            </div>
+
+            <form id="profileForm" onsubmit="event.preventDefault(); window.saveBusinessProfile();">
+              <div class="profile-form-grid">
+                <div class="profile-field-group">
+                  <label class="profile-field-label" for="profileBusinessName">Business / Freelancer Name</label>
+                  <input type="text" id="profileBusinessName" class="profile-field-input" placeholder="e.g. Acme Creative Studio LLC">
+                </div>
+
+                <div class="profile-field-group">
+                  <label class="profile-field-label" for="profileEmail">Work Email</label>
+                  <input type="email" id="profileEmail" class="profile-field-input" placeholder="contact@company.com">
+                </div>
+
+                <div class="profile-field-group">
+                  <label class="profile-field-label" for="profilePhone">Phone Number</label>
+                  <input type="tel" id="profilePhone" class="profile-field-input" placeholder="+1 (555) 019-2834">
+                </div>
+
+                <div class="profile-field-group">
+                  <label class="profile-field-label" for="profileTaxId">Tax ID / VAT Registration Number</label>
+                  <input type="text" id="profileTaxId" class="profile-field-input" placeholder="e.g. US-982341-X or GB123456789">
+                </div>
+
+                <div class="profile-field-group profile-field-full">
+                  <label class="profile-field-label" for="profileAddress">Full Business Address</label>
+                  <textarea id="profileAddress" class="profile-field-textarea" placeholder="Street address, Suite, City, State/Province, Postal Code, Country"></textarea>
+                </div>
+
+                <div class="profile-field-group">
+                  <label class="profile-field-label" for="profileCurrency">Default Currency</label>
+                  <select id="profileCurrency" class="profile-field-input">
+                    <option value="USD">USD ($) — US Dollar</option>
+                    <option value="EUR">EUR (€) — Euro</option>
+                    <option value="GBP">GBP (£) — British Pound</option>
+                    <option value="BDT">BDT (৳) — Bangladeshi Taka</option>
+                    <option value="INR">INR (₹) — Indian Rupee</option>
+                    <option value="CAD">CAD (CA$) — Canadian Dollar</option>
+                    <option value="AUD">AUD (AU$) — Australian Dollar</option>
+                    <option value="JPY">JPY (¥) — Japanese Yen</option>
+                    <option value="AED">AED (د.إ) — UAE Dirham</option>
+                  </select>
+                </div>
+
+                <div class="profile-field-group">
+                  <label class="profile-field-label" for="profilePaymentTerms">Default Payment Terms</label>
+                  <select id="profilePaymentTerms" class="profile-field-input">
+                    <option value="Due on Receipt">Due on Receipt</option>
+                    <option value="Net 7 Days">Net 7 Days</option>
+                    <option value="Net 14 Days">Net 14 Days</option>
+                    <option value="Net 30 Days">Net 30 Days</option>
+                    <option value="Net 60 Days">Net 60 Days</option>
+                  </select>
+                </div>
+
+                <div class="profile-field-group profile-field-full">
+                  <label class="profile-field-label" for="profileNotes">Default Payment Instructions / Notes</label>
+                  <textarea id="profileNotes" class="profile-field-textarea" placeholder="Bank account info, IBAN, Swift code, or 'Thank you for your business!'"></textarea>
+                </div>
+              </div>
+
+              <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn-save-profile" id="btnSaveProfile">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  Save Business Profile
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right Column Sidebar -->
+        <aside>
+          <!-- User Profile Card -->
+          <div class="dashboard-user-card">
+            <div class="user-avatar-large" id="dashUserAvatar">
+              <span id="dashUserInitial">U</span>
+            </div>
+            <div class="user-display-name" id="dashUserFullName">User Profile</div>
+            <div class="user-display-email" id="dashUserEmail">user@company.com</div>
+            <div>
+              <span class="user-tier-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Free Forever Tier
+              </span>
+            </div>
+
+            <button type="button" class="btn-signout-dashboard" id="btnSignoutDashboard">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              Sign Out
+            </button>
+          </div>
+
+          <!-- Quick Templates Card -->
+          <div class="dashboard-card" style="margin-bottom: 20px;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+              <span>Invoice Templates</span>
+              <a href="templates.html" style="font-size: 0.75rem; color: #00c875; text-decoration: none; font-weight: 600;">View all &rarr;</a>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <a href="index.html?template=charcoal" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #1e293b; font-size: 0.8125rem; font-weight: 600; background: #f8fafc; transition: all 0.15s ease;">
+                <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #0f172a;"></span> Minimal Slate</span>
+                <span style="color: #64748b; font-size: 0.75rem;">Open &rarr;</span>
+              </a>
+              <a href="index.html?template=emerald" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #1e293b; font-size: 0.8125rem; font-weight: 600; background: #f8fafc; transition: all 0.15s ease;">
+                <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #00c875;"></span> Emerald Green</span>
+                <span style="color: #64748b; font-size: 0.75rem;">Open &rarr;</span>
+              </a>
+              <a href="index.html?template=corporate" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #1e293b; font-size: 0.8125rem; font-weight: 600; background: #f8fafc; transition: all 0.15s ease;">
+                <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #1e3a8a;"></span> Corporate Navy</span>
+                <span style="color: #64748b; font-size: 0.75rem;">Open &rarr;</span>
+              </a>
+              <a href="index.html?template=creative" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: #1e293b; font-size: 0.8125rem; font-weight: 600; background: #f8fafc; transition: all 0.15s ease;">
+                <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #4f46e5;"></span> Creative Indigo</span>
+                <span style="color: #64748b; font-size: 0.75rem;">Open &rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Privacy Notice -->
+          <div class="dashboard-card" style="background: #f8fafc; border-style: dashed;">
+            <div style="display: flex; gap: 10px; align-items: flex-start;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00c875" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <div>
+                <div style="font-size: 0.8125rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Zero-Tracking Privacy</div>
+                <div style="font-size: 0.75rem; color: #64748b; line-height: 1.45;">Your invoice data and profile defaults are strictly stored in your browser's private storage. No data is harvested.</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Complete Luxury SaaS Footer -->
+  <footer class="saas-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="44" height="44">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p>
+            The modern, private, and effortless online invoice generator. Helping freelancers and businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html">Invoice Generator</a>
+            <a href="templates.html">Templates</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="payments.html">Payments Hub</a>
+            <a href="sitemap.html">Sitemap</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Luxury HUD Toast Notice -->
+  <div class="toast-notice" id="toastNotice"></div>
+
+  <!-- Client-Side Dashboard Management Script -->
+  <script>
+    (function () {
+      // -----------------------------------------------------------------------
+      // 1. Toast Notification Helper
+      // -----------------------------------------------------------------------
+      function showToast(message, type = 'success') {
+        let toast = document.getElementById('toastNotice');
+        if (!toast) return;
+        let icon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        if (type === 'warning') {
+          icon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+        }
+        toast.innerHTML = `<span class="toast-icon-badge">${icon}</span><span class="toast-text">${message}</span>`;
+        toast.className = `toast-notice toast-${type} show`;
+        setTimeout(() => toast.classList.remove('show'), 3500);
+      }
+
+      // -----------------------------------------------------------------------
+      // 2. Auth Session Guard & User Display
+      // -----------------------------------------------------------------------
+      function getUserSession() {
+        try {
+          const raw = localStorage.getItem('invoicegen_user');
+          if (!raw) return null;
+          const user = JSON.parse(raw);
+          if (!user || !user.email) return null;
+          return user;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      const currentUser = getUserSession();
+      if (!currentUser) {
+        // Not logged in -> redirect to login with redirect=dashboard
+        window.location.href = 'login.html?redirect=dashboard';
+        return;
+      }
+
+      // Populate user info
+      const displayName = currentUser.name || currentUser.email.split('@')[0];
+      const initial = displayName.charAt(0).toUpperCase();
+
+      document.getElementById('heroUserName').textContent = displayName;
+      document.getElementById('dashUserFullName').textContent = displayName;
+      document.getElementById('dashUserEmail').textContent = currentUser.email;
+      
+      const avatarContainer = document.getElementById('dashUserAvatar');
+      if (currentUser.avatar) {
+        avatarContainer.innerHTML = `<img src="${currentUser.avatar}" alt="${displayName}">`;
+      } else {
+        document.getElementById('dashUserInitial').textContent = initial;
+      }
+
+      // Navbar Account link
+      const btnHeaderLogin = document.getElementById('btnHeaderLogin');
+      if (btnHeaderLogin) {
+        btnHeaderLogin.textContent = `My Account (${displayName.split(' ')[0]})`;
+      }
+
+      // Sign Out Handler
+      document.getElementById('btnSignoutDashboard')?.addEventListener('click', () => {
+        localStorage.removeItem('invoicegen_user');
+        showToast('Successfully signed out. Redirecting...', 'info');
+        setTimeout(() => window.location.href = 'index.html', 700);
+      });
+
+      // -----------------------------------------------------------------------
+      // 3. Tab Switching Architecture
+      // -----------------------------------------------------------------------
+      const tabBtnInvoices = document.getElementById('tabBtnInvoices');
+      const tabBtnProfile = document.getElementById('tabBtnProfile');
+      const panelInvoices = document.getElementById('panelInvoices');
+      const panelProfile = document.getElementById('panelProfile');
+
+      tabBtnInvoices.addEventListener('click', () => {
+        tabBtnInvoices.classList.add('active');
+        tabBtnProfile.classList.remove('active');
+        panelInvoices.style.display = 'block';
+        panelProfile.style.display = 'none';
+      });
+
+      tabBtnProfile.addEventListener('click', () => {
+        tabBtnProfile.classList.add('active');
+        tabBtnInvoices.classList.remove('active');
+        panelProfile.style.display = 'block';
+        panelInvoices.style.display = 'none';
+      });
+
+      // -----------------------------------------------------------------------
+      // 4. Invoices Repository & Data Synchronization
+      // -----------------------------------------------------------------------
+      const DEFAULT_SAMPLE_INVOICES = [
+        {
+          id: 'inv-001',
+          number: 'INV-001',
+          clientName: 'Huize Frankendael',
+          clientEmail: 'invoices@huizefrankendael.nl',
+          issueDate: 'Sep 4, 2026',
+          dueDate: 'Sep 18, 2026',
+          amount: 2450.00,
+          currency: 'USD',
+          currencySymbol: '$',
+          status: 'paid'
+        },
+        {
+          id: 'inv-002',
+          number: 'INV-002',
+          clientName: 'Studio Nordic BV',
+          clientEmail: 'billing@studionordic.eu',
+          issueDate: 'Aug 29, 2026',
+          dueDate: 'Sep 12, 2026',
+          amount: 1200.00,
+          currency: 'USD',
+          currencySymbol: '$',
+          status: 'paid'
+        },
+        {
+          id: 'inv-003',
+          number: 'INV-003',
+          clientName: 'Vanguard Global Corp',
+          clientEmail: 'accounts@vanguardcorp.com',
+          issueDate: 'Sep 6, 2026',
+          dueDate: 'Sep 20, 2026',
+          amount: 1200.00,
+          currency: 'USD',
+          currencySymbol: '$',
+          status: 'pending'
+        }
+      ];
+
+      function getSavedInvoices() {
+        try {
+          const raw = localStorage.getItem('invoicegen_invoices');
+          if (!raw) {
+            // Seed initial realistic list for a polished first visit
+            localStorage.setItem('invoicegen_invoices', JSON.stringify(DEFAULT_SAMPLE_INVOICES));
+            return DEFAULT_SAMPLE_INVOICES;
+          }
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_SAMPLE_INVOICES;
+        } catch (e) {
+          return DEFAULT_SAMPLE_INVOICES;
+        }
+      }
+
+      function saveInvoicesList(list) {
+        localStorage.setItem('invoicegen_invoices', JSON.stringify(list));
+      }
+
+      let activeFilter = 'all';
+      let searchQuery = '';
+
+      function updateDashboardStats(invoices) {
+        const totalCount = invoices.length;
+        let totalBilled = 0;
+        let paidCount = 0;
+        let paidAmount = 0;
+        let pendingCount = 0;
+        let pendingAmount = 0;
+
+        invoices.forEach(inv => {
+          const amt = parseFloat(inv.amount) || 0;
+          totalBilled += amt;
+          if (inv.status === 'paid') {
+            paidCount++;
+            paidAmount += amt;
+          } else if (inv.status === 'pending') {
+            pendingCount++;
+            pendingAmount += amt;
+          }
+        });
+
+        document.getElementById('statTotalInvoices').textContent = totalCount;
+        document.getElementById('statTotalBilled').textContent = `$${totalBilled.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+        document.getElementById('statPaidCount').textContent = paidCount;
+        document.getElementById('statPaidAmount').textContent = `$${paidAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })} collected`;
+        document.getElementById('statPendingAmount').textContent = `$${pendingAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+        document.getElementById('statPendingCount').textContent = `${pendingCount} invoice awaiting payment`;
+
+        // Update tab count
+        document.getElementById('tabBadgeCount').textContent = totalCount;
+
+        // Update filter pill counts
+        document.getElementById('countFilterAll').textContent = totalCount;
+        document.getElementById('countFilterPaid').textContent = paidCount;
+        document.getElementById('countFilterPending').textContent = pendingCount;
+        document.getElementById('countFilterDraft').textContent = invoices.filter(i => i.status === 'draft').length;
+      }
+
+      function renderInvoicesTable() {
+        const invoices = getSavedInvoices();
+        updateDashboardStats(invoices);
+
+        const filtered = invoices.filter(inv => {
+          const matchFilter = activeFilter === 'all' || inv.status === activeFilter;
+          const q = searchQuery.toLowerCase().trim();
+          const matchSearch = !q || inv.number.toLowerCase().includes(q) || inv.clientName.toLowerCase().includes(q) || (inv.clientEmail && inv.clientEmail.toLowerCase().includes(q));
+          return matchFilter && matchSearch;
+        });
+
+        const tbody = document.getElementById('invoicesTableBody');
+        const emptyState = document.getElementById('invoicesEmptyState');
+        const table = document.getElementById('invoicesTable');
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = '';
+          table.style.display = 'none';
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        table.style.display = 'table';
+        emptyState.style.display = 'none';
+
+        tbody.innerHTML = filtered.map(inv => {
+          let statusBadge = `<span class="status-badge status-draft">Draft</span>`;
+          if (inv.status === 'paid') statusBadge = `<span class="status-badge status-paid">● Paid</span>`;
+          if (inv.status === 'pending') statusBadge = `<span class="status-badge status-pending">● Pending</span>`;
+
+          const curSymbol = inv.currencySymbol || '$';
+          const formattedAmount = `${curSymbol}${parseFloat(inv.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+
+          return `
+            <tr>
+              <td>
+                <a href="index.html?load=${inv.id || ''}" class="doc-number-link">${inv.number}</a>
+              </td>
+              <td>
+                <div style="font-weight: 600; color: #0f172a;">${inv.clientName || 'Client'}</div>
+                <div style="font-size: 0.78rem; color: #64748b;">${inv.clientEmail || ''}</div>
+              </td>
+              <td>${inv.issueDate || '—'}</td>
+              <td>${inv.dueDate || '—'}</td>
+              <td style="font-weight: 700; color: #0f172a;">${formattedAmount}</td>
+              <td>${statusBadge}</td>
+              <td style="text-align: right;">
+                <div class="table-action-group" style="justify-content: flex-end;">
+                  <button type="button" class="btn-table-action" onclick="window.editInvoice('${inv.id}')" title="Edit in Generator">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Edit
+                  </button>
+                  <button type="button" class="btn-table-action btn-action-danger" onclick="window.deleteInvoice('${inv.id}')" title="Delete Invoice">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Filter Pill Listeners
+      document.querySelectorAll('#filterPillsGroup .filter-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#filterPillsGroup .filter-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFilter = btn.dataset.filter || 'all';
+          renderInvoicesTable();
+        });
+      });
+
+      // Search Listener
+      document.getElementById('searchInvoiceInput')?.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderInvoicesTable();
+      });
+
+      // Table Action: Edit Invoice (Loads into active editor and navigates)
+      window.editInvoice = function (id) {
+        const invoices = getSavedInvoices();
+        const found = invoices.find(i => i.id === id);
+        if (found) {
+          // If invoice has full state stored, set active; else synthesize
+          const activeState = {
+            title: 'INVOICE',
+            number: found.number.replace('INV-', ''),
+            date: found.issueDate,
+            dueDate: found.dueDate,
+            client: { name: found.clientName, email: found.clientEmail || '' },
+            items: [{ id: 1, description: 'Consulting & Design Services', quantity: 1, rate: found.amount }],
+            currency: found.currency || 'USD'
+          };
+          localStorage.setItem('invoicegen_active_v3', JSON.stringify(activeState));
+        }
+        window.location.href = 'index.html';
+      };
+
+      // Table Action: Delete Invoice
+      window.deleteInvoice = function (id) {
+        if (!confirm('Are you sure you want to delete this invoice record?')) return;
+        let invoices = getSavedInvoices();
+        invoices = invoices.filter(i => i.id !== id);
+        saveInvoicesList(invoices);
+        renderInvoicesTable();
+        showToast('Invoice deleted from records');
+      };
+
+      // -----------------------------------------------------------------------
+      // 5. Business Profile & Defaults Form
+      // -----------------------------------------------------------------------
+      function loadBusinessProfile() {
+        try {
+          const raw = localStorage.getItem('invoicegen_business_profile');
+          if (!raw) {
+            // Pre-fill user name and email from session if empty
+            if (currentUser) {
+              document.getElementById('profileBusinessName').value = currentUser.name || '';
+              document.getElementById('profileEmail').value = currentUser.email || '';
+            }
+            return;
+          }
+          const p = JSON.parse(raw);
+          if (p.businessName) document.getElementById('profileBusinessName').value = p.businessName;
+          if (p.email) document.getElementById('profileEmail').value = p.email;
+          if (p.phone) document.getElementById('profilePhone').value = p.phone;
+          if (p.taxId) document.getElementById('profileTaxId').value = p.taxId;
+          if (p.address) document.getElementById('profileAddress').value = p.address;
+          if (p.currency) document.getElementById('profileCurrency').value = p.currency;
+          if (p.paymentTerms) document.getElementById('profilePaymentTerms').value = p.paymentTerms;
+          if (p.notes) document.getElementById('profileNotes').value = p.notes;
+        } catch (e) {}
+      }
+
+      window.saveBusinessProfile = function () {
+        const profile = {
+          businessName: document.getElementById('profileBusinessName').value.trim(),
+          email: document.getElementById('profileEmail').value.trim(),
+          phone: document.getElementById('profilePhone').value.trim(),
+          taxId: document.getElementById('profileTaxId').value.trim(),
+          address: document.getElementById('profileAddress').value.trim(),
+          currency: document.getElementById('profileCurrency').value,
+          paymentTerms: document.getElementById('profilePaymentTerms').value,
+          notes: document.getElementById('profileNotes').value.trim(),
+          updatedAt: new Date().toISOString()
+        };
+
+        localStorage.setItem('invoicegen_business_profile', JSON.stringify(profile));
+        showToast('Business profile updated successfully! Defaults will apply to new invoices.');
+      };
+
+      // Initial Render
+      renderInvoicesTable();
+      loadBusinessProfile();
+
+      // Check URL query parameters (e.g. ?tab=profile)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('tab') === 'profile') {
+        tabBtnProfile.click();
+      }
+    })();
+  </script>
+</body>
+</html>
