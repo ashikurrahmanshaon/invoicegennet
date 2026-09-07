@@ -902,35 +902,37 @@
   justify-content: space-between;
 }
 
-/* Primary Action: Emerald Gradient Download Button */
+/* Primary Action: Minimalist Logo-Matched Download Button (Zero Glow) */
 .btn-generate-pdf {
   width: 100%;
-  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  background-color: #00c875;
   color: #ffffff;
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   padding: 11px 18px;
-  border-radius: 9px;
-  border: 1px solid #047857;
+  border-radius: 8px;
+  border: 1px solid #059669;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 9px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 3px 12px rgba(16, 185, 129, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  transition: all 0.18s ease;
 }
 
 .btn-generate-pdf:hover {
-  background: linear-gradient(180deg, #14c78c 0%, #059669 100%);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 6px 18px rgba(16, 185, 129, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background-color: #059669;
+  border-color: #047857;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.12);
   transform: translateY(-1px);
 }
 
 .btn-generate-pdf:active {
   transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(16, 185, 129, 0.2);
+  background-color: #047857;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
 }
 
 /* Secondary 4-Button Utility Toolbar */
