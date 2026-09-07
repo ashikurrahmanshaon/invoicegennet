@@ -1285,8 +1285,8 @@
 }
 
 .brand-logo-frame {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1298,16 +1298,17 @@
 }
 
 .brand-icon-svg {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   display: block;
   flex-shrink: 0;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.28));
+  /* Zero animation - stable & rock-solid */
+  transform: none;
+  transition: none;
 }
 
 .brand-wrapper:hover .brand-icon-svg {
-  transform: scale(1.06) rotate(-2deg);
+  transform: none;
 }
 
 .brand-text-block {
@@ -1317,10 +1318,10 @@
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: #090d16;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.035em;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -1328,7 +1329,7 @@
 
 .brand-name .accent,
 .brand-name .brand-accent {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #059669 0%, #00c875 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800;
@@ -1338,19 +1339,22 @@
 .brand-name .dot-net,
 .brand-name .brand-badge,
 .brand-name .badge-net {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-sans);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #94a3b8;
-  letter-spacing: -0.01em;
-  margin-left: 2px;
-  background: transparent;
-  border: none;
-  padding: 0;
-  text-transform: lowercase;
-  vertical-align: baseline;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 2.5px 6.5px;
+  border-radius: 5px;
+  margin-left: 6px;
   line-height: 1;
-  -webkit-text-fill-color: initial;
+  text-transform: lowercase;
+  vertical-align: middle;
+  -webkit-text-fill-color: #047857;
 }
 
 /* 2. Linear / Stripe Minimalist Navigation Links */

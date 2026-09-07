@@ -490,42 +490,38 @@ ul, ol {
 }
 
 .brand-logo-frame {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  contain: layout paint size;
 }
 
 .brand-icon-svg {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
   display: block !important;
   flex-shrink: 0 !important;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.28));
+  /* Zero animation - stable & rock-solid */
+  transform: none !important;
+  transition: none !important;
 }
 
 .brand-wrapper:hover .brand-icon-svg {
-  transform: scale(1.06) rotate(-2deg);
+  transform: none !important;
 }
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.25rem !important;
+  font-size: 1.35rem !important;
   font-weight: 800 !important;
   color: #090d16 !important;
-  letter-spacing: -0.04em !important;
+  letter-spacing: -0.035em !important;
   line-height: 1 !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -533,7 +529,7 @@ ul, ol {
 
 .brand-name .accent,
 .brand-name .brand-accent {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+  background: linear-gradient(135deg, #059669 0%, #00c875 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   font-weight: 800 !important;
@@ -543,19 +539,22 @@ ul, ol {
 .brand-name .dot-net,
 .brand-name .brand-badge,
 .brand-name .badge-net {
+  display: inline-flex !important;
+  align-items: center !important;
   font-family: var(--font-sans) !important;
-  font-size: 0.85rem !important;
-  font-weight: 600 !important;
-  color: #94a3b8 !important;
-  letter-spacing: -0.01em !important;
-  margin-left: 2px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  text-transform: lowercase !important;
-  vertical-align: baseline !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  color: #047857 !important;
+  background: #ecfdf5 !important;
+  border: 1px solid #a7f3d0 !important;
+  padding: 2.5px 6.5px !important;
+  border-radius: 5px !important;
+  margin-left: 6px !important;
   line-height: 1 !important;
-  -webkit-text-fill-color: initial !important;
+  text-transform: lowercase !important;
+  vertical-align: middle !important;
+  -webkit-text-fill-color: #047857 !important;
 }
 
 /* ==========================================================================
