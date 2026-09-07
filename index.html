@@ -33,55 +33,32 @@
 <body>
 
   <!-- Authentic SaaS Top Navigation with Login & Sign Up -->
-  <!-- Clean SaaS Top Navigation -->
+  <!-- Clean Minimalist SaaS Top Navigation -->
   <header class="navbar-saas">
     <div class="container">
-      <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
+      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
         <div class="brand-logo-frame">
-          <img src="/assets/icons/logo.svg" alt="Invoice-Gen Logo" class="brand-icon-svg" width="32" height="32">
+          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="44" height="44">
         </div>
         <div class="brand-text-block">
           <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
         </div>
       </a>
 
-      <!-- Center SaaS Navigation Links -->
+                  <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
         <a href="index.html" class="nav-link-item active" data-i18n="nav_generator">Invoice Generator</a>
         <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
-        <a href="dashboard.html" class="nav-link-item" id="navMyInvoices">My Invoices</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
         <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
       </nav>
 
-      <!-- Right Header Actions -->
+      <!-- Right Header Actions (Clean Minimalist Auth & Language Switcher) -->
       <div class="nav-actions-wrap">
-        <!-- Language Switcher Pill -->
-        <div class="lang-switcher-container">
-          <button type="button" class="header-lang-pill" id="btnHeaderLang" title="Change Language">
-            <svg width="15" height="11" viewBox="0 0 640 480" style="border-radius: 2px;">
-              <path fill="#bd3d44" d="M0 0h640v480H0z"/>
-              <path stroke="#fff" stroke-width="37" d="M0 55h640M0 129h640M0 203h640M0 277h640M0 351h640M0 425h640"/>
-              <path fill="#192f5d" d="M0 0h256v258H0z"/>
-            </svg>
-            <span>us English</span>
-            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1L5 5L9 1"/></svg>
-          </button>
-        </div>
-
-        <!-- Notifications Bell -->
-        <button type="button" class="header-icon-btn" id="btnHeaderNotify" title="Notifications">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-        </button>
-
-        <!-- User Profile Pill -->
-        <a href="dashboard.html" class="header-user-badge" id="headerUserBadge" title="View Profile">
-          <div class="user-avatar-dot">A</div>
-          <span class="user-badge-name">Asif Mehedi</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </a>
-
-        <!-- Mobile Navigation Toggle -->
-        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu" style="display: none;">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
       </div>
@@ -89,356 +66,290 @@
 
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
-      <div class="mobile-nav-links">
+                  <div class="mobile-nav-links">
         <a href="index.html" class="mobile-nav-item active" data-i18n="nav_generator">Invoice Generator</a>
         <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
-        <a href="dashboard.html" class="mobile-nav-item">My Invoices</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
         <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
       </div>
       <div class="mobile-nav-auth">
-        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnMobileLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" data-i18n="btn_signup">Sign Up Free</a>
       </div>
     </div>
   </header>
 
-  <!-- Main Application Workspace Shell -->
-  <main class="app-workspace-shell" id="workspace">
-    <div class="app-shell-grid">
+  <!-- Main Application Workspace -->
+  <main class="app-workspace-layout" id="workspace">
 
-      <!-- Column 1: Left Navigation Sidebar -->
-      <aside class="workspace-sidebar-left" id="workspaceSidebarLeft">
-        <button type="button" class="btn-create-invoice" id="btnCreateInvoice">
-          <span class="btn-create-icon-badge">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          </span>
-          <span>Create Invoice</span>
+    <!-- The Invoice Sheet Card (Blank by default) -->
+    <div class="invoice-sheet-card" id="invoicePaper">
+
+      <!-- Top Section: Sender Details & Document Meta -->
+      <div class="sheet-top-grid">
+
+        <!-- Sender Block (Left) -->
+        <div class="sender-info-box">
+          <!-- Logo Uploader -->
+          <div class="logo-slot-wrap">
+            <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
+            <div class="logo-uploader-card" id="btnUploadLogo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>+ Add your logo</span>
+            </div>
+            <div class="logo-preview-container" id="logoPreviewBox">
+              <img src="" alt="Uploaded Logo" id="logoImg">
+              <button type="button" class="btn-remove-logo-badge" id="btnRemoveLogo" title="Remove logo">&times;</button>
+            </div>
+          </div>
+
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="senderName">From (Your Business)</label>
+            <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="Your Business or Studio Name">
+          </div>
+
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="senderAddress">Address &amp; Contact</label>
+            <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Street address, City, Postal Code, Country&#10;Email, Phone or Tax ID"></textarea>
+          </div>
+        </div>
+
+        <!-- Document Title & Meta (Right) -->
+        <div class="doc-meta-box">
+          <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename (e.g. INVOICE, ESTIMATE, RECEIPT, QUOTE)">
+
+          <div class="meta-inputs-grid">
+            <span class="meta-field-label">Invoice #:</span>
+            <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="e.g. 001">
+
+            <span class="meta-field-label">Date:</span>
+            <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="e.g. Sep 7, 2026">
+
+            <span class="meta-field-label">Terms:</span>
+            <select id="paymentTerms" class="form-select sheet-paper-select">
+              <option value="Due on Receipt">Due on Receipt</option>
+              <option value="Net 15 Days">Net 15 Days</option>
+              <option value="Net 30 Days">Net 30 Days</option>
+              <option value="Net 60 Days">Net 60 Days</option>
+            </select>
+
+            <span class="meta-field-label due-date-field-row" style="display: none;">Due Date:</span>
+            <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="e.g. Sep 21, 2026" style="display: none;">
+
+            <!-- PO Number (Toggleable) -->
+            <span class="meta-field-label po-field-row" style="display: none;">PO Number:</span>
+            <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="Optional PO#" style="display: none;">
+
+            <!-- Dedicated Balance Due Strip -->
+            <div class="balance-due-strip">
+              <span class="strip-label" data-i18n="lbl_balance_due">Balance Due:</span>
+              <span class="strip-val" id="balanceDueDisplay">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Middle Section: Bill To & Ship To Side-by-Side (Clean Stationery Typography) -->
+      <div class="sheet-billing-row">
+
+        <!-- Bill To -->
+        <div class="sheet-billing-col" id="billToCol">
+          <div class="sheet-col-header">
+            <span class="sheet-col-title">Bill To</span>
+          </div>
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="clientName">Client / Company Name</label>
+            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="Who is this invoice to?">
+          </div>
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="clientAddress">Billing Address</label>
+            <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Client street address, City, Country&#10;Email, Phone or Tax ID"></textarea>
+          </div>
+        </div>
+
+        <!-- Ship To (Optional or Default) -->
+        <div class="sheet-billing-col" id="shipToCardPanel">
+          <div class="sheet-col-header">
+            <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
+          </div>
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="shipToName">Recipient Name</label>
+            <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Destination Name">
+          </div>
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="shipToAddress">Shipping Destination</label>
+            <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Shipping destination address, City, Country"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Items Table (Modern Crisp Ledger) -->
+      <div class="table-wrapper-box">
+        <table class="invoice-items-table" id="refTable">
+          <thead>
+            <tr>
+              <th style="width: 50%;" data-i18n="tbl_item">Item / Service Description</th>
+              <th class="col-qty" style="width: 15%;" data-i18n="tbl_qty">Quantity</th>
+              <th class="col-rate" style="width: 15%;" data-i18n="tbl_rate">Rate / Price</th>
+              <th class="col-amount" style="width: 15%;" data-i18n="tbl_amount">Amount</th>
+              <th class="col-action" style="width: 5%;"></th>
+            </tr>
+          </thead>
+          <tbody id="itemsTableBody">
+            <!-- Dynamically populated via js/app.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Add Line Item Button -->
+      <div>
+        <button type="button" class="btn-add-item-bar" id="btnAddItem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span data-i18n="btn_add_item">+ Add Line Item</span>
+        </button>
+      </div>
+
+      <!-- Bottom Section: Notes & Calculations Summary -->
+      <div class="sheet-bottom-section">
+
+        <!-- Left: Notes, Bank Details, IBAN, VAT & Signature -->
+        <div class="sheet-notes-col">
+          <div class="sheet-field-group">
+            <label class="sheet-field-label" for="invoiceNotes">
+              Payment Terms &amp; Notes
+            </label>
+            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="5" placeholder="Bank: Silicon Valley Bank&#10;IBAN / Swift: SVBUS6S&#10;Thank you for your business!"></textarea>
+          </div>
+
+          <!-- Digital Signature Line (Toggleable) -->
+          <div class="signature-block-wrap" id="signatureBlockWrap" style="display: none; margin-top: 16px;">
+            <label class="sheet-field-label">Authorized Signature</label>
+            <div style="border-top: 1px solid #cbd5e1; width: 220px; padding-top: 6px;">
+              <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer Full Name" style="border: none; padding: 4px 0; font-weight: 700;">
+              <div style="font-size: 0.75rem; color: #94a3b8;">Authorized Representative</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Real-time Totals Breakdown -->
+        <div class="totals-summary-card">
+          <div class="total-line">
+            <span data-i18n="lbl_subtotal">Subtotal:</span>
+            <span class="val" id="subtotalDisplay">$0.00</span>
+          </div>
+
+          <!-- Discount Row (Toggleable) -->
+          <div class="total-line discount-line-row" id="discountLineRow" style="display: none;">
+            <div class="discount-edit-group">
+              <span data-i18n="opt_discount">Discount</span>
+              <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0"><i>%</i></span>
+            </div>
+            <span class="val" id="discountAmountDisplay">-$0.00</span>
+          </div>
+
+          <div class="total-line">
+            <div class="tax-edit-group">
+              <span data-i18n="lbl_tax">Tax / VAT</span>
+              <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0"><i>%</i></span>
+            </div>
+            <span class="val" id="taxAmountDisplay">$0.00</span>
+          </div>
+
+          <div class="total-line grand-total-line">
+            <span class="lbl" data-i18n="lbl_total">Total:</span>
+            <span class="val" id="grandTotalDisplay">$0.00</span>
+          </div>
+
+          <!-- Amount Paid Row (Toggleable) -->
+          <div class="total-line amount-paid-row" id="amountPaidLineRow" style="display: none;">
+            <span data-i18n="lbl_amount_paid">Amount Paid:</span>
+            <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00">
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar: Unified Studio Inspector Panel -->
+    <aside class="action-sidebar-panel studio-inspector">
+
+      <!-- Section 1: Hero Export & Quick Tools -->
+      <div class="inspector-section inspector-hero-section">
+        <div class="inspector-section-header">
+          <span class="inspector-eyebrow">Document Actions</span>
+        </div>
+
+        <!-- Primary Emerald Gradient Download Button -->
+        <button type="button" class="btn-generate-pdf" id="btnDownloadPDF">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span data-i18n="btn_download_pdf">Download PDF</span>
         </button>
 
-        <nav class="sidebar-nav-menu">
-          <a href="dashboard.html" class="sidebar-nav-item">
-            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            <span>Dashboard</span>
-          </a>
-          <a href="index.html" class="sidebar-nav-item active">
-            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            <span>Invoice Generator</span>
-          </a>
-          <a href="dashboard.html" class="sidebar-nav-item">
-            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-            <span>My Invoices</span>
-          </a>
-          <a href="templates.html" class="sidebar-nav-item">
-            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-            <span>Templates</span>
-          </a>
-          <a href="#" class="sidebar-nav-item" id="btnSidebarClients">
-            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            <span>Clients</span>
-          </a>
-          <a href="#" class="sidebar-nav-item" id="btnSidebarItems">
-            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-            <span>Items &amp; Services</span>
-          </a>
-          <a href="profile.html" class="sidebar-nav-item" id="btnSidebarSettings">
-            <svg class="sidebar-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <span>Settings</span>
-          </a>
-        </nav>
+        <!-- Secondary Actions 4-Button Utility Toolbar -->
+        <div class="inspector-toolbar-grid">
+          <button type="button" class="inspector-tool-btn" id="btnPrintSidebar" title="Print Invoice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span data-i18n="btn_print">Print</span>
+          </button>
 
-        <!-- Upgrade to Pro Card -->
-        <div class="sidebar-pro-card">
-          <div class="pro-crown-badge">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#00c875" stroke-width="2"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14v2H5v-2z"></path></svg>
-          </div>
-          <div class="pro-card-title">Upgrade to Pro</div>
-          <div class="pro-card-desc">Unlock premium templates, custom branding and more.</div>
-          <a href="pricing.html" class="btn-pro-upgrade">Upgrade Now</a>
+          <button type="button" class="inspector-tool-btn" id="btnOpenSendEmail" title="Send via Email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span data-i18n="btn_send_email">Email</span>
+          </button>
+
+          <button type="button" class="inspector-tool-btn" id="btnLoadSample" title="Load Sample Invoice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span data-i18n="btn_sample_demo">Sample</span>
+          </button>
+
+          <button type="button" class="inspector-tool-btn tool-btn-danger" id="btnClearInvoice" title="Clear All Fields">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span data-i18n="btn_reset_form">Clear</span>
+          </button>
         </div>
-      </aside>
+      </div>
 
-      <!-- Column 2: Center Workspace Canvas -->
-      <section class="workspace-center-canvas">
-        <!-- Top Action Bar -->
-        <div class="workspace-action-bar">
-          <div class="action-bar-left">
-            <a href="dashboard.html" class="btn-action-back">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-              <span>Back to Invoices</span>
-            </a>
-            <h1 class="workspace-heading">New Invoice</h1>
-            <div class="draft-status-pill" id="draftStatusPill">
-              <span class="status-dot"></span>
-              <span class="status-text">Draft saved 2 minutes ago</span>
-            </div>
-          </div>
-          <div class="action-bar-right">
-            <button type="button" class="btn-action-secondary" id="btnActionPreview">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-              <span>Preview</span>
-            </button>
-            <button type="button" class="btn-action-secondary" id="btnActionSaveDraft">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-              <span>Save Draft</span>
-            </button>
-            <button type="button" class="btn-action-primary" id="btnDownloadPDF">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span>Download PDF</span>
-            </button>
-          </div>
+      <div class="inspector-divider"></div>
+
+      <!-- Section 2: Currency Settings -->
+      <div class="inspector-section">
+        <div class="inspector-section-header">
+          <span class="inspector-eyebrow">Currency</span>
         </div>
 
-        <!-- The Invoice Sheet Card (Real A4 Paper Document) -->
-        <div class="invoice-sheet-card" id="invoicePaper">
-          <!-- Top Section: Sender Details & Document Meta -->
-          <div class="sheet-top-grid">
-            <!-- Sender Block (Left) -->
-            <div class="sender-info-box">
-              <div class="logo-slot-wrap" id="logoSlotWrap">
-                <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
-                <div class="logo-uploader-card" id="btnUploadLogo">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                  <div class="logo-text-block">
-                    <span class="logo-upload-title">+ Add your logo</span>
-                    <span class="logo-upload-sub">PNG, JPG (Max 2MB)</span>
-                  </div>
-                </div>
-                <div class="logo-preview-container" id="logoPreviewBox" style="display: none;">
-                  <img src="" alt="Uploaded Logo" id="logoImg">
-                  <button type="button" class="btn-remove-logo-badge" id="btnRemoveLogo" title="Remove logo">&times;</button>
-                </div>
-              </div>
-
-              <div class="sheet-field-group">
-                <label class="sheet-field-label" for="senderName">From (Your Business)</label>
-                <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="Asif Mehedi">
-              </div>
-
-              <div class="sheet-field-group">
-                <label class="sheet-field-label" for="senderAddress">Address &amp; Contact</label>
-                <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="4" placeholder="P.Hans Frankfurthersingel 128, 1060 TN&#10;Amsterdam, Netherlands&#10;asif@example.com&#10;+31 6 1234 5678"></textarea>
-              </div>
-            </div>
-
-            <!-- Document Title & Meta (Right) -->
-            <div class="doc-meta-box">
-              <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename">
-
-              <div class="meta-inputs-grid">
-                <span class="meta-field-label">Invoice #:</span>
-                <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="37">
-
-                <span class="meta-field-label">Date:</span>
-                <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="Sep 4, 2026">
-
-                <span class="meta-field-label">Terms:</span>
-                <select id="paymentTerms" class="form-select sheet-paper-select">
-                  <option value="Due on Receipt" selected>Due on Receipt</option>
-                  <option value="Net 15 Days">Net 15 Days</option>
-                  <option value="Net 30 Days">Net 30 Days</option>
-                  <option value="Net 60 Days">Net 60 Days</option>
-                </select>
-
-                <span class="meta-field-label due-date-field-row" style="display: none;">Due Date:</span>
-                <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="Sep 18, 2026" style="display: none;">
-
-                <span class="meta-field-label po-field-row" style="display: none;">PO Number:</span>
-                <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="PO-8921" style="display: none;">
-
-                <!-- Dedicated Balance Due Strip -->
-                <div class="balance-due-strip">
-                  <span class="strip-label">Balance Due</span>
-                  <span class="strip-val" id="balanceDueDisplay">€6,098.40</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle Section: Bill To & Ship To Side-by-Side -->
-          <div class="sheet-billing-row">
-            <!-- Bill To -->
-            <div class="sheet-billing-col" id="billToCol">
-              <div class="sheet-col-header">
-                <span class="sheet-col-title">BILL TO</span>
-              </div>
-              <div class="sheet-field-group">
-                <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="Huze Frankendael">
-              </div>
-              <div class="sheet-field-group">
-                <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Middenweg 72&#10;1097BS Amsterdam"></textarea>
-              </div>
-            </div>
-
-            <!-- Ship To -->
-            <div class="sheet-billing-col" id="shipToCardPanel">
-              <div class="sheet-col-header sheet-col-header-flex">
-                <div class="ship-to-label-group">
-                  <span class="sheet-col-title">SHIP TO</span>
-                  <span class="sheet-optional-tag">Optional</span>
-                </div>
-                <div class="switch-box switch-box-sm">
-                  <input type="checkbox" id="toggleShipToHeader" checked>
-                  <span class="switch-slider"></span>
-                </div>
-              </div>
-              <div class="sheet-field-group">
-                <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="Middenweg 72">
-              </div>
-              <div class="sheet-field-group">
-                <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="1097BS Amsterdam&#10;Netherlands"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <!-- Items Table -->
-          <div class="table-wrapper-box">
-            <table class="invoice-items-table" id="refTable">
-              <thead>
-                <tr>
-                  <th style="width: 52%;">DESCRIPTION</th>
-                  <th class="col-qty" style="width: 14%;">QTY</th>
-                  <th class="col-rate" style="width: 14%;">RATE</th>
-                  <th class="col-amount" style="width: 15%;">AMOUNT</th>
-                  <th class="col-action" style="width: 5%;"></th>
-                </tr>
-              </thead>
-              <tbody id="itemsTableBody">
-                <!-- Dynamically populated via js/app.js -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Add Line Item Button -->
-          <div>
-            <button type="button" class="btn-add-item-bar" id="btnAddItem">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>+ Add Line Item</span>
-            </button>
-          </div>
-
-          <!-- Bottom Section: Notes & Totals -->
-          <div class="sheet-bottom-section">
-            <!-- Left: Notes, Bank Details, IBAN, VAT -->
-            <div class="sheet-notes-col" id="notesColumnBlock">
-              <div class="sheet-field-group">
-                <label class="sheet-field-label" for="invoiceNotes">Payment Terms &amp; Notes</label>
-                <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="5" placeholder="KvK: 91435382&#10;VAT Number: NL004890664B78&#10;Bank A/C Name: A. Mehedi&#10;IBAN: NL54 ABNA 0125632436&#10;&#10;Thank you for your business!"></textarea>
-              </div>
-
-              <!-- Digital Signature Line (Toggleable) -->
-              <div class="signature-block-wrap" id="signatureBlockWrap" style="display: none; margin-top: 16px;">
-                <label class="sheet-field-label">Authorized Signature</label>
-                <div style="border-top: 1px solid #cbd5e1; width: 220px; padding-top: 6px;">
-                  <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer Full Name" style="border: none; padding: 4px 0; font-weight: 700;">
-                  <div style="font-size: 0.75rem; color: #94a3b8;">Authorized Representative</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right: Real-time Totals Breakdown -->
-            <div class="totals-summary-card">
-              <div class="total-line">
-                <span>Subtotal</span>
-                <span class="val" id="subtotalDisplay">€5,040.00</span>
-              </div>
-
-              <!-- Discount Row -->
-              <div class="total-line discount-line-row" id="discountLineRow" style="display: none;">
-                <div class="discount-edit-group">
-                  <span>Discount</span>
-                  <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0"><i>%</i></span>
-                </div>
-                <span class="val" id="discountAmountDisplay">-€0.00</span>
-              </div>
-
-              <div class="total-line" id="taxLineRow">
-                <div class="tax-edit-group">
-                  <span id="taxLabelDisplay">Tax (21%)</span>
-                  <span class="pct-pill" id="taxPctPill" style="display: none;"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="21"><i>%</i></span>
-                </div>
-                <span class="val" id="taxAmountDisplay">€1,058.40</span>
-              </div>
-
-              <div class="total-line grand-total-line">
-                <span class="lbl">Total</span>
-                <span class="val" id="grandTotalDisplay">€6,098.40</span>
-              </div>
-
-              <!-- Amount Paid Row -->
-              <div class="total-line amount-paid-row" id="amountPaidLineRow" style="display: none;">
-                <span>Amount Paid</span>
-                <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00">
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Column 3: Right Settings Panel -->
-      <aside class="workspace-settings-right">
-        <!-- 3 Segmented Tabs: Design | Settings | Payment -->
-        <div class="settings-tabs-nav">
-          <button type="button" class="settings-tab-btn active" data-tab="design">Design</button>
-          <button type="button" class="settings-tab-btn" data-tab="settings">Settings</button>
-          <button type="button" class="settings-tab-btn" data-tab="payment">Payment</button>
-        </div>
-
-        <!-- Design Tab Content -->
-        <div class="settings-tab-pane active" id="tabPaneDesign">
-          <!-- Template Style Miniature Cards -->
-          <div class="inspector-group">
-            <label class="inspector-group-title">Template Style</label>
-            <div class="template-thumbnail-grid">
-              <button type="button" class="template-thumb-card active" data-style="charcoal" data-color="charcoal" title="Minimal Template">
-                <div class="thumb-sheet-mini">
-                  <div class="mini-bar-header"></div>
-                  <div class="mini-lines"></div>
-                </div>
-                <span class="thumb-name">Minimal</span>
-              </button>
-              <button type="button" class="template-thumb-card" data-style="emerald" data-color="emerald" title="Emerald Template">
-                <div class="thumb-sheet-mini">
-                  <div class="mini-bar-header emerald-bg"></div>
-                  <div class="mini-lines"></div>
-                </div>
-                <span class="thumb-name">Emerald</span>
-              </button>
-              <button type="button" class="template-thumb-card" data-style="navy" data-color="navy" title="Corporate Template">
-                <div class="thumb-sheet-mini">
-                  <div class="mini-bar-header corporate-bg"></div>
-                  <div class="mini-lines"></div>
-                </div>
-                <span class="thumb-name">Corporate</span>
-              </button>
-              <button type="button" class="template-thumb-card" data-style="indigo" data-color="indigo" title="Creative Template">
-                <div class="thumb-sheet-mini">
-                  <div class="mini-bar-header creative-bg"></div>
-                  <div class="mini-lines"></div>
-                </div>
-                <span class="thumb-name">Creative</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Accent Color Circles -->
-          <div class="inspector-group">
-            <label class="inspector-group-title">Accent Color</label>
-            <div class="accent-color-swatches">
-              <button type="button" class="color-swatch-circle active" data-color="#00c875" style="background-color: #00c875;" title="Emerald"></button>
-              <button type="button" class="color-swatch-circle" data-color="#3b82f6" style="background-color: #3b82f6;" title="Blue"></button>
-              <button type="button" class="color-swatch-circle" data-color="#8b5cf6" style="background-color: #8b5cf6;" title="Purple"></button>
-              <button type="button" class="color-swatch-circle" data-color="#f97316" style="background-color: #f97316;" title="Orange"></button>
-              <button type="button" class="color-swatch-circle" data-color="#f43f5e" style="background-color: #f43f5e;" title="Coral"></button>
-              <button type="button" class="color-swatch-circle" data-color="#0f172a" style="background-color: #0f172a;" title="Navy"></button>
-            </div>
-          </div>
-
-          <!-- Currency Dropdown -->
-          <div class="inspector-group">
-            <label class="inspector-group-title" for="currencySelector">Currency</label>
+        <!-- Billing Currency Dropdown -->
+        <div class="inspector-inline-control" style="flex-direction: column; align-items: stretch; gap: 6px;">
+          <label for="currencySelector" class="inspector-control-label">Billing Currency</label>
+          <div class="custom-currency-wrap">
             <select id="currencySelector" class="custom-currency-select">
-              <option value="EUR" selected>EUR (€) — Euro</option>
               <option value="USD">USD ($) — US Dollar</option>
+              <option value="EUR">EUR (€) — Euro</option>
               <option value="GBP">GBP (£) — British Pound</option>
               <option value="BDT">BDT (৳) — Bangladeshi Taka</option>
               <option value="INR">INR (₹) — Indian Rupee</option>
@@ -448,181 +359,70 @@
               <option value="AED">AED (د.إ) — UAE Dirham</option>
             </select>
           </div>
+        </div>
+      </div>
 
-          <!-- Document Options (Clean Switch Toggles) -->
-          <div class="inspector-group">
-            <label class="inspector-group-title">Document Options</label>
-            <div class="inspector-toggle-list">
-              <label class="inspector-toggle-row" for="toggleLogo">
-                <span class="toggle-text">Show Logo</span>
-                <div class="switch-box">
-                  <input type="checkbox" id="toggleLogo" checked>
-                  <span class="switch-slider"></span>
-                </div>
-              </label>
-              <label class="inspector-toggle-row" for="toggleShipTo">
-                <span class="toggle-text">Show Shipping Address</span>
-                <div class="switch-box">
-                  <input type="checkbox" id="toggleShipTo" checked>
-                  <span class="switch-slider"></span>
-                </div>
-              </label>
-              <label class="inspector-toggle-row" for="toggleTax">
-                <span class="toggle-text">Show Tax</span>
-                <div class="switch-box">
-                  <input type="checkbox" id="toggleTax" checked>
-                  <span class="switch-slider"></span>
-                </div>
-              </label>
-              <label class="inspector-toggle-row" for="togglePaymentDetails">
-                <span class="toggle-text">Show Payment Details</span>
-                <div class="switch-box">
-                  <input type="checkbox" id="togglePaymentDetails" checked>
-                  <span class="switch-slider"></span>
-                </div>
-              </label>
-              <label class="inspector-toggle-row" for="toggleSignature">
-                <span class="toggle-text">Show Signature Line</span>
-                <div class="switch-box">
-                  <input type="checkbox" id="toggleSignature">
-                  <span class="switch-slider"></span>
-                </div>
-              </label>
+      <div class="inspector-divider"></div>
+
+      <!-- Section 3: Document Fields & Toggles (Clean, modern Linear-style list with NO BOXES) -->
+      <div class="inspector-section">
+        <div class="inspector-section-header">
+          <span class="inspector-eyebrow">Document Options</span>
+        </div>
+
+        <div class="inspector-toggle-list">
+          <label class="inspector-toggle-row" for="toggleShipTo">
+            <span class="toggle-text">Shipping details</span>
+            <div class="switch-box">
+              <input type="checkbox" id="toggleShipTo" checked>
+              <span class="switch-slider"></span>
             </div>
-          </div>
+          </label>
 
-          <!-- Accordions -->
-          <div class="settings-accordions-container">
-            <details class="settings-accordion" id="accInvoiceDetails">
-              <summary class="accordion-summary">
-                <span class="acc-icon-title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                  Invoice Details
-                </span>
-                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </summary>
-              <div class="accordion-body">
-                <label class="inspector-toggle-row" for="togglePoNumber">
-                  <span class="toggle-text">PO Number (PO#)</span>
-                  <div class="switch-box">
-                    <input type="checkbox" id="togglePoNumber">
-                    <span class="switch-slider"></span>
-                  </div>
-                </label>
-                <label class="inspector-toggle-row" for="toggleDueDate">
-                  <span class="toggle-text">Payment Due Date</span>
-                  <div class="switch-box">
-                    <input type="checkbox" id="toggleDueDate">
-                    <span class="switch-slider"></span>
-                  </div>
-                </label>
-              </div>
-            </details>
-
-            <details class="settings-accordion" id="accClientShipping">
-              <summary class="accordion-summary">
-                <span class="acc-icon-title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                  Client &amp; Shipping
-                </span>
-                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </summary>
-              <div class="accordion-body">
-                <p class="acc-subtext">Click fields directly on the invoice preview to edit client details or shipping address.</p>
-              </div>
-            </details>
-
-            <details class="settings-accordion" id="accItemsServices">
-              <summary class="accordion-summary">
-                <span class="acc-icon-title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                  Items &amp; Services
-                </span>
-                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </summary>
-              <div class="accordion-body">
-                <label class="inspector-toggle-row" for="toggleDiscount">
-                  <span class="toggle-text">Discount percentage</span>
-                  <div class="switch-box">
-                    <input type="checkbox" id="toggleDiscount">
-                    <span class="switch-slider"></span>
-                  </div>
-                </label>
-                <label class="inspector-toggle-row" for="toggleAmountPaid">
-                  <span class="toggle-text">Deposit / Amount paid</span>
-                  <div class="switch-box">
-                    <input type="checkbox" id="toggleAmountPaid">
-                    <span class="switch-slider"></span>
-                  </div>
-                </label>
-              </div>
-            </details>
-
-            <details class="settings-accordion" id="accPaymentInfo">
-              <summary class="accordion-summary">
-                <span class="acc-icon-title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                  Payment Information
-                </span>
-                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </summary>
-              <div class="accordion-body">
-                <p class="acc-subtext">Add IBAN, Swift/BIC, KvK, VAT ID or PayPal link inside Payment Terms &amp; Notes.</p>
-              </div>
-            </details>
-
-            <details class="settings-accordion" id="accNotesSignature">
-              <summary class="accordion-summary">
-                <span class="acc-icon-title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
-                  Notes &amp; Signature
-                </span>
-                <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-              </summary>
-              <div class="accordion-body">
-                <p class="acc-subtext">Add legal notes, payment instructions, and authorized signature blocks.</p>
-              </div>
-            </details>
-          </div>
-        </div>
-
-        <!-- Settings Tab Content -->
-        <div class="settings-tab-pane" id="tabPaneSettings">
-          <div class="inspector-group">
-            <label class="inspector-group-title">Document Actions</label>
-            <div class="settings-action-buttons-list">
-              <button type="button" class="btn-panel-action" id="btnPrintSidebar">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                <span>Print Document</span>
-              </button>
-              <button type="button" class="btn-panel-action" id="btnOpenSendEmail">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                <span>Email to Client</span>
-              </button>
-              <button type="button" class="btn-panel-action" id="btnLoadSample">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                <span>Reload Sample Data</span>
-              </button>
-              <button type="button" class="btn-panel-action btn-panel-danger" id="btnClearInvoice">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                <span>Clear All Fields</span>
-              </button>
+          <label class="inspector-toggle-row" for="togglePoNumber">
+            <span class="toggle-text">Purchase Order (PO#)</span>
+            <div class="switch-box">
+              <input type="checkbox" id="togglePoNumber">
+              <span class="switch-slider"></span>
             </div>
-          </div>
-        </div>
+          </label>
 
-        <!-- Payment Tab Content -->
-        <div class="settings-tab-pane" id="tabPanePayment">
-          <div class="inspector-group">
-            <label class="inspector-group-title">Online Payments</label>
-            <p class="acc-subtext" style="margin-bottom: 12px;">Accept credit card payments via Stripe or PayPal directly from your invoices.</p>
-            <a href="payments.html" class="btn-panel-action" style="text-decoration: none;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-              <span>Connect Payment Gateway</span>
-            </a>
+          <label class="inspector-toggle-row" for="toggleDueDate">
+            <span class="toggle-text">Payment Due Date</span>
+            <div class="switch-box">
+              <input type="checkbox" id="toggleDueDate">
+              <span class="switch-slider"></span>
+            </div>
+          </label>
+
+          <label class="inspector-toggle-row" for="toggleDiscount">
+            <span class="toggle-text">Discount percentage</span>
+            <div class="switch-box">
+              <input type="checkbox" id="toggleDiscount">
+              <span class="switch-slider"></span>
+            </div>
+          </label>
+
+          <label class="inspector-toggle-row" for="toggleAmountPaid">
+            <span class="toggle-text">Deposit / Amount paid</span>
+            <div class="switch-box">
+              <input type="checkbox" id="toggleAmountPaid">
+              <span class="switch-slider"></span>
+            </div>
+          </label>
+
+          <label class="inspector-toggle-row" for="toggleSignature">
+            <span class="toggle-text">Signature line</span>
+            <div class="switch-box">
+              <input type="checkbox" id="toggleSignature">
+              <span class="switch-slider"></span>
+            </div>
+          </label>
         </div>
-      </aside>
-    </div>
+      </div>
+
+    </aside>
+
   </main>
 
   <!-- Login & Sign Up Modal -->
@@ -709,23 +509,72 @@
   </div>
 
   <!-- Complete, High-End SaaS Footer -->
-  <!-- Production SaaS Compact Single-Line Footer -->
-  <footer class="saas-compact-footer">
-    <div class="compact-footer-inner">
-      <div class="compact-footer-left">
-        <a href="index.html" class="compact-footer-brand">
-          <img src="/assets/icons/logo.svg" alt="Invoice-Gen Logo" width="22" height="22">
-          <span class="compact-brand-text">Invoice-Gen<span class="accent">.net</span></span>
-        </a>
-        <span class="compact-tagline">The modern, private, and effortless online invoice generator.</span>
-      </div>
-      <div class="compact-footer-right">
-        <a href="blog.html">Blog</a>
-        <a href="contact.html">Help</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms of Service</a>
-        <a href="contact.html">Contact</a>
-        <span class="compact-copyright">&copy; 2016–2026 Invoice-Gen.net</span>
+  <footer class="saas-footer">
+    <div class="container">
+      <div class="footer-columns-grid">
+
+        <!-- Col 1: Brand & Mission -->
+        <div class="footer-brand-summary">
+          <a href="index.html" class="brand-wrapper">
+            <div class="brand-logo-frame">
+              <img src="/assets/icons/logo.svg" alt="InvoiceGen Document Logo" class="brand-icon-svg" width="44" height="44">
+            </div>
+            <div class="brand-text-block">
+              <div class="brand-name">Invoice-Gen<span class="accent">.net</span></div>
+            </div>
+          </a>
+          <p data-i18n="footer_tagline">
+            The modern, private, and effortless online invoice generator. Helping freelancers and businesses create professional invoices in seconds.
+          </p>
+          <div class="footer-brand-copyright">
+            &copy; 2016-2026 Invoice-Gen.net
+          </div>
+        </div>
+
+        <!-- Col 2: Product -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
+          <div class="footer-nav-list">
+            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
+            <a href="templates.html" data-i18n="nav_templates">Templates</a>
+            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
+            <a href="payments.html">Payments Hub</a>
+            <a href="sitemap.html">Sitemap</a>
+          </div>
+        </div>
+
+        <!-- Col 3: About Us -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
+          <div class="footer-nav-list">
+            <a href="about.html">Company Story</a>
+            <a href="features.html">Platform Features</a>
+            <a href="security.html">Security &amp; Architecture</a>
+            <a href="contact.html">Contact &amp; Support</a>
+          </div>
+        </div>
+
+        <!-- Col 4: Legal & Security -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
+          <div class="footer-nav-list">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="refunds.html">Refund Policy</a>
+            <a href="security.html">Security Guarantee</a>
+          </div>
+        </div>
+
+        <!-- Col 5: Blog -->
+        <div>
+          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
+          <div class="footer-nav-list">
+            <a href="blog.html">Blog &amp; Resources</a>
+            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
+            <a href="getting-paid-faster.html">Getting Paid Faster</a>
+            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
+          </div>
+        </div>
       </div>
     </div>
   </footer>
