@@ -156,7 +156,7 @@
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 12px 32px -4px rgba(15, 23, 42, 0.06), 0 24px 64px -12px rgba(15, 23, 42, 0.04);
   padding: 48px 52px;
   position: relative;
-  transition: all var(--transition-fast);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 @media (max-width: 640px) {
@@ -202,7 +202,7 @@
   border: 1px dashed #cbd5e1;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   color: #475569;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -601,7 +601,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   margin: 0 auto;
 }
 
@@ -624,7 +624,7 @@
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   margin-bottom: 28px;
 }
 
@@ -667,7 +667,7 @@
   line-height: 1.6;
   width: 100%;
   box-sizing: border-box;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .sheet-notes-textarea:hover {
@@ -761,7 +761,7 @@
   color: #64748b;
   font-weight: 600;
   margin-left: 2px;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
@@ -820,7 +820,7 @@
   font-family: var(--font-mono);
   background-color: #ffffff;
   color: #0f172a;
-  transition: all 150ms ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
@@ -917,7 +917,7 @@
   justify-content: center;
   gap: 9px;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-  transition: all 0.18s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .btn-generate-pdf:hover {
@@ -953,7 +953,7 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   user-select: none;
 }
 
@@ -1005,7 +1005,7 @@
   border: 1.5px solid #e2e8f0;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   font-family: inherit;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -1080,7 +1080,7 @@
   color: #0f172a;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
@@ -1470,7 +1470,7 @@
   gap: 6px;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
   user-select: none;
 }
 
@@ -1574,7 +1574,7 @@
   font-family: inherit;
   text-align: left;
   cursor: pointer;
-  transition: all 150ms ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   color: #334155;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -1641,7 +1641,7 @@
   height: 34px;
   box-sizing: border-box;
   border-radius: 8px;
-  transition: all 0.18s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -1685,7 +1685,7 @@
   justify-content: center;
   gap: 6px;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-  transition: all 0.18s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
@@ -1730,7 +1730,7 @@
   height: 34px;
   width: 36px;
   box-sizing: border-box;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .btn-mobile-nav-toggle:hover {
@@ -1750,9 +1750,17 @@
     height: 56px;
   }
 
-  .brand-name .badge-net,
-  .brand-name .brand-badge {
-    display: none !important;
+  .brand-logo-frame,
+  .brand-icon-svg {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+  }
+
+  .brand-name {
+    font-size: 1.08rem !important;
+    white-space: nowrap !important;
   }
 
   .nav-center-links {
@@ -1760,11 +1768,15 @@
   }
 
   .btn-login {
-    display: none;
+    display: none !important;
+  }
+
+  .nav-actions-wrap {
+    gap: 8px;
   }
 
   .btn-signup-free {
-    padding: 0 12px;
+    padding: 0 10px;
     font-size: 0.75rem;
     height: 32px;
   }
@@ -1783,10 +1795,12 @@
 }
 
 @media (max-width: 480px) {
-  .btn-signup-free {
-    padding: 0 10px;
-    font-size: 0.72rem;
-    height: 30px;
+  .navbar-saas .btn-signup-free {
+    display: none !important;
+  }
+
+  .brand-name {
+    font-size: 1.02rem !important;
   }
 }
 
@@ -1795,14 +1809,17 @@
   background-color: #ffffff;
   border-top: 1px solid #e2e8f0;
   box-shadow: 0 12px 30px -5px rgba(15, 23, 42, 0.12);
-  padding: 16px 24px 24px;
+  padding: 16px 20px 24px;
   flex-direction: column;
   gap: 16px;
   position: absolute;
-  top: 64px;
+  top: 100%;
   left: 0;
   right: 0;
-  z-index: 49;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 999;
 }
 
 .mobile-nav-drawer.active {
@@ -1822,7 +1839,7 @@
   text-decoration: none;
   padding: 10px 14px;
   border-radius: 8px;
-  transition: all var(--transition-fast);
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .mobile-nav-item:hover,
@@ -1921,7 +1938,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   padding: 0;
 }
 
@@ -1996,7 +2013,7 @@
   font-size: 0.875rem;
   color: #0f172a;
   background: #f8fafc;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   font-family: inherit;
   box-sizing: border-box;
 }
@@ -2022,7 +2039,7 @@
   font-size: 0.875rem;
   color: #0f172a;
   background: #f8fafc;
-  transition: all 0.18s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   font-family: inherit;
   resize: vertical;
   box-sizing: border-box;
@@ -2056,7 +2073,7 @@
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   margin-bottom: 16px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
@@ -2107,7 +2124,7 @@
   justify-content: center;
   gap: 8px;
   box-shadow: 0 4px 14px rgba(0, 200, 117, 0.35);
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .btn-auth-submit:hover {
@@ -2477,7 +2494,7 @@
   gap: 5px;
   z-index: 5;
   box-shadow: 0 2px 5px rgba(15, 23, 42, 0.05);
-  transition: all var(--transition-fast);
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .btn-card-quick-preview:hover {
@@ -2667,7 +2684,7 @@
   font-size: 0.875rem;
   font-weight: 700;
   text-decoration: none;
-  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   cursor: pointer;
 }
 
@@ -3065,7 +3082,7 @@
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   text-align: center;
   border: 1px solid transparent;
 }
@@ -3489,7 +3506,7 @@
   border-radius: 8px;
   font-size: 0.9375rem;
   color: #0f172a;
-  transition: all var(--transition-fast);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .auth-input-field::placeholder {
@@ -3595,7 +3612,7 @@
   justify-content: center;
   gap: 8px;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all var(--transition-fast);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .btn-auth-primary:hover {
@@ -3663,7 +3680,7 @@
   padding: 9px 12px;
   border-radius: 6px;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -3756,7 +3773,7 @@
   background: #ecfdf5;
   color: #059669;
   border: 1px solid #a7f3d0;
-  transition: all var(--transition-fast);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .billing-switch-btn.active .billing-save-pill {
@@ -3792,7 +3809,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
@@ -4111,7 +4128,7 @@ html[dir="rtl"] .lang-item-en {
   border-radius: 9px;
   text-decoration: none;
   box-shadow: 0 4px 14px rgba(0, 200, 117, 0.35);
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .btn-dashboard-cta:hover {
@@ -4134,7 +4151,7 @@ html[dir="rtl"] .lang-item-en {
   border: 1.5px solid #e2e8f0;
   border-radius: 12px;
   padding: 20px 22px;
-  transition: all 0.18s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
 }
 
@@ -4232,7 +4249,7 @@ html[dir="rtl"] .lang-item-en {
   color: #64748b;
   cursor: pointer;
   border-bottom: 2.5px solid transparent;
-  transition: all 0.18s ease;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
   margin-bottom: -2px;
 }
 
@@ -4293,7 +4310,7 @@ html[dir="rtl"] .lang-item-en {
   border: 1px solid #e2e8f0;
   color: #64748b;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
   font-family: inherit;
 }
 
@@ -4319,7 +4336,7 @@ html[dir="rtl"] .lang-item-en {
   background: #f8fafc;
   font-family: inherit;
   width: 200px;
-  transition: all 0.18s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .dashboard-search-input:focus {
@@ -4422,7 +4439,7 @@ html[dir="rtl"] .lang-item-en {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: all 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
   font-family: inherit;
 }
 
@@ -4504,7 +4521,7 @@ html[dir="rtl"] .lang-item-en {
   color: #0f172a;
   background: #f8fafc;
   font-family: inherit;
-  transition: all 0.18s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   box-sizing: border-box;
 }
 
@@ -4530,7 +4547,7 @@ html[dir="rtl"] .lang-item-en {
   color: #0f172a;
   background: #f8fafc;
   font-family: inherit;
-  transition: all 0.18s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   resize: vertical;
   box-sizing: border-box;
   line-height: 1.5;
@@ -4561,7 +4578,7 @@ html[dir="rtl"] .lang-item-en {
   align-items: center;
   gap: 8px;
   box-shadow: 0 4px 14px rgba(0, 200, 117, 0.35);
-  transition: all 0.18s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
 .btn-save-profile:hover {
@@ -4644,7 +4661,7 @@ html[dir="rtl"] .lang-item-en {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.18s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
   font-family: inherit;
 }
 

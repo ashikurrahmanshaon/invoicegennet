@@ -1,6 +1,7 @@
 /**
  * InstantNav - Ultra-fast 0ms Page Navigation & Smooth Multi-Page Transitions
- * Injects Speculation Rules API, pointer prefetch, instant feedback bar, and pins favicon cache.
+ * Injects Speculation Rules API, pointer prefetch, instant feedback bar, pins favicon cache,
+ * and manages the universal mobile navigation drawer.
  */
 (function () {
   'use strict';
@@ -16,18 +17,13 @@
   }
   pinFavicon();
 
-  // 2. Prefetching disabled to ensure browser always serves fresh content on reload/navigate
-  function prefetchUrl() {
-    // Disabled intentionally to prevent browser cache retention
-  }
-
-  // 4. Subtle, high-performance top progress feedback on navigation click
+  // 2. Subtle, high-performance top progress feedback on navigation click
   let progressBar = null;
   function showProgressBar() {
     if (!progressBar) {
       progressBar = document.createElement('div');
       progressBar.id = 'instant-nav-progress';
-      progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2px;background:#00c875;z-index:99999;width:0%;transition:width 0.22s cubic-bezier(0.1, 0.9, 0.2, 1), opacity 0.15s ease;pointer-events:none;';
+      progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2.5px;background:#10b981;z-index:99999;width:0%;transition:width 0.22s cubic-bezier(0.1, 0.9, 0.2, 1), opacity 0.15s ease;pointer-events:none;';
       document.body.appendChild(progressBar);
     }
     progressBar.style.opacity = '1';
@@ -66,4 +62,40 @@
       }, 100);
     }
   });
+
+  // 3. Universal Mobile Navigation Drawer Handler
+  function initMobileNav() {
+    const btnToggle = document.getElementById('btnMobileNavToggle');
+    const drawer = document.getElementById('mobileNavDrawer');
+    if (!btnToggle || !drawer) return;
+
+    btnToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = drawer.classList.toggle('active');
+      btnToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!drawer.contains(e.target) && !btnToggle.contains(e.target)) {
+        if (drawer.classList.contains('active')) {
+          drawer.classList.remove('active');
+          btnToggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('active')) {
+        drawer.classList.remove('active');
+        btnToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileNav);
+  } else {
+    initMobileNav();
+  }
 })();

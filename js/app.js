@@ -529,19 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Mobile Navigation Drawer Toggle
-  if (btnMobileNavToggle && mobileNavDrawer) {
-    btnMobileNavToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      mobileNavDrawer.classList.toggle('active');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!mobileNavDrawer.contains(e.target) && !btnMobileNavToggle.contains(e.target)) {
-        mobileNavDrawer.classList.remove('active');
-      }
-    });
-  }
+  // Mobile Navigation Drawer Toggle is handled universally by instant-nav.js
 
   if (btnMobileLogin) {
     btnMobileLogin.addEventListener('click', () => {

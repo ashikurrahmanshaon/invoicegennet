@@ -14,14 +14,12 @@
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/design-system.css">
-  <link rel="stylesheet" href="css/invoice-editor.css">
+    <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
+  <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/design-system.css?v=4.0">
+  <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
 
   <style>
     /* Specialized Styling for Payments & Currency Hub */
@@ -171,7 +169,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
       box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
 
@@ -198,7 +196,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: all 160ms cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
       box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
 
@@ -295,48 +293,56 @@
 <body>
 
   <!-- Authentic SaaS Top Navigation -->
+    <!-- Universal SaaS Top Navigation Bar -->
   <header class="navbar-saas">
     <div class="container">
-      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
+      <!-- Brand Lockup -->
+      <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
         <div class="brand-logo-frame">
-          <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="44" height="44">
+          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36">
         </div>
         <div class="brand-text-block">
-          <div class="brand-name">Invoice<span class="accent">Gen</span><span class="badge-net">.net</span></div>
+          <div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div>
         </div>
       </a>
 
-                  <!-- Center SaaS Navigation Links -->
+      <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Invoice Generator</a>
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Editor</a>
         <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
-        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
         <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
+        <a href="payments.html" class="nav-link-item active">Payments</a>
       </nav>
 
-      <!-- Right Header Actions (Clean Minimalist Boxy SaaS Auth & Language Switcher) -->
+      <!-- Right Header Actions -->
       <div class="nav-actions-wrap">
         <div class="lang-switcher-container"></div>
         <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">
+          <span data-i18n="btn_signup">Sign Up Free</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
         <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
       </div>
     </div>
 
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
-                  <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Invoice Generator</a>
+      <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Editor</a>
         <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
-        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
         <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
+        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
+        <a href="payments.html" class="mobile-nav-item active">Payments</a>
+        <a href="blog.html" class="mobile-nav-item">Blog &amp; Guides</a>
+        <a href="dashboard.html" class="mobile-nav-item">Dashboard</a>
       </div>
       <div class="mobile-nav-auth">
-        <div class="lang-switcher-container"></div>
-        <a href="login.html" class="btn-login" id="btnMobileLogin" data-i18n="btn_login">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" data-i18n="btn_signup">Sign Up Free</a>
+        <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" style="width:100%; text-align:center;">Sign Up Free</a>
       </div>
     </div>
   </header>
@@ -530,71 +536,28 @@
   </main>
 
   <!-- Complete, High-End SaaS Footer -->
-  <footer class="saas-footer">
+    <!-- Universal Sleek Footer Bar -->
+  <footer class="site-footer-bar">
     <div class="container">
-      <div class="footer-columns-grid">
-
-        <!-- Col 1: Brand & Mission -->
-        <div class="footer-brand-summary">
-          <a href="index.html" class="brand-wrapper">
-            <div class="brand-logo-frame">
-              <img src="/assets/icons/logo.svg" alt="InvoiceGen Logo" class="brand-icon-svg" width="44" height="44">
-            </div>
-            <div class="brand-text-block">
-              <div class="brand-name">Invoice<span class="accent">Gen</span><span class="badge-net">.net</span></div>
-            </div>
-          </a>
-          <p data-i18n="footer_tagline">
-            The modern, private, and effortless online invoice generator. Helping freelancers, designers, and growing businesses create professional invoices in seconds.
-          </p>
-          <div class="footer-brand-copyright">
-            &copy; 2016-2026 Invoice-Gen.net
-          </div>
-        </div>
-
-        <!-- Col 2: Product -->
-        <div>
-          <div class="footer-heading" data-i18n="footer_col_product">Product</div>
-          <div class="footer-nav-list">
-            <a href="index.html" data-i18n="nav_generator">Invoice Generator</a>
-            <a href="templates.html" data-i18n="nav_templates">Templates</a>
-            <a href="pricing.html" data-i18n="nav_pricing">Pricing</a>
-            <a href="payments.html" style="color: #00c875; font-weight: 700;">Payments Hub</a>
-          </div>
-        </div>
-
-        <!-- Col 3: About Us -->
-        <div>
-          <div class="footer-heading" data-i18n="footer_col_about">About Us</div>
-          <div class="footer-nav-list">
-            <a href="about.html">Company Story</a>
-            <a href="features.html">Platform Features</a>
-            <a href="security.html">Security &amp; Architecture</a>
-            <a href="contact.html">Contact &amp; Support</a>
-          </div>
-        </div>
-
-        <!-- Col 4: Legal & Security -->
-        <div>
-          <div class="footer-heading" data-i18n="footer_col_legal">Legal &amp; Security</div>
-          <div class="footer-nav-list">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="refunds.html">Refund Policy</a>
-            <a href="security.html">Security Guarantee</a>
-          </div>
-        </div>
-
-        <!-- Col 5: Blog -->
-        <div>
-          <div class="footer-heading" data-i18n="footer_col_blog">Blog</div>
-          <div class="footer-nav-list">
-            <a href="blog.html">Blog &amp; Resources</a>
-            <a href="invoicing-guide.html">Invoicing Guide 2026</a>
-            <a href="getting-paid-faster.html">Getting Paid Faster</a>
-            <a href="stripe-vs-paypal.html">Stripe vs PayPal</a>
-          </div>
-        </div>
+      <div class="footer-bar-left">
+        <a href="index.html" class="footer-brand-lockup">
+          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
+          <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
+        </a>
+        <span class="footer-bar-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net</span>
+      </div>
+      <div class="footer-bar-right">
+        <nav class="footer-nav-links" aria-label="Footer Navigation">
+          <a href="templates.html">Templates</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="payments.html" style="color: #00c875; font-weight: 700;">Payments</a>
+          <a href="blog.html">Blog</a>
+          <a href="contact.html">Help</a>
+          <a href="sitemap.html">Sitemap</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="contact.html">Contact</a>
+        </nav>
       </div>
     </div>
   </footer>
@@ -603,7 +566,7 @@
   <div class="toast-notice" id="toastNotice"></div>
 
   <!-- Scripts -->
-  <script src="js/i18n.js"></script>
+  <script src="js/i18n.js?v=4.0"></script>
   <script>
     // -------------------------------------------------------------------------
     // 1. Currencies Directory Data
@@ -758,7 +721,7 @@
       }
     });
   </script>
-  <script src="js/google-auth.js"></script>
-  <script src="js/instant-nav.js"></script>
+  <script src="js/google-auth.js?v=4.0"></script>
+  <script src="js/instant-nav.js?v=4.0"></script>
 </body>
 </html>

@@ -3,6 +3,38 @@
    Aesthetic: Clean White & Emerald Green Fintech SaaS
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   SELF-HOSTED FONTS & ZERO-SHIFT STABILIZATION
+   Eliminates FOUT, FOIT, and Layout Shifts from Frame 0
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/assets/fonts/plus-jakarta-sans-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/assets/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Fallback Font Metric Overrides (Matches Segoe UI / Apple System to Plus Jakarta Sans) */
+@font-face {
+  font-family: 'Plus Jakarta Sans Fallback';
+  src: local('Segoe UI'), local('Roboto'), local('Helvetica Neue'), local('Arial');
+  ascent-override: 102%;
+  descent-override: 28%;
+  line-gap-override: 0%;
+  size-adjust: 101%;
+}
+
 :root {
   /* Brand Green Palette */
   --primary-50: #ecfdf5;
@@ -48,7 +80,7 @@
   --info-500: #3b82f6;
 
   /* Fonts */
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Elevation & Shadows */
@@ -159,7 +191,7 @@ ul, ol {
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
   white-space: nowrap;
   user-select: none;
 }
@@ -466,6 +498,8 @@ ul, ol {
   text-decoration: none;
   user-select: none;
   transition: opacity 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .brand-wrapper:hover {
@@ -501,13 +535,15 @@ ul, ol {
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.28rem !important;
+  font-size: 1.25rem !important;
   font-weight: 800 !important;
   color: #0f172a !important;
   letter-spacing: -0.03em !important;
   line-height: 1 !important;
   display: inline-flex !important;
   align-items: baseline !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 .brand-name .accent,
