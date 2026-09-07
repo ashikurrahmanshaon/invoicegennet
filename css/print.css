@@ -1,32 +1,35 @@
 /* ==========================================================================
-   HIGH-PRECISION PRINT STYLESHEET
-   Matches reference image for pixel-perfect A4 PDF / Print
+   HIGH-PRECISION A4 PRINT STYLESHEET
+   Flawless ISO 210mm x 297mm A4 Print & Browser PDF Export
    ========================================================================== */
 
 @page {
   size: A4 portrait;
-  margin: 15mm 15mm 15mm 15mm;
+  margin: 10mm 12mm 10mm 12mm;
 }
 
 @media print {
-  /* Hide UI elements */
-  .app-nav,
-  .sidebar-panel,
-  .btn-upload-logo-text,
-  .btn-del-line,
-  .btn-add-line-plain,
-  .btn-remove-logo,
-  .col-action,
+  /* Hide all UI shell, navbars, sidebars, buttons, and footers */
+  .navbar-saas,
+  .editor-sidebar,
+  .footer-saas,
+  .btn-add-item-bar,
+  .btn-delete-item,
+  .logo-uploader-card,
+  .btn-remove-logo-badge,
   .toast-notice,
-  .app-footer-clean,
+  .modal-overlay,
+  .auth-modal-overlay,
+  .lang-switcher-container,
+  .col-action,
   .no-print {
     display: none !important;
   }
 
   html, body {
     background: #ffffff !important;
-    color: #1f2937 !important;
-    font-size: 10pt !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
@@ -34,21 +37,26 @@
     print-color-adjust: exact !important;
   }
 
-  .app-container {
+  .app-workspace-layout,
+  #workspace {
     display: block !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    box-shadow: none !important;
   }
 
-  .invoice-paper {
+  .invoice-sheet-card,
+  #invoicePaper {
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
+    margin: 0 !important;
     width: 100% !important;
+    max-width: 100% !important;
   }
 
-  /* Form inputs appear as plain printed text */
+  /* Form inputs appear as clean typography without borders or outlines */
   input, textarea, select {
     border: none !important;
     background: transparent !important;
@@ -59,36 +67,50 @@
     font-family: inherit !important;
     font-size: inherit !important;
     resize: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
   }
 
-  input::placeholder, textarea::placeholder {
+  input::placeholder,
+  textarea::placeholder {
     color: transparent !important;
   }
 
-  /* Preserve reference header table background */
-  .ref-table thead tr {
-    background-color: #383838 !important;
+  /* Force table headers to print in dark/contrast background */
+  .invoice-items-table thead tr,
+  #refTable thead tr {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .invoice-items-table th,
+  #refTable th {
     color: #ffffff !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
   /* Preserve Balance Due Gray Bar */
+  .balance-due-strip,
   .balance-due-banner {
-    background-color: #f3f4f6 !important;
+    background-color: #f1f5f9 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  .ref-table th.col-action,
-  .ref-table td:last-child {
+  .invoice-items-table th.col-action,
+  .invoice-items-table td.col-action,
+  #refTable th.col-action,
+  #refTable td.col-action {
     display: none !important;
   }
 
-  .paper-top-row,
-  .billing-section-row,
-  .ref-table tr,
-  .paper-bottom-grid {
+  .sheet-top-grid,
+  .sheet-billing-row,
+  .invoice-items-table tr,
+  .sheet-bottom-section {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
