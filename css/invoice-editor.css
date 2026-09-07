@@ -1079,8 +1079,8 @@
   border: 1.5px solid #cbd5e1;
   border-radius: 8px;
   padding: 8px 34px 8px 14px;
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.875rem;
+  font-weight: 600;
   color: #0f172a;
   font-family: inherit;
   cursor: pointer;
@@ -1101,8 +1101,8 @@
 }
 
 .custom-currency-select option {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.875rem;
+  font-weight: 500;
   padding: 6px 10px;
 }
 
