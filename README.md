@@ -47,6 +47,28 @@ Navigate to `http://localhost:57784` in your web browser.
 
 ---
 
+## 🌐 Deploy to Production
+
+### Deploy with Vercel
+1. Push your repository to GitHub.
+2. Go to [Vercel Dashboard](https://vercel.com/new) and import `ashikurrahmanshaon/invoicegennet`.
+3. Vercel will automatically detect `vercel.json` and deploy with instant global CDN caching and clean URLs.
+
+### Deploy with Netlify
+1. Go to [Netlify](https://app.netlify.com/start) and link your GitHub repository.
+2. Build command: leave blank (or `npm run test`).
+3. Publish directory: `.` (root directory, configured via `netlify.toml`).
+4. Click **Deploy Site**.
+
+### Deploy on Node.js / VPS / Render / Railway
+```bash
+npm install
+npm start
+```
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License.
+

@@ -208,8 +208,15 @@ const server = http.createServer((req, res) => {
           return serveFile(htmlFallback);
         }
 
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        return res.end('File Not Found');
+        const notFoundPath = path.join(__dirname, '404.html');
+        fs.readFile(notFoundPath, (nfErr, nfData) => {
+          res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+          if (!nfErr && nfData) {
+            res.end(nfData);
+          } else {
+            res.end('<h1>404 - Page Not Found</h1>');
+          }
+        });
       });
     });
 });

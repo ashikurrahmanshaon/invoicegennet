@@ -1,0 +1,27 @@
+{
+  "name": "invoicegennet",
+  "version": "1.0.0",
+  "description": "Invoice-Gen.net - Modern, fast, and free online invoice generator for freelancers, contractors, and small businesses.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node scratch/verify_all_pages_cleanliness.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashikurrahmanshaon/invoicegennet.git"
+  },
+  "keywords": [
+    "invoice-generator",
+    "invoice-template",
+    "freelancer-tools",
+    "pdf-invoice",
+    "billing"
+  ],
+  "author": "ashikurrahmanshaon",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
