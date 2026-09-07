@@ -501,20 +501,20 @@ ul, ol {
 
 .brand-name {
   font-family: var(--font-sans);
-  font-size: 1.35rem !important;
+  font-size: 1.28rem !important;
   font-weight: 800 !important;
-  color: #090d16 !important;
-  letter-spacing: -0.035em !important;
+  color: #0f172a !important;
+  letter-spacing: -0.03em !important;
   line-height: 1 !important;
   display: inline-flex !important;
-  align-items: center !important;
+  align-items: baseline !important;
 }
 
 .brand-name .accent,
 .brand-name .brand-accent {
-  background: linear-gradient(135deg, #059669 0%, #00c875 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  color: inherit !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
   font-weight: 800 !important;
 }
 
@@ -522,22 +522,19 @@ ul, ol {
 .brand-name .dot-net,
 .brand-name .brand-badge,
 .brand-name .badge-net {
-  display: inline-flex !important;
-  align-items: center !important;
+  display: inline !important;
   font-family: var(--font-sans) !important;
-  font-size: 0.7rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.02em !important;
-  color: #047857 !important;
-  background: #ecfdf5 !important;
-  border: 1px solid #a7f3d0 !important;
-  padding: 2.5px 6.5px !important;
-  border-radius: 5px !important;
-  margin-left: 6px !important;
+  font-size: 1.28rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  color: #00c875 !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin-left: 0 !important;
   line-height: 1 !important;
-  text-transform: lowercase !important;
-  vertical-align: middle !important;
-  -webkit-text-fill-color: #047857 !important;
+  vertical-align: baseline !important;
+  -webkit-text-fill-color: #00c875 !important;
 }
 
 /* ==========================================================================

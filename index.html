@@ -25,9 +25,9 @@
   <meta http-equiv="Expires" content="0">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/design-system.css?v=3.6">
-  <link rel="stylesheet" href="css/invoice-editor.css?v=3.6">
-  <link rel="stylesheet" href="css/print.css?v=3.6" media="print">
+  <link rel="stylesheet" href="css/design-system.css?v=3.7">
+  <link rel="stylesheet" href="css/invoice-editor.css?v=3.7">
+  <link rel="stylesheet" href="css/print.css?v=3.7" media="print">
 
   <!-- Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -38,15 +38,26 @@
   <!-- Clean Minimalist SaaS Top Navigation -->
   <header class="navbar-saas">
     <div class="container">
-      <!-- Left: Brand Lockup -->
-      <a href="index.html" class="brand-wrapper" title="InvoiceGen Home">
-        <div class="brand-logo-frame">
-          <img src="/assets/icons/logo.svg?v=3.3" alt="InvoiceGen Logo" class="brand-icon-svg" width="42" height="42">
-        </div>
-        <div class="brand-text-block">
-          <div class="brand-name">Invoice<span class="accent">Gen</span><span class="dot-net">.net</span></div>
-        </div>
-      </a>
+      <!-- Left: Brand Lockup & Tagline -->
+      <div class="brand-left-group">
+        <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
+          <div class="brand-logo-frame">
+            <img src="/assets/icons/logo.svg?v=4.0" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="32" height="32">
+          </div>
+          <div class="brand-text-block">
+            <div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div>
+          </div>
+        </a>
+        <span class="header-tagline-text">The modern, private, and effortless online invoice generator.</span>
+      </div>
+
+      <!-- Center: Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main Navigation">
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
+        <a href="blog.html" class="nav-link-item">Blog</a>
+        <a href="contact.html" class="nav-link-item">Help</a>
+      </nav>
 
       <!-- Right Header Actions (Language Switcher, Log In, Sign Up) -->
       <div class="nav-actions-wrap">
@@ -405,6 +416,29 @@
     </aside>
 
   </main>
+
+  <!-- Sleek Horizontal Footer Bar (Matching Reference Image) -->
+  <footer class="site-footer-bar">
+    <div class="container">
+      <div class="footer-bar-left">
+        <a href="index.html" class="footer-brand-lockup">
+          <img src="/assets/icons/logo.svg?v=4.0" alt="Invoice-Gen.net" class="footer-logo-img" width="26" height="26">
+          <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
+        </a>
+        <span class="footer-tagline-sub">The modern, private, and effortless online invoice generator.</span>
+      </div>
+      <div class="footer-bar-right">
+        <nav class="footer-nav-links" aria-label="Footer Navigation">
+          <a href="blog.html">Blog</a>
+          <a href="contact.html">Help</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <span class="footer-bar-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net</span>
+      </div>
+    </div>
+  </footer>
 
   <!-- Login & Sign Up Modal -->
   <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true">
