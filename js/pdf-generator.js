@@ -209,24 +209,18 @@ class PDFEngine {
       }
     }
 
-    // Create wrapper container with exact A4 proportions (210mm x 297mm => 794px x 1123px at 96 DPI)
+    // Create container with clean document flow (NO position: fixed or negative coordinates!)
     const container = document.createElement('div');
     container.id = 'printableInvoiceA4';
     container.style.cssText = `
-      width: 794px;
-      min-height: 1123px;
-      padding: 48px 52px;
+      width: 100%;
       box-sizing: border-box;
       background: #ffffff;
       color: #111827;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 12px;
       line-height: 1.5;
-      position: fixed;
-      left: -9999px;
-      top: 0;
-      z-index: -9999;
-      box-shadow: none;
+      padding: 6px 4px;
       -webkit-font-smoothing: antialiased;
     `;
 
@@ -495,26 +489,23 @@ class PDFEngine {
       }
       await new Promise(r => setTimeout(r, 60));
 
-      // Build isolated, pixel-perfect A4 printable container
+      // Build isolated, pixel-perfect A4 printable container (clean flow styling)
       const printableElement = this.buildPrintableA4Element();
-      document.body.appendChild(printableElement);
 
       const state = window.invoiceStore ? window.invoiceStore.getState() : {};
       const invNumber = (document.getElementById('invoiceNumber')?.value || state.number || '001').replace(/[^a-zA-Z0-9-_]/g, '_');
       const filename = `Invoice_${invNumber}.pdf`;
 
-      // ISO A4 exact calibration (210mm x 297mm)
+      // ISO A4 exact calibration (210mm x 297mm) with 10mm print margins
       const opt = {
-        margin: 0,
+        margin: [10, 10, 10, 10],
         filename: filename,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
-          scale: 2.5, // 240-300 DPI high-resolution
+          scale: 2, // 2x Retina high-resolution (crystal clear)
           useCORS: true,
           logging: false,
           letterRendering: true,
-          width: 794,
-          windowWidth: 794,
           backgroundColor: '#ffffff'
         },
         jsPDF: {
@@ -525,13 +516,8 @@ class PDFEngine {
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      // Generate & save
+      // Generate & save directly without manual DOM pollution
       await html2pdf().set(opt).from(printableElement).save();
-
-      // Clean up temporary DOM element
-      if (printableElement.parentNode) {
-        printableElement.parentNode.removeChild(printableElement);
-      }
 
       this.showToast('Invoice PDF downloaded successfully!', 'success');
     } catch (err) {
