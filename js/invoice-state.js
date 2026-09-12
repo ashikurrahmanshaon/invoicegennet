@@ -12,7 +12,8 @@ const CURRENCIES = {
   CAD: { code: 'CAD', symbol: 'CA$', position: 'before' },
   AUD: { code: 'AUD', symbol: 'AU$', position: 'before' },
   JPY: { code: 'JPY', symbol: '¥', position: 'before' },
-  AED: { code: 'AED', symbol: 'د.إ ', position: 'before' },
+  AED: { code: 'AED', symbol: 'د.إ', position: 'before' },
+  SAR: { code: 'SAR', symbol: '﷼', position: 'before' },
   SGD: { code: 'SGD', symbol: 'SG$', position: 'before' }
 };
 
@@ -152,23 +153,29 @@ class InvoiceStore {
   }
 
   addItem(description = '', quantity = 1, rate = 0) {
-    const newId = Date.now();
+    const newId = Date.now() + Math.floor(Math.random() * 1000);
+    const q = parseFloat(quantity) || 1;
+    const r = parseFloat(rate) || 0;
     this.state.items.push({
       id: newId,
       description: description,
       subtext: '',
-      quantity: Number(quantity),
-      rate: Number(rate)
+      quantity: q,
+      rate: r,
+      amount: q * r
     });
     this.notify();
     return newId;
   }
 
   removeItem(id) {
-    if (this.state.items.length <= 1) {
-      this.state.items = [{ id: Date.now(), description: '', subtext: '', quantity: 1, rate: 0 }];
+    if (!this.state.items || this.state.items.length <= 1) {
+      this.state.items = [{ id: Date.now(), description: '', subtext: '', quantity: 1, rate: 0, amount: 0 }];
     } else {
       this.state.items = this.state.items.filter(item => item.id != id);
+      if (this.state.items.length === 0) {
+        this.state.items = [{ id: Date.now(), description: '', subtext: '', quantity: 1, rate: 0, amount: 0 }];
+      }
     }
     this.notify();
   }
@@ -178,6 +185,7 @@ class InvoiceStore {
     if (item) {
       if (field === 'quantity' || field === 'rate') {
         item[field] = parseFloat(value) || 0;
+        item.amount = (parseFloat(item.quantity) || 0) * (parseFloat(item.rate) || 0);
       } else {
         item[field] = value;
       }
@@ -186,7 +194,7 @@ class InvoiceStore {
   }
 
   calculateTotals() {
-    const subtotal = this.state.items.reduce((acc, item) => {
+    const subtotal = (this.state.items || []).reduce((acc, item) => {
       const qty = parseFloat(item.quantity) || 0;
       const rate = parseFloat(item.rate) || 0;
       return acc + (qty * rate);
@@ -201,14 +209,13 @@ class InvoiceStore {
     }
     discount = Math.min(discount, subtotal);
 
-    const afterDiscount = Math.max(0, subtotal - discount);
-
     const taxRate = parseFloat(this.state.taxRate) || 0;
-    const taxAmount = (afterDiscount * taxRate) / 100;
+    const taxAmount = (subtotal * taxRate) / 100;
 
     const shipping = parseFloat(this.state.shippingFee) || 0;
 
-    const grandTotal = afterDiscount + taxAmount + shipping;
+    // Subtotal + Tax - Discount = Grand Total (Clear, standard order)
+    const grandTotal = Math.max(0, subtotal + taxAmount - discount + shipping);
     const amountPaid = parseFloat(this.state.amountPaid) || 0;
     const balanceDue = Math.max(0, grandTotal - amountPaid);
 
@@ -223,13 +230,16 @@ class InvoiceStore {
     };
   }
 
-  formatMoney(amount) {
-    const cur = CURRENCIES[this.state.currency] || CURRENCIES.USD;
-    const formatted = Math.abs(amount).toLocaleString('en-US', {
+  formatMoney(amount, currencyCode = null) {
+    const code = currencyCode || this.state.currency || 'USD';
+    const cur = CURRENCIES[code] || CURRENCIES.USD;
+    const num = parseFloat(amount) || 0;
+    const formatted = Math.abs(num).toLocaleString('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
-    return cur.position === 'before' ? `${cur.symbol}${formatted}` : `${formatted} ${cur.symbol}`;
+    const sign = num < 0 ? '-' : '';
+    return cur.position === 'before' ? `${sign}${cur.symbol}${formatted}` : `${sign}${formatted} ${cur.symbol}`;
   }
 
   setCurrency(currCode) {

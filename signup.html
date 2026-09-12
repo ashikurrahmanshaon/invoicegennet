@@ -9,13 +9,11 @@
   <meta name="theme-color" content="#00c875">
 
   <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
-
-  <!-- Stylesheets -->
-    <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=5.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=5.0">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon.svg?v=5.0">
+  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
@@ -23,13 +21,14 @@
 
   <!-- Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="js/google-auth.js?v=6.0"></script>
 </head>
 <body style="background-color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
 
   <!-- Authentic SaaS Top Navigation -->
     <!-- Universal SaaS Top Navigation Bar -->
-  <header class="navbar-saas">
-    <div class="container">
+            <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
       <!-- Brand Lockup -->
       <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
         <div class="brand-logo-frame">
@@ -42,11 +41,204 @@
 
       <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="nav-link-item">Payments</a>
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="nav-link-item" title="View your saved invoices and history">
+          <span data-i18n="nav_my_invoices">My Invoices</span>
+          <span class="nav-count-badge" id="headerSavedInvoicesBadge" style="display: none;"></span>
+        </a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav_tools">Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+            <div class="mega-menu-grid">
+              <!-- INVOICE -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Invoice</div>
+                <a href="index.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Generator</span>
+                    <span class="mega-desc">Fast web invoice builder</span>
+                  </div>
+                </a>
+                <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Invoice Generator</span>
+                    <span class="mega-desc">A4 vector PDF export</span>
+                  </div>
+                </a>
+                <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Freelancer Invoice</span>
+                    <span class="mega-desc">Hourly &amp; milestone billing</span>
+                  </div>
+                </a>
+                <a href="gst-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">GST &amp; Tax Invoice</span>
+                    <span class="mega-desc">Tax breakdowns &amp; HSN</span>
+                  </div>
+                </a>
+                <a href="invoice-number-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Number Generator</span>
+                    <span class="mega-desc">Auto-sequential numbering</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- DOCUMENTS -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Documents</div>
+                <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF to JPG</span>
+                    <span class="mega-desc">Convert PDF pages to image</span>
+                  </div>
+                </a>
+                <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">JPG to PDF</span>
+                    <span class="mega-desc">Combine images to PDF</span>
+                  </div>
+                </a>
+                <a href="pdf-merger.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Merger</span>
+                    <span class="mega-desc">Merge multiple PDF files</span>
+                  </div>
+                </a>
+                <a href="pdf-splitter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Splitter</span>
+                    <span class="mega-desc">Extract pages &amp; ranges</span>
+                  </div>
+                </a>
+                <a href="image-compressor.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Image Compressor</span>
+                    <span class="mega-desc">Reduce JPG &amp; PNG size</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- CALCULATORS, PAYMENTS & CLOUD -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Calculators</div>
+                <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Tax Calculator</span>
+                    <span class="mega-desc">Inclusive &amp; exclusive tax</span>
+                  </div>
+                </a>
+                <a href="payment-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Calculator</span>
+                    <span class="mega-desc">Installments &amp; schedules</span>
+                  </div>
+                </a>
+                <a href="due-date-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Due Date Calculator</span>
+                    <span class="mega-desc">Payment terms &amp; calendar</span>
+                  </div>
+                </a>
+                <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Currency Converter</span>
+                    <span class="mega-desc">Live genuine exchange rates</span>
+                  </div>
+                </a>
+
+                <div class="mega-menu-heading" style="margin-top: 8px;">Payments &amp; Cloud</div>
+                <a href="payments.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Online Payments</span>
+                    <span class="mega-desc">Stripe, PayPal &amp; Bank</span>
+                  </div>
+                </a>
+                <a href="payment-link.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Link Generator</span>
+                    <span class="mega-desc">Shareable invoice links</span>
+                  </div>
+                </a>
+                <a href="files.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-cloud">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">My Files (Cloud)</span>
+                    <span class="mega-desc">Private cloud file storage</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="mega-menu-footer">
+              <a href="tools.html" class="mega-footer-link">
+                <span>Browse All 17 Professional Tools</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          </div></div>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
+          <span>Pricing</span>
+        </a>
       </nav>
 
       <!-- Right Header Actions -->
@@ -66,13 +258,27 @@
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="mobile-nav-item">Payments</a>
-        <a href="blog.html" class="mobile-nav-item">Blog &amp; Guides</a>
-        <a href="dashboard.html" class="mobile-nav-item">Dashboard</a>
+        <a href="index.html" class="mobile-nav-item">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="mobile-nav-item">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="mobile-nav-item">
+          <span>My Invoices</span>
+          <span class="mobile-nav-count-badge" style="display: none;"></span>
+        </a>
+        <div class="mobile-nav-group-title">Tools &amp; Solutions</div>
+        <div class="mobile-nav-sublinks">
+          <a href="pdf-invoice-generator.html" class="mobile-nav-subitem">PDF Generator</a>
+          <a href="gst-invoice-generator.html" class="mobile-nav-subitem">GST Invoices</a>
+          <a href="invoice-generator-for-freelancers.html" class="mobile-nav-subitem">Freelancers</a>
+          <a href="invoice-number-generator.html" class="mobile-nav-subitem">Invoice Numbers</a>
+          <a href="payments.html" class="mobile-nav-subitem">Payments</a>
+        </div>
+        <a href="pricing.html" class="mobile-nav-item">
+          <span>Pricing</span>
+        </a>
       </div>
       <div class="mobile-nav-auth">
         <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
@@ -81,229 +287,148 @@
     </div>
   </header>
 
-  <!-- Main Sign Up Section (Split-Screen Reference UI Card) -->
-  <main class="auth-page-section" style="flex: 1; display: flex; align-items: center; justify-content: center;">
-    <div class="auth-split-wrapper">
+  <!-- Main Sign Up Section (Clean Centered SaaS Card) -->
+  <main class="auth-page-section" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 16px;">
+    <div class="auth-single-card" style="max-width: 440px;">
       
-      <!-- Left Showcase Panel (Matching Image 2 with Wavy Art & Rocket Emblem) -->
-      <div class="auth-showcase-panel">
-        
-        <!-- Multi-layered Wavy SVG Transition for Image 2 Fidelity -->
-        <svg class="auth-showcase-waves" viewBox="0 0 100 800" preserveAspectRatio="none" style="position: absolute; top: 0; bottom: 0; right: 0; width: 42px; height: 100%; pointer-events: none; z-index: 1;">
-          <!-- Layer 1 Shadow Wave -->
-          <path d="M0,0 C30,120 70,240 30,360 C-10,480 60,600 20,720 L100,800 L100,0 Z" fill="rgba(255, 255, 255, 0.18)"></path>
-          <!-- Layer 2 Smooth Wave into Card -->
-          <path d="M20,0 C65,130 15,260 55,380 C95,500 25,630 65,740 L100,800 L100,0 Z" fill="#ffffff"></path>
-        </svg>
-
-        <!-- Top & Center Branding Elements -->
-        <div class="auth-showcase-top" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-          <div style="font-size: 1.15rem; font-weight: 700; letter-spacing: 0.04em; color: #a7f3d0; margin-bottom: 20px;">
-            Welcome to
-          </div>
-          
-          <!-- Rocket Brand Circle (Matching Reference Image 2) -->
-          <div class="auth-logo-circle" style="background: #ffffff; width: 84px; height: 84px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(0,0,0,0.22); margin-bottom: 16px;">
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
-              <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
-              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
-              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
-            </svg>
-          </div>
-
-          <div style="font-size: 1.5rem; font-weight: 800; color: #ffffff; letter-spacing: -0.01em; margin-bottom: 16px;">
-            InvoiceGen<span style="color: #6ee7b7;">.net</span>
-          </div>
-
-          <p class="auth-showcase-desc" style="max-width: 320px; margin: 0 auto 24px; font-size: 0.9rem; line-height: 1.6; color: #e6fffa;">
-            Create your account to unlock premium features and stay updated with the latest tools. Join our community and embark on an exciting journey with us!
-          </p>
-
-          <!-- Core Perks -->
-          <div class="auth-perks-stack" style="text-align: left; width: 100%; max-width: 290px;">
-            <div class="auth-perk-item">
-              <div class="auth-perk-icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              </div>
-              <span>Unlock all 6 Pro Templates</span>
-            </div>
-            <div class="auth-perk-item">
-              <div class="auth-perk-icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              </div>
-              <span>Unlimited Vector PDF Exports</span>
-            </div>
-            <div class="auth-perk-item">
-              <div class="auth-perk-icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              </div>
-              <span>100% Free Forever &bull; Zero Fees</span>
-            </div>
-          </div>
+      <!-- Brand & Heading -->
+      <div class="auth-center-badge">
+        <div class="box-icon-frame icon-lg" style="margin: 0 auto 16px; background: #ecfdf5; border-color: #a7f3d0;">
+          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" style="width: 28px; height: 28px;">
         </div>
-
-        <!-- Showcase Footer (Matching "CREATE HERE | DISCOVER HERE" from Image 2) -->
-        <div class="auth-showcase-footer" style="text-align: center; letter-spacing: 0.08em; font-weight: 700; font-size: 0.75rem;">
-          <a href="index.html" style="color: #a7f3d0; text-decoration: none;">CREATE HERE</a>
-          <span style="margin: 0 10px; opacity: 0.5;">|</span>
-          <a href="templates.html" style="color: #a7f3d0; text-decoration: none;">DISCOVER HERE</a>
-        </div>
+        <h1 class="auth-heading" data-i18n="auth_create_account">Create your account</h1>
+        <p class="auth-subtitle">Start generating professional invoices in seconds</p>
       </div>
 
-      <!-- Right Form Panel (Matching Image 2 Form Layout) -->
-      <div class="auth-form-panel">
+      <!-- Sign up with Google Button -->
+      <button type="button" class="btn-google-wide" id="btnGoogleWideSignup">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Sign up with Google</span>
+      </button>
+
+      <div class="auth-divider-line">
+        <span>or register with email</span>
+      </div>
+
+      <!-- Registration Form -->
+      <form id="signupForm" autocomplete="on" novalidate>
         
-        <div style="margin-bottom: 24px;">
-          <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 6px;" data-i18n="auth_create_account">
-            Create your account
-          </h1>
-          <p style="font-size: 0.875rem; color: #64748b;">
-            Start generating professional invoices in seconds.
-          </p>
+        <!-- Full Name Field -->
+        <div style="margin-bottom: 12px;">
+          <label for="signupFullName" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 5px;">
+            Full Name
+          </label>
+          <div class="auth-input-group" style="margin-bottom: 0;">
+            <span class="auth-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </span>
+            <input 
+              type="text" 
+              id="signupFullName" 
+              class="auth-input-field" 
+              placeholder="e.g. Sarah Jenkins" 
+              required 
+              autocomplete="name"
+            >
+          </div>
+          <div class="form-error-msg" id="nameError"></div>
         </div>
 
-        <!-- Sign up with Google Button -->
-        <button type="button" class="btn-google-wide" id="btnGoogleWideSignup">
-          <svg width="18" height="18" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          <span>Sign up with Google</span>
+        <!-- Email Field -->
+        <div style="margin-bottom: 12px;">
+          <label for="signupEmail" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 5px;">
+            Work Email
+          </label>
+          <div class="auth-input-group" style="margin-bottom: 0;">
+            <span class="auth-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </span>
+            <input 
+              type="email" 
+              id="signupEmail" 
+              class="auth-input-field" 
+              placeholder="name@company.com" 
+              required 
+              autocomplete="email"
+            >
+          </div>
+          <div class="form-error-msg" id="emailError"></div>
+        </div>
+
+        <!-- Password Field with Eye Toggle -->
+        <div style="margin-bottom: 12px;">
+          <label for="signupPassword" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 5px;">
+            Password
+          </label>
+          <div class="auth-input-group" style="margin-bottom: 0;">
+            <span class="auth-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </span>
+            <input 
+              type="password" 
+              id="signupPassword" 
+              class="auth-input-field" 
+              placeholder="At least 6 characters" 
+              required 
+              autocomplete="new-password"
+            >
+            <button type="button" class="btn-toggle-eye" id="toggleSignupPasswordBtn" title="Toggle password visibility" aria-label="Toggle password visibility">
+              <svg id="signupEyeOpen" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              <svg id="signupEyeClosed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            </button>
+          </div>
+          <div class="form-error-msg" id="passwordError"></div>
+        </div>
+
+        <!-- Confirm Password Field with Eye Toggle -->
+        <div style="margin-bottom: 16px;">
+          <label for="signupConfirmPassword" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 5px;">
+            Confirm Password
+          </label>
+          <div class="auth-input-group" style="margin-bottom: 0;">
+            <span class="auth-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </span>
+            <input 
+              type="password" 
+              id="signupConfirmPassword" 
+              class="auth-input-field" 
+              placeholder="Confirm your password" 
+              required 
+              autocomplete="new-password"
+            >
+            <button type="button" class="btn-toggle-eye" id="toggleSignupConfirmPasswordBtn" title="Toggle password visibility" aria-label="Toggle password visibility">
+              <svg id="signupConfirmEyeOpen" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              <svg id="signupConfirmEyeClosed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            </button>
+          </div>
+          <div class="form-error-msg" id="confirmError"></div>
+        </div>
+
+        <!-- Terms and Conditions Agreement Checkbox -->
+        <div style="margin-bottom: 20px;">
+          <label class="auth-checkbox-label" style="font-size: 0.8125rem;">
+            <input type="checkbox" id="agreeTerms" checked required>
+            <span style="color: #475569;" data-i18n="auth_agree_terms">I agree to the <a href="terms.html" target="_blank" style="color: #059669; font-weight: 600;">Terms</a> and <a href="privacy.html" target="_blank" style="color: #059669; font-weight: 600;">Privacy Policy</a></span>
+          </label>
+          <div class="form-error-msg" id="termsError"></div>
+        </div>
+
+        <!-- Primary Sign Up Button -->
+        <button type="submit" class="btn-auth-primary" id="btnSubmitSignup" style="width: 100%; height: 42px;">
+          <span data-i18n="btn_signup">Create Free Account</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
+      </form>
 
-        <div class="auth-divider-line">
-          <span>or register with email</span>
-        </div>
-
-        <!-- Registration Form -->
-        <form id="signupForm" autocomplete="on">
-          
-          <!-- Full Name Field -->
-          <div style="margin-bottom: 16px;">
-            <label for="signupFullName" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">
-              Full name
-            </label>
-            <div class="auth-input-group" style="margin-bottom: 0;">
-              <span class="auth-input-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              </span>
-              <input 
-                type="text" 
-                id="signupFullName" 
-                class="auth-input-field" 
-                placeholder="Enter Full name" 
-                required 
-                autocomplete="name"
-              >
-            </div>
-          </div>
-
-          <!-- Email Field -->
-          <div style="margin-bottom: 16px;">
-            <label for="signupEmail" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">
-              Email
-            </label>
-            <div class="auth-input-group" style="margin-bottom: 0;">
-              <span class="auth-input-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              </span>
-              <input 
-                type="email" 
-                id="signupEmail" 
-                class="auth-input-field" 
-                placeholder="Enter email" 
-                required 
-                autocomplete="email"
-              >
-            </div>
-          </div>
-
-          <!-- Password Field with Eye Toggle -->
-          <div style="margin-bottom: 18px;">
-            <label for="signupPassword" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">
-              Password
-            </label>
-            <div class="auth-input-group" style="margin-bottom: 0;">
-              <span class="auth-input-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              </span>
-              <input 
-                type="password" 
-                id="signupPassword" 
-                class="auth-input-field" 
-                placeholder="Enter Password" 
-                required 
-                autocomplete="new-password"
-              >
-              <button type="button" class="btn-toggle-eye" id="toggleSignupPasswordBtn" title="Toggle password visibility" aria-label="Toggle password visibility">
-                <svg id="signupEyeOpen" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                <svg id="signupEyeClosed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Terms and Conditions Agreement Checkbox (Image 2) -->
-          <div style="margin-bottom: 20px;">
-            <label class="auth-checkbox-label" style="font-size: 0.8125rem;">
-              <input type="checkbox" id="agreeTerms" checked required>
-              <span style="color: #475569;" data-i18n="auth_agree_terms">I agree to the terms and Conditions</span>
-            </label>
-          </div>
-
-          <!-- Primary Sign Up Button -->
-          <button type="submit" class="btn-auth-primary" id="btnSubmitSignup">
-            <span data-i18n="btn_signup">Sign Up</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </button>
-        </form>
-
-        <!-- Social Divider (Matching "Sign Up with" from Image 2) -->
-        <div class="social-divider">
-          <span>Sign Up with</span>
-        </div>
-
-        <!-- 4 Social Circles matching Image 2: Facebook, X, Google, Apple -->
-        <div class="social-auth-circles">
-          <!-- Facebook -->
-          <button type="button" class="social-circle-btn" id="signupSocialFb" title="Sign Up with Facebook" aria-label="Sign Up with Facebook">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-          </button>
-
-          <!-- X (Twitter) -->
-          <button type="button" class="social-circle-btn" id="signupSocialX" title="Sign Up with X" aria-label="Sign Up with X">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#0f172a">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-          </button>
-
-          <!-- Google -->
-          <button type="button" class="social-circle-btn" id="signupSocialGoogle" title="Sign Up with Google" aria-label="Sign Up with Google">
-            <svg width="20" height="20" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-          </button>
-
-          <!-- Apple -->
-          <button type="button" class="social-circle-btn" id="signupSocialApple" title="Sign Up with Apple" aria-label="Sign Up with Apple">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.6-1.12.98-2.68.8-4.37-1.38.06-3.02.94-3.98 2.06-.54.63-.99 1.66-.86 3.12 1.54.12 3.17-.83 4.04-1.81z"></path>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Bottom Switch (Matching Image 2: "Already have an account? Sign In") -->
-        <div class="auth-bottom-switch">
-          Already have an account? <a href="login.html" id="linkToLogin">Sign In</a>
-        </div>
-
+      <!-- Bottom Switch to Login -->
+      <div class="auth-bottom-switch" style="margin-top: 24px;">
+        Already have an account? <a href="login.html" id="linkToLogin" style="font-weight: 700; color: #059669;">Log In &rarr;</a>
       </div>
 
     </div>
@@ -311,27 +436,63 @@
 
   <!-- Global Footer -->
     <!-- Universal Sleek Footer Bar -->
-  <footer class="site-footer-bar">
-    <div class="container">
-      <div class="footer-bar-left">
+      <footer class="site-footer" id="mainFooter">
+    <div class="container footer-container">
+      <div class="footer-brand-col">
         <a href="index.html" class="footer-brand-lockup">
           <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
           <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
         </a>
-        <span class="footer-bar-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net</span>
+        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
       </div>
-      <div class="footer-bar-right">
-        <nav class="footer-nav-links" aria-label="Footer Navigation">
-          <a href="templates.html">Templates</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="payments.html">Payments</a>
-          <a href="blog.html">Blog</a>
-          <a href="contact.html">Help</a>
-          <a href="sitemap.html">Sitemap</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+
+      <div class="footer-nav-grid">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Create Invoice</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="dashboard.html">My Invoices</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="payments.html">Payments</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html">Help</a></li>
+            <li><a href="features.html">Tools</a></li>
+            <li><a href="sitemap.html">Sitemap</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="refunds.html">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-links-list">
+            <li><a href="contact.html">Support</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom-bar">
+      <p class="footer-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net. All rights reserved.</p>
+      <div class="footer-bottom-badges">
+        <span class="footer-badge-pill">Zero Data Tracking</span>
+        <span class="footer-badge-pill">100% Client-Side</span>
       </div>
     </div>
   </footer>
@@ -341,152 +502,192 @@
 
   <!-- Sign Up Logic -->
   <script>
-    const showToast = (message, type = 'success') => {
-      const toast = document.getElementById('toastNotice');
-      if (!toast) return;
-      toast.className = `toast-notice toast-${type} show`;
-      let icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
-      if (type === 'info') {
-        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
-      } else if (type === 'warning') {
-        icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
-      }
-      toast.innerHTML = `<span class="toast-icon-badge">${icon}</span><span class="toast-text">${message}</span>`;
-      toast.onclick = () => toast.classList.remove('show');
-      setTimeout(() => toast.classList.remove('show'), 3200);
-    };
+    window.initSignupPage = function () {
+      const showToast = (message, type = 'success') => {
+        const toast = document.getElementById('toastNotice');
+        if (!toast) return;
+        toast.className = `toast-notice toast-${type} show`;
+        let icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        if (type === 'info') {
+          icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+        } else if (type === 'warning') {
+          icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+        }
+        toast.innerHTML = `<span class="toast-icon-badge">${icon}</span><span class="toast-text">${message}</span>`;
+        toast.onclick = () => toast.classList.remove('show');
+        setTimeout(() => toast.classList.remove('show'), 3200);
+      };
 
-    // Toggle Password Visibility
-    const pwdInput = document.getElementById('signupPassword');
-    const toggleBtn = document.getElementById('toggleSignupPasswordBtn');
-    const eyeOpen = document.getElementById('signupEyeOpen');
-    const eyeClosed = document.getElementById('signupEyeClosed');
+      // Toggle Password Visibility
+      const pwdInput = document.getElementById('signupPassword');
+      const toggleBtn = document.getElementById('toggleSignupPasswordBtn');
+      const eyeOpen = document.getElementById('signupEyeOpen');
+      const eyeClosed = document.getElementById('signupEyeClosed');
 
-    toggleBtn?.addEventListener('click', () => {
-      const isPassword = pwdInput.getAttribute('type') === 'password';
-      pwdInput.setAttribute('type', isPassword ? 'text' : 'password');
-      eyeOpen.style.display = isPassword ? 'none' : 'block';
-      eyeClosed.style.display = isPassword ? 'block' : 'none';
-    });
+      toggleBtn?.addEventListener('click', () => {
+        const isPassword = pwdInput.getAttribute('type') === 'password';
+        pwdInput.setAttribute('type', isPassword ? 'text' : 'password');
+        eyeOpen.style.display = isPassword ? 'none' : 'block';
+        eyeClosed.style.display = isPassword ? 'block' : 'none';
+      });
 
-    // Complete Registration and Redirect
-    function completeSignup(userProfile) {
-      localStorage.setItem('invoicegen_user', JSON.stringify(userProfile));
-      showToast(`Account successfully created! Welcome, ${userProfile.name}!`);
+      // Toggle Confirm Password Visibility
+      const confirmPwdInput = document.getElementById('signupConfirmPassword');
+      const toggleConfirmBtn = document.getElementById('toggleSignupConfirmPasswordBtn');
+      const confirmEyeOpen = document.getElementById('signupConfirmEyeOpen');
+      const confirmEyeClosed = document.getElementById('signupConfirmEyeClosed');
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectPage = urlParams.get('redirect');
-      const pendingTpl = urlParams.get('template') || sessionStorage.getItem('pending_template');
+      toggleConfirmBtn?.addEventListener('click', () => {
+        const isPassword = confirmPwdInput.getAttribute('type') === 'password';
+        confirmPwdInput.setAttribute('type', isPassword ? 'text' : 'password');
+        confirmEyeOpen.style.display = isPassword ? 'none' : 'block';
+        confirmEyeClosed.style.display = isPassword ? 'block' : 'none';
+      });
 
-      setTimeout(() => {
+      // Complete Registration and Redirect
+      function completeSignup(userProfile) {
+        showToast(`Account successfully created! Welcome, ${userProfile.name || 'User'}!`);
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectPage = urlParams.get('redirect') || 'dashboard.html';
+        const pendingTpl = urlParams.get('template') || sessionStorage.getItem('pending_template');
+
         if (pendingTpl) {
           sessionStorage.removeItem('pending_template');
-          window.location.href = `index.html?template=${pendingTpl}`;
-        } else if (redirectPage === 'templates') {
-          window.location.href = 'templates.html';
-        } else if (redirectPage === 'generator') {
-          window.location.href = 'index.html';
+          const target = `index.html?template=${pendingTpl}`;
+          if (window.router && typeof window.router.navigate === 'function') {
+            window.router.navigate(target);
+          } else {
+            window.location.replace(target);
+          }
         } else {
-          window.location.href = 'dashboard.html';
+          if (window.router && typeof window.router.navigate === 'function') {
+            window.router.navigate(redirectPage);
+          } else {
+            window.location.replace(redirectPage);
+          }
         }
-      }, 700);
-    }
+      }
 
-    // Sign Up Form Submission
-    document.getElementById('signupForm')?.addEventListener('submit', (e) => {
-      e.preventDefault();
+      // Sign Up Form Submission
+      const signupForm = document.getElementById('signupForm');
+      const submitBtn = document.getElementById('btnSubmitSignup');
       const nameInput = document.getElementById('signupFullName');
       const emailInput = document.getElementById('signupEmail');
       const agreeTerms = document.getElementById('agreeTerms');
 
-      const name = nameInput?.value.trim();
-      const email = emailInput?.value.trim();
+      const nameErr = document.getElementById('nameError');
+      const emailErr = document.getElementById('emailError');
+      const pwdErr = document.getElementById('passwordError');
+      const confirmErr = document.getElementById('confirmError');
+      const termsErr = document.getElementById('termsError');
 
-      const pwdInput = document.getElementById('signupPassword');
-      const pwd = pwdInput?.value.trim();
+      const clearSignupErrors = () => {
+        if (nameErr) nameErr.textContent = '';
+        if (emailErr) emailErr.textContent = '';
+        if (pwdErr) pwdErr.textContent = '';
+        if (confirmErr) confirmErr.textContent = '';
+        if (termsErr) termsErr.textContent = '';
+        nameInput?.classList.remove('is-invalid');
+        emailInput?.classList.remove('is-invalid');
+        pwdInput?.classList.remove('is-invalid');
+        confirmPwdInput?.classList.remove('is-invalid');
+      };
 
-      if (!name) {
-        showToast('Please enter your full name', 'warning');
-        nameInput?.focus();
-        return;
-      }
-      if (!email) {
-        showToast('Please enter your email address', 'warning');
-        emailInput?.focus();
-        return;
-      }
-      if (!pwd) {
-        showToast('Please enter a password', 'warning');
-        pwdInput?.focus();
-        return;
-      }
-      if (!agreeTerms?.checked) {
-        showToast('Please accept the terms and conditions', 'warning');
-        return;
-      }
-
-      completeSignup({
-        name,
-        email,
-        provider: 'signup_form',
-        createdAt: new Date().toISOString()
+      [nameInput, emailInput, pwdInput, confirmPwdInput].forEach(inp => {
+        inp?.addEventListener('input', clearSignupErrors);
       });
-    });
 
-    // Social Registration Handlers
-    document.getElementById('signupSocialGoogle')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (typeof window.triggerGoogleLogin === 'function') {
-        window.triggerGoogleLogin();
-      }
-    });
-    document.getElementById('signupSocialApple')?.addEventListener('click', () => {
-      showToast('Please complete the registration form to create your account', 'info');
-      document.getElementById('signupFullName')?.focus();
-    });
-    document.getElementById('signupSocialFb')?.addEventListener('click', () => {
-      showToast('Please complete the registration form to create your account', 'info');
-      document.getElementById('signupFullName')?.focus();
-    });
-    document.getElementById('signupSocialX')?.addEventListener('click', () => {
-      showToast('Please complete the registration form to create your account', 'info');
-      document.getElementById('signupFullName')?.focus();
-    });
+      signupForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearSignupErrors();
 
-    // Check if already signed in (Purge any demo/mock accounts)
-    try {
-      const existing = localStorage.getItem('invoicegen_user');
-      if (existing) {
-        const u = JSON.parse(existing);
-        if (!u || !u.email || u.isDemo || u.email === 'user@company.com' || u.email === 'google.user@gmail.com' || u.email.includes('alex.') || u.email.includes('sarah.')) {
-          localStorage.removeItem('invoicegen_user');
-        } else {
-          const headerLogin = document.getElementById('btnHeaderLogin');
-          const headerSignup = document.getElementById('btnHeaderSignup');
-          if (headerLogin) {
-            headerLogin.textContent = `My Account (${u.name || 'User'})`;
-            headerLogin.href = 'index.html';
-          }
-          if (headerSignup) headerSignup.style.display = 'none';
+        const name = nameInput?.value.trim();
+        const email = emailInput?.value.trim();
+        const password = pwdInput?.value.trim();
+        const confirmPassword = confirmPwdInput?.value.trim();
+
+        if (!name) {
+          if (nameErr) nameErr.textContent = 'Please enter your full name';
+          nameInput?.classList.add('is-invalid');
+          nameInput?.focus();
+          return;
         }
-      }
-    } catch(e){}
+        if (!email) {
+          if (emailErr) emailErr.textContent = 'Please enter your email address';
+          emailInput?.classList.add('is-invalid');
+          emailInput?.focus();
+          return;
+        }
+        if (!password || password.length < 6) {
+          if (pwdErr) pwdErr.textContent = 'Password must be at least 6 characters long';
+          pwdInput?.classList.add('is-invalid');
+          pwdInput?.focus();
+          return;
+        }
+        if (password !== confirmPassword) {
+          if (confirmErr) confirmErr.textContent = 'Passwords do not match. Please re-enter.';
+          confirmPwdInput?.classList.add('is-invalid');
+          confirmPwdInput?.focus();
+          return;
+        }
+        if (!agreeTerms?.checked) {
+          if (termsErr) termsErr.textContent = 'Please agree to the Terms and Privacy Policy';
+          return;
+        }
 
-    // Mobile nav toggle
-    const mobileBtn = document.getElementById('btnMobileNavToggle');
-    const mobileDrawer = document.getElementById('mobileNavDrawer');
-    mobileBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      mobileDrawer?.classList.toggle('active');
-    });
-    document.addEventListener('click', (e) => {
-      if (mobileDrawer && !mobileDrawer.contains(e.target) && !mobileBtn?.contains(e.target)) {
-        mobileDrawer.classList.remove('active');
-      }
-    });
+        submitBtn.classList.add('is-loading');
+        submitBtn.disabled = true;
+
+        try {
+          const result = await window.Auth.signup(name, email, password);
+          if (result.success) {
+            completeSignup(result.user);
+          } else {
+            const msg = result.error || 'Registration failed. Please try again.';
+            if (emailErr) emailErr.textContent = msg;
+            emailInput?.classList.add('is-invalid');
+            showToast(msg, 'warning');
+            submitBtn.classList.remove('is-loading');
+            submitBtn.disabled = false;
+          }
+        } catch (err) {
+          showToast('Unable to connect to server. Please try again.', 'warning');
+          submitBtn.classList.remove('is-loading');
+          submitBtn.disabled = false;
+        }
+      });
+
+      // Google Sign Up handler
+      const triggerGoogle = () => {
+        if (typeof window.triggerGoogleLogin === 'function') {
+          window.triggerGoogleLogin();
+        } else {
+          showToast('Google authentication initializing...', 'info');
+        }
+      };
+      document.getElementById('btnGoogleWideSignup')?.addEventListener('click', triggerGoogle);
+
+      // Redirect if already logged in
+      window.Auth?.onReady((state, user) => {
+        if (state === 'AUTHENTICATED' && user) {
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirect = urlParams.get('redirect') || 'dashboard.html';
+          if (window.router && typeof window.router.navigate === 'function') {
+            window.router.navigate(redirect);
+          } else {
+            window.location.replace(redirect);
+          }
+        }
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', window.initSignupPage);
+    } else {
+      window.initSignupPage();
+    }
   </script>
-  <script src="js/i18n.js?v=4.0"></script>
-  <script src="js/google-auth.js?v=4.0"></script>
-  <script src="js/instant-nav.js?v=4.0"></script>
+  <script src="js/i18n.js?v=5.0"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
 </body>
 </html>

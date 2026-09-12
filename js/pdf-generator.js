@@ -118,10 +118,12 @@ class PDFEngine {
 
     const grandTotal = getText('grandTotalDisplay', '$0.00');
 
-    const amountPaidLine = document.getElementById('amountPaidRow');
+    const amountPaidLine = document.getElementById('amountPaidLineRow') || document.getElementById('amountPaidRow');
     const hasAmountPaid = amountPaidLine && window.getComputedStyle(amountPaidLine).display !== 'none';
-    const amountPaidAmt = getText('amountPaidDisplay', '$0.00');
-
+    const amountPaidInput = document.getElementById('amountPaidInput');
+    const amountPaidVal = amountPaidInput ? (parseFloat(amountPaidInput.value) || 0) : (parseFloat(store.amountPaid) || 0);
+    const isPaymentRecorded = hasAmountPaid && amountPaidVal > 0;
+    const amountPaidAmt = window.invoiceStore ? window.invoiceStore.formatMoney(amountPaidVal) : `$${amountPaidVal.toFixed(2)}`;
     const balanceDue = getText('balanceDueDisplay', '$0.00');
 
     // Line items extraction - robust detection across DOM inputs and store
@@ -228,7 +230,7 @@ class PDFEngine {
     let tableRowsHtml = '';
     if (items.length === 0) {
       tableRowsHtml = `
-        <tr style="border: none;">
+        <tr style="border: none; page-break-inside: avoid; break-inside: avoid;">
           <td colspan="4" style="padding: 14px 14px; text-align: center; color: #9ca3af; font-style: italic; font-size: 11px;">
             No items listed.
           </td>
@@ -237,20 +239,20 @@ class PDFEngine {
     } else {
       items.forEach((item) => {
         tableRowsHtml += `
-          <tr style="border: none;">
-            <td style="padding: 7px 14px; vertical-align: top;">
-              <div style="font-weight: 400; font-size: 11px; color: #111827; line-height: 1.35;">
+          <tr style="border-bottom: 1px solid #f1f5f9; page-break-inside: avoid; break-inside: avoid;">
+            <td style="padding: 9px 14px; vertical-align: top;">
+              <div style="font-weight: 500; font-size: 11.5px; color: #111827; line-height: 1.35;">
                 ${this.escapeHtml(item.desc || '')}
               </div>
               ${item.subtext ? `<div style="font-size: 10px; color: #6b7280; margin-top: 2px; line-height: 1.3;">${this.escapeHtml(item.subtext)}</div>` : ''}
             </td>
-            <td style="padding: 7px 14px; text-align: right; vertical-align: top; font-size: 11px; font-weight: 400; color: #111827;">
+            <td style="padding: 9px 14px; text-align: right; vertical-align: top; font-size: 11px; font-weight: 400; color: #111827;">
               ${this.escapeHtml(item.qty)}
             </td>
-            <td style="padding: 7px 14px; text-align: right; vertical-align: top; font-size: 11px; font-weight: 400; color: #111827;">
+            <td style="padding: 9px 14px; text-align: right; vertical-align: top; font-size: 11px; font-weight: 400; color: #111827;">
               ${this.escapeHtml(item.rate)}
             </td>
-            <td style="padding: 7px 14px; text-align: right; vertical-align: top; font-size: 11px; font-weight: 400; color: #111827;">
+            <td style="padding: 9px 14px; text-align: right; vertical-align: top; font-size: 11px; font-weight: 600; color: #111827;">
               ${this.escapeHtml(item.amount)}
             </td>
           </tr>
@@ -264,6 +266,24 @@ class PDFEngine {
           font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
           box-sizing: border-box;
         }
+        #printableInvoiceA4 table {
+          page-break-inside: auto;
+          width: 100%;
+          border-collapse: collapse;
+        }
+        #printableInvoiceA4 thead {
+          display: table-header-group !important;
+        }
+        #printableInvoiceA4 tr {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+        #printableInvoiceA4 .totals-section,
+        #printableInvoiceA4 .notes-section,
+        #printableInvoiceA4 .signature-section {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
       </style>
 
       <!-- Top Row: Sender Info & Invoice Title -->
@@ -276,10 +296,14 @@ class PDFEngine {
               <img src="${logoSrc}" alt="Company Logo" style="max-height: 52px; max-width: 170px; object-fit: contain; display: block;">
             </div>
           ` : ''}
-          <div style="font-size: 13px; font-weight: 700; color: #111827; line-height: 1.3; margin-bottom: 3px;">
-            ${this.escapeHtml(senderName || 'Your Business Name')}
-          </div>
-          <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(senderAddress || '')}</div>
+          ${senderName ? `
+            <div style="font-size: 13px; font-weight: 700; color: #111827; line-height: 1.3; margin-bottom: 3px;">
+              ${this.escapeHtml(senderName)}
+            </div>
+          ` : ''}
+          ${senderAddress ? `
+            <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(senderAddress)}</div>
+          ` : ''}
         </div>
 
         <!-- Right: Title & Invoice Number -->
@@ -293,85 +317,91 @@ class PDFEngine {
         </div>
       </div>
 
-      <!-- Second Row: Bill To / Ship To on Left, Date & Balance Due on Right -->
+      <!-- Second Row: Bill To / Ship To on Left, Date & Meta on Right -->
       <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 26px;">
         
         <!-- Left: Bill To & Optional Ship To -->
         <div style="display: flex; gap: 32px; max-width: 440px;">
-          <div>
-            <div style="font-size: 10px; font-weight: 500; color: #6b7280; margin-bottom: 3px;">
-              Bill To:
+          ${(clientName || clientAddress) ? `
+            <div>
+              <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 3px;">
+                Bill To:
+              </div>
+              ${clientName ? `
+                <div style="font-size: 12px; font-weight: 700; color: #111827; margin-bottom: 2px;">
+                  ${this.escapeHtml(clientName)}
+                </div>
+              ` : ''}
+              ${clientAddress ? `
+                <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(clientAddress)}</div>
+              ` : ''}
             </div>
-            <div style="font-size: 12px; font-weight: 700; color: #111827; margin-bottom: 2px;">
-              ${this.escapeHtml(clientName || 'Client Name')}
-            </div>
-            <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(clientAddress || '')}</div>
-          </div>
+          ` : ''}
 
           ${(isShipToVisible && (shipToName || shipToAddress)) ? `
             <div>
-              <div style="font-size: 10px; font-weight: 500; color: #6b7280; margin-bottom: 3px;">
+              <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 3px;">
                 Ship To:
               </div>
-              <div style="font-size: 12px; font-weight: 700; color: #111827; margin-bottom: 2px;">
-                ${this.escapeHtml(shipToName || '')}
-              </div>
-              <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(shipToAddress || '')}</div>
+              ${shipToName ? `
+                <div style="font-size: 12px; font-weight: 700; color: #111827; margin-bottom: 2px;">
+                  ${this.escapeHtml(shipToName)}
+                </div>
+              ` : ''}
+              ${shipToAddress ? `
+                <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(shipToAddress)}</div>
+              ` : ''}
             </div>
           ` : ''}
         </div>
 
-        <!-- Right: Date, Terms, & Balance Due Bar -->
+        <!-- Right: Date, Terms, & Meta (No top balance due box) -->
         <div style="text-align: right; min-width: 220px;">
-          <table style="margin-left: auto; border-collapse: collapse; font-size: 11px; color: #4b5563; text-align: right; margin-bottom: 8px;">
-            <tr>
-              <td style="padding: 2px 10px 2px 0; color: #6b7280; font-weight: 400;">Date:</td>
-              <td style="padding: 2px 0; font-weight: 400; color: #111827;">${this.escapeHtml(invoiceDate)}</td>
-            </tr>
+          <table style="margin-left: auto; border-collapse: collapse; font-size: 11px; color: #4b5563; text-align: right;">
+            ${invoiceDate ? `
+              <tr>
+                <td style="padding: 2px 10px 2px 0; color: #6b7280; font-weight: 400;">Date:</td>
+                <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(invoiceDate)}</td>
+              </tr>
+            ` : ''}
             ${(paymentTerms && paymentTerms !== 'Due on Receipt') ? `
               <tr>
                 <td style="padding: 2px 10px 2px 0; color: #6b7280; font-weight: 400;">Terms:</td>
-                <td style="padding: 2px 0; font-weight: 400; color: #111827;">${this.escapeHtml(paymentTerms)}</td>
+                <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(paymentTerms)}</td>
               </tr>
             ` : ''}
             ${dueDate ? `
               <tr>
                 <td style="padding: 2px 10px 2px 0; color: #6b7280; font-weight: 400;">Due Date:</td>
-                <td style="padding: 2px 0; font-weight: 400; color: #111827;">${this.escapeHtml(dueDate)}</td>
+                <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(dueDate)}</td>
               </tr>
             ` : ''}
             ${poNumber ? `
               <tr>
                 <td style="padding: 2px 10px 2px 0; color: #6b7280; font-weight: 400;">PO Number:</td>
-                <td style="padding: 2px 0; font-weight: 400; color: #111827;">${this.escapeHtml(poNumber)}</td>
+                <td style="padding: 2px 0; font-weight: 500; color: #111827;">${this.escapeHtml(poNumber)}</td>
               </tr>
             ` : ''}
           </table>
-
-          <!-- Gray Balance Due Bar (Matches reference image) -->
-          <div style="background-color: #f3f4f6; border-radius: 4px; padding: 6px 14px; display: flex; justify-content: space-between; align-items: center; min-width: 210px; min-height: 32px;">
-            <span style="font-size: 11.5px; font-weight: 600; color: #1f2937;">Balance Due:</span>
-            <span style="font-size: 13px; font-weight: 700; color: ${themeAccent};">${this.escapeHtml(balanceDue)}</span>
-          </div>
         </div>
 
       </div>
 
-      <!-- Items Table (Dark Header Bar matching reference) -->
+      <!-- Items Table (Dark Header Bar with Multi-Page Repeating Header) -->
       <div style="margin-bottom: 16px;">
         <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background-color: ${tableHeaderBg}; color: #ffffff;">
-              <th style="width: 52%; text-align: left; padding: 7px 14px; font-size: 11px; font-weight: 500; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
-                Item
+          <thead style="display: table-header-group;">
+            <tr style="background-color: ${tableHeaderBg}; color: #ffffff; page-break-inside: avoid; break-inside: avoid;">
+              <th style="width: 50%; text-align: left; padding: 7px 14px; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
+                Description
               </th>
-              <th style="width: 16%; text-align: right; padding: 7px 14px; font-size: 11px; font-weight: 500;">
-                Quantity
+              <th style="width: 14%; text-align: right; padding: 7px 14px; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                Qty
               </th>
-              <th style="width: 16%; text-align: right; padding: 7px 14px; font-size: 11px; font-weight: 500;">
+              <th style="width: 18%; text-align: right; padding: 7px 14px; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
                 Rate
               </th>
-              <th style="width: 16%; text-align: right; padding: 7px 14px; font-size: 11px; font-weight: 500; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
+              <th style="width: 18%; text-align: right; padding: 7px 14px; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
                 Amount
               </th>
             </tr>
@@ -383,13 +413,13 @@ class PDFEngine {
       </div>
 
       <!-- Bottom Layout: Notes on Left & Financial Totals on Right -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 14px; page-break-inside: avoid; break-inside: avoid;">
         
         <!-- Left: Notes & Terms Section -->
         <div style="max-width: 380px;">
           ${notes ? `
             <div style="font-size: 10.5px; font-weight: 500; color: #6b7280; margin-bottom: 4px;">
-              Notes:
+              Notes / Payment Terms:
             </div>
             <div style="font-size: 10.5px; color: #374151; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(notes)}</div>
           ` : ''}
@@ -437,19 +467,37 @@ class PDFEngine {
               <td style="padding: 6px 0; font-weight: 700; font-size: 11.5px; color: #111827; text-align: right;">Total:</td>
               <td style="padding: 6px 14px 6px 16px; text-align: right; font-weight: 700; font-size: 11.5px; color: #111827;">${this.escapeHtml(grandTotal)}</td>
             </tr>
-            ${hasAmountPaid ? `
+            ${(hasAmountPaid && isPaymentRecorded) ? `
               <tr>
                 <td style="padding: 3px 0; color: #6b7280; text-align: right; font-weight: 400;">Amount Paid:</td>
                 <td style="padding: 3px 14px 3px 16px; text-align: right; font-weight: 400; color: #111827;">${this.escapeHtml(amountPaidAmt)}</td>
+              </tr>
+              <tr style="border-top: 1px dashed #cbd5e1;">
+                <td style="padding: 5px 0 2px; font-weight: 700; font-size: 11px; color: #111827; text-align: right;">Balance Due:</td>
+                <td style="padding: 5px 14px 2px 16px; text-align: right; font-weight: 700; font-size: 11.5px; color: ${themeAccent};">${this.escapeHtml(balanceDue)}</td>
               </tr>
             ` : ''}
           </table>
         </div>
 
       </div>
+
+      <!-- Document Footer Branding -->
+      <div style="margin-top: 36px; padding-top: 14px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: #94a3b8; page-break-inside: avoid; break-inside: avoid;">
+        <span>Thank you for your business.</span>
+        <span>Generated via Invoice-Gen.net</span>
+      </div>
     `;
 
     return container;
+  }
+
+  renderPreviewElement() {
+    const printable = this.buildPrintableA4Element();
+    const wrapper = document.createElement('div');
+    wrapper.className = 'preview-paper-wrapper';
+    wrapper.appendChild(printable);
+    return wrapper;
   }
 
   async downloadPDF() {
@@ -490,12 +538,17 @@ class PDFEngine {
       const printableElement = this.buildPrintableA4Element();
 
       const state = window.invoiceStore ? window.invoiceStore.getState() : {};
-      const invNumber = (document.getElementById('invoiceNumber')?.value || state.number || '001').replace(/[^a-zA-Z0-9-_]/g, '_');
-      const filename = `Invoice_${invNumber}.pdf`;
+      const rawInvNumber = (document.getElementById('invoiceNumber')?.value || state.number || '001').trim();
+      const rawClientName = (document.getElementById('clientName')?.value || state.client?.name || '').trim();
 
-      // ISO A4 exact calibration (210mm x 297mm) with 18mm print margins for high-end designer proportions
+      const cleanInvNumber = rawInvNumber.replace(/[^a-zA-Z0-9-_]/g, '-') || 'INV-001';
+      const cleanClientName = rawClientName.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').slice(0, 40);
+
+      const filename = cleanClientName ? `Invoice-${cleanInvNumber}-${cleanClientName}.pdf` : `Invoice-${cleanInvNumber}.pdf`;
+
+      // ISO A4 exact calibration (210mm x 297mm) with 15mm print margins for high-end designer proportions
       const opt = {
-        margin: [18, 18, 18, 18],
+        margin: [15, 15, 15, 15],
         filename: filename,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
@@ -519,13 +572,68 @@ class PDFEngine {
       this.showToast('Invoice PDF downloaded successfully!', 'success');
     } catch (err) {
       console.error('PDF Generation Error:', err);
-      this.showToast('Direct PDF export encountered an issue. Opening print view...', 'warning');
-      window.print();
+      this.showToast('Could not generate PDF. Please try again.', 'warning');
     } finally {
       this.isGenerating = false;
       if (downloadBtn) {
         downloadBtn.disabled = false;
         downloadBtn.innerHTML = originalContent;
+      }
+    }
+  }
+
+  async generatePDFBlob() {
+    const isLoaded = await this.ensureLibrary();
+    if (!isLoaded || typeof html2pdf === 'undefined') {
+      throw new Error('PDF generation library failed to initialize.');
+    }
+    if (document.fonts && document.fonts.ready) {
+      await document.fonts.ready;
+    }
+    await new Promise(r => setTimeout(r, 60));
+    const printableElement = this.buildPrintableA4Element();
+    const opt = {
+      margin: [15, 15, 15, 15],
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true, backgroundColor: '#ffffff' },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    return await html2pdf().set(opt).from(printableElement).outputPdf('blob');
+  }
+
+  async saveToCloud() {
+    if (this.isGenerating) return;
+    const btn = document.getElementById('btnSaveToCloud') || document.getElementById('btnSaveCloud');
+    const origText = btn ? btn.innerHTML : 'Save to Cloud';
+    try {
+      this.isGenerating = true;
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>Saving...</span>';
+      }
+      this.showToast('Rendering uncompressed A4 vector PDF...', 'info');
+      const blob = await this.generatePDFBlob();
+      const state = window.invoiceStore ? window.invoiceStore.getState() : {};
+      const rawInvNumber = (document.getElementById('invoiceNumber')?.value || state.number || '001').trim();
+      const rawClientName = (document.getElementById('clientName')?.value || state.client?.name || '').trim();
+      const cleanInvNumber = rawInvNumber.replace(/[^a-zA-Z0-9-_]/g, '-') || 'INV-001';
+      const cleanClientName = rawClientName.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').slice(0, 40);
+      const filename = cleanClientName ? `Invoice-${cleanInvNumber}-${cleanClientName}.pdf` : `Invoice-${cleanInvNumber}.pdf`;
+
+      if (window.saveFileToCloud) {
+        await window.saveFileToCloud(blob, filename, 'invoice', 'PDF Invoice Generator');
+      } else {
+        throw new Error('Cloud file client is not active.');
+      }
+    } catch (err) {
+      console.error('Save to Cloud error:', err);
+      this.showToast("Couldn't save file. Try again.", 'warning');
+    } finally {
+      this.isGenerating = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origText;
       }
     }
   }

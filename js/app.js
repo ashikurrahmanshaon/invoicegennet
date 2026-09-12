@@ -4,7 +4,8 @@
    Header Quick Tools, Auth Modal, Sidebar Customizer & Multiple Styles
    ========================================================================== */
 
-document.addEventListener('DOMContentLoaded', () => {
+window.initInvoiceEditorPage = function () {
+  if (!document.getElementById('invoicePaper')) return;
   const store = window.invoiceStore;
 
   // DOM Elements - Document Header
@@ -105,6 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const emailSubject = document.getElementById('emailSubject');
   const emailMessage = document.getElementById('emailMessage');
 
+  // DOM Elements - Live Preview Modal
+  const btnPreviewInvoice = document.getElementById('btnPreviewInvoice');
+  const previewModal = document.getElementById('previewModal');
+  const previewModalBody = document.getElementById('previewModalBody');
+  const btnClosePreviewModal = document.getElementById('btnClosePreviewModal');
+  const btnPreviewPrint = document.getElementById('btnPreviewPrint');
+  const btnPreviewDownload = document.getElementById('btnPreviewDownload');
+
   // Track Auth Modal Mode ('login' or 'signup')
   let currentAuthMode = 'login';
 
@@ -178,8 +187,167 @@ document.addEventListener('DOMContentLoaded', () => {
     // Line items
     renderItems(state.items || []);
 
+    // Sync adaptive Ship To column
+    const billingRow = document.getElementById('sheetBillingRow');
+    if (billingRow && toggleShipTo) {
+      billingRow.classList.toggle('ship-to-hidden', !toggleShipTo.checked);
+    }
+
+    // Sync Balance Due and Amount Paid rows
+    const balDueRow = document.getElementById('balanceDueLineRow');
+    const hasAmtPaid = toggleAmountPaid ? toggleAmountPaid.checked : false;
+    if (amountPaidLineRow) amountPaidLineRow.style.display = hasAmtPaid ? 'flex' : 'none';
+    if (balDueRow) balDueRow.style.display = hasAmtPaid ? 'flex' : 'none';
+
     // Totals
     updateCalculations();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Debounced Auto-Save for Drafts
+  // ---------------------------------------------------------------------------
+  let autoSaveTimer = null;
+  function triggerAutoSaveDebounced() {
+    if (!activeInvoiceId) return;
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => {
+      autoSaveDraftSilently();
+    }, 2000);
+  }
+
+  async function autoSaveDraftSilently() {
+    if (!activeInvoiceId) return;
+    try {
+      const payload = buildInvoicePayload('draft');
+      const errs = validateInvoice(payload);
+      if (errs.length > 0) return;
+
+      const res = await fetch(`/api/invoices/${activeInvoiceId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        if (btnSaveInvoiceText && !btnSaveInvoiceText.textContent.includes('...')) {
+          const original = btnSaveInvoiceText.textContent;
+          btnSaveInvoiceText.textContent = 'Saved (Draft)';
+          setTimeout(() => {
+            if (btnSaveInvoiceText) btnSaveInvoiceText.textContent = original;
+          }, 1500);
+        }
+      }
+    } catch (e) {}
+  }
+
+  // Helper to build a single row element with bound event handlers
+  function createRowElement(item, isNew = false) {
+    const row = document.createElement('tr');
+    row.className = isNew ? 'item-row row-new' : 'item-row';
+    row.dataset.id = item.id;
+
+    const itemTotal = (parseFloat(item.quantity) || 0) * (parseFloat(item.rate) || 0);
+
+    row.innerHTML = `
+      <td class="col-desc">
+        <input type="text" class="table-input-field item-desc-field item-desc-input" placeholder="e.g. Website Design &amp; Consulting" value="${escapeHtml(item.description || '')}" aria-label="Item description">
+      </td>
+      <td class="col-qty">
+        <input type="number" min="0" step="any" class="table-input-field item-qty-field item-qty-input" style="text-align: right;" value="${item.quantity !== undefined && item.quantity !== '' ? item.quantity : 1}" placeholder="1" aria-label="Quantity">
+      </td>
+      <td class="col-rate">
+        <input type="number" min="0" step="0.01" class="table-input-field item-rate-field item-rate-input" style="text-align: right;" value="${item.rate !== undefined && item.rate !== 0 ? item.rate : (item.rate === 0 && !item.description ? '' : item.rate)}" placeholder="0.00" aria-label="Rate or unit price">
+      </td>
+      <td class="col-amount">
+        <div class="table-amount-val item-amount-col">${store.formatMoney(itemTotal)}</div>
+      </td>
+      <td class="col-action">
+        <button type="button" class="btn-trash-row" title="Delete Row" data-id="${item.id}" aria-label="Delete line item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </td>
+    `;
+
+    const descInput = row.querySelector('.item-desc-field, .item-desc-input');
+    const qtyInput = row.querySelector('.item-qty-field, .item-qty-input');
+    const rateInput = row.querySelector('.item-rate-field, .item-rate-input');
+    const deleteBtn = row.querySelector('.btn-trash-row');
+
+    descInput.addEventListener('input', (e) => {
+      store.updateItem(item.id, 'description', e.target.value);
+      triggerAutoSaveDebounced();
+    });
+
+    qtyInput.addEventListener('input', (e) => {
+      const qVal = e.target.value === '' ? '' : (parseFloat(e.target.value) || 0);
+      store.updateItem(item.id, 'quantity', qVal);
+      updateRowTotal(row, item.id);
+      updateCalculations();
+      triggerAutoSaveDebounced();
+    });
+
+    rateInput.addEventListener('input', (e) => {
+      const rVal = e.target.value === '' ? '' : (parseFloat(e.target.value) || 0);
+      store.updateItem(item.id, 'rate', rVal);
+      updateRowTotal(row, item.id);
+      updateCalculations();
+      triggerAutoSaveDebounced();
+    });
+
+    // Pressing Enter in Rate adds next row and focuses description
+    rateInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addNewRowAndFocus();
+      }
+    });
+
+    const handleDelete = () => {
+      const allItems = store.getState().items || [];
+      if (allItems.length <= 1) {
+        store.removeItem(item.id);
+        renderItems(store.getState().items);
+        updateCalculations();
+        triggerAutoSaveDebounced();
+      } else {
+        row.classList.add('row-fade-out');
+        setTimeout(() => {
+          store.removeItem(item.id);
+          row.remove();
+          updateCalculations();
+          triggerAutoSaveDebounced();
+        }, 140);
+      }
+    };
+
+    deleteBtn.addEventListener('click', handleDelete);
+    deleteBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleDelete();
+      }
+    });
+
+    return row;
+  }
+
+  // Helper to add empty line item and focus description smoothly
+  function addNewRowAndFocus() {
+    const newId = store.addItem('', 1, 0);
+    const stateItems = store.getState().items || [];
+    const newItem = stateItems.find(it => it.id === newId) || { id: newId, description: '', quantity: 1, rate: 0 };
+    if (itemsTableBody) {
+      const row = createRowElement(newItem, true);
+      itemsTableBody.appendChild(row);
+      const descInput = row.querySelector('.item-desc-field, .item-desc-input');
+      if (descInput) {
+        descInput.focus();
+      }
+    }
+    updateCalculations();
+    triggerAutoSaveDebounced();
   }
 
   // ---------------------------------------------------------------------------
@@ -190,54 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
     itemsTableBody.innerHTML = '';
 
     items.forEach((item) => {
-      const row = document.createElement('tr');
-      row.className = 'item-row';
-      row.dataset.id = item.id;
-
-      const itemTotal = (parseFloat(item.quantity) || 0) * (parseFloat(item.rate) || 0);
-
-      row.innerHTML = `
-        <td class="col-desc">
-          <input type="text" class="table-input-field item-desc-field" placeholder="e.g. Website Development / Consulting service" value="${escapeHtml(item.description || '')}">
-        </td>
-        <td class="col-qty">
-          <input type="number" min="0" step="any" class="table-input-field item-qty-field" style="text-align: right;" value="${item.quantity}">
-        </td>
-        <td class="col-rate">
-          <input type="number" min="0" step="0.01" class="table-input-field item-rate-field" style="text-align: right;" value="${item.rate}">
-        </td>
-        <td class="col-amount">
-          <div class="table-amount-val item-amount-col">${store.formatMoney(itemTotal)}</div>
-        </td>
-        <td class="col-action">
-          <button type="button" class="btn-trash-row" title="Delete Row" data-id="${item.id}">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-          </button>
-        </td>
-      `;
-
-      const descInput = row.querySelector('.item-desc-field');
-      const qtyInput = row.querySelector('.item-qty-field');
-      const rateInput = row.querySelector('.item-rate-field');
-      const deleteBtn = row.querySelector('.btn-trash-row');
-
-      descInput.addEventListener('input', (e) => store.updateItem(item.id, 'description', e.target.value));
-      qtyInput.addEventListener('input', (e) => {
-        store.updateItem(item.id, 'quantity', e.target.value);
-        updateRowTotal(row, item.id);
-      });
-      rateInput.addEventListener('input', (e) => {
-        store.updateItem(item.id, 'rate', e.target.value);
-        updateRowTotal(row, item.id);
-      });
-      deleteBtn.addEventListener('click', () => {
-        store.removeItem(item.id);
-      });
-
-      itemsTableBody.appendChild(row);
+      itemsTableBody.appendChild(createRowElement(item, false));
     });
   }
 
@@ -325,15 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. Add Item Button
   // ---------------------------------------------------------------------------
   if (btnAddItem) {
-    btnAddItem.addEventListener('click', () => {
-      store.addItem('', 1, 0);
-      renderItems(store.getState().items);
-      const rows = itemsTableBody.querySelectorAll('.item-row');
-      if (rows.length > 0) {
-        const lastRowDesc = rows[rows.length - 1].querySelector('.item-desc-field');
-        if (lastRowDesc) lastRowDesc.focus();
-      }
-    });
+    btnAddItem.addEventListener('click', addNewRowAndFocus);
   }
 
   // ---------------------------------------------------------------------------
@@ -380,6 +493,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const btnReplaceLogo = document.getElementById('btnReplaceLogo');
+  if (btnReplaceLogo && logoFileInput) {
+    btnReplaceLogo.addEventListener('click', (e) => {
+      e.stopPropagation();
+      logoFileInput.click();
+    });
+  }
+
   // ---------------------------------------------------------------------------
   // 6. Primary PDF Export & Print Actions
   // ---------------------------------------------------------------------------
@@ -414,6 +535,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       localStorage.setItem('invoicegen_invoices', JSON.stringify(invoices));
     } catch (e) {}
+
+    // Log PDF download activity if logged in
+    try {
+      fetch('/api/activities/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'invoice_downloaded',
+          description: `Downloaded PDF for invoice #${store.getState()?.number || '001'}`,
+          entityType: 'invoice',
+          entityId: activeInvoiceId || ''
+        })
+      }).catch(() => {});
+    } catch (e) {}
   };
 
   const handlePrint = () => {
@@ -428,6 +563,260 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // DOM Elements - Save Actions
+  const btnSaveInvoice = document.getElementById('btnSaveInvoice');
+  const btnSaveInvoiceText = document.getElementById('btnSaveInvoiceText');
+  const btnSaveDraft = document.getElementById('btnSaveDraft');
+  let activeInvoiceId = null;
+
+  function buildInvoicePayload(targetStatus = 'draft') {
+    const rows = document.querySelectorAll('#itemsTableBody .item-row');
+    const items = [];
+    rows.forEach((r, idx) => {
+      const descInput = r.querySelector('.item-desc-field, .item-desc-input');
+      const subInput = r.querySelector('.item-subtext-field, .item-subtext-input');
+      const qtyInput = r.querySelector('.item-qty-field, .item-qty-input');
+      const rateInput = r.querySelector('.item-rate-field, .item-rate-input');
+      const q = parseFloat(qtyInput?.value) || 0;
+      const rt = parseFloat(rateInput?.value) || 0;
+      items.push({
+        id: r.dataset.id || (Date.now() + idx),
+        description: descInput?.value.trim() || '',
+        subtext: subInput?.value.trim() || '',
+        quantity: q,
+        rate: rt,
+        amount: q * rt
+      });
+    });
+
+    if (items.length > 0) {
+      store.getState().items = items;
+    }
+    const totals = store.calculateTotals();
+    const activeTheme = invoicePaper ? (invoicePaper.className.match(/theme-(\w+)/)?.[1] || 'emerald') : 'emerald';
+
+    return {
+      id: activeInvoiceId || undefined,
+      number: invoiceNumberInput?.value.trim() || 'INV-001',
+      status: targetStatus,
+      date: invoiceDateInput?.value || '',
+      dueDate: dueDateInput?.value || '',
+      currency: currencySelect?.value || 'USD',
+      currencySymbol: (CURRENCIES[currencySelect?.value || 'USD'] || {}).symbol || '$',
+      poNumber: poNumberInput?.value || '',
+      paymentTerms: paymentTermsSelect?.value || 'Due on Receipt',
+      sender: {
+        name: senderName?.value || '',
+        address: senderAddress?.value || ''
+      },
+      client: {
+        name: clientName?.value || '',
+        address: clientAddress?.value || ''
+      },
+      shipTo: {
+        enabled: toggleShipTo ? toggleShipTo.checked : false,
+        name: shipToName?.value || '',
+        address: shipToAddress?.value || ''
+      },
+      notes: invoiceNotes?.value || '',
+      items: items.length > 0 ? items : [{ description: 'General Services', quantity: 1, rate: 0, amount: 0 }],
+      subtotal: totals.subtotal,
+      taxRate: parseFloat(taxRateInput?.value) || 0,
+      taxAmount: totals.taxAmount,
+      discountType: 'percent',
+      discountValue: parseFloat(discountRateInput?.value) || 0,
+      discountAmount: totals.discount,
+      amountPaid: totals.amountPaid,
+      total: totals.grandTotal,
+      balanceDue: totals.balanceDue,
+      template: activeTheme
+    };
+  }
+
+  function validateInvoice(payload) {
+    const errors = [];
+    if (!payload.number || !payload.number.trim()) {
+      errors.push('Invoice number is required.');
+    }
+    if (isNaN(payload.taxRate) || payload.taxRate < 0) {
+      errors.push('Tax percentage must be a valid number >= 0.');
+    }
+    if (isNaN(payload.discountValue) || payload.discountValue < 0) {
+      errors.push('Discount percentage must be a valid number >= 0.');
+    }
+    if (isNaN(payload.amountPaid) || payload.amountPaid < 0) {
+      errors.push('Amount paid must be a valid number >= 0.');
+    }
+    if (payload.client?.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.client.email.trim())) {
+      errors.push('Client email address is invalid.');
+    }
+    if (!payload.items || payload.items.length === 0) {
+      errors.push('Invoice must contain at least one line item.');
+    } else {
+      payload.items.forEach((item, index) => {
+        const rowNum = index + 1;
+        if (isNaN(item.quantity) || parseFloat(item.quantity) < 0) {
+          errors.push(`Row ${rowNum}: Quantity must be numeric and >= 0.`);
+        }
+        if (isNaN(item.rate) || parseFloat(item.rate) < 0) {
+          errors.push(`Row ${rowNum}: Rate must be numeric and >= 0.`);
+        }
+      });
+    }
+    return errors;
+  }
+
+  async function handleSaveInvoice(targetStatus = 'pending') {
+    const btn = targetStatus === 'draft' ? btnSaveDraft : btnSaveInvoice;
+    const origHtml = btn ? btn.innerHTML : '';
+
+    const payload = buildInvoicePayload(targetStatus);
+    const validationErrors = validateInvoice(payload);
+    if (validationErrors.length > 0) {
+      if (window.showToast) {
+        window.showToast(validationErrors[0], 'warning');
+      } else if (window.pdfEngine) {
+        window.pdfEngine.showToast(validationErrors[0], 'warning');
+      }
+      return;
+    }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<svg class="spinner-inline" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite; margin-right: 6px;"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path></svg><span>Saving...</span>`;
+    }
+
+    let data = null;
+    try {
+      const authRes = await fetch('/api/auth/me');
+      const authData = await authRes.json();
+
+      if (!authData || !authData.authenticated) {
+        if (window.showToast) {
+          window.showToast('Please sign in or create an account to save invoices to the database.', 'warning');
+        }
+        setTimeout(() => {
+          window.location.href = 'login.html?redirect=generator';
+        }, 1200);
+        return;
+      }
+
+      const isUpdate = Boolean(activeInvoiceId);
+      const endpoint = isUpdate ? `/api/invoices/${activeInvoiceId}` : '/api/invoices';
+      const method = isUpdate ? 'PUT' : 'POST';
+
+      const res = await fetch(endpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      data = await res.json();
+
+      if (res.ok && data.success) {
+        activeInvoiceId = data.id || (data.invoice && data.invoice.id);
+        const saveSubtext = document.getElementById('saveStatusSubtext');
+        if (saveSubtext) {
+          saveSubtext.textContent = 'Saved to cloud database just now';
+          saveSubtext.style.color = '#059669';
+        }
+
+        // Show "Saved" state on the button
+        if (btn) {
+          btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Saved</span>`;
+          setTimeout(() => {
+            if (btn) {
+              const label = activeInvoiceId ? 'Update Invoice' : 'Save Invoice';
+              btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg><span id="btnSaveInvoiceText">${label}</span>`;
+            }
+          }, 2000);
+        }
+
+        const msg = targetStatus === 'draft' 
+          ? `Draft ${payload.number} saved to database!` 
+          : `Invoice ${payload.number} saved successfully!`;
+        if (window.showToast) {
+          window.showToast(msg, 'success');
+        }
+        if (activeInvoiceId && !window.location.search.includes(activeInvoiceId)) {
+          window.history.replaceState({}, '', `index.html?id=${activeInvoiceId}`);
+        }
+      } else {
+        if (window.showToast) {
+          window.showToast(data.error || 'Could not save invoice.', 'warning');
+        }
+      }
+    } catch (e) {
+      if (window.showToast) {
+        window.showToast('Could not save invoice. Please check your connection.', 'warning');
+      }
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        if (!data || !data.success) {
+          btn.innerHTML = origHtml;
+        }
+      }
+    }
+  }
+
+  // Hook save buttons
+  if (btnSaveInvoice) {
+    btnSaveInvoice.addEventListener('click', () => handleSaveInvoice('pending'));
+  }
+  if (btnSaveDraft) {
+    btnSaveDraft.addEventListener('click', () => handleSaveInvoice('draft'));
+  }
+  const btnSaveToCloud = document.getElementById('btnSaveToCloud');
+  if (btnSaveToCloud) {
+    btnSaveToCloud.addEventListener('click', () => {
+      if (window.pdfEngine && typeof window.pdfEngine.saveToCloud === 'function') {
+        window.pdfEngine.saveToCloud();
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Live Document Preview Modal Actions
+  // ---------------------------------------------------------------------------
+  function openPreviewModal() {
+    if (!previewModal || !previewModalBody) return;
+    previewModalBody.innerHTML = '';
+    if (window.pdfEngine) {
+      const previewEl = window.pdfEngine.renderPreviewElement();
+      previewModalBody.appendChild(previewEl);
+    }
+    previewModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePreviewModal() {
+    if (!previewModal) return;
+    previewModal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (btnPreviewInvoice) {
+    btnPreviewInvoice.addEventListener('click', openPreviewModal);
+  }
+  if (btnClosePreviewModal) {
+    btnClosePreviewModal.addEventListener('click', closePreviewModal);
+  }
+  if (previewModal) {
+    previewModal.addEventListener('click', (e) => {
+      if (e.target === previewModal) closePreviewModal();
+    });
+  }
+  if (btnPreviewPrint) {
+    btnPreviewPrint.addEventListener('click', () => {
+      window.print();
+    });
+  }
+  if (btnPreviewDownload) {
+    btnPreviewDownload.addEventListener('click', () => {
+      if (window.pdfEngine) window.pdfEngine.downloadPDF();
+    });
+  }
+
   // Sidebar actions
   if (btnDownloadPDF) btnDownloadPDF.addEventListener('click', handleDownload);
   if (btnPrintSidebar) btnPrintSidebar.addEventListener('click', handlePrint);
@@ -437,7 +826,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnLoadSample.addEventListener('click', () => {
       store.loadSample();
       syncUIFromState(store.getState());
-      if (window.pdfEngine) window.pdfEngine.showToast('Sample invoice loaded!');
+      if (window.showToast) window.showToast('Sample demo loaded! Click "Save Invoice" to persist to database.', 'info');
     });
   }
 
@@ -479,12 +868,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ---------------------------------------------------------------------------
-  // 8. Sidebar Document Field Toggles
+  // 8. Sidebar Document Field Toggles (Smooth Animated Reveal)
   // ---------------------------------------------------------------------------
+  function revealField(el, show, displayType = 'block') {
+    if (!el) return;
+    if (show) {
+      el.style.display = displayType;
+      el.classList.add('toggleable-reveal');
+      requestAnimationFrame(() => {
+        el.classList.add('revealed');
+      });
+    } else {
+      el.classList.remove('revealed');
+      el.style.display = 'none';
+    }
+  }
+
   if (toggleShipTo) {
     toggleShipTo.addEventListener('change', (e) => {
-      if (shipToCardPanel) {
-        shipToCardPanel.style.display = e.target.checked ? 'block' : 'none';
+      revealField(shipToCardPanel, e.target.checked, 'block');
+      const billingRow = document.getElementById('sheetBillingRow');
+      if (billingRow) {
+        billingRow.classList.toggle('ship-to-hidden', !e.target.checked);
       }
     });
   }
@@ -492,7 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (togglePoNumber) {
     togglePoNumber.addEventListener('change', (e) => {
       poFieldRows.forEach(el => {
-        el.style.display = e.target.checked ? 'inline-block' : 'none';
+        revealField(el, e.target.checked, 'inline-block');
       });
     });
   }
@@ -500,32 +905,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleDueDate) {
     toggleDueDate.addEventListener('change', (e) => {
       dueDateFieldRows.forEach(el => {
-        el.style.display = e.target.checked ? 'inline-block' : 'none';
+        revealField(el, e.target.checked, 'inline-block');
       });
     });
   }
 
   if (toggleDiscount) {
     toggleDiscount.addEventListener('change', (e) => {
-      if (discountLineRow) {
-        discountLineRow.style.display = e.target.checked ? 'flex' : 'none';
-      }
+      revealField(discountLineRow, e.target.checked, 'flex');
     });
   }
 
+  const balanceDueLineRow = document.getElementById('balanceDueLineRow');
   if (toggleAmountPaid) {
     toggleAmountPaid.addEventListener('change', (e) => {
-      if (amountPaidLineRow) {
-        amountPaidLineRow.style.display = e.target.checked ? 'flex' : 'none';
-      }
+      revealField(amountPaidLineRow, e.target.checked, 'flex');
+      revealField(balanceDueLineRow, e.target.checked, 'flex');
+      updateCalculations();
     });
   }
 
   if (toggleSignature) {
     toggleSignature.addEventListener('change', (e) => {
-      if (signatureBlockWrap) {
-        signatureBlockWrap.style.display = e.target.checked ? 'block' : 'none';
-      }
+      revealField(signatureBlockWrap, e.target.checked, 'block');
     });
   }
 
@@ -588,32 +990,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function syncLoggedInUser() {
-    try {
-      const stored = localStorage.getItem('invoicegen_user');
-      if (stored) {
-        const user = JSON.parse(stored);
-        // Strictly purge any legacy demo / mock accounts
-        if (!user || !user.email || user.isDemo || user.email === 'user@company.com' || user.email === 'google.user@gmail.com' || user.email.includes('alex.') || user.email.includes('sarah.')) {
-          localStorage.removeItem('invoicegen_user');
-          return;
-        }
-
-        const firstName = user.name ? user.name.split(' ')[0] : 'User';
-        if (btnHeaderLogin) {
-          btnHeaderLogin.textContent = `Dashboard (${firstName})`;
-          btnHeaderLogin.href = 'dashboard.html';
-          btnHeaderLogin.title = `Signed in as ${user.email} (Open Dashboard)`;
-          btnHeaderLogin.onclick = null;
-        }
-        if (btnHeaderSignup) btnHeaderSignup.style.display = 'none';
-        if (btnMobileLogin) {
-          btnMobileLogin.textContent = `Dashboard (${firstName})`;
-          btnMobileLogin.href = 'dashboard.html';
-          btnMobileLogin.onclick = null;
-        }
-        if (btnMobileSignup) btnMobileSignup.style.display = 'none';
-      }
-    } catch (e) {}
+    if (window.Auth && typeof window.Auth.renderHeader === 'function') {
+      window.Auth.renderHeader();
+    }
   }
   syncLoggedInUser();
 
@@ -704,29 +1083,218 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---------------------------------------------------------------------------
   syncUIFromState(store.getState());
 
-  // Check if a template was chosen from templates.html (e.g., ?template=corporate)
+  // Check if loading an existing invoice (e.g. ?id=inv_... or ?load=inv_...)
   try {
     const urlParams = new URLSearchParams(window.location.search);
+    const editId = urlParams.get('id') || urlParams.get('load');
+
+    if (editId) {
+      fetch(`/api/invoices/${editId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.success && data.invoice) {
+            activeInvoiceId = editId;
+            const inv = data.invoice;
+            if (btnSaveInvoiceText) btnSaveInvoiceText.textContent = 'Update Invoice';
+
+            store.updateState('number', inv.number || inv.invoice_number);
+            store.updateState('date', inv.date || inv.issue_date);
+            store.updateState('dueDate', inv.dueDate || inv.due_date);
+            store.updateState('poNumber', inv.poNumber || inv.po_number || '');
+            store.updateState('paymentTerms', inv.paymentTerms || inv.payment_terms || 'Due on Receipt');
+            store.updateState('currency', inv.currency || 'USD');
+            store.updateState('sender.name', inv.sender?.name || inv.sender_name || '');
+            store.updateState('sender.address', inv.sender?.address || inv.sender_address || '');
+            store.updateState('client.name', inv.client?.name || inv.client_name || '');
+            store.updateState('client.address', inv.client?.address || inv.client_address || '');
+            store.updateState('notes', inv.notes || '');
+            store.updateState('taxRate', inv.taxRate || inv.tax_rate || 0);
+            store.updateState('discountValue', inv.discountValue || inv.discount_value || 0);
+            store.updateState('amountPaid', inv.amountPaid || inv.amount_paid || 0);
+            if (Array.isArray(inv.items) && inv.items.length > 0) {
+              store.updateState('items', inv.items);
+            }
+            syncUIFromState(store.getState());
+            if (inv.template) applyTheme(inv.template);
+            if (window.showToast) window.showToast(`Loaded invoice ${inv.number}`, 'info');
+          }
+        })
+        .catch(() => {});
+    } else {
+      // New invoice mode: fetch next sequential number & defaults from user profile
+      fetch('/api/auth/me')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.authenticated && data.user) {
+            const user = data.user;
+            fetch('/api/invoices/next-number')
+              .then(r => r.json())
+              .then(numData => {
+                if (numData && numData.nextNumber && invoiceNumberInput) {
+                  invoiceNumberInput.value = numData.nextNumber;
+                  store.updateState('number', numData.nextNumber);
+                }
+              }).catch(() => {});
+
+            if (user.business_name && senderName && !senderName.value) {
+              senderName.value = user.business_name;
+              store.updateState('sender.name', user.business_name);
+            }
+            if (user.business_address && senderAddress && !senderAddress.value) {
+              senderAddress.value = user.business_address;
+              store.updateState('sender.address', user.business_address);
+            }
+            if (user.default_currency && currencySelect && !currencySelect.value) {
+              currencySelect.value = user.default_currency;
+              store.updateState('currency', user.default_currency);
+            }
+            if (user.default_payment_terms && paymentTermsSelect) {
+              paymentTermsSelect.value = user.default_payment_terms;
+              store.updateState('paymentTerms', user.default_payment_terms);
+            }
+            if (user.default_notes && invoiceNotes && !invoiceNotes.value) {
+              invoiceNotes.value = user.default_notes;
+              store.updateState('notes', user.default_notes);
+            }
+            if (user.default_tax_rate !== undefined && user.default_tax_rate !== null && taxRateInput && !taxRateInput.value) {
+              taxRateInput.value = user.default_tax_rate;
+              store.updateState('taxRate', user.default_tax_rate);
+              updateCalculations();
+            }
+          }
+        }).catch(() => {});
+    }
+
+    // Check if client_id was passed in URL
+    const targetClientId = urlParams.get('client_id') || urlParams.get('client');
+    if (targetClientId) {
+      fetch(`/api/clients/${targetClientId}`)
+        .then(res => res.json())
+        .then(cData => {
+          if (cData && cData.success && cData.client) {
+            const cl = cData.client;
+            const displayName = cl.company ? `${cl.name} (${cl.company})` : cl.name;
+            if (clientName) {
+              clientName.value = displayName;
+              store.updateState('client.name', displayName);
+            }
+            if (clientAddress) {
+              clientAddress.value = cl.billing_address || '';
+              store.updateState('client.address', cl.billing_address || '');
+            }
+            if (cl.shipping_address && shipToAddress) {
+              shipToAddress.value = cl.shipping_address;
+              store.updateState('shipTo.address', cl.shipping_address);
+              if (shipToName && cl.name) {
+                shipToName.value = cl.name;
+                store.updateState('shipTo.name', cl.name);
+              }
+              if (toggleShipTo && !toggleShipTo.checked) {
+                toggleShipTo.checked = true;
+                const bRow = document.getElementById('sheetBillingRow');
+                if (bRow) bRow.classList.remove('ship-to-hidden');
+                store.updateState('shipTo.enabled', true);
+              }
+            }
+            if (window.showToast) window.showToast(`Loaded client "${cl.name}"`, 'info');
+          }
+        })
+        .catch(() => {});
+    }
+
+    // Populate client dropdown if user has existing clients
+    fetch('/api/clients')
+      .then(res => res.json())
+      .then(clData => {
+        if (clData && clData.success && Array.isArray(clData.clients) && clData.clients.length > 0) {
+          let picker = document.getElementById('clientQuickSelect');
+          if (!picker) {
+            const billToHeader = document.querySelector('#billToCol .sheet-col-header');
+            if (billToHeader) {
+              billToHeader.style.display = 'flex';
+              billToHeader.style.alignItems = 'center';
+              billToHeader.style.justifyContent = 'space-between';
+              picker = document.createElement('select');
+              picker.id = 'clientQuickSelect';
+              picker.className = 'form-select client-quick-picker';
+              picker.style.cssText = 'width: auto; max-width: 170px; height: 26px; padding: 2px 8px; font-size: 0.72rem; border-radius: 6px; border: 1px solid #cbd5e1; background-color: #ffffff; color: #334155; font-weight: 500; cursor: pointer;';
+              billToHeader.appendChild(picker);
+            }
+          }
+          if (picker) {
+            picker.style.display = 'inline-block';
+            picker.innerHTML = '<option value="">+ Existing Client</option>' + clData.clients.map(c => 
+              `<option value="${c.id}">${c.name}${c.company ? ' (' + c.company + ')' : ''}</option>`
+            ).join('');
+
+            picker.addEventListener('change', (e) => {
+              const selectedId = e.target.value;
+              if (!selectedId) return;
+              const chosen = clData.clients.find(c => c.id === selectedId);
+              if (chosen) {
+                const displayName = chosen.company ? `${chosen.name} (${chosen.company})` : chosen.name;
+                if (clientName) {
+                  clientName.value = displayName;
+                  store.updateState('client.name', displayName);
+                }
+                if (clientAddress) {
+                  clientAddress.value = chosen.billing_address || '';
+                  store.updateState('client.address', chosen.billing_address || '');
+                }
+                if (chosen.shipping_address && shipToAddress) {
+                  shipToAddress.value = chosen.shipping_address;
+                  store.updateState('shipTo.address', chosen.shipping_address);
+                  if (shipToName && chosen.name) {
+                    shipToName.value = chosen.name;
+                    store.updateState('shipTo.name', chosen.name);
+                  }
+                  if (toggleShipTo && !toggleShipTo.checked) {
+                    toggleShipTo.checked = true;
+                    const bRow = document.getElementById('sheetBillingRow');
+                    if (bRow) bRow.classList.remove('ship-to-hidden');
+                    store.updateState('shipTo.enabled', true);
+                  }
+                }
+                triggerAutoSaveDebounced();
+                if (window.showToast) window.showToast(`Selected client "${chosen.name}"`, 'info');
+              }
+            });
+          }
+        }
+      })
+      .catch(() => {});
+
     const requestedTemplate = urlParams.get('template');
     if (requestedTemplate && requestedTemplate !== 'emerald') {
-      const stored = localStorage.getItem('invoicegen_user');
-      let isValidUser = false;
-      if (stored) {
-        const u = JSON.parse(stored);
-        if (u && u.email && !u.isDemo && u.email !== 'user@company.com' && u.email !== 'google.user@gmail.com' && !u.email.includes('alex.') && !u.email.includes('sarah.')) {
-          isValidUser = true;
-        }
-      }
-      if (!isValidUser) {
-        // Not logged in! Redirect to login page
-        window.location.href = `login.html?redirect=templates&template=${requestedTemplate}`;
-      } else {
-        applyTheme(requestedTemplate);
-      }
+      applyTheme(requestedTemplate);
     } else if (requestedTemplate === 'emerald') {
       applyTheme('emerald');
     }
-  } catch (e) {
-    // Ignore URL parsing errors
-  }
-});
+
+    // Wire Mobile Sticky Bottom Action Bar
+    const btnMobileDownload = document.getElementById('btnMobileDownloadPdf');
+    const btnMobileSave = document.getElementById('btnMobileSaveInvoice');
+    const btnMobileOpts = document.getElementById('btnMobileOpenOptions');
+    if (btnMobileDownload && downloadPdfBtn) {
+      btnMobileDownload.addEventListener('click', () => downloadPdfBtn.click());
+    }
+    if (btnMobileSave && btnSaveInvoice) {
+      btnMobileSave.addEventListener('click', () => btnSaveInvoice.click());
+    }
+    if (btnMobileOpts) {
+      btnMobileOpts.addEventListener('click', () => {
+        const sidebar = document.getElementById('inspectorSidebar');
+        if (sidebar) {
+          sidebar.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+    document.body.classList.add('has-mobile-sticky-actions');
+  } catch (e) {}
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.initInvoiceEditorPage);
+} else {
+  window.initInvoiceEditorPage();
+}

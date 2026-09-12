@@ -3,485 +3,1107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice Generator for Freelancers - Free Online Invoicing | Invoice-Gen.net</title>
-  <meta name="description" content="Free invoice generator built specifically for freelancers, consultants, and contractors. Bill hourly or per-project, embed Stripe and PayPal links, and get paid 2x faster.">
-  <meta name="keywords" content="invoice generator for freelancers, freelance invoice generator, contractor invoice generator, freelance invoice maker, freelance billing software, invoice template for freelancers">
-  <link rel="canonical" href="https://invoice-gen.net/invoice-generator-for-freelancers.html">
-  <meta name="theme-color" content="#00c875">
-
-  <!-- Open Graph / SEO Social -->
+  <title>Freelancer Invoice Generator | Invoice-Gen.net</title>
+  <meta name="description" content="Dedicated freelancer invoice generator. Supports Hourly, Fixed Price, Milestone, and Project-Based billing with automatic totals and instant A4 PDF export.">
+  <link rel="canonical" href="https://invoice-gen.net/tools/freelancer-invoice">
+  <meta property="og:title" content="Freelancer Invoice Generator | Invoice-Gen.net">
+  <meta property="og:description" content="Dedicated freelancer invoice generator with hourly, milestone, fixed price, and project billing modes.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://invoice-gen.net/invoice-generator-for-freelancers.html">
-  <meta property="og:title" content="Invoice Generator for Freelancers - Free Online Invoicing">
-  <meta property="og:description" content="The modern, zero-fee invoice generator for freelancers. Fast vector PDFs, hourly billing, and instant payment links.">
-  <meta property="og:image" content="https://invoice-gen.net/assets/icons/logo.svg">
 
-  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
+  <!-- Core SaaS Stylesheets -->
+  <link rel="stylesheet" href="/css/design-system.css?v=6.0">
+  <link rel="stylesheet" href="/css/invoice-editor.css?v=6.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Stylesheets -->
-    <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
-  <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/design-system.css?v=4.0">
-  <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
-
-  <!-- JSON-LD Structured Data for Google Rich Snippets -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "SoftwareApplication",
-        "name": "InvoiceGen Freelancer Invoice Generator",
-        "operatingSystem": "All (Web-based)",
-        "applicationCategory": "BusinessApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Tailor-made online invoice generator for freelancers, contractors, and solopreneurs. Supports hourly rates, milestones, and card checkouts."
-      },
-      {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://invoice-gen.net/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Blog & Resources",
-            "item": "https://invoice-gen.net/blog.html"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Freelancer Invoice Generator",
-            "item": "https://invoice-gen.net/invoice-generator-for-freelancers.html"
-          }
-        ]
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What should a freelancer invoice always include?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "A standard freelance invoice must include your business name/contact, client contact details, unique invoice number, issue date, payment due date (e.g. Net 14), itemized hourly or milestone breakdown, accepted payment methods (e.g. Stripe card or PayPal), and your tax ID or VAT number."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Can I bill international clients in their local currency?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes! InvoiceGen supports over 30 global currencies including USD, EUR, GBP, CAD, AUD, JPY, and BDT. You can switch currencies with one click."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "What are the best payment terms for freelancers to avoid late payments?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "We recommend Net 14 (due in 14 days) or Due Upon Receipt with an embedded Stripe credit card link. Net 30 often results in clients deprioritizing your invoice."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is Invoice-Gen.net free for commercial freelance client billing?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. Freelancers can generate unlimited commercial invoices, export unbranded PDFs, and accept payments with 100% free core functionality."
-            }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
+  <!-- Vendor Libraries for PDF Generation -->
+  <script src="/js/vendor/pdf-lib.min.js"></script>
 
   <style>
-    .seo-article {
+    .fl-tool-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    .fl-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 44px 48px;
-      margin-bottom: 36px;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+      margin-bottom: 24px;
     }
-    @media (max-width: 640px) {
-      .seo-article { padding: 24px 20px; }
-    }
-    .seo-article h2 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-top: 36px;
-      margin-bottom: 14px;
-      letter-spacing: -0.02em;
-    }
-    .seo-article h3 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #1e293b;
-      margin-top: 24px;
-      margin-bottom: 10px;
-    }
-    .seo-article p {
-      color: #475569;
-      font-size: 0.96rem;
-      line-height: 1.75;
-      margin-bottom: 16px;
-    }
-    .seo-feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      margin: 28px 0;
-    }
-    .seo-feature-card {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 22px;
-    }
-    .seo-feature-card h4 {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 8px;
-    }
-    .seo-feature-card p {
-      font-size: 0.875rem;
-      color: #64748b;
-      line-height: 1.6;
-      margin-bottom: 0;
-    }
-    .seo-step-row {
+    .fl-mode-tabs {
       display: flex;
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 16px;
+      flex-wrap: wrap;
     }
-    .seo-step-num {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: #0f172a;
+    .fl-mode-btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .fl-mode-btn:hover {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .fl-mode-btn.active {
+      background: #059669;
       color: #ffffff;
+      border-color: #059669;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+    }
+    .fl-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .fl-grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .fl-grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .fl-section-title {
+      font-size: 0.8125rem;
       font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #059669;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      gap: 8px;
     }
-    .cta-hero-box {
-      background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
-      border-radius: 8px;
-      padding: 36px;
-      color: #ffffff;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .freelance-tips-box {
-      background: #ecfdf5;
-      border-left: 4px solid #00c875;
-      padding: 20px 24px;
-      border-radius: 0 8px 8px 0;
-      margin: 24px 0;
-    }
-    .freelance-tips-box h4 {
-      color: #065f46;
-      font-size: 1.05rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-    .freelance-tips-box p {
-      color: #047857;
-      font-size: 0.92rem;
-      margin: 0;
-      line-height: 1.6;
-    }
-    .seo-hub-nav {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 24px;
-      margin-top: 32px;
-    }
-    .seo-hub-nav h4 {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #0f172a;
+    .fl-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       margin-bottom: 12px;
     }
-    .seo-hub-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    .fl-label {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #334155;
     }
-    .seo-hub-links a {
-      background: #ffffff;
+    .fl-input, .fl-select, .fl-textarea {
+      width: 100%;
+      padding: 9px 13px;
       border: 1px solid #cbd5e1;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #1e293b;
-      text-decoration: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: #0f172a;
+      background: #ffffff;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      box-sizing: border-box;
     }
-    .seo-hub-links a:hover {
-      border-color: #00c875;
+    .fl-input:focus, .fl-select:focus, .fl-textarea:focus {
+      outline: none;
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+    .fl-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      margin: 16px 0;
+    }
+    .fl-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    .fl-table th {
+      background: #f8fafc;
+      padding: 10px 12px;
+      font-weight: 800;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    .fl-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .fl-table input, .fl-table select {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      box-sizing: border-box;
+    }
+    .fl-totals-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 440px;
+      margin-left: auto;
+    }
+    .fl-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      font-size: 0.875rem;
+      color: #475569;
+    }
+    .fl-grand-total {
+      border-top: 2px solid #0f172a;
+      padding-top: 10px;
+      margin-top: 8px;
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .fl-balance-row {
+      background: #ecfdf5;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-weight: 800;
       color: #065f46;
     }
+    .fl-actions-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .btn-fl-primary {
+      background: #059669;
+      color: #ffffff;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-fl-primary:hover { background: #047857; transform: translateY(-1px); }
+    .btn-fl-secondary {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .btn-fl-secondary:hover { background: #f8fafc; border-color: #94a3b8; }
+    .btn-fl-cloud {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-fl-cloud:hover { background: #d1fae5; }
+    @media (max-width: 768px) {
+      .fl-grid-2col, .fl-grid-3col, .fl-grid-4col { grid-template-columns: 1fr; }
+      .fl-totals-card { max-width: 100%; }
+      .fl-card { padding: 20px 16px; }
+    }
   </style>
+
+  <script src="js/google-auth.js?v=6.0"></script>
 </head>
-<body>
+<body style="background: #f8fafc;">
 
-  <!-- Authentic SaaS Top Navigation -->
-    <!-- Universal SaaS Top Navigation Bar -->
-  <header class="navbar-saas">
-    <div class="container">
-      <!-- Brand Lockup -->
-      <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
-        <div class="brand-logo-frame">
-          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36">
-        </div>
-        <div class="brand-text-block">
-          <div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div>
-        </div>
+  <!-- SaaS Navigation -->
+  <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-wrapper">
+        <div class="brand-logo-frame"><img src="/assets/icons/logo.svg" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36"></div>
+        <div class="brand-text-block"><div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div></div>
       </a>
+      <nav class="nav-center-links">
+        <a href="index.html" class="nav-link-item"><span>Create Invoice</span></a>
+        <a href="templates.html" class="nav-link-item"><span>Templates</span></a>
+        <a href="dashboard.html" class="nav-link-item"><span>My Invoices</span></a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn active" id="toolsDropdownBtn">
+            <span>Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+            <div class="mega-menu-grid">
+              <!-- INVOICE -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Invoice</div>
+                <a href="index.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Generator</span>
+                    <span class="mega-desc">Fast web invoice builder</span>
+                  </div>
+                </a>
+                <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Invoice Generator</span>
+                    <span class="mega-desc">A4 vector PDF export</span>
+                  </div>
+                </a>
+                <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Freelancer Invoice</span>
+                    <span class="mega-desc">Hourly &amp; milestone billing</span>
+                  </div>
+                </a>
+                <a href="gst-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">GST &amp; Tax Invoice</span>
+                    <span class="mega-desc">Tax breakdowns &amp; HSN</span>
+                  </div>
+                </a>
+                <a href="invoice-number-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Number Generator</span>
+                    <span class="mega-desc">Auto-sequential numbering</span>
+                  </div>
+                </a>
+              </div>
 
-      <!-- Center SaaS Navigation Links -->
-      <nav class="nav-center-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="nav-link-item">Payments</a>
+              <!-- DOCUMENTS -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Documents</div>
+                <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF to JPG</span>
+                    <span class="mega-desc">Convert PDF pages to image</span>
+                  </div>
+                </a>
+                <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">JPG to PDF</span>
+                    <span class="mega-desc">Combine images to PDF</span>
+                  </div>
+                </a>
+                <a href="pdf-merger.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Merger</span>
+                    <span class="mega-desc">Merge multiple PDF files</span>
+                  </div>
+                </a>
+                <a href="pdf-splitter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Splitter</span>
+                    <span class="mega-desc">Extract pages &amp; ranges</span>
+                  </div>
+                </a>
+                <a href="image-compressor.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Image Compressor</span>
+                    <span class="mega-desc">Reduce JPG &amp; PNG size</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- CALCULATORS, PAYMENTS & CLOUD -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Calculators</div>
+                <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Tax Calculator</span>
+                    <span class="mega-desc">Inclusive &amp; exclusive tax</span>
+                  </div>
+                </a>
+                <a href="payment-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Calculator</span>
+                    <span class="mega-desc">Installments &amp; schedules</span>
+                  </div>
+                </a>
+                <a href="due-date-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Due Date Calculator</span>
+                    <span class="mega-desc">Payment terms &amp; calendar</span>
+                  </div>
+                </a>
+                <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Currency Converter</span>
+                    <span class="mega-desc">Live genuine exchange rates</span>
+                  </div>
+                </a>
+
+                <div class="mega-menu-heading" style="margin-top: 8px;">Payments &amp; Cloud</div>
+                <a href="payments.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Online Payments</span>
+                    <span class="mega-desc">Stripe, PayPal &amp; Bank</span>
+                  </div>
+                </a>
+                <a href="payment-link.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Link Generator</span>
+                    <span class="mega-desc">Shareable invoice links</span>
+                  </div>
+                </a>
+                <a href="files.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-cloud">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">My Files (Cloud)</span>
+                    <span class="mega-desc">Private cloud file storage</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="mega-menu-footer">
+              <a href="tools.html" class="mega-footer-link">
+                <span>Browse All 17 Professional Tools</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <a href="pricing.html" class="nav-link-item"><span>Pricing</span></a>
       </nav>
-
-      <!-- Right Header Actions -->
       <div class="nav-actions-wrap">
         <div class="lang-switcher-container"></div>
-        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">
-          <span data-i18n="btn_signup">Sign Up Free</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </a>
-        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div class="mobile-nav-drawer" id="mobileNavDrawer">
-      <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="mobile-nav-item">Payments</a>
-        <a href="blog.html" class="mobile-nav-item">Blog &amp; Guides</a>
-        <a href="dashboard.html" class="mobile-nav-item">Dashboard</a>
-      </div>
-      <div class="mobile-nav-auth">
-        <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" style="width:100%; text-align:center;">Sign Up Free</a>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">Sign Up Free</a>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="page-container" style="max-width: 920px;">
+  <main class="fl-tool-wrap">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <div class="breadcrumb-item"><a href="tools.html">Tools</a></div>
+      <div class="breadcrumb-separator">/</div>
+      <div class="breadcrumb-item active" aria-current="page">Freelancer Invoice Generator</div>
+    </nav>
 
-    <!-- Hero Header -->
-    <div class="page-hero-wrap">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        BUILT FOR FREELANCERS, CONTRACTORS &amp; CONSULTANTS
-      </div>
-      <h1 class="hero-title" style="font-size: 2.75rem; margin-top: 14px;">
-        Invoice Generator for Freelancers
-      </h1>
-      <p class="hero-subtitle" style="margin: 16px auto 0;">
-        Send sleek, professional invoices that command respect. Track hourly rates, milestone deliverables, and accept direct card payments without recurring software subscriptions.
+    <!-- Header -->
+    <div style="margin: 16px 0 28px;">
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.03em; margin: 0 0 8px;">Freelancer Invoice Generator</h1>
+      <p style="font-size: 1rem; color: #64748b; margin: 0; max-width: 680px;">
+        Designed specifically for independent contractors, freelancers, and creative studios. Choose between Hourly, Fixed Price, Milestone, or Project-Based billing with automatic totals and vector PDF downloads.
       </p>
     </div>
 
-    <!-- Fast Action Hero Banner -->
-    <div class="cta-hero-box">
-      <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 12px; color: #ffffff;">Create Your Freelance Invoice (Free)</h2>
-      <p style="color: #a7f3d0; max-width: 580px; margin: 0 auto 24px; font-size: 0.95rem;">
-        Add your hourly tasks or fixed-price milestones and download a branded, watermark-free vector PDF in seconds.
-      </p>
-      <a href="index.html" class="btn-signup-free" style="background: #00c875; border-color: #00c875; color: #022c22; font-weight: 800; font-size: 1.05rem; padding: 12px 28px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-        Start Freelancer Invoice Now
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </a>
+    <!-- Workspace Form Card -->
+    <div class="fl-card">
+
+      <!-- Invoice Type Tabs -->
+      <div class="fl-section-title" style="color: #0f172a; margin-bottom: 8px;">Select Billing Model</div>
+      <div class="fl-mode-tabs" id="flModeTabs">
+        <button type="button" class="fl-mode-btn active" data-mode="hourly">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>Hourly Time-Tracking</span>
+        </button>
+        <button type="button" class="fl-mode-btn" data-mode="fixed">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          <span>Fixed Price Deliverables</span>
+        </button>
+        <button type="button" class="fl-mode-btn" data-mode="milestone">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+          <span>Milestone Billing</span>
+        </button>
+        <button type="button" class="fl-mode-btn" data-mode="project">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          <span>Project Based (Retainer &amp; Schedule)</span>
+        </button>
+      </div>
+
+      <!-- Parties Block -->
+      <div class="fl-grid-2col">
+        <!-- Freelancer Details -->
+        <div>
+          <div class="fl-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Freelancer / Studio Details</span>
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flName">Your Name / Studio *</label>
+            <input type="text" id="flName" class="fl-input" value="Alex Rivera (Creative Dev)" placeholder="Your full name or freelancing brand">
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flEmail">Email &amp; Phone</label>
+            <input type="text" id="flEmail" class="fl-input" value="alex@riverastudio.design • +1 (555) 321-7890">
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flAddress">Your Address</label>
+            <textarea id="flAddress" class="fl-textarea" rows="2" placeholder="Your street address or studio headquarters">742 Evergreen Terrace, Portland, OR 97201</textarea>
+          </div>
+        </div>
+
+        <!-- Client Details -->
+        <div>
+          <div class="fl-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            <span>Client / Company Details</span>
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flClient">Client Name / Company *</label>
+            <input type="text" id="flClient" class="fl-input" value="Acme Digital Media Inc." placeholder="Client company name">
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flContactPerson">Attention / Contact Person</label>
+            <input type="text" id="flContactPerson" class="fl-input" value="Sarah Jenkins (Head of Product)">
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flClientAddr">Client Billing Address</label>
+            <textarea id="flClientAddr" class="fl-textarea" rows="2" placeholder="Client billing address">500 Market Street, Suite 1200, San Francisco, CA 94105</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Metadata Row -->
+      <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #f1f5f9;">
+        <div class="fl-grid-4col">
+          <div class="fl-input-group">
+            <label class="fl-label" for="flInvNum">Invoice Number *</label>
+            <input type="text" id="flInvNum" class="fl-input" value="INV-2026-FL01">
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flDate">Issue Date</label>
+            <input type="date" id="flDate" class="fl-input">
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flDue">Due Date</label>
+            <input type="date" id="flDue" class="fl-input">
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flCurrency">Billing Currency</label>
+            <select id="flCurrency" class="fl-select">
+              <option value="$" selected>$ — USD (US Dollar)</option>
+              <option value="€">€ — EUR (Euro)</option>
+              <option value="£">£ — GBP (British Pound)</option>
+              <option value="A$">A$ — AUD (Australian Dollar)</option>
+              <option value="CA$">CA$ — CAD (Canadian Dollar)</option>
+              <option value="₹">₹ — INR (Indian Rupee)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-input-group" style="margin-top: 10px;">
+        <label class="fl-label" for="flProjectName">Project Title / Scope Description</label>
+        <input type="text" id="flProjectName" class="fl-input" value="SaaS Platform UI/UX Redesign &amp; Next.js Frontend Development" placeholder="e.g. Mobile App MVP Sprint 3">
+      </div>
+
+      <!-- Mode Specific Dynamic Tables -->
+      <div style="margin-top: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div class="fl-section-title" id="modeTableTitle" style="margin: 0;">Hourly Labor Items</div>
+          <button type="button" id="btnAddRow" class="btn-fl-secondary" style="padding: 6px 14px; font-size: 0.8125rem;">+ Add Line Item</button>
+        </div>
+
+        <div class="fl-table-wrapper">
+          <table class="fl-table" id="flItemsTable">
+            <thead id="flTableHead">
+              <!-- Rendered based on mode -->
+            </thead>
+            <tbody id="flTableBody">
+              <!-- Rendered based on mode -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Totals & Payment Details Grid -->
+      <div class="fl-grid-2col" style="margin-top: 24px; align-items: flex-start;">
+        <!-- Bank & Notes -->
+        <div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flBank">Payment Terms &amp; Bank Details</label>
+            <textarea id="flBank" class="fl-textarea" rows="4" placeholder="Bank: Chase Bank&#10;Routing / ABA: 021000021&#10;Account #: 987654321&#10;PayPal / Stripe: alex@riverastudio.design"></textarea>
+          </div>
+          <div class="fl-input-group">
+            <label class="fl-label" for="flNotes">Notes to Client</label>
+            <textarea id="flNotes" class="fl-textarea" rows="3" placeholder="Thank you for trusting my studio with your product. Net 15 days payment terms apply."></textarea>
+          </div>
+        </div>
+
+        <!-- Calculated Summary Card -->
+        <div class="fl-totals-card">
+          <div class="fl-total-row">
+            <span>Services Subtotal:</span>
+            <strong id="flOutSubtotal" style="font-family: 'JetBrains Mono', monospace;">$0.00</strong>
+          </div>
+          <div class="fl-total-row">
+            <span>Reimbursable Expenses:</span>
+            <input type="number" id="flExpensesInput" value="0" min="0" step="1" style="width: 90px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right;">
+          </div>
+          <div class="fl-total-row">
+            <span>Tax Rate (%):</span>
+            <input type="number" id="flTaxPctInput" value="0" min="0" max="100" step="0.5" style="width: 70px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right;">
+          </div>
+          <div class="fl-total-row" id="flTaxAmountRow" style="display: none; color: #059669;">
+            <span>Tax Amount:</span>
+            <strong id="flOutTaxAmount" style="font-family: 'JetBrains Mono', monospace;">+$0.00</strong>
+          </div>
+          <div class="fl-total-row fl-grand-total">
+            <span>Total Fee:</span>
+            <span id="flOutGrandTotal" style="font-family: 'JetBrains Mono', monospace; color: #059669;">$0.00</span>
+          </div>
+          <div class="fl-total-row" style="margin-top: 10px;">
+            <span>Deposit / Paid:</span>
+            <input type="number" id="flPaidInput" value="0" min="0" step="0.01" style="width: 100px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right; font-weight: 700;">
+          </div>
+          <div class="fl-total-row fl-balance-row">
+            <span>Balance Due:</span>
+            <span id="flOutBalanceDue" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem;">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="fl-actions-bar">
+        <button type="button" id="btnDownloadFlPdf" class="btn-fl-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Download PDF</span>
+        </button>
+
+        <button type="button" id="btnSaveFlCloud" class="btn-fl-cloud">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+          <span>Save to Cloud</span>
+        </button>
+
+        <button type="button" id="btnPrintFlInvoice" class="btn-fl-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span>Print</span>
+        </button>
+
+        <button type="button" id="btnResetFlForm" class="btn-fl-secondary" style="color: #dc2626;">
+          <span>Reset</span>
+        </button>
+      </div>
+
     </div>
 
-    <!-- SEO Content Article -->
-    <article class="seo-article">
-      <h2>Why Freelancers Need a Dedicated Invoicing Solution</h2>
-      <p>
-        As an independent professional, your invoice isn't just a billing request — it represents your brand, sets your working expectations, and directly impacts how quickly cash hits your bank account.
+    <!-- Guidance Section -->
+    <div class="fl-card" style="margin-top: 40px;">
+      <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0;">Freelancer Invoicing Best Practices</h2>
+      <p style="font-size: 0.875rem; color: #475569; line-height: 1.6;">
+        Choose the invoicing model that matches your contract agreement. Hourly billing provides detailed transparency into time expenditures. Milestone billing protects cash flow on large projects by billing upon sprint completions. Retainers and fixed fee agreements ensure steady predictable revenues without time-logging disputes.
       </p>
-      <p>
-        Traditional accounting tools like QuickBooks and FreshBooks charge $20 to $50 each month just to send a handful of invoices, while basic spreadsheet templates look unprofessional and are prone to calculation errors.
-      </p>
-      <p>
-        <strong>Invoice-Gen.net</strong> provides the best of both worlds: free, automated, pixel-perfect calculations paired with high-converting payment links.
-      </p>
-
-      <div class="seo-feature-grid">
-        <div class="seo-feature-card">
-          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-          <h4>Hourly &amp; Milestone Billing</h4>
-          <p>Seamlessly bill clients by the hour (quantity &times; hourly rate) or flat-rate milestones for project phases.</p>
-        </div>
-        <div class="seo-feature-card">
-          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-          <h4>Multi-Currency Support</h4>
-          <p>Charge US clients in USD, European clients in EUR, and UK clients in GBP with automated currency formatting.</p>
-        </div>
-        <div class="seo-feature-card">
-          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-          <h4>Integrated Payment Links</h4>
-          <p>Add clickable Stripe payment links or PayPal accounts so clients can pay your invoice immediately via credit card.</p>
-        </div>
-        <div class="seo-feature-card">
-          <div class="box-icon-frame" style="margin-bottom: 14px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-          <h4>Zero Cloud Data Leakage</h4>
-          <p>Your client rates, project scopes, and financial agreements stay on your device without server tracking.</p>
-        </div>
-      </div>
-
-      <div class="freelance-tips-box">
-        <h4>Pro-Tip for Faster Client Payments: Use Net 14 Terms</h4>
-        <p>
-          Data across thousands of invoices shows that invoices marked "Net 30" frequently sit in accounting queues until day 29. By using "Net 14" with an instant Stripe payment link, freelance professionals receive settlement an average of 11 days sooner.
-        </p>
-      </div>
-
-      <h2>What to Include on Every Freelance Invoice</h2>
-      <p>
-        To ensure smooth processing and prevent accounting disputes with enterprise or small business clients, always include these critical fields:
-      </p>
-
-      <div style="margin: 24px 0;">
-        <div class="seo-step-row">
-          <div class="seo-step-num">1</div>
-          <div>
-            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Clear Contact &amp; Legal Info</h4>
-            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Include your full legal or trading name, business email, portfolio or website URL, and your tax registration number (SSN, EIN, or VAT ID).</p>
-          </div>
-        </div>
-
-        <div class="seo-step-row">
-          <div class="seo-step-num">2</div>
-          <div>
-            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Itemized Deliverables &amp; Timesheets</h4>
-            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Instead of generic lines like "Design work", specify: "UI Design Sprint 2: Mobile Checkout Prototype (16 hrs @ $75/hr)". Transparent breakdowns prevent client pushback.</p>
-          </div>
-        </div>
-
-        <div class="seo-step-row">
-          <div class="seo-step-num">3</div>
-          <div>
-            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Structured Sequential Invoice ID</h4>
-            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Use structured numbers like <code>FL-2026-004</code>. This helps client finance departments track records and simplifies your annual tax reconciliation.</p>
-          </div>
-        </div>
-
-        <div class="seo-step-row">
-          <div class="seo-step-num">4</div>
-          <div>
-            <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Clear Settlement Instructions</h4>
-            <p style="font-size: 0.92rem; color: #475569; margin: 0;">Include both your electronic payment link (Stripe / PayPal) and direct bank account details (IBAN, Swift, or Routing/Account) in the payment notes section.</p>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin: 36px 0; text-align: center;">
-        <a href="index.html" class="btn-signup-free" style="padding: 12px 28px; font-weight: 800; font-size: 1rem; text-decoration: none;">Launch Freelance Invoice Generator &rarr;</a>
-      </div>
-
-      <h2>Frequently Asked Questions for Freelancers</h2>
-      <div style="margin-top: 20px;">
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">How do I handle revisions or late fees on invoices?</h4>
-          <p style="font-size: 0.92rem; color: #475569; margin: 0;">You can add a brief terms clause in the Notes section, e.g., "Payments past 14 days accrue a 1.5% monthly late assessment. Project scope includes two rounds of revision."</p>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Do I have to charge sales tax or VAT as a freelancer?</h4>
-          <p style="font-size: 0.92rem; color: #475569; margin: 0;">This depends on your country of tax residence and whether you exceed statutory VAT/GST thresholds. In InvoiceGen, you can set custom tax percentages from 0% to any standard rate with automatic line calculation.</p>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-          <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Can I save my client details so I don't have to re-enter them every month?</h4>
-          <p style="font-size: 0.92rem; color: #475569; margin: 0;">Yes! InvoiceGen's client storage stores your client roster in your browser, enabling 1-click invoice generation for recurring monthly retainer clients.</p>
-        </div>
-      </div>
-
-      <!-- Hub Interlinking -->
-      <div class="seo-hub-nav">
-        <h4>Explore Invoicing Tools &amp; Guides:</h4>
-        <div class="seo-hub-links">
-          <a href="free-invoice-generator.html">Free Invoice Generator</a>
-          <a href="pdf-invoice-generator.html">PDF Invoice Generator</a>
-          <a href="how-to-make-an-invoice.html">How to Make an Invoice</a>
-          <a href="best-invoice-generator.html">Best Invoice Generators 2026</a>
-          <a href="gst-invoice-generator.html">GST / Tax Invoice Generator</a>
-          <a href="invoice-number-generator.html">Invoice Number Generator</a>
-          <a href="templates.html">Free Invoice Templates</a>
-        </div>
-      </div>
-    </article>
-
+    </div>
   </main>
 
-  <!-- Global Footer -->
-    <!-- Universal Sleek Footer Bar -->
-  <footer class="site-footer-bar">
-    <div class="container">
-      <div class="footer-bar-left">
-        <a href="index.html" class="footer-brand-lockup">
-          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
-          <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
-        </a>
-        <span class="footer-bar-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net</span>
-      </div>
-      <div class="footer-bar-right">
-        <nav class="footer-nav-links" aria-label="Footer Navigation">
-          <a href="templates.html">Templates</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="payments.html">Payments</a>
-          <a href="blog.html">Blog</a>
-          <a href="contact.html">Help</a>
-          <a href="sitemap.html">Sitemap</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+  <footer class="footer-saas">
+    <div class="container footer-bottom-bar">
+      <div class="footer-copyright">&copy; 2026 Invoice-Gen.net. All rights reserved. Zero watermarks.</div>
+      <div class="footer-legal-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="tools.html">Tools Hub</a>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/i18n.js?v=4.0"></script>
-  <script src="js/google-auth.js?v=4.0"></script>
-  <script src="js/instant-nav.js?v=4.0"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
+  <script src="js/tools-engine.js"></script>
+  <script>
+    // Dates
+    const today = new Date().toISOString().split('T')[0];
+    const due = new Date(Date.now() + 15 * 86400000).toISOString().split('T')[0];
+    document.getElementById('flDate').value = today;
+    document.getElementById('flDue').value = due;
+
+    let currentMode = 'hourly';
+
+    // Data models per mode
+    const modeData = {
+      hourly: [
+        { desc: 'Core Dashboard UX Design & Figma Components', hours: 18, rate: 85.00 },
+        { desc: 'Next.js Frontend Architecture & Tailwind Slicing', hours: 24, rate: 95.00 }
+      ],
+      fixed: [
+        { desc: 'Complete Brand Identity Guidelines & Vector Assets', amount: 1200.00 },
+        { desc: 'Landing Page Responsive Webflow Development', amount: 1800.00 }
+      ],
+      milestone: [
+        { name: 'Milestone 1: Wireframing & Information Architecture', desc: 'Approved user flows, wireframes, and persona diagrams', amount: 1250.00, status: 'Completed' },
+        { name: 'Milestone 2: High-Fidelity Interactive Prototypes', desc: 'Clickable prototype with dark/light mode tokens', amount: 1750.00, status: 'Completed' },
+        { name: 'Milestone 3: Production Code Deployment', desc: 'Vercel staging release and Lighthouse speed optimization', amount: 1500.00, status: 'In Progress' }
+      ],
+      project: [
+        { name: 'Full Stack Web App Redesign (Phase 1)', fee: 5000.00, schedule: '50% Upfront Deposit, 50% on Final Delivery' }
+      ]
+    };
+
+    function renderModeTable() {
+      const thead = document.getElementById('flTableHead');
+      const tbody = document.getElementById('flTableBody');
+      const sym = document.getElementById('flCurrency').value;
+      const title = document.getElementById('modeTableTitle');
+
+      if (currentMode === 'hourly') {
+        title.textContent = 'Hourly Time-Tracking Items';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 50%;">Task / Work Description</th>
+            <th style="width: 15%;">Hours</th>
+            <th style="width: 15%;">Hourly Rate</th>
+            <th style="width: 15%;">Amount</th>
+            <th style="width: 5%;"></th>
+          </tr>
+        `;
+        tbody.innerHTML = '';
+        modeData.hourly.forEach((item, idx) => {
+          const amt = item.hours * item.rate;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}"></td>
+            <td><input type="number" class="fl-item-hours" data-idx="${idx}" value="${item.hours}" min="0.25" step="0.25"></td>
+            <td><input type="number" class="fl-item-rate" data-idx="${idx}" value="${item.rate.toFixed(2)}" min="0" step="1"></td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;">${sym}${amt.toFixed(2)}</td>
+            <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else if (currentMode === 'fixed') {
+        title.textContent = 'Fixed Price Deliverables';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 70%;">Deliverable Description</th>
+            <th style="width: 25%;">Fixed Amount</th>
+            <th style="width: 5%;"></th>
+          </tr>
+        `;
+        tbody.innerHTML = '';
+        modeData.fixed.forEach((item, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}"></td>
+            <td><input type="number" class="fl-item-amount" data-idx="${idx}" value="${item.amount.toFixed(2)}" min="0" step="10"></td>
+            <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else if (currentMode === 'milestone') {
+        title.textContent = 'Milestone Billing';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 30%;">Milestone Name</th>
+            <th style="width: 35%;">Deliverable Details</th>
+            <th style="width: 15%;">Status</th>
+            <th style="width: 15%;">Amount</th>
+            <th style="width: 5%;"></th>
+          </tr>
+        `;
+        tbody.innerHTML = '';
+        modeData.milestone.forEach((item, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="text" class="fl-item-name" data-idx="${idx}" value="${item.name}"></td>
+            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}"></td>
+            <td>
+              <select class="fl-item-status" data-idx="${idx}">
+                <option value="Completed" ${item.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                <option value="In Progress" ${item.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                <option value="Pending" ${item.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              </select>
+            </td>
+            <td><input type="number" class="fl-item-amount" data-idx="${idx}" value="${item.amount.toFixed(2)}" min="0" step="10"></td>
+            <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else if (currentMode === 'project') {
+        title.textContent = 'Project Based Retainer & Schedule';
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 35%;">Project Name</th>
+            <th style="width: 40%;">Payment Schedule</th>
+            <th style="width: 20%;">Project Fee</th>
+            <th style="width: 5%;"></th>
+          </tr>
+        `;
+        tbody.innerHTML = '';
+        modeData.project.forEach((item, idx) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="text" class="fl-item-name" data-idx="${idx}" value="${item.name}"></td>
+            <td><input type="text" class="fl-item-schedule" data-idx="${idx}" value="${item.schedule}"></td>
+            <td><input type="number" class="fl-item-fee" data-idx="${idx}" value="${item.fee.toFixed(2)}" min="0" step="50"></td>
+            <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      calculateTotals();
+    }
+
+    function calculateTotals() {
+      const sym = document.getElementById('flCurrency').value;
+      const expenses = parseFloat(document.getElementById('flExpensesInput').value) || 0;
+      const taxPct = parseFloat(document.getElementById('flTaxPctInput').value) || 0;
+      const amountPaid = parseFloat(document.getElementById('flPaidInput').value) || 0;
+
+      let subtotal = 0;
+      if (currentMode === 'hourly') {
+        modeData.hourly.forEach(i => subtotal += (i.hours * i.rate));
+      } else if (currentMode === 'fixed') {
+        modeData.fixed.forEach(i => subtotal += i.amount);
+      } else if (currentMode === 'milestone') {
+        modeData.milestone.forEach(i => subtotal += i.amount);
+      } else if (currentMode === 'project') {
+        modeData.project.forEach(i => subtotal += i.fee);
+      }
+
+      const taxableBase = subtotal + expenses;
+      const taxAmt = taxableBase * (taxPct / 100);
+      const grandTotal = taxableBase + taxAmt;
+      const balanceDue = Math.max(0, grandTotal - amountPaid);
+
+      document.getElementById('flOutSubtotal').textContent = `${sym}${subtotal.toFixed(2)}`;
+      
+      const taxRow = document.getElementById('flTaxAmountRow');
+      if (taxPct > 0) {
+        taxRow.style.display = 'flex';
+        document.getElementById('flOutTaxAmount').textContent = `+${sym}${taxAmt.toFixed(2)} (${taxPct}%)`;
+      } else {
+        taxRow.style.display = 'none';
+      }
+
+      document.getElementById('flOutGrandTotal').textContent = `${sym}${grandTotal.toFixed(2)}`;
+      document.getElementById('flOutBalanceDue').textContent = `${sym}${balanceDue.toFixed(2)}`;
+    }
+
+    // Switch billing mode tabs
+    document.querySelectorAll('.fl-mode-btn').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.fl-mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.dataset.mode;
+        renderModeTable();
+      };
+    });
+
+    // Add row
+    document.getElementById('btnAddRow').onclick = () => {
+      if (currentMode === 'hourly') {
+        modeData.hourly.push({ desc: 'Additional Consultation & Revision', hours: 4, rate: 85.00 });
+      } else if (currentMode === 'fixed') {
+        modeData.fixed.push({ desc: 'Additional Feature Package Deliverable', amount: 500.00 });
+      } else if (currentMode === 'milestone') {
+        modeData.milestone.push({ name: 'Milestone: Additional Deliverable', desc: 'Scope deliverable sign-off', amount: 750.00, status: 'Pending' });
+      } else if (currentMode === 'project') {
+        modeData.project.push({ name: 'Phase Retainer Expansion', fee: 1500.00, schedule: '100% on delivery' });
+      }
+      renderModeTable();
+    };
+
+    // Table inputs delegation
+    document.getElementById('flItemsTable').addEventListener('input', (e) => {
+      const idx = e.target.dataset.idx;
+      if (idx === undefined) return;
+      const item = modeData[currentMode][idx];
+      if (!item) return;
+
+      if (e.target.classList.contains('fl-item-desc')) item.desc = e.target.value;
+      if (e.target.classList.contains('fl-item-hours')) item.hours = parseFloat(e.target.value) || 0;
+      if (e.target.classList.contains('fl-item-rate')) item.rate = parseFloat(e.target.value) || 0;
+      if (e.target.classList.contains('fl-item-amount')) item.amount = parseFloat(e.target.value) || 0;
+      if (e.target.classList.contains('fl-item-name')) item.name = e.target.value;
+      if (e.target.classList.contains('fl-item-fee')) item.fee = parseFloat(e.target.value) || 0;
+      if (e.target.classList.contains('fl-item-schedule')) item.schedule = e.target.value;
+      if (e.target.classList.contains('fl-item-status')) item.status = e.target.value;
+
+      calculateTotals();
+    });
+
+    // Table delete
+    document.getElementById('flItemsTable').addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-del')) {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        if (modeData[currentMode].length > 1) {
+          modeData[currentMode].splice(idx, 1);
+          renderModeTable();
+        } else {
+          alert('At least one line item is required.');
+        }
+      }
+    });
+
+    ['flCurrency', 'flExpensesInput', 'flTaxPctInput', 'flPaidInput'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderModeTable);
+      document.getElementById(id).addEventListener('change', renderModeTable);
+    });
+
+    // Real Vector PDF Generation via pdf-lib
+    async function generateFreelancePdfBlob() {
+      if (typeof PDFLib === 'undefined') throw new Error('PDF library is not loaded');
+      const { PDFDocument, rgb, StandardFonts } = PDFLib;
+      const doc = await PDFDocument.create();
+      const page = doc.addPage([595.28, 841.89]); // A4
+      const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+      const fontRegular = await doc.embedFont(StandardFonts.Helvetica);
+
+      const sym = document.getElementById('flCurrency').value;
+      const flName = document.getElementById('flName').value || 'Freelancer Studio';
+      const flEmail = document.getElementById('flEmail').value || '';
+      const flAddr = document.getElementById('flAddress').value || '';
+      const clientName = document.getElementById('flClient').value || 'Client Company';
+      const contactPerson = document.getElementById('flContactPerson').value || '';
+      const clientAddr = document.getElementById('flClientAddr').value || '';
+      const invNum = document.getElementById('flInvNum').value || 'INV-2026-FL01';
+      const invDate = document.getElementById('flDate').value || today;
+      const dueDate = document.getElementById('flDue').value || due;
+      const projName = document.getElementById('flProjectName').value || 'Contract Deliverables';
+
+      // Header Banner
+      page.drawRectangle({ x: 0, y: 775, width: 595.28, height: 66.89, color: rgb(0.02, 0.59, 0.41) });
+      page.drawText('FREELANCE INVOICE', { x: 40, y: 800, size: 20, font: fontBold, color: rgb(1, 1, 1) });
+      page.drawText(`# ${invNum}`, { x: 430, y: 802, size: 14, font: fontBold, color: rgb(1, 1, 1) });
+
+      // Parties
+      page.drawText('FROM (CONTRACTOR):', { x: 40, y: 750, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
+      page.drawText(flName, { x: 40, y: 735, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
+      page.drawText(flEmail, { x: 40, y: 721, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
+      page.drawText(flAddr.substring(0, 45), { x: 40, y: 709, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
+
+      page.drawText('CLIENT (BILL TO):', { x: 320, y: 750, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
+      page.drawText(clientName, { x: 320, y: 735, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
+      if (contactPerson) page.drawText(`Attn: ${contactPerson}`, { x: 320, y: 721, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+      page.drawText(clientAddr.substring(0, 45), { x: 320, y: 709, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
+
+      // Meta row
+      page.drawRectangle({ x: 40, y: 668, width: 515, height: 26, color: rgb(0.96, 0.97, 0.98) });
+      page.drawText(`Project: ${projName.substring(0, 36)}`, { x: 50, y: 676, size: 8, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
+      page.drawText(`Issue: ${invDate}`, { x: 310, y: 676, size: 8, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+      page.drawText(`Due: ${dueDate}`, { x: 420, y: 676, size: 8, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+
+      // Items Table
+      let y = 630;
+      page.drawRectangle({ x: 40, y: y, width: 515, height: 20, color: rgb(0.93, 0.95, 0.96) });
+      page.drawText('Description / Deliverable', { x: 46, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('Rate / Scope', { x: 380, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('Amount', { x: 480, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+
+      y -= 20;
+      let subtotal = 0;
+
+      if (currentMode === 'hourly') {
+        modeData.hourly.forEach(i => {
+          const amt = i.hours * i.rate;
+          subtotal += amt;
+          page.drawText(i.desc.substring(0, 48), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText(`${i.hours}h @ ${sym}${i.rate.toFixed(2)}/h`, { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+          page.drawText(`${sym}${amt.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+          page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
+          y -= 20;
+        });
+      } else if (currentMode === 'fixed') {
+        modeData.fixed.forEach(i => {
+          subtotal += i.amount;
+          page.drawText(i.desc.substring(0, 52), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText('Fixed Price', { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+          page.drawText(`${sym}${i.amount.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+          page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
+          y -= 20;
+        });
+      } else if (currentMode === 'milestone') {
+        modeData.milestone.forEach(i => {
+          subtotal += i.amount;
+          page.drawText(`${i.name} (${i.status})`.substring(0, 50), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText(i.status, { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.02, 0.59, 0.41) });
+          page.drawText(`${sym}${i.amount.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+          page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
+          y -= 20;
+        });
+      } else if (currentMode === 'project') {
+        modeData.project.forEach(i => {
+          subtotal += i.fee;
+          page.drawText(i.name.substring(0, 48), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText(i.schedule.substring(0, 20), { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+          page.drawText(`${sym}${i.fee.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+          page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
+          y -= 20;
+        });
+      }
+
+      // Totals
+      const expenses = parseFloat(document.getElementById('flExpensesInput').value) || 0;
+      const taxPct = parseFloat(document.getElementById('flTaxPctInput').value) || 0;
+      const taxableBase = subtotal + expenses;
+      const taxAmt = taxableBase * (taxPct / 100);
+      const grandTotal = taxableBase + taxAmt;
+      const amountPaid = parseFloat(document.getElementById('flPaidInput').value) || 0;
+      const balanceDue = Math.max(0, grandTotal - amountPaid);
+
+      y -= 10;
+      page.drawText(`Labor / Deliverables Subtotal: ${sym}${subtotal.toFixed(2)}`, { x: 340, y: y, size: 9, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+      y -= 16;
+      if (expenses > 0) {
+        page.drawText(`Reimbursable Expenses: +${sym}${expenses.toFixed(2)}`, { x: 340, y: y, size: 9, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+        y -= 16;
+      }
+      if (taxPct > 0) {
+        page.drawText(`Tax (${taxPct}%): +${sym}${taxAmt.toFixed(2)}`, { x: 340, y: y, size: 9, font: fontRegular, color: rgb(0.02, 0.59, 0.41) });
+        y -= 16;
+      }
+      page.drawText(`TOTAL FEE: ${sym}${grandTotal.toFixed(2)}`, { x: 340, y: y, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
+      y -= 16;
+      page.drawText(`Balance Due: ${sym}${balanceDue.toFixed(2)}`, { x: 340, y: y, size: 11, font: fontBold, color: rgb(0.02, 0.59, 0.41) });
+
+      // Footer
+      page.drawText('Generated securely via Invoice-Gen.net — Freelancer Invoicing Suite', {
+        x: 40, y: 36, size: 8, font: fontRegular, color: rgb(0.6, 0.6, 0.6)
+      });
+
+      const pdfBytes = await doc.save();
+      return new Blob([pdfBytes], { type: 'application/pdf' });
+    }
+    window.generateFreelancePdfBlob = generateFreelancePdfBlob;
+
+    // Download PDF Button
+    document.getElementById('btnDownloadFlPdf').onclick = async () => {
+      try {
+        const btn = document.getElementById('btnDownloadFlPdf');
+        btn.disabled = true;
+        btn.textContent = 'Generating PDF...';
+        const blob = await generateFreelancePdfBlob();
+        const invNum = (document.getElementById('flInvNum').value || 'INV-001').trim();
+        const clientName = (document.getElementById('flClient').value || 'Client').trim().replace(/[^a-zA-Z0-9]/g, '-');
+        const filename = `Invoice-${invNum}-${clientName}.pdf`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        window.showToolToast('Freelancer Invoice PDF downloaded successfully!', 'success');
+      } catch (err) {
+        window.showToolToast('Could not generate PDF: ' + err.message, 'error');
+      } finally {
+        const btn = document.getElementById('btnDownloadFlPdf');
+        btn.disabled = false;
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Download PDF</span>
+        `;
+      }
+    };
+
+    // Save to Cloud Button
+    document.getElementById('btnSaveFlCloud').onclick = async () => {
+      try {
+        const btn = document.getElementById('btnSaveFlCloud');
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+        const blob = await generateFreelancePdfBlob();
+        const invNum = (document.getElementById('flInvNum').value || 'INV-001').trim();
+        const clientName = (document.getElementById('flClient').value || 'Client').trim().replace(/[^a-zA-Z0-9]/g, '-');
+        const filename = `Invoice-${invNum}-${clientName}.pdf`;
+
+        if (window.saveFileToCloud) {
+          await window.saveFileToCloud(blob, filename, 'invoice', 'Freelancer Invoice Generator');
+        } else {
+          throw new Error('Cloud storage engine is not available.');
+        }
+      } catch (err) {
+        window.showToolToast(err.message, 'error');
+      } finally {
+        const btn = document.getElementById('btnSaveFlCloud');
+        btn.disabled = false;
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+          <span>Save to Cloud</span>
+        `;
+      }
+    };
+
+    // Print
+    document.getElementById('btnPrintFlInvoice').onclick = () => window.print();
+
+    // Initial render
+    renderModeTable();
+  </script>
 </body>
 </html>

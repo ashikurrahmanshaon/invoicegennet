@@ -23,3 +23,5 @@ Thumbs.db
 
 # Temporary test & scratch assets
 scratch/
+.cdp_*
+.cdp_mobile_profile_*

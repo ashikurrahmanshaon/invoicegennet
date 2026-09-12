@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" fill="none">
+  <!-- Clean Crisp White Invoice Document on Transparent Background (Zero Green Background Container) -->
+  <g id="invoiceLogo">
+    <!-- Document Base Paper with Crisp Emerald Boundary Stroke for Light/Dark Tab Contrast -->
+    <path d="M7 5C7 3.89543 7.89543 3 9 3H21L29 11V31C29 32.1046 28.1046 33 27 33H9C7.89543 33 7 32.1046 7 31V5Z" fill="#FFFFFF" stroke="#059669" stroke-width="2"/>
+    <!-- Precision Folded Corner -->
+    <path d="M21 3V9C21 10.1046 21.8954 11 23 11H29L21 3Z" fill="#10B981"/>
+    <!-- Ledger Data Lines -->
+    <rect x="11" y="14" width="11" height="2.4" rx="1.2" fill="#0F172A"/>
+    <rect x="11" y="18.5" width="8.5" height="2" rx="1" fill="#64748B"/>
+    <rect x="11" y="23" width="6.5" height="2" rx="1" fill="#10B981"/>
+    <!-- Instant Generation Star Badge -->
+    <circle cx="27" cy="27" r="4.5" fill="#047857" stroke="#FFFFFF" stroke-width="1.2"/>
+    <path d="M27 24.5L27.7 26.2L29.5 27L27.7 27.8L27 29.5L26.3 27.8L24.5 27L26.3 26.2L27 24.5Z" fill="#FDE047"/>
+  </g>
+</svg>

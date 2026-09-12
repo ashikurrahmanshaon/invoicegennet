@@ -41,14 +41,14 @@
       zh: '免费发票'
     },
     nav_generator: {
-      en: 'Invoice Generator',
-      bn: 'ইনভয়েস জেনারেটর',
-      es: 'Generador de Facturas',
-      fr: 'Générateur de Factures',
-      de: 'Rechnungs-Generator',
-      ar: 'مولد الفواتير',
-      hi: 'इनवॉइस जेनरेटर',
-      zh: '发票生成器'
+      en: 'Create Invoice',
+      bn: 'ইনভয়েস তৈরি করুন',
+      es: 'Crear Factura',
+      fr: 'Créer Facture',
+      de: 'Rechnung Erstellen',
+      ar: 'إنشاء فاتورة',
+      hi: 'इनवॉइस बनाएं',
+      zh: '创建发票'
     },
     nav_templates: {
       en: 'Templates',
@@ -59,6 +59,26 @@
       ar: 'النماذج',
       hi: 'टेम्पलेट्स',
       zh: '模板库'
+    },
+    nav_my_invoices: {
+      en: 'My Invoices',
+      bn: 'আমার ইনভয়েস',
+      es: 'Mis Facturas',
+      fr: 'Mes Factures',
+      de: 'Meine Rechnungen',
+      ar: 'فواتيري',
+      hi: 'मेरे इनवॉइस',
+      zh: '我的发票'
+    },
+    nav_tools: {
+      en: 'Tools',
+      bn: 'টুলস',
+      es: 'Herramientas',
+      fr: 'Outils',
+      de: 'Werkzeuge',
+      ar: 'الأدوات',
+      hi: 'टूल्स',
+      zh: '实用工具'
     },
     nav_features: {
       en: 'Features',
@@ -933,11 +953,48 @@
     });
   }
 
+  const LOCALE_MAP = {
+    en: 'en-US',
+    bn: 'bn-BD',
+    es: 'es-ES',
+    fr: 'fr-FR',
+    de: 'de-DE',
+    ar: 'ar-SA',
+    hi: 'hi-IN',
+    zh: 'zh-CN'
+  };
+
+  function formatDate(date, options = { year: 'numeric', month: 'short', day: 'numeric' }) {
+    if (!date) return '';
+    try {
+      const d = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
+      if (isNaN(d.getTime())) return String(date);
+      const locale = LOCALE_MAP[currentLang] || 'en-US';
+      return new Intl.DateTimeFormat(locale, options).format(d);
+    } catch (e) {
+      return String(date);
+    }
+  }
+
+  function formatNumber(num, options = {}) {
+    try {
+      const n = typeof num === 'string' ? parseFloat(num) : num;
+      if (isNaN(n)) return '0';
+      const locale = LOCALE_MAP[currentLang] || 'en-US';
+      return new Intl.NumberFormat(locale, options).format(n);
+    } catch (e) {
+      return String(num);
+    }
+  }
+
   // Public API
   window.i18n = {
     languages: LANGUAGES,
     translations: TRANSLATIONS,
     getLanguage: () => currentLang,
+    getLocale: () => LOCALE_MAP[currentLang] || 'en-US',
+    formatDate,
+    formatNumber,
     setLanguage: applyLanguage,
     t: (key) => (TRANSLATIONS[key] && TRANSLATIONS[key][currentLang]) ? TRANSLATIONS[key][currentLang] : (TRANSLATIONS[key] ? TRANSLATIONS[key].en : key),
     renderSwitcher: renderLanguageSwitcher,

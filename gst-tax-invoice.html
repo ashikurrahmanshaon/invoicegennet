@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GST &amp; Tax Invoice Generator | Invoice-Gen.net</title>
+  <meta name="description" content="Create compliant GST, VAT, and Sales Tax invoices with multi-country tax regimes, HSN/SAC code tracking, itemized tax breakdowns, and instant A4 PDF export.">
+  <link rel="canonical" href="https://invoice-gen.net/tools/gst-tax-invoice">
+  <meta property="og:title" content="GST &amp; Tax Invoice Generator | Invoice-Gen.net">
+  <meta property="og:description" content="Create compliant GST, VAT, and Sales Tax invoices with multi-country tax regimes, HSN/SAC code tracking, itemized tax breakdowns, and instant A4 PDF export.">
+  <meta property="og:type" content="website">
+
+  <!-- Core SaaS Stylesheets -->
+  <link rel="stylesheet" href="/css/design-system.css?v=6.0">
+  <link rel="stylesheet" href="/css/invoice-editor.css?v=6.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor Libraries for PDF Generation -->
+  <script src="/js/vendor/pdf-lib.min.js"></script>
+
+  <style>
+    .gst-tool-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    .gst-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+      margin-bottom: 24px;
+    }
+    .gst-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .gst-grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .gst-grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .gst-section-title {
+      font-size: 0.8125rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #059669;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gst-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .gst-label {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #334155;
+    }
+    .gst-input, .gst-select, .gst-textarea {
+      width: 100%;
+      padding: 9px 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      color: #0f172a;
+      background: #ffffff;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      box-sizing: border-box;
+    }
+    .gst-input:focus, .gst-select:focus, .gst-textarea:focus {
+      outline: none;
+      border-color: #059669;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+    .gst-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      margin: 16px 0;
+    }
+    .gst-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+    .gst-items-table th {
+      background: #f8fafc;
+      padding: 10px 12px;
+      font-weight: 800;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    .gst-items-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .gst-items-table input {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      box-sizing: border-box;
+    }
+    .gst-items-table input:focus {
+      border-color: #059669;
+      outline: none;
+    }
+    .gst-totals-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 440px;
+      margin-left: auto;
+    }
+    .gst-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      font-size: 0.875rem;
+      color: #475569;
+    }
+    .gst-grand-total {
+      border-top: 2px solid #0f172a;
+      padding-top: 10px;
+      margin-top: 8px;
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .gst-balance-row {
+      background: #ecfdf5;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-weight: 800;
+      color: #065f46;
+    }
+    .gst-actions-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .btn-gst-primary {
+      background: #059669;
+      color: #ffffff;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-gst-primary:hover { background: #047857; transform: translateY(-1px); }
+    .btn-gst-secondary {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .btn-gst-secondary:hover { background: #f8fafc; border-color: #94a3b8; }
+    .btn-gst-cloud {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-gst-cloud:hover { background: #d1fae5; }
+    @media (max-width: 768px) {
+      .gst-grid-2col, .gst-grid-3col, .gst-grid-4col {
+        grid-template-columns: 1fr;
+      }
+      .gst-totals-card { max-width: 100%; }
+      .gst-card { padding: 20px 16px; }
+    }
+  </style>
+
+  <script src="js/google-auth.js?v=6.0"></script>
+</head>
+<body style="background: #f8fafc;">
+
+  <!-- SaaS Navigation -->
+  <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-wrapper">
+        <div class="brand-logo-frame"><img src="/assets/icons/logo.svg" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36"></div>
+        <div class="brand-text-block"><div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div></div>
+      </a>
+      <nav class="nav-center-links">
+        <a href="index.html" class="nav-link-item"><span>Create Invoice</span></a>
+        <a href="templates.html" class="nav-link-item"><span>Templates</span></a>
+        <a href="dashboard.html" class="nav-link-item"><span>My Invoices</span></a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn active" id="toolsDropdownBtn">
+            <span>Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+            <div class="mega-menu-grid">
+              <!-- INVOICE -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Invoice</div>
+                <a href="index.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Generator</span>
+                    <span class="mega-desc">Fast web invoice builder</span>
+                  </div>
+                </a>
+                <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Invoice Generator</span>
+                    <span class="mega-desc">A4 vector PDF export</span>
+                  </div>
+                </a>
+                <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Freelancer Invoice</span>
+                    <span class="mega-desc">Hourly &amp; milestone billing</span>
+                  </div>
+                </a>
+                <a href="gst-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">GST &amp; Tax Invoice</span>
+                    <span class="mega-desc">Tax breakdowns &amp; HSN</span>
+                  </div>
+                </a>
+                <a href="invoice-number-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Number Generator</span>
+                    <span class="mega-desc">Auto-sequential numbering</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- DOCUMENTS -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Documents</div>
+                <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF to JPG</span>
+                    <span class="mega-desc">Convert PDF pages to image</span>
+                  </div>
+                </a>
+                <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">JPG to PDF</span>
+                    <span class="mega-desc">Combine images to PDF</span>
+                  </div>
+                </a>
+                <a href="pdf-merger.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Merger</span>
+                    <span class="mega-desc">Merge multiple PDF files</span>
+                  </div>
+                </a>
+                <a href="pdf-splitter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Splitter</span>
+                    <span class="mega-desc">Extract pages &amp; ranges</span>
+                  </div>
+                </a>
+                <a href="image-compressor.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Image Compressor</span>
+                    <span class="mega-desc">Reduce JPG &amp; PNG size</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- CALCULATORS, PAYMENTS & CLOUD -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Calculators</div>
+                <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Tax Calculator</span>
+                    <span class="mega-desc">Inclusive &amp; exclusive tax</span>
+                  </div>
+                </a>
+                <a href="payment-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Calculator</span>
+                    <span class="mega-desc">Installments &amp; schedules</span>
+                  </div>
+                </a>
+                <a href="due-date-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Due Date Calculator</span>
+                    <span class="mega-desc">Payment terms &amp; calendar</span>
+                  </div>
+                </a>
+                <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Currency Converter</span>
+                    <span class="mega-desc">Live genuine exchange rates</span>
+                  </div>
+                </a>
+
+                <div class="mega-menu-heading" style="margin-top: 8px;">Payments &amp; Cloud</div>
+                <a href="payments.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Online Payments</span>
+                    <span class="mega-desc">Stripe, PayPal &amp; Bank</span>
+                  </div>
+                </a>
+                <a href="payment-link.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Link Generator</span>
+                    <span class="mega-desc">Shareable invoice links</span>
+                  </div>
+                </a>
+                <a href="files.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-cloud">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">My Files (Cloud)</span>
+                    <span class="mega-desc">Private cloud file storage</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="mega-menu-footer">
+              <a href="tools.html" class="mega-footer-link">
+                <span>Browse All 17 Professional Tools</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          </div></div>
+        <a href="pricing.html" class="nav-link-item"><span>Pricing</span></a>
+      </nav>
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="gst-tool-wrap">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <div class="breadcrumb-item"><a href="tools.html">Tools</a></div>
+      <div class="breadcrumb-separator">/</div>
+      <div class="breadcrumb-item active" aria-current="page">GST &amp; Tax Invoices</div>
+    </nav>
+
+    <!-- Header -->
+    <div style="margin: 16px 0 28px;">
+      <h1 style="font-size: 2.25rem; font-weight: 800; color: #0f172a; letter-spacing: -0.03em; margin: 0 0 8px;">GST &amp; Tax Invoice Generator</h1>
+      <p style="font-size: 1rem; color: #64748b; margin: 0; max-width: 680px;">
+        Issue compliant tax invoices with customizable tax regimes (GST, VAT, Sales Tax, Custom), automated CGST/SGST/IGST breakdown, HSN/SAC codes, and A4 PDF export.
+      </p>
+    </div>
+
+    <!-- Workspace Form Card -->
+    <div class="gst-card" id="gstInvoiceWorkspace">
+
+      <!-- Tax System Configuration -->
+      <div style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px;">
+        <div class="gst-section-title" style="color: #0f172a;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span>Tax Regime &amp; Regional Configuration</span>
+        </div>
+        <div class="gst-grid-3col">
+          <div class="gst-input-group">
+            <label class="gst-label" for="taxRegime">Country / Tax System</label>
+            <select id="taxRegime" class="gst-select">
+              <option value="in_intra" selected>India GST (Intra-State: 9% CGST + 9% SGST = 18%)</option>
+              <option value="in_inter">India IGST (Inter-State: 18% Integrated GST)</option>
+              <option value="uk_vat">United Kingdom VAT (20% Standard HMRC)</option>
+              <option value="uk_vat_reduced">United Kingdom VAT (5% Reduced)</option>
+              <option value="au_gst">Australia GST (10% ATO Compliant)</option>
+              <option value="ca_gst">Canada GST/HST (5% Federal)</option>
+              <option value="us_sales">US Sales Tax (Custom State/City Rate)</option>
+              <option value="custom">Custom Tax System</option>
+            </select>
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="currencySelect">Currency</label>
+            <select id="currencySelect" class="gst-select">
+              <option value="$" selected>$ — USD (US Dollar)</option>
+              <option value="₹">₹ — INR (Indian Rupee)</option>
+              <option value="£">£ — GBP (British Pound)</option>
+              <option value="€">€ — EUR (Euro)</option>
+              <option value="A$">A$ — AUD (Australian Dollar)</option>
+              <option value="CA$">CA$ — CAD (Canadian Dollar)</option>
+              <option value="S$">S$ — SGD (Singapore Dollar)</option>
+            </select>
+          </div>
+          <div class="gst-input-group" id="customTaxRateGroup" style="display: none;">
+            <label class="gst-label" for="customTaxRate">Custom Tax Rate (%)</label>
+            <input type="number" id="customTaxRate" class="gst-input" value="10" min="0" max="100" step="0.1">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="taxMode">Tax Calculation Mode</label>
+            <select id="taxMode" class="gst-select">
+              <option value="exclusive" selected>Tax Exclusive (Tax Added to Rate)</option>
+              <option value="inclusive">Tax Inclusive (Rate Includes Tax)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parties Block -->
+      <div class="gst-grid-2col">
+        <!-- Business Details -->
+        <div>
+          <div class="gst-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Seller / Business Details</span>
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="bizName">Business Name *</label>
+            <input type="text" id="bizName" class="gst-input" value="Apex Digital Solutions Pvt Ltd" placeholder="Legal registered company name">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="bizTaxNum">Business Tax / GST / VAT Number *</label>
+            <input type="text" id="bizTaxNum" class="gst-input" value="27AAACA9988C1Z8" placeholder="e.g. 27AAACA9988C1Z8 or GB123456789">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="bizAddress">Business Address</label>
+            <textarea id="bizAddress" class="gst-textarea" rows="3" placeholder="Street, City, State, ZIP, Country">Suite 400, Tech Park Road, Mumbai, MH 400001</textarea>
+          </div>
+        </div>
+
+        <!-- Client Details -->
+        <div>
+          <div class="gst-section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            <span>Client / Buyer Details</span>
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="clientName">Client Name / Company *</label>
+            <input type="text" id="clientName" class="gst-input" value="Horizon Global Enterprises" placeholder="Client legal name">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="clientTaxNum">Client Tax / GST Number</label>
+            <input type="text" id="clientTaxNum" class="gst-input" value="27BBBPB1234F2Z4" placeholder="Client's GSTIN, VAT, or Tax ID (Optional)">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="clientAddress">Client Address</label>
+            <textarea id="clientAddress" class="gst-textarea" rows="3" placeholder="Billing address">7th Floor, Commerce Tower, Bandra, Mumbai 400051</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Metadata -->
+      <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #f1f5f9;">
+        <div class="gst-grid-4col">
+          <div class="gst-input-group">
+            <label class="gst-label" for="invNumber">Invoice Number *</label>
+            <input type="text" id="invNumber" class="gst-input" value="INV-2026-001">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="invDate">Invoice Date</label>
+            <input type="date" id="invDate" class="gst-input">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="dueDate">Due Date</label>
+            <input type="date" id="dueDate" class="gst-input">
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="placeOfSupply">Place of Supply / State</label>
+            <input type="text" id="placeOfSupply" class="gst-input" value="Maharashtra (27)" placeholder="e.g. Maharashtra (27)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Itemized Table -->
+      <div style="margin-top: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="gst-section-title" style="margin: 0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            <span>Taxable Line Items</span>
+          </div>
+          <button type="button" id="btnAddItemRow" class="btn-gst-secondary" style="padding: 6px 14px; font-size: 0.8125rem;">+ Add Item</button>
+        </div>
+
+        <div class="gst-table-wrapper">
+          <table class="gst-items-table" id="gstItemsTable">
+            <thead>
+              <tr>
+                <th style="width: 32%;">Item Description</th>
+                <th style="width: 14%;">HSN / SAC</th>
+                <th style="width: 8%;">Qty</th>
+                <th style="width: 12%;">Rate</th>
+                <th style="width: 12%;">Taxable Amt</th>
+                <th style="width: 8%;">Tax %</th>
+                <th style="width: 10%;">Tax Amt</th>
+                <th style="width: 12%;">Total</th>
+                <th style="width: 4%;"></th>
+              </tr>
+            </thead>
+            <tbody id="gstItemsBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Totals & Calculations Grid -->
+      <div class="gst-grid-2col" style="margin-top: 24px; align-items: flex-start;">
+        <!-- Payment Instructions & Notes -->
+        <div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="bankInstructions">Payment Instructions &amp; Bank Details</label>
+            <textarea id="bankInstructions" class="gst-textarea" rows="4" placeholder="Bank: HDFC Bank&#10;A/C: 50200012345678&#10;IFSC: HDFC0000123&#10;UPI: apexsolutions@hdfcbank"></textarea>
+          </div>
+          <div class="gst-input-group">
+            <label class="gst-label" for="invoiceNotes">Invoice Notes &amp; Terms</label>
+            <textarea id="invoiceNotes" class="gst-textarea" rows="3" placeholder="Thank you for your business. Payment due within 15 days of invoice date."></textarea>
+          </div>
+        </div>
+
+        <!-- Calculated Summary Card -->
+        <div class="gst-totals-card">
+          <div class="gst-total-row">
+            <span>Subtotal (Taxable Base):</span>
+            <strong id="outSubtotal" style="font-family: 'JetBrains Mono', monospace;">$0.00</strong>
+          </div>
+          <div class="gst-total-row">
+            <span>Discount (%):</span>
+            <input type="number" id="discountPct" value="0" min="0" max="100" style="width: 70px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right;">
+          </div>
+          <div class="gst-total-row" id="rowDiscountAmount" style="display: none; color: #dc2626;">
+            <span>Discount Amount:</span>
+            <strong id="outDiscountAmt" style="font-family: 'JetBrains Mono', monospace;">-$0.00</strong>
+          </div>
+
+          <!-- Dynamic Tax Lines (CGST/SGST or VAT) -->
+          <div id="dynamicTaxLinesContainer" style="border-top: 1px dashed #cbd5e1; margin-top: 6px; padding-top: 6px;"></div>
+
+          <div class="gst-total-row gst-grand-total">
+            <span>Invoice Grand Total:</span>
+            <span id="outGrandTotal" style="font-family: 'JetBrains Mono', monospace; color: #059669;">$0.00</span>
+          </div>
+
+          <div class="gst-total-row" style="margin-top: 10px;">
+            <span>Amount Paid:</span>
+            <input type="number" id="amountPaidInput" value="0" min="0" step="0.01" style="width: 100px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right; font-weight: 700;">
+          </div>
+
+          <div class="gst-total-row gst-balance-row">
+            <span>Balance Due:</span>
+            <span id="outBalanceDue" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem;">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="gst-actions-bar">
+        <button type="button" id="btnDownloadGstPdf" class="btn-gst-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Download PDF</span>
+        </button>
+
+        <button type="button" id="btnSaveGstCloud" class="btn-gst-cloud">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+          <span>Save to Cloud</span>
+        </button>
+
+        <button type="button" id="btnPrintGstInvoice" class="btn-gst-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span>Print</span>
+        </button>
+
+        <button type="button" id="btnResetGstForm" class="btn-gst-secondary" style="color: #dc2626;">
+          <span>Reset Form</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Educational & Legal Guidance Section -->
+    <div class="gst-card" style="margin-top: 40px;">
+      <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-top: 0;">GST &amp; Tax Invoicing Rules &amp; Compliance</h2>
+      <p style="font-size: 0.875rem; color: #475569; line-height: 1.6;">
+        A registered tax invoice must satisfy specific statutory requirements to allow your client to claim input tax credits (ITC, VAT recovery, or GST refunds). Key mandatory fields include your registered Business Tax/GSTIN number, client address, place of supply, sequential serial numbering, and clear itemization of HSN/SAC codes alongside applicable tax rates.
+      </p>
+      <div class="gst-grid-3col" style="margin-top: 20px;">
+        <div style="background: #f8fafc; padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0;">
+          <strong style="color: #0f172a; font-size: 0.875rem; display: block; margin-bottom: 6px;">Intra-State GST (India)</strong>
+          <p style="font-size: 0.8125rem; color: #64748b; margin: 0;">Split equally into Central GST (CGST) and State GST (SGST) when supplier and buyer are located within the same state.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0;">
+          <strong style="color: #0f172a; font-size: 0.875rem; display: block; margin-bottom: 6px;">Inter-State IGST</strong>
+          <p style="font-size: 0.8125rem; color: #64748b; margin: 0;">Assessed as a single integrated tax when supplying goods or services across state or national boundaries.</p>
+        </div>
+        <div style="background: #f8fafc; padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0;">
+          <strong style="color: #0f172a; font-size: 0.875rem; display: block; margin-bottom: 6px;">UK / European VAT</strong>
+          <p style="font-size: 0.8125rem; color: #64748b; margin: 0;">Requires explicit display of gross taxable amount, VAT rate (20% standard), and unique VAT registration number.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-saas">
+    <div class="container footer-bottom-bar">
+      <div class="footer-copyright">&copy; 2026 Invoice-Gen.net. All rights reserved. Zero watermarks.</div>
+      <div class="footer-legal-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="tools.html">Tools Hub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/instant-nav.js?v=6.0"></script>
+  <script src="js/tools-engine.js"></script>
+  <script>
+    // Initialize default dates
+    const today = new Date().toISOString().split('T')[0];
+    const due = new Date(Date.now() + 15 * 86400000).toISOString().split('T')[0];
+    document.getElementById('invDate').value = today;
+    document.getElementById('dueDate').value = due;
+
+    // Default line items
+    let gstItems = [
+      { desc: 'Cloud Infrastructure & API Architecture Consulting', hsn: '998313', qty: 1, rate: 1200.00, taxRate: 18 },
+      { desc: 'Enterprise Security Audit & SSL Deployment', hsn: '998314', qty: 1, rate: 650.00, taxRate: 18 }
+    ];
+
+    function renderGstTable() {
+      const tbody = document.getElementById('gstItemsBody');
+      tbody.innerHTML = '';
+      const sym = document.getElementById('currencySelect').value;
+      const isInclusive = document.getElementById('taxMode').value === 'inclusive';
+
+      gstItems.forEach((item, index) => {
+        let taxableAmt = item.qty * item.rate;
+        let taxAmt = 0;
+        let total = 0;
+
+        if (isInclusive) {
+          taxableAmt = (item.qty * item.rate) / (1 + (item.taxRate / 100));
+          taxAmt = (item.qty * item.rate) - taxableAmt;
+          total = item.qty * item.rate;
+        } else {
+          taxAmt = taxableAmt * (item.taxRate / 100);
+          total = taxableAmt + taxAmt;
+        }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><input type="text" class="item-desc" data-index="${index}" value="${item.desc}"></td>
+          <td><input type="text" class="item-hsn" data-index="${index}" value="${item.hsn}"></td>
+          <td><input type="number" class="item-qty" data-index="${index}" value="${item.qty}" min="1" step="1"></td>
+          <td><input type="number" class="item-rate" data-index="${index}" value="${item.rate.toFixed(2)}" min="0" step="0.01"></td>
+          <td style="font-family:'JetBrains Mono',monospace;font-weight:600;">${sym}${taxableAmt.toFixed(2)}</td>
+          <td><input type="number" class="item-tax" data-index="${index}" value="${item.taxRate}" min="0" max="100" step="0.5"></td>
+          <td style="font-family:'JetBrains Mono',monospace;color:#059669;">${sym}${taxAmt.toFixed(2)}</td>
+          <td style="font-family:'JetBrains Mono',monospace;font-weight:700;">${sym}${total.toFixed(2)}</td>
+          <td style="text-align:center;">
+            <button type="button" class="btn-del-item" data-index="${index}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;font-weight:bold;">&times;</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      calculateTotals();
+    }
+
+    function calculateTotals() {
+      const sym = document.getElementById('currencySelect').value;
+      const regime = document.getElementById('taxRegime').value;
+      const discountPct = parseFloat(document.getElementById('discountPct').value) || 0;
+      const amountPaid = parseFloat(document.getElementById('amountPaidInput').value) || 0;
+      const isInclusive = document.getElementById('taxMode').value === 'inclusive';
+
+      let totalTaxable = 0;
+      let totalTax = 0;
+
+      gstItems.forEach(item => {
+        let taxable = item.qty * item.rate;
+        if (isInclusive) {
+          taxable = (item.qty * item.rate) / (1 + (item.taxRate / 100));
+          totalTax += (item.qty * item.rate) - taxable;
+        } else {
+          totalTax += taxable * (item.taxRate / 100);
+        }
+        totalTaxable += taxable;
+      });
+
+      const discountAmt = totalTaxable * (discountPct / 100);
+      const netTaxable = Math.max(0, totalTaxable - discountAmt);
+      const grandTotal = isInclusive ? (totalTaxable + totalTax - discountAmt) : (netTaxable + totalTax);
+      const balanceDue = Math.max(0, grandTotal - amountPaid);
+
+      document.getElementById('outSubtotal').textContent = `${sym}${totalTaxable.toFixed(2)}`;
+      
+      const discountRow = document.getElementById('rowDiscountAmount');
+      if (discountPct > 0) {
+        discountRow.style.display = 'flex';
+        document.getElementById('outDiscountAmt').textContent = `-${sym}${discountAmt.toFixed(2)} (${discountPct}%)`;
+      } else {
+        discountRow.style.display = 'none';
+      }
+
+      const taxContainer = document.getElementById('dynamicTaxLinesContainer');
+      if (regime === 'in_intra') {
+        const halfTax = totalTax / 2;
+        taxContainer.innerHTML = `
+          <div class="gst-total-row" style="color: #059669;">
+            <span>CGST (Central Tax 50%):</span>
+            <strong style="font-family:'JetBrains Mono',monospace;">+${sym}${halfTax.toFixed(2)}</strong>
+          </div>
+          <div class="gst-total-row" style="color: #059669;">
+            <span>SGST (State Tax 50%):</span>
+            <strong style="font-family:'JetBrains Mono',monospace;">+${sym}${halfTax.toFixed(2)}</strong>
+          </div>
+        `;
+      } else if (regime === 'in_inter') {
+        taxContainer.innerHTML = `
+          <div class="gst-total-row" style="color: #059669;">
+            <span>IGST (Integrated Tax):</span>
+            <strong style="font-family:'JetBrains Mono',monospace;">+${sym}${totalTax.toFixed(2)}</strong>
+          </div>
+        `;
+      } else {
+        taxContainer.innerHTML = `
+          <div class="gst-total-row" style="color: #059669;">
+            <span>Tax Amount:</span>
+            <strong style="font-family:'JetBrains Mono',monospace;">+${sym}${totalTax.toFixed(2)}</strong>
+          </div>
+        `;
+      }
+
+      document.getElementById('outGrandTotal').textContent = `${sym}${grandTotal.toFixed(2)}`;
+      document.getElementById('outBalanceDue').textContent = `${sym}${balanceDue.toFixed(2)}`;
+    }
+
+    // Event Delegations
+    document.getElementById('gstItemsTable').addEventListener('input', (e) => {
+      const idx = e.target.dataset.index;
+      if (idx === undefined) return;
+      if (e.target.classList.contains('item-desc')) gstItems[idx].desc = e.target.value;
+      if (e.target.classList.contains('item-hsn')) gstItems[idx].hsn = e.target.value;
+      if (e.target.classList.contains('item-qty')) gstItems[idx].qty = parseFloat(e.target.value) || 0;
+      if (e.target.classList.contains('item-rate')) gstItems[idx].rate = parseFloat(e.target.value) || 0;
+      if (e.target.classList.contains('item-tax')) gstItems[idx].taxRate = parseFloat(e.target.value) || 0;
+      renderGstTable();
+    });
+
+    document.getElementById('gstItemsTable').addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-del-item')) {
+        const idx = parseInt(e.target.dataset.index, 10);
+        if (gstItems.length > 1) {
+          gstItems.splice(idx, 1);
+          renderGstTable();
+        } else {
+          alert('At least one line item is required.');
+        }
+      }
+    });
+
+    document.getElementById('btnAddItemRow').onclick = () => {
+      let defaultTax = 18;
+      const regime = document.getElementById('taxRegime').value;
+      if (regime === 'uk_vat') defaultTax = 20;
+      else if (regime === 'au_gst') defaultTax = 10;
+      else if (regime === 'uk_vat_reduced' || regime === 'ca_gst') defaultTax = 5;
+      else if (regime === 'custom') defaultTax = parseFloat(document.getElementById('customTaxRate').value) || 10;
+
+      gstItems.push({ desc: 'New Service Deliverable', hsn: '998311', qty: 1, rate: 250.00, taxRate: defaultTax });
+      renderGstTable();
+    };
+
+    document.getElementById('taxRegime').onchange = (e) => {
+      const val = e.target.value;
+      const customGroup = document.getElementById('customTaxRateGroup');
+      if (val === 'custom') {
+        customGroup.style.display = 'flex';
+      } else {
+        customGroup.style.display = 'none';
+        let rate = 18;
+        if (val === 'uk_vat') rate = 20;
+        else if (val === 'au_gst') rate = 10;
+        else if (val === 'uk_vat_reduced' || val === 'ca_gst') rate = 5;
+        gstItems.forEach(item => item.taxRate = rate);
+        renderGstTable();
+      }
+    };
+
+    ['currencySelect', 'taxMode', 'discountPct', 'amountPaidInput'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderGstTable);
+      document.getElementById(id).addEventListener('change', renderGstTable);
+    });
+
+    // Generate Real Vector PDF using pdf-lib
+    async function generateGstPdfBlob() {
+      if (typeof PDFLib === 'undefined') {
+        throw new Error('PDF library is not loaded');
+      }
+      const { PDFDocument, rgb, StandardFonts } = PDFLib;
+      const doc = await PDFDocument.create();
+      const page = doc.addPage([595.28, 841.89]); // A4
+      const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+      const fontRegular = await doc.embedFont(StandardFonts.Helvetica);
+
+      const sym = document.getElementById('currencySelect').value;
+      const bizName = document.getElementById('bizName').value || 'Apex Business';
+      const bizTax = document.getElementById('bizTaxNum').value || '';
+      const bizAddr = document.getElementById('bizAddress').value || '';
+      const clientName = document.getElementById('clientName').value || 'Client Name';
+      const clientTax = document.getElementById('clientTaxNum').value || '';
+      const clientAddr = document.getElementById('clientAddress').value || '';
+      const invNum = document.getElementById('invNumber').value || 'INV-001';
+      const invDate = document.getElementById('invDate').value || today;
+      const dueDate = document.getElementById('dueDate').value || due;
+
+      // Header Banner
+      page.drawRectangle({
+        x: 0, y: 780, width: 595.28, height: 61.89,
+        color: rgb(0.02, 0.59, 0.41)
+      });
+      page.drawText('TAX INVOICE', { x: 40, y: 800, size: 22, font: fontBold, color: rgb(1, 1, 1) });
+      page.drawText(`# ${invNum}`, { x: 420, y: 802, size: 14, font: fontBold, color: rgb(1, 1, 1) });
+
+      // Seller & Buyer Details
+      page.drawText('ISSUED BY:', { x: 40, y: 755, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
+      page.drawText(bizName, { x: 40, y: 740, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
+      page.drawText(`Tax/GSTIN: ${bizTax}`, { x: 40, y: 726, size: 9, font: fontBold, color: rgb(0.02, 0.59, 0.41) });
+      page.drawText(bizAddr.substring(0, 45), { x: 40, y: 712, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
+
+      page.drawText('BILL TO:', { x: 320, y: 755, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
+      page.drawText(clientName, { x: 320, y: 740, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
+      if (clientTax) page.drawText(`Tax ID: ${clientTax}`, { x: 320, y: 726, size: 9, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+      page.drawText(clientAddr.substring(0, 45), { x: 320, y: 712, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
+
+      // Meta row
+      page.drawRectangle({ x: 40, y: 670, width: 515, height: 24, color: rgb(0.96, 0.97, 0.98) });
+      page.drawText(`Invoice Date: ${invDate}`, { x: 50, y: 677, size: 9, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+      page.drawText(`Due Date: ${dueDate}`, { x: 220, y: 677, size: 9, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+      page.drawText(`Currency: ${sym}`, { x: 440, y: 677, size: 9, font: fontBold, color: rgb(0.2, 0.2, 0.2) });
+
+      // Items Table Header
+      let y = 635;
+      page.drawRectangle({ x: 40, y: y, width: 515, height: 20, color: rgb(0.93, 0.95, 0.96) });
+      page.drawText('Description', { x: 46, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('HSN/SAC', { x: 230, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('Qty', { x: 300, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('Rate', { x: 340, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('Taxable', { x: 400, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('Tax %', { x: 460, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      page.drawText('Total', { x: 510, y: y + 5, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+
+      y -= 20;
+      let totalTaxable = 0;
+      let totalTax = 0;
+
+      gstItems.forEach(item => {
+        const taxable = item.qty * item.rate;
+        const tax = taxable * (item.taxRate / 100);
+        const lineTotal = taxable + tax;
+        totalTaxable += taxable;
+        totalTax += tax;
+
+        page.drawText(item.desc.substring(0, 32), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(item.hsn, { x: 230, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+        page.drawText(String(item.qty), { x: 300, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(`${sym}${item.rate.toFixed(2)}`, { x: 340, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(`${sym}${taxable.toFixed(2)}`, { x: 400, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(`${item.taxRate}%`, { x: 460, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+        page.drawText(`${sym}${lineTotal.toFixed(2)}`, { x: 510, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+
+        // separator line
+        page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
+        y -= 20;
+      });
+
+      // Totals Box
+      const discountPct = parseFloat(document.getElementById('discountPct').value) || 0;
+      const discountAmt = totalTaxable * (discountPct / 100);
+      const grandTotal = totalTaxable - discountAmt + totalTax;
+      const amountPaid = parseFloat(document.getElementById('amountPaidInput').value) || 0;
+      const balanceDue = Math.max(0, grandTotal - amountPaid);
+
+      y -= 10;
+      page.drawText(`Taxable Subtotal: ${sym}${totalTaxable.toFixed(2)}`, { x: 380, y: y, size: 9, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+      y -= 16;
+      if (discountPct > 0) {
+        page.drawText(`Discount (${discountPct}%): -${sym}${discountAmt.toFixed(2)}`, { x: 380, y: y, size: 9, font: fontRegular, color: rgb(0.8, 0.1, 0.1) });
+        y -= 16;
+      }
+      page.drawText(`Total Tax Breakdown: +${sym}${totalTax.toFixed(2)}`, { x: 380, y: y, size: 9, font: fontRegular, color: rgb(0.02, 0.59, 0.41) });
+      y -= 18;
+      page.drawText(`GRAND TOTAL: ${sym}${grandTotal.toFixed(2)}`, { x: 380, y: y, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
+      y -= 16;
+      page.drawText(`Balance Due: ${sym}${balanceDue.toFixed(2)}`, { x: 380, y: y, size: 11, font: fontBold, color: rgb(0.02, 0.59, 0.41) });
+
+      // Footer notice
+      page.drawText('Generated securely via Invoice-Gen.net — Professional Tax Invoice Suite', {
+        x: 40, y: 36, size: 8, font: fontRegular, color: rgb(0.6, 0.6, 0.6)
+      });
+
+      const pdfBytes = await doc.save();
+      return new Blob([pdfBytes], { type: 'application/pdf' });
+    }
+    window.generateGstPdfBlob = generateGstPdfBlob;
+
+    // PDF Download Button
+    document.getElementById('btnDownloadGstPdf').onclick = async () => {
+      try {
+        const btn = document.getElementById('btnDownloadGstPdf');
+        btn.disabled = true;
+        btn.textContent = 'Generating PDF...';
+        const blob = await generateGstPdfBlob();
+        const invNum = (document.getElementById('invNumber').value || 'INV-001').trim();
+        const clientName = (document.getElementById('clientName').value || 'Client').trim().replace(/[^a-zA-Z0-9]/g, '-');
+        const filename = `Invoice-${invNum}-${clientName}.pdf`;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        window.showToolToast('GST Tax Invoice PDF downloaded successfully!', 'success');
+      } catch (err) {
+        console.error(err);
+        window.showToolToast('Could not generate PDF: ' + err.message, 'error');
+      } finally {
+        const btn = document.getElementById('btnDownloadGstPdf');
+        btn.disabled = false;
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Download PDF</span>
+        `;
+      }
+    };
+
+    // Save to Cloud Button
+    document.getElementById('btnSaveGstCloud').onclick = async () => {
+      try {
+        const btn = document.getElementById('btnSaveGstCloud');
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+        const blob = await generateGstPdfBlob();
+        const invNum = (document.getElementById('invNumber').value || 'INV-001').trim();
+        const clientName = (document.getElementById('clientName').value || 'Client').trim().replace(/[^a-zA-Z0-9]/g, '-');
+        const filename = `Invoice-${invNum}-${clientName}.pdf`;
+
+        if (window.saveFileToCloud) {
+          await window.saveFileToCloud(blob, filename, 'invoice', 'GST & Tax Invoice');
+        } else {
+          throw new Error('Cloud storage engine is not available.');
+        }
+      } catch (err) {
+        window.showToolToast(err.message, 'error');
+      } finally {
+        const btn = document.getElementById('btnSaveGstCloud');
+        btn.disabled = false;
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+          <span>Save to Cloud</span>
+        `;
+      }
+    };
+
+    // Print Button
+    document.getElementById('btnPrintGstInvoice').onclick = () => {
+      window.print();
+    };
+
+    // Initial render
+    renderGstTable();
+  </script>
+</body>
+</html>

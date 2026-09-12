@@ -9,13 +9,11 @@
   <meta name="theme-color" content="#00c875">
 
   <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
-
-  <!-- Stylesheets -->
-    <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=5.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=5.0">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon.svg?v=5.0">
+  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
@@ -24,14 +22,15 @@
     .blog-article-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 32px;
-      margin-bottom: 28px;
-      transition: border-color 0.2s ease, transform 0.2s ease;
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 14px -2px rgba(15, 23, 42, 0.04);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .blog-article-card:hover {
       border-color: #cbd5e1;
-      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
     }
     .blog-tag {
       display: inline-block;
@@ -39,24 +38,25 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 6px;
-      background: #f1f5f9;
-      color: #334155;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #047857;
       margin-bottom: 12px;
     }
     .blog-article-title {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: #0f172a;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-      line-height: 1.35;
+      letter-spacing: -0.025em;
+      margin-bottom: 10px;
+      line-height: 1.3;
     }
     .blog-meta {
       font-size: 0.8125rem;
       color: #94a3b8;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -74,25 +74,42 @@
       padding-left: 20px;
       margin-bottom: 16px;
     }
+    .blog-read-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #059669;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: all 0.15s ease;
+    }
+    .blog-read-link:hover {
+      color: #047857;
+      gap: 10px;
+    }
     .trending-hub-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
     }
     .trending-hub-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 22px;
       text-decoration: none;
       display: flex;
-      gap: 14px;
+      gap: 16px;
       align-items: flex-start;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
     }
     .trending-hub-card:hover {
-      border-color: #cbd5e1;
-      box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.06);
+      border-color: #10b981;
+      box-shadow: 0 6px 18px -2px rgba(15, 23, 42, 0.06);
+      transform: translateY(-1px);
     }
     .trending-card-icon {
       font-size: 1.6rem;
@@ -119,18 +136,19 @@
     .trending-card-link {
       font-size: 0.8rem;
       font-weight: 700;
-      color: #00c875;
+      color: #059669;
       display: inline-flex;
       align-items: center;
     }
   </style>
+  <script src="js/google-auth.js?v=6.0"></script>
 </head>
 <body>
 
   <!-- Authentic SaaS Top Navigation -->
     <!-- Universal SaaS Top Navigation Bar -->
-  <header class="navbar-saas">
-    <div class="container">
+            <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
       <!-- Brand Lockup -->
       <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
         <div class="brand-logo-frame">
@@ -143,11 +161,204 @@
 
       <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="nav-link-item">Payments</a>
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="nav-link-item" title="View your saved invoices and history">
+          <span data-i18n="nav_my_invoices">My Invoices</span>
+          <span class="nav-count-badge" id="headerSavedInvoicesBadge" style="display: none;"></span>
+        </a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav_tools">Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+            <div class="mega-menu-grid">
+              <!-- INVOICE -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Invoice</div>
+                <a href="index.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Generator</span>
+                    <span class="mega-desc">Fast web invoice builder</span>
+                  </div>
+                </a>
+                <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Invoice Generator</span>
+                    <span class="mega-desc">A4 vector PDF export</span>
+                  </div>
+                </a>
+                <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Freelancer Invoice</span>
+                    <span class="mega-desc">Hourly &amp; milestone billing</span>
+                  </div>
+                </a>
+                <a href="gst-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">GST &amp; Tax Invoice</span>
+                    <span class="mega-desc">Tax breakdowns &amp; HSN</span>
+                  </div>
+                </a>
+                <a href="invoice-number-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Number Generator</span>
+                    <span class="mega-desc">Auto-sequential numbering</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- DOCUMENTS -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Documents</div>
+                <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF to JPG</span>
+                    <span class="mega-desc">Convert PDF pages to image</span>
+                  </div>
+                </a>
+                <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">JPG to PDF</span>
+                    <span class="mega-desc">Combine images to PDF</span>
+                  </div>
+                </a>
+                <a href="pdf-merger.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Merger</span>
+                    <span class="mega-desc">Merge multiple PDF files</span>
+                  </div>
+                </a>
+                <a href="pdf-splitter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Splitter</span>
+                    <span class="mega-desc">Extract pages &amp; ranges</span>
+                  </div>
+                </a>
+                <a href="image-compressor.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Image Compressor</span>
+                    <span class="mega-desc">Reduce JPG &amp; PNG size</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- CALCULATORS, PAYMENTS & CLOUD -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Calculators</div>
+                <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Tax Calculator</span>
+                    <span class="mega-desc">Inclusive &amp; exclusive tax</span>
+                  </div>
+                </a>
+                <a href="payment-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Calculator</span>
+                    <span class="mega-desc">Installments &amp; schedules</span>
+                  </div>
+                </a>
+                <a href="due-date-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Due Date Calculator</span>
+                    <span class="mega-desc">Payment terms &amp; calendar</span>
+                  </div>
+                </a>
+                <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Currency Converter</span>
+                    <span class="mega-desc">Live genuine exchange rates</span>
+                  </div>
+                </a>
+
+                <div class="mega-menu-heading" style="margin-top: 8px;">Payments &amp; Cloud</div>
+                <a href="payments.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Online Payments</span>
+                    <span class="mega-desc">Stripe, PayPal &amp; Bank</span>
+                  </div>
+                </a>
+                <a href="payment-link.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Link Generator</span>
+                    <span class="mega-desc">Shareable invoice links</span>
+                  </div>
+                </a>
+                <a href="files.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-cloud">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">My Files (Cloud)</span>
+                    <span class="mega-desc">Private cloud file storage</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="mega-menu-footer">
+              <a href="tools.html" class="mega-footer-link">
+                <span>Browse All 17 Professional Tools</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          </div></div>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
+          <span>Pricing</span>
+        </a>
       </nav>
 
       <!-- Right Header Actions -->
@@ -167,13 +378,27 @@
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="mobile-nav-item">Payments</a>
-        <a href="blog.html" class="mobile-nav-item active">Blog &amp; Guides</a>
-        <a href="dashboard.html" class="mobile-nav-item">Dashboard</a>
+        <a href="index.html" class="mobile-nav-item">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="mobile-nav-item">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="mobile-nav-item">
+          <span>My Invoices</span>
+          <span class="mobile-nav-count-badge" style="display: none;"></span>
+        </a>
+        <div class="mobile-nav-group-title">Tools &amp; Solutions</div>
+        <div class="mobile-nav-sublinks">
+          <a href="pdf-invoice-generator.html" class="mobile-nav-subitem">PDF Generator</a>
+          <a href="gst-invoice-generator.html" class="mobile-nav-subitem">GST Invoices</a>
+          <a href="invoice-generator-for-freelancers.html" class="mobile-nav-subitem">Freelancers</a>
+          <a href="invoice-number-generator.html" class="mobile-nav-subitem">Invoice Numbers</a>
+          <a href="payments.html" class="mobile-nav-subitem">Payments</a>
+        </div>
+        <a href="pricing.html" class="mobile-nav-item">
+          <span>Pricing</span>
+        </a>
       </div>
       <div class="mobile-nav-auth">
         <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
@@ -200,10 +425,10 @@
     </div>
 
     <!-- Trending Invoicing Hub & Search Query Guides -->
-    <div style="max-width: 880px; margin: 0 auto 40px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px;">
+    <div style="max-width: 1040px; margin: 0 auto 48px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; border-bottom: 2px solid #e2e8f0; padding-bottom: 14px;">
         <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0;">Featured Invoicing Tools &amp; Search Guides</h2>
-        <span style="font-size: 0.8rem; font-weight: 700; color: #00c875; background: #ecfdf5; padding: 4px 10px; border-radius: 6px;">TRENDING 2026</span>
+        <span style="font-size: 0.8rem; font-weight: 700; color: #059669; background: #ecfdf5; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbf7d0;">TRENDING 2026</span>
       </div>
 
       <div class="trending-hub-grid">
@@ -294,7 +519,7 @@
     </div>
 
     <!-- Articles Feed -->
-    <div style="max-width: 880px; margin: 0 auto;">
+    <div style="max-width: 1040px; margin: 0 auto;">
 
       <!-- Article 1: Best Practices -->
       <article class="blog-article-card" id="practices">
@@ -316,6 +541,7 @@
             <li><strong>Unambiguous Payment Terms:</strong> Clearly specify whether payment is due upon receipt, Net 15, or Net 30. Mention accepted payment methods upfront (e.g. "Direct Bank Transfer, Stripe Card, or PayPal").</li>
             <li><strong>Unique Sequential Numbering:</strong> Use structured identifiers such as <code>INV-2026-001</code> to maintain clean bookkeeping and tax compliance.</li>
           </ul>
+          <a href="invoicing-guide.html" class="blog-read-link">Read Full Guide &rarr;</a>
         </div>
       </article>
 
@@ -337,6 +563,7 @@
             <li><strong>Bill Immediately Upon Milestone Completion:</strong> Invoices dispatched within 24 hours of project milestones are 80% more likely to be settled within 7 days.</li>
             <li><strong>Shorten Payment Terms to Net 14:</strong> The standard 30-day window often leads to procrastination. Setting 14 calendar days creates healthy urgency.</li>
           </ul>
+          <a href="getting-paid-faster.html" class="blog-read-link">Read Full Guide &rarr;</a>
         </div>
       </article>
 
@@ -358,6 +585,7 @@
             <li><strong>PayPal (Best for Global Household Name Trust):</strong> Widely recognized across 200+ markets, ideal when working with clients who prefer funding payments via their PayPal balance.</li>
             <li><strong>The Hybrid Strategy:</strong> Leading freelancers offer both! Let corporate clients pay via credit card on Stripe, and international clients pay via PayPal.</li>
           </ul>
+          <a href="stripe-vs-paypal.html" class="blog-read-link">Read Full Comparison &rarr;</a>
         </div>
       </article>
 
@@ -379,6 +607,7 @@
             <li><strong>Currency Conversion Records:</strong> If billing in foreign currencies (USD, EUR, GBP, BDT), document the exchange rate applied on the invoice date.</li>
             <li><strong>Offline Backups:</strong> Store your exported A4 PDFs in secure cloud folders organized by tax year for painless annual filings.</li>
           </ul>
+          <a href="gst-invoice-generator.html" class="blog-read-link">Explore Tax Generator &rarr;</a>
         </div>
       </article>
 
@@ -388,34 +617,85 @@
 
   <!-- Global Footer -->
     <!-- Universal Sleek Footer Bar -->
-  <footer class="site-footer-bar">
-    <div class="container">
-      <div class="footer-bar-left">
+      <footer class="site-footer" id="mainFooter">
+    <div class="container footer-container">
+      <div class="footer-brand-col">
         <a href="index.html" class="footer-brand-lockup">
           <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
           <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
         </a>
-        <span class="footer-bar-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net</span>
+        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
       </div>
-      <div class="footer-bar-right">
-        <nav class="footer-nav-links" aria-label="Footer Navigation">
-          <a href="templates.html">Templates</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="payments.html">Payments</a>
-          <a href="blog.html" style="color: #00c875; font-weight: 700;">Blog</a>
-          <a href="contact.html">Help</a>
-          <a href="sitemap.html">Sitemap</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+
+  <!-- Universal Sleek Footer Bar -->
+  <footer class="site-footer" id="mainFooter">
+    <div class="container footer-container">
+      <div class="footer-brand-col">
+        <a href="index.html" class="footer-brand-lockup">
+          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
+          <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
+        </a>
+        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
+      </div>
+
+      <div class="footer-nav-grid">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Create Invoice</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="dashboard.html">My Invoices</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="payments.html">Payments</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Tools</div>
+          <ul class="footer-links-list">
+            <li><a href="pdf-invoice-generator.html">PDF Generator</a></li>
+            <li><a href="gst-invoice-generator.html">GST Invoices</a></li>
+            <li><a href="invoice-generator-for-freelancers.html">Freelancer Invoices</a></li>
+            <li><a href="invoice-number-generator.html">Invoice Numbers</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="invoicing-guide.html">Invoicing Guide</a></li>
+            <li><a href="how-to-make-an-invoice.html">How to Make an Invoice</a></li>
+            <li><a href="getting-paid-faster.html">Getting Paid Faster</a></li>
+            <li><a href="stripe-vs-paypal.html">Stripe vs PayPal</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="refunds.html">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom-bar">
+      <div class="footer-copyright">&copy; 2026 Invoice-Gen.net. All rights reserved. Zero watermarks, client-side encryption.</div>
+      <div class="footer-legal-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="sitemap.html">Sitemap</a>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <script src="js/i18n.js?v=4.0"></script>
-  <script src="js/google-auth.js?v=4.0"></script>
-  <script src="js/instant-nav.js?v=4.0"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
+  <script src="js/tools-engine.js"></script>
 </body>
 </html>

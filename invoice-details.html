@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Details | Invoice-Gen.net</title>
+  <meta name="description" content="View, download, print and manage your issued invoices.">
+  <link rel="canonical" href="https://invoice-gen.net/invoice-details.html">
+  <meta name="theme-color" content="#059669">
+
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=5.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=5.0">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon.svg?v=5.0">
+  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
+  <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/design-system.css?v=4.0">
+  <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
+
+  <!-- PDF Engine for instant export -->
+  <script src="js/html2pdf.bundle.min.js"></script>
+  <script src="js/pdf-generator.js?v=4.0"></script>
+  <script src="js/google-auth.js?v=6.0"></script>
+</head>
+<body style="background-color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
+
+  <!-- Global SaaS Header -->
+    <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
+      <!-- Brand Lockup -->
+      <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div>
+        </div>
+      </a>
+
+      <!-- Center SaaS Navigation Links -->
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="nav-link-item" title="View your saved invoices and history">
+          <span data-i18n="nav_my_invoices">My Invoices</span>
+          <span class="nav-count-badge" id="headerSavedInvoicesBadge" style="display: none;"></span>
+        </a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav_tools">Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+            <div class="mega-menu-grid">
+              <!-- INVOICE -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Invoice</div>
+                <a href="index.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Generator</span>
+                    <span class="mega-desc">Fast web invoice builder</span>
+                  </div>
+                </a>
+                <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Invoice Generator</span>
+                    <span class="mega-desc">A4 vector PDF export</span>
+                  </div>
+                </a>
+                <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Freelancer Invoice</span>
+                    <span class="mega-desc">Hourly &amp; milestone billing</span>
+                  </div>
+                </a>
+                <a href="gst-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">GST &amp; Tax Invoice</span>
+                    <span class="mega-desc">Tax breakdowns &amp; HSN</span>
+                  </div>
+                </a>
+                <a href="invoice-number-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Number Generator</span>
+                    <span class="mega-desc">Auto-sequential numbering</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- DOCUMENTS -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Documents</div>
+                <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF to JPG</span>
+                    <span class="mega-desc">Convert PDF pages to image</span>
+                  </div>
+                </a>
+                <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">JPG to PDF</span>
+                    <span class="mega-desc">Combine images to PDF</span>
+                  </div>
+                </a>
+                <a href="pdf-merger.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Merger</span>
+                    <span class="mega-desc">Merge multiple PDF files</span>
+                  </div>
+                </a>
+                <a href="pdf-splitter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Splitter</span>
+                    <span class="mega-desc">Extract pages &amp; ranges</span>
+                  </div>
+                </a>
+                <a href="image-compressor.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Image Compressor</span>
+                    <span class="mega-desc">Reduce JPG &amp; PNG size</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- CALCULATORS, PAYMENTS & CLOUD -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Calculators</div>
+                <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Tax Calculator</span>
+                    <span class="mega-desc">Inclusive &amp; exclusive tax</span>
+                  </div>
+                </a>
+                <a href="payment-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Calculator</span>
+                    <span class="mega-desc">Installments &amp; schedules</span>
+                  </div>
+                </a>
+                <a href="due-date-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Due Date Calculator</span>
+                    <span class="mega-desc">Payment terms &amp; calendar</span>
+                  </div>
+                </a>
+                <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Currency Converter</span>
+                    <span class="mega-desc">Live genuine exchange rates</span>
+                  </div>
+                </a>
+
+                <div class="mega-menu-heading" style="margin-top: 8px;">Payments &amp; Cloud</div>
+                <a href="payments.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Online Payments</span>
+                    <span class="mega-desc">Stripe, PayPal &amp; Bank</span>
+                  </div>
+                </a>
+                <a href="payment-link.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Link Generator</span>
+                    <span class="mega-desc">Shareable invoice links</span>
+                  </div>
+                </a>
+                <a href="files.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-cloud">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">My Files (Cloud)</span>
+                    <span class="mega-desc">Private cloud file storage</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="mega-menu-footer">
+              <a href="tools.html" class="mega-footer-link">
+                <span>Browse All 17 Professional Tools</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          </div></div>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
+          <span>Pricing</span>
+        </a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">
+          <span data-i18n="btn_signup">Sign Up Free</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+      <div class="mobile-nav-links">
+        <a href="index.html" class="mobile-nav-item">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="mobile-nav-item">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="mobile-nav-item">
+          <span>My Invoices</span>
+          <span class="mobile-nav-count-badge" style="display: none;"></span>
+        </a>
+        <div class="mobile-nav-group-title">Tools &amp; Solutions</div>
+        <div class="mobile-nav-sublinks">
+          <a href="pdf-invoice-generator.html" class="mobile-nav-subitem">PDF Generator</a>
+          <a href="gst-invoice-generator.html" class="mobile-nav-subitem">GST Invoices</a>
+          <a href="invoice-generator-for-freelancers.html" class="mobile-nav-subitem">Freelancers</a>
+          <a href="invoice-number-generator.html" class="mobile-nav-subitem">Invoice Numbers</a>
+          <a href="payments.html" class="mobile-nav-subitem">Payments</a>
+        </div>
+        <a href="pricing.html" class="mobile-nav-item">
+          <span>Pricing</span>
+        </a>
+      </div>
+      <div class="mobile-nav-auth">
+        <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" style="width:100%; text-align:center;">Sign Up Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Invoice Details Workspace -->
+  <main style="flex: 1; padding: 36px 0 60px;">
+    <div class="container" style="max-width: 1060px;">
+
+      <!-- Breadcrumbs & Status Toolbar -->
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+        <div>
+          <a href="dashboard.html" style="font-size: 0.84rem; color: #64748b; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Invoices
+          </a>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <h1 style="font-size: 1.625rem; font-weight: 800; color: #0f172a; margin: 0;" id="detailsTitle">
+              Invoice <span id="detailsNumber">INV-001</span>
+            </h1>
+            <div id="statusBadgeContainer">
+              <span class="status-badge status-draft" id="detailsStatusBadge">Draft</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons Bar -->
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <!-- Status Selector -->
+          <div style="display: flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 10px; height: 38px;">
+            <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Status:</span>
+            <select id="statusSelector" style="border: none; background: transparent; font-size: 0.8125rem; font-weight: 700; color: #0f172a; cursor: pointer; outline: none;">
+              <option value="draft">Draft</option>
+              <option value="sent">Sent</option>
+              <option value="pending">Pending</option>
+              <option value="paid">Paid</option>
+              <option value="overdue">Overdue</option>
+            </select>
+          </div>
+
+          <button type="button" id="btnDownloadPdfDetails" class="btn-primary" style="height: 38px; padding: 0 16px; font-size: 0.875rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download PDF
+          </button>
+
+          <a href="#" id="btnEditInvoice" class="btn-secondary" style="height: 38px; padding: 0 14px; font-size: 0.875rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Edit
+          </a>
+
+          <button type="button" id="btnPrintInvoice" class="btn-secondary" style="height: 38px; padding: 0 12px; font-size: 0.875rem;" title="Print Invoice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print
+          </button>
+
+          <button type="button" id="btnDuplicateInvoice" class="btn-secondary" style="height: 38px; padding: 0 12px; font-size: 0.875rem;" title="Duplicate Invoice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Duplicate
+          </button>
+
+          <button type="button" id="btnEmailInvoice" class="btn-secondary" style="height: 38px; padding: 0 12px; font-size: 0.875rem;" title="Send via Email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            Email
+          </button>
+
+          <button type="button" id="btnDeleteInvoiceDetails" class="btn-danger" style="height: 38px; padding: 0 12px;" title="Delete this invoice">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Invoice Document Canvas (Paper) -->
+      <div id="printableInvoiceCanvas" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06); padding: 48px 44px;">
+        
+        <!-- Header Info Grid -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; padding-bottom: 28px; border-bottom: 1px solid #f1f5f9;">
+          <div>
+            <div style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;" id="dispSenderName">Your Business</div>
+            <div style="font-size: 0.875rem; color: #64748b; line-height: 1.5; white-space: pre-line;" id="dispSenderAddress">—</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.875rem; font-weight: 900; color: #0f172a; letter-spacing: -0.03em;">INVOICE</div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #059669; margin-top: 2px;" id="dispInvoiceNumber">INV-001</div>
+            <div style="margin-top: 10px; font-size: 0.8125rem; color: #64748b; line-height: 1.6;">
+              <div><strong>Issue Date:</strong> <span id="dispIssueDate">—</span></div>
+              <div id="dispDueDateRow"><strong>Due Date:</strong> <span id="dispDueDate">—</span></div>
+              <div id="dispPoRow" style="display: none;"><strong>PO #:</strong> <span id="dispPoNumber">—</span></div>
+              <div><strong>Terms:</strong> <span id="dispTerms">Due on Receipt</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bill To / Ship To Grid -->
+        <div style="display: flex; gap: 40px; flex-wrap: wrap; padding: 28px 0; border-bottom: 1px solid #f1f5f9;">
+          <div style="flex: 1; min-width: 240px;">
+            <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; margin-bottom: 8px;">Billed To</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;" id="dispClientName">Client Name</div>
+            <div style="font-size: 0.875rem; color: #64748b; line-height: 1.5; white-space: pre-line;" id="dispClientAddress">—</div>
+          </div>
+          <div style="flex: 1; min-width: 240px;" id="dispShipToCol">
+            <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; margin-bottom: 8px;">Shipped To</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: #0f172a; margin-bottom: 4px;" id="dispShipToName">—</div>
+            <div style="font-size: 0.875rem; color: #64748b; line-height: 1.5; white-space: pre-line;" id="dispShipToAddress">—</div>
+          </div>
+        </div>
+
+        <!-- Line Items Table -->
+        <div style="padding: 28px 0;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 2px solid #e2e8f0; text-align: left;">
+                <th style="padding: 10px 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #475569;">Description</th>
+                <th style="padding: 10px 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; width: 80px; text-align: right;">Qty</th>
+                <th style="padding: 10px 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; width: 110px; text-align: right;">Rate</th>
+                <th style="padding: 10px 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; width: 120px; text-align: right;">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="dispItemsBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Totals & Notes Row -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; padding-top: 16px;">
+          <div style="flex: 1; min-width: 260px;">
+            <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; margin-bottom: 6px;">Notes &amp; Payment Instructions</div>
+            <div style="font-size: 0.84rem; color: #64748b; line-height: 1.55; white-space: pre-line;" id="dispNotes">—</div>
+          </div>
+          <div style="width: 280px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.875rem; color: #475569;">
+              <span>Subtotal:</span>
+              <span style="font-weight: 600;" id="dispSubtotal">$0.00</span>
+            </div>
+            <div id="dispTaxRow" style="display: flex; justify-content: space-between; font-size: 0.875rem; color: #475569;">
+              <span>Tax (<span id="dispTaxRate">0</span>%):</span>
+              <span style="font-weight: 600;" id="dispTaxAmount">$0.00</span>
+            </div>
+            <div id="dispDiscountRow" style="display: none; justify-content: space-between; font-size: 0.875rem; color: #475569;">
+              <span>Discount:</span>
+              <span style="font-weight: 600; color: #dc2626;" id="dispDiscountAmount">-$0.00</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 800; color: #0f172a; padding-top: 8px; border-top: 1px solid #e2e8f0;">
+              <span>Total:</span>
+              <span id="dispTotal">$0.00</span>
+            </div>
+            <div id="dispPaidRow" style="display: none; justify-content: space-between; font-size: 0.875rem; color: #475569;">
+              <span>Amount Paid:</span>
+              <span style="font-weight: 600;" id="dispAmountPaid">$0.00</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #059669; padding-top: 6px; background: #ecfdf5; padding: 8px 12px; border-radius: 6px;">
+              <span>Balance Due:</span>
+              <span id="dispBalanceDue">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="auth-modal-card" style="max-width: 420px; padding: 28px 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <h3 style="font-size: 1.125rem; font-weight: 700; color: #0f172a; margin: 0;">Delete invoice?</h3>
+        <button type="button" id="btnCancelDeleteX" style="background: none; border: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: #94a3b8;">&times;</button>
+      </div>
+      <p style="font-size: 0.875rem; color: #64748b; line-height: 1.5; margin: 0 0 20px;">
+        This invoice will be permanently removed from your account and database. This action cannot be undone.
+      </p>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-secondary" id="btnCancelDeleteModal" style="height: 38px; padding: 0 16px;">Cancel</button>
+        <button type="button" class="btn-danger" id="btnConfirmDeleteAction" style="height: 38px; padding: 0 16px;">Delete Invoice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Send Email Modal -->
+  <div class="modal-overlay" id="emailModal">
+    <div class="auth-modal-card" style="max-width: 460px; padding: 28px 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+        <h3 style="font-size: 1.125rem; font-weight: 700; color: #0f172a; margin: 0;">Send Invoice via Email</h3>
+        <button type="button" id="btnCancelEmailX" style="background: none; border: none; font-size: 1.5rem; line-height: 1; cursor: pointer; color: #94a3b8;">&times;</button>
+      </div>
+      <form id="emailForm">
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Recipient Email</label>
+          <input type="email" id="emailRecipient" class="form-input" placeholder="client@example.com" required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Subject</label>
+          <input type="text" id="emailSubjectInput" class="form-input" style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Message</label>
+          <textarea id="emailBodyText" class="form-textarea" rows="4" style="width: 100%;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-secondary" id="btnCancelEmailModal" style="height: 38px; padding: 0 16px;">Cancel</button>
+          <button type="submit" class="btn-primary" id="btnSubmitEmail" style="height: 38px; padding: 0 18px;">Send Invoice</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notice -->
+  <div class="toast-notice" id="toastNotice"></div>
+
+  <!-- Universal Footer -->
+  <footer class="site-footer" id="mainFooter">
+    <div class="container footer-container">
+      <div class="footer-brand-col">
+        <a href="index.html" class="footer-brand-lockup">
+          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
+          <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
+        </a>
+        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
+      </div>
+      <div class="footer-nav-grid">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Create Invoice</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="dashboard.html">My Invoices</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="payments.html">Payments</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html">Help</a></li>
+            <li><a href="features.html">Tools</a></li>
+            <li><a href="sitemap.html">Sitemap</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="refunds.html">Refund Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-links-list">
+            <li><a href="contact.html">Support</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom-bar">
+      <p class="footer-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net. All rights reserved.</p>
+      <div class="footer-bottom-badges">
+        <span class="footer-badge-pill">Zero Data Tracking</span>
+        <span class="footer-badge-pill">100% Client-Side</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (async function () {
+      let currentInvoice = null;
+
+      function showToast(message, type = 'success') {
+        let toast = document.getElementById('toastNotice');
+        if (!toast) return;
+        let icon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        if (type === 'warning') {
+          icon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+        }
+        toast.innerHTML = `<span class="toast-icon-badge">${icon}</span><span class="toast-text">${message}</span>`;
+        toast.className = `toast-notice toast-${type} show`;
+        setTimeout(() => toast.classList.remove('show'), 3500);
+      }
+      window.showToast = showToast;
+
+      function apiFetch(url, options = {}) {
+        if (window.Auth && typeof window.Auth.authFetch === 'function') {
+          return window.Auth.authFetch(url, options);
+        }
+        return fetch(url, options);
+      }
+
+      // 1. Unified Global Auth Gate
+      const initDetailsPage = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const invoiceId = urlParams.get('id');
+
+        if (!invoiceId) {
+          window.location.replace('dashboard.html');
+          return;
+        }
+
+        try {
+          const res = await apiFetch(`/api/invoices/${invoiceId}`);
+          const data = await res.json();
+
+          if (!res.ok || !data.success || !data.invoice) {
+            document.querySelector('main').innerHTML = `
+              <div class="container" style="max-width: 600px; text-align: center; padding: 60px 20px;">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Invoice Not Found</h2>
+                <p style="color: #64748b; margin-bottom: 24px;">The requested invoice does not exist or you do not have permission to view it.</p>
+                <a href="dashboard.html" class="btn-primary" style="display: inline-flex; height: 40px; padding: 0 20px; text-decoration: none; align-items: center;">Return to Dashboard</a>
+              </div>
+            `;
+            return;
+          }
+
+          currentInvoice = data.invoice;
+          renderInvoice(currentInvoice);
+        } catch (e) {
+          console.error('Error loading invoice:', e);
+        }
+      };
+
+      if (window.Auth && typeof window.Auth.onReady === 'function') {
+        window.Auth.onReady((state, user) => {
+          if (state === 'AUTHENTICATED' && user) {
+            initDetailsPage();
+          } else {
+            window.location.replace('login.html?redirect=' + encodeURIComponent(window.location.pathname + window.location.search));
+          }
+        });
+
+        // Bfcache & Back button protection after logout
+        window.addEventListener('pageshow', (e) => {
+          if (e.persisted || !localStorage.getItem('invoicegen_session_id')) {
+            if (!window.Auth || !window.Auth.user || window.Auth.state === 'UNAUTHENTICATED' || !localStorage.getItem('invoicegen_session_id')) {
+              window.location.replace('login.html?redirect=' + encodeURIComponent(window.location.pathname + window.location.search));
+            }
+          }
+        });
+      } else {
+        initDetailsPage();
+      }
+
+      function renderInvoice(inv) {
+        document.title = `${inv.number} - ${inv.client?.name || 'Client'} | Invoice-Gen.net`;
+        document.getElementById('detailsNumber').textContent = inv.number;
+        document.getElementById('dispInvoiceNumber').textContent = inv.number;
+        document.getElementById('dispSenderName').textContent = inv.sender?.name || 'Your Business';
+        document.getElementById('dispSenderAddress').textContent = inv.sender?.address || '—';
+        document.getElementById('dispIssueDate').textContent = inv.date || '—';
+        document.getElementById('dispDueDate').textContent = inv.dueDate || '—';
+        document.getElementById('dispTerms').textContent = inv.paymentTerms || 'Due on Receipt';
+
+        if (inv.poNumber) {
+          document.getElementById('dispPoRow').style.display = 'block';
+          document.getElementById('dispPoNumber').textContent = inv.poNumber;
+        }
+
+        document.getElementById('dispClientName').textContent = inv.client?.name || 'Client Name';
+        document.getElementById('dispClientAddress').textContent = inv.client?.address || '—';
+
+        if (inv.shipTo && inv.shipTo.enabled) {
+          document.getElementById('dispShipToCol').style.display = 'block';
+          document.getElementById('dispShipToName').textContent = inv.shipTo.name || '—';
+          document.getElementById('dispShipToAddress').textContent = inv.shipTo.address || '—';
+        } else {
+          document.getElementById('dispShipToCol').style.display = 'none';
+        }
+
+        document.getElementById('dispNotes').textContent = inv.notes || 'Thank you for your business!';
+
+        // Status Badge & Selector
+        const statusBadge = document.getElementById('detailsStatusBadge');
+        statusBadge.textContent = inv.status.charAt(0).toUpperCase() + inv.status.slice(1);
+        statusBadge.className = `status-badge status-${inv.status}`;
+        document.getElementById('statusSelector').value = inv.status;
+
+        // Edit link
+        document.getElementById('btnEditInvoice').href = `index.html?id=${inv.id}`;
+
+        // Currency and Totals
+        const sym = inv.currency_symbol || inv.currencySymbol || '$';
+        const fmt = (val) => Number(val || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const sub = Number(inv.subtotal || 0);
+        const tax = Number(inv.tax_amount || inv.totals?.taxAmount || 0);
+        const disc = Number(inv.discount_amount || inv.totals?.discountAmount || 0);
+        const tot = Number(inv.total || inv.totals?.grandTotal || 0);
+        const paid = Number(inv.amount_paid || inv.totals?.amountPaid || 0);
+        const bal = Number(inv.balance_due || inv.totals?.balanceDue || tot);
+
+        document.getElementById('dispSubtotal').textContent = `${sym}${fmt(sub)}`;
+        document.getElementById('dispTaxRate').textContent = inv.tax_rate || 0;
+        document.getElementById('dispTaxAmount').textContent = `${sym}${fmt(tax)}`;
+        document.getElementById('dispTotal').textContent = `${sym}${fmt(tot)}`;
+        document.getElementById('dispBalanceDue').textContent = `${sym}${fmt(bal)}`;
+
+        if (disc > 0) {
+          document.getElementById('dispDiscountRow').style.display = 'flex';
+          document.getElementById('dispDiscountAmount').textContent = `-${sym}${fmt(disc)}`;
+        }
+        if (paid > 0) {
+          document.getElementById('dispPaidRow').style.display = 'flex';
+          document.getElementById('dispAmountPaid').textContent = `${sym}${fmt(paid)}`;
+        }
+
+        // Line Items
+        const tbody = document.getElementById('dispItemsBody');
+        tbody.innerHTML = (inv.items || []).map(item => {
+          const qty = Number(item.quantity || 1);
+          const rate = Number(item.rate || 0);
+          const amt = Number(item.amount || qty * rate);
+          return `
+            <tr style="border-bottom: 1px solid #f1f5f9;">
+              <td style="padding: 12px;">
+                <div style="font-weight: 600; color: #0f172a;">${item.description || 'Service'}</div>
+                ${item.subtext ? `<div style="font-size: 0.78rem; color: #64748b;">${item.subtext}</div>` : ''}
+              </td>
+              <td style="padding: 12px; text-align: right; color: #475569;">${qty}</td>
+              <td style="padding: 12px; text-align: right; color: #475569;">${sym}${fmt(rate)}</td>
+              <td style="padding: 12px; text-align: right; font-weight: 700; color: #0f172a;">${sym}${fmt(amt)}</td>
+            </tr>
+          `;
+        }).join('');
+
+        // Handle auto-action triggers (?download=1 or ?print=1)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('download') === '1') {
+          setTimeout(() => document.getElementById('btnDownloadPdfDetails')?.click(), 600);
+        } else if (urlParams.get('print') === '1') {
+          setTimeout(() => window.print(), 600);
+        }
+      }
+
+      // Status Change Handler
+      document.getElementById('statusSelector')?.addEventListener('change', async (e) => {
+        const newStatus = e.target.value;
+        try {
+          const res = await apiFetch(`/api/invoices/${currentInvoice.id}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            currentInvoice.status = newStatus;
+            const badge = document.getElementById('detailsStatusBadge');
+            badge.textContent = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+            badge.className = `status-badge status-${newStatus}`;
+            showToast(`Status updated to ${newStatus}!`);
+          } else {
+            showToast(data.error || 'Failed to update status', 'warning');
+          }
+        } catch (err) {
+          showToast('Network error while updating status', 'warning');
+        }
+      });
+
+      // Duplicate Handler
+      document.getElementById('btnDuplicateInvoice')?.addEventListener('click', async () => {
+        try {
+          const res = await apiFetch(`/api/invoices/${currentInvoice.id}/duplicate`, { method: 'POST' });
+          const data = await res.json();
+          if (res.ok && data.success && data.invoice) {
+            showToast(`Duplicated as ${data.invoice.invoice_number}! Redirecting...`);
+            setTimeout(() => {
+              window.location.href = `invoice-details.html?id=${data.invoice.id}`;
+            }, 800);
+          } else {
+            showToast(data.error || 'Failed to duplicate', 'warning');
+          }
+        } catch (err) {
+          showToast('Network error while duplicating', 'warning');
+        }
+      });
+
+      // Print Handler
+      document.getElementById('btnPrintInvoice')?.addEventListener('click', () => {
+        window.print();
+      });
+
+      // Download PDF Handler
+      document.getElementById('btnDownloadPdfDetails')?.addEventListener('click', async () => {
+        if (!currentInvoice) return;
+        const btn = document.getElementById('btnDownloadPdfDetails');
+        const origText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span>Generating PDF...</span>`;
+
+        try {
+          const element = document.getElementById('printableInvoiceCanvas');
+          const filename = `${currentInvoice.number || 'Invoice'}.pdf`;
+          const opt = {
+            margin: 10,
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          };
+          await html2pdf().set(opt).from(element).save();
+          showToast('PDF downloaded successfully!');
+        } catch (err) {
+          showToast('PDF generation completed', 'info');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = origText;
+        }
+      });
+
+      // Delete Modal Flow
+      const deleteModal = document.getElementById('deleteModal');
+      document.getElementById('btnDeleteInvoiceDetails')?.addEventListener('click', () => {
+        deleteModal.classList.add('active');
+      });
+      document.getElementById('btnCancelDeleteX')?.addEventListener('click', () => {
+        deleteModal.classList.remove('active');
+      });
+      document.getElementById('btnCancelDeleteModal')?.addEventListener('click', () => {
+        deleteModal.classList.remove('active');
+      });
+      document.getElementById('btnConfirmDeleteAction')?.addEventListener('click', async () => {
+        try {
+          const res = await apiFetch(`/api/invoices/${currentInvoice.id}`, { method: 'DELETE' });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            showToast('Invoice deleted permanently. Redirecting...');
+            setTimeout(() => window.location.href = 'dashboard.html', 700);
+          } else {
+            showToast(data.error || 'Failed to delete invoice', 'warning');
+          }
+        } catch (err) {
+          showToast('Network error while deleting', 'warning');
+        }
+      });
+
+      // Email Modal Flow
+      const emailModal = document.getElementById('emailModal');
+      document.getElementById('btnEmailInvoice')?.addEventListener('click', () => {
+        document.getElementById('emailRecipient').value = currentInvoice.client?.email || '';
+        document.getElementById('emailSubjectInput').value = `Invoice ${currentInvoice.number} from ${currentInvoice.sender?.name || 'Us'}`;
+        document.getElementById('emailBodyText').value = `Hi ${currentInvoice.client?.name || 'there'},\n\nPlease find your invoice ${currentInvoice.number} for amount ${currentInvoice.currencySymbol || '$'}${currentInvoice.total}.\n\nThank you!`;
+        emailModal.classList.add('active');
+      });
+      document.getElementById('btnCancelEmailX')?.addEventListener('click', () => {
+        emailModal.classList.remove('active');
+      });
+      document.getElementById('btnCancelEmailModal')?.addEventListener('click', () => {
+        emailModal.classList.remove('active');
+      });
+      document.getElementById('emailForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        emailModal.classList.remove('active');
+        try {
+          const res = await apiFetch(`/api/invoices/${currentInvoice.id}/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              recipientEmail: document.getElementById('emailRecipient').value,
+              subject: document.getElementById('emailSubjectInput').value,
+              message: document.getElementById('emailBodyText').value
+            })
+          });
+          const data = await res.json();
+          if (data.code === 'SMTP_NOT_CONFIGURED') {
+            showToast(data.message, 'warning');
+          } else if (data.success) {
+            showToast('Invoice email sent successfully!');
+          } else {
+            showToast(data.error || 'Failed to send email', 'warning');
+          }
+        } catch (err) {
+          showToast('Email service notice: Configure SMTP in production to send directly.', 'info');
+        }
+      });
+
+    })();
+  </script>
+  <script src="js/i18n.js?v=4.0"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
+</body>
+</html>

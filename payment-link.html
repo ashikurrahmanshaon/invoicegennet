@@ -3,57 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terms of Service & Payment Terms | Invoice-Gen.net</title>
-  <meta name="description" content="Invoice-Gen.net Terms of Service and Payment Terms. Read our transparent billing rules, Stripe card policies, PayPal checkout, and 14-day refund guarantee.">
-  <link rel="canonical" href="https://invoice-gen.net/terms.html">
-  <meta name="theme-color" content="#00c875">
+  <title>Payment Link Generator | Invoice-Gen.net</title>
+  <meta name="description" content="Generate instant, shareable payment links directly connected to your invoices. Collect payments from clients securely with tokenized payment status tracking.">
+  <link rel="canonical" href="https://invoice-gen.net/tools/payment-link">
+  <meta name="theme-color" content="#10b981">
 
-  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5.0">
   <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=5.0">
-  <link rel="shortcut icon" href="/favicon.ico?v=5.0">
-  <link rel="apple-touch-icon" href="/assets/icons/favicon.svg?v=5.0">
-  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
   <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
+
+  <style>
+    .tool-workspace-wrap { max-width: 1040px; margin: 32px auto 48px; }
+    .tool-page-header { margin-bottom: 28px; }
+    .tool-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8125rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+    .tool-breadcrumb a { color: #059669; text-decoration: none; font-weight: 600; }
+    .tool-page-title { font-size: 2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .tool-page-desc { font-size: 1rem; color: #64748b; line-height: 1.5; }
+    .tool-main-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .tool-main-grid { grid-template-columns: 1fr; }
+    }
+    .tool-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    }
+  </style>
+
   <script src="js/google-auth.js?v=6.0"></script>
 </head>
-<body>
+<body style="background: #f8fafc;">
 
-  <!-- Authentic SaaS Top Navigation -->
-    <!-- Universal SaaS Top Navigation Bar -->
-            <header class="navbar-saas" id="mainHeader">
+  <!-- SaaS Navigation -->
+  <header class="navbar-saas" id="mainHeader">
     <div class="container navbar-container">
-      <!-- Brand Lockup -->
-      <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
-        <div class="brand-logo-frame">
-          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36">
-        </div>
-        <div class="brand-text-block">
-          <div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div>
-        </div>
+      <a href="index.html" class="brand-wrapper">
+        <div class="brand-logo-frame"><img src="/assets/icons/logo.svg" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36"></div>
+        <div class="brand-text-block"><div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div></div>
       </a>
-
-      <!-- Center SaaS Navigation Links -->
-      <nav class="nav-center-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
-          <span>Create Invoice</span>
-        </a>
-        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">
-          <span>Templates</span>
-        </a>
-        <a href="dashboard.html" class="nav-link-item" title="View your saved invoices and history">
-          <span data-i18n="nav_my_invoices">My Invoices</span>
-          <span class="nav-count-badge" id="headerSavedInvoicesBadge" style="display: none;"></span>
-        </a>
+      <nav class="nav-center-links">
+        <a href="index.html" class="nav-link-item"><span>Create Invoice</span></a>
+        <a href="templates.html" class="nav-link-item"><span>Templates</span></a>
+        <a href="dashboard.html" class="nav-link-item"><span>My Invoices</span></a>
         <div class="nav-dropdown-item-wrap">
-          <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
-            <span data-i18n="nav_tools">Tools</span>
-            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          <button type="button" class="nav-link-item nav-dropdown-btn active" id="toolsDropdownBtn">
+            <span>Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
-          <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+        <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
             <div class="mega-menu-grid">
               <!-- INVOICE -->
               <div class="mega-menu-col">
@@ -233,225 +247,150 @@
               </a>
             </div>
           </div></div>
-        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
-          <span>Pricing</span>
-        </a>
+        <a href="pricing.html" class="nav-link-item"><span>Pricing</span></a>
       </nav>
-
-      <!-- Right Header Actions -->
       <div class="nav-actions-wrap">
         <div class="lang-switcher-container"></div>
-        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">
-          <span data-i18n="btn_signup">Sign Up Free</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </a>
-        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div class="mobile-nav-drawer" id="mobileNavDrawer">
-      <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item">
-          <span>Create Invoice</span>
-        </a>
-        <a href="templates.html" class="mobile-nav-item">
-          <span>Templates</span>
-        </a>
-        <a href="dashboard.html" class="mobile-nav-item">
-          <span>My Invoices</span>
-          <span class="mobile-nav-count-badge" style="display: none;"></span>
-        </a>
-        <div class="mobile-nav-group-title">Tools &amp; Solutions</div>
-        <div class="mobile-nav-sublinks">
-          <a href="pdf-invoice-generator.html" class="mobile-nav-subitem">PDF Generator</a>
-          <a href="gst-invoice-generator.html" class="mobile-nav-subitem">GST Invoices</a>
-          <a href="invoice-generator-for-freelancers.html" class="mobile-nav-subitem">Freelancers</a>
-          <a href="invoice-number-generator.html" class="mobile-nav-subitem">Invoice Numbers</a>
-          <a href="payments.html" class="mobile-nav-subitem">Payments</a>
-        </div>
-        <a href="pricing.html" class="mobile-nav-item">
-          <span>Pricing</span>
-        </a>
-      </div>
-      <div class="mobile-nav-auth">
-        <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" style="width:100%; text-align:center;">Sign Up Free</a>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">Sign Up Free</a>
       </div>
     </div>
   </header>
 
-  <!-- Main Terms Content -->
-  <main class="page-container container-reading" style="padding-top: 56px; padding-bottom: 80px;">
+  <div class="container tool-workspace-wrap">
 
-    <!-- Standard Legal Header -->
-    <div class="legal-header">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        <span>Simple, Fair &bull; Transparent Terms</span>
+    <div class="tool-page-header">
+      <div class="tool-breadcrumb">
+        <a href="tools.html">Tools</a>
+        <span>/</span>
+        <span>Payment Link Generator</span>
       </div>
-      <h1 class="legal-title">
-        Terms of <span class="accent">Service</span>
-      </h1>
-      <p class="legal-subtitle">
-        Includes Platform Rules, Payment Terms, and Refund Policies &bull; Effective: September 2026
-      </p>
+      <h1 class="tool-page-title">Payment Link Generator</h1>
+      <p class="tool-page-desc">Create direct shareable checkout links tied to invoices or standalone payment requests.</p>
     </div>
 
-    <!-- Terms Body Box -->
-    <div class="reading-surface">
+    <div class="tool-main-grid">
 
-      <section class="legal-section">
-        <h2>1. Agreement to Terms</h2>
-        <p>
-          By accessing or using Invoice-Gen.net, you agree to be bound by these Terms of Service. If you disagree with any part of these terms, you may not access the service.
-        </p>
-      </section>
+      <!-- Left: Create Link Form & Active Links -->
+      <div>
+        <div class="tool-card" style="margin-bottom: 24px;">
+          <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin-bottom: 18px;">Create Payment Request</h3>
 
-      <section class="legal-section">
-        <h2>2. Free Tier &amp; Permitted Usage</h2>
-        <p>
-          Invoice-Gen.net provides a <strong>100% Free Classic Tier</strong> with zero expiration, no watermark, and unlimited downloads. You may use generated invoices for legitimate commercial, freelancing, contractor, and corporate billing purposes worldwide.
-        </p>
-      </section>
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Connect to Saved Invoice (Optional)</label>
+            <select id="plkInvoiceSelect" class="input-control" style="width: 100%;">
+              <option value="">-- Standalone Payment Link --</option>
+            </select>
+          </div>
 
-      <!-- Dedicated Payment Terms Anchor Section -->
-      <section class="legal-section" id="payment-terms">
-        <h2>3. Payment Terms &amp; Billing (Stripe &amp; PayPal)</h2>
-        <p>
-          We offer flexible subscription and lifetime ownership options:
-        </p>
-        <ul>
-          <li><strong>Pro Monthly Plan:</strong> Billed at <strong>$5 per month</strong>. Renews automatically every 30 days until canceled. You can cancel at any time from your account settings.</li>
-          <li><strong>Lifetime Deal:</strong> A single one-time payment of <strong>$70</strong> granting perpetual lifetime access to all Pro features and upcoming templates without recurring fees.</li>
-        </ul>
-        <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 16px 0 8px;">Supported Payment Methods:</h3>
-        <p>
-          All transactions are processed securely via:
-        </p>
-        <ul>
-          <li><strong>Stripe:</strong> Major credit and debit cards including Visa, Mastercard, American Express, Discover, Apple Pay, and Google Pay.</li>
-          <li><strong>PayPal:</strong> Instant Express Checkout with PayPal balance, bank debit, or Pay in 4.</li>
-        </ul>
-        <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 16px 0 8px;">14-Day Money-Back Guarantee:</h3>
-        <p>
-          If you are not 100% satisfied with our Pro Plan or Lifetime Deal within 14 days of purchase, email us at <code style="background: #f8fafc; padding: 2px 6px; border-radius: 4px; border: 1px solid #cbd5e1;">billing@invoice-gen.net</code> for a full, no-questions-asked refund back to your original payment method.
-        </p>
-      </section>
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Payment Title / Project Name</label>
+            <input type="text" id="plkTitle" class="input-control" placeholder="e.g. Website Design Milestone 1" style="width: 100%;">
+          </div>
 
-      <section class="legal-section">
-        <h2>4. Intellectual Property &amp; User Invoices</h2>
-        <p>
-          You retain full, exclusive ownership of all text, logos, client records, and invoice figures you input into Invoice-Gen.net. Invoice-Gen.net claims no intellectual property rights over any invoice documents created through the service.
-        </p>
-      </section>
+          <div style="display: grid; grid-template-columns: 1fr 120px; gap: 14px; margin-bottom: 14px;">
+            <div>
+              <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Amount Due</label>
+              <input type="number" id="plkAmount" class="input-control" placeholder="0.00" min="1" step="0.01" style="width: 100%; font-family: 'JetBrains Mono', monospace; font-weight: 700;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Currency</label>
+              <select id="plkCurrency" class="input-control" style="width: 100%;">
+                <option value="USD" selected>USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="CAD">CAD</option>
+                <option value="AUD">AUD</option>
+              </select>
+            </div>
+          </div>
 
-      <section class="legal-section">
-        <h2>5. Limitation of Liability</h2>
-        <p>
-          Invoice-Gen.net provides an automated client-side calculation and layout tool. While we rigorously test our mathematical algorithms and PDF layout formatting, you remain responsible for ensuring your tax rates, legal business details, and invoice figures comply with your local tax jurisdiction.
-        </p>
-      </section>
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Description / Instructions</label>
+            <textarea id="plkDesc" class="input-control" rows="2" placeholder="Optional notes for client (e.g. Due upon contract signing)..." style="width: 100%; resize: vertical;"></textarea>
+          </div>
 
-      <section class="legal-section">
-        <h2>6. Contacting Legal &amp; Billing</h2>
-        <p>
-          For licensing questions, payment queries, or enterprise support, please contact:
-        </p>
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 16px; display: inline-block; font-family: var(--font-mono); font-size: 0.875rem; color: #0f172a; margin-top: 8px;">
-          support@invoice-gen.net
+          <button type="button" id="btnCreatePaymentLink" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px 18px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span>Generate Payment Link</span>
+          </button>
         </div>
-      </section>
+
+        <!-- Created Links Table -->
+        <div class="tool-card">
+          <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;">Active Payment Links</h3>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid #e2e8f0; text-align: left;">
+                  <th style="padding: 10px 12px; font-weight: 700; color: #64748b; font-size: 0.75rem; text-transform: uppercase;">Title</th>
+                  <th style="padding: 10px 12px; font-weight: 700; color: #64748b; font-size: 0.75rem; text-transform: uppercase;">Amount</th>
+                  <th style="padding: 10px 12px; font-weight: 700; color: #64748b; font-size: 0.75rem; text-transform: uppercase;">Status</th>
+                  <th style="padding: 10px 12px; font-weight: 700; color: #64748b; font-size: 0.75rem; text-transform: uppercase;">Created</th>
+                  <th style="padding: 10px 12px; text-align: right;"></th>
+                </tr>
+              </thead>
+              <tbody id="plkHistoryTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Generated Link Result Card -->
+      <div>
+        <div class="tool-card" id="plkResultCard" style="display: none; margin-bottom: 24px;">
+          <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin-bottom: 12px;">Shareable Link Ready</h3>
+          <p style="font-size: 0.8125rem; color: #64748b; margin-bottom: 14px;">Send this URL to your client via email, WhatsApp, or messaging.</p>
+
+          <div style="margin-bottom: 12px;">
+            <input type="text" id="plkGeneratedUrl" class="input-control" readonly style="width: 100%; font-size: 0.8125rem; background: #f8fafc; font-family: 'JetBrains Mono', monospace;">
+          </div>
+
+          <button type="button" id="btnCopyPaymentLink" class="btn-primary" style="width: 100%; justify-content: center; padding: 10px;">Copy Link to Clipboard</button>
+        </div>
+
+        <div class="tool-card">
+          <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin-bottom: 12px;">Payment Infrastructure</h3>
+          <p style="font-size: 0.8125rem; color: #64748b; line-height: 1.5; margin-bottom: 14px;">
+            Payment links connect directly to your configured payment gateway (Stripe, PayPal, or Bank Transfer). Payments update your invoice balances automatically.
+          </p>
+          <a href="payments.html" class="btn-secondary" style="width: 100%; justify-content: center; text-decoration: none; padding: 8px 12px; font-size: 0.8125rem;">
+            Manage Payment Settings →
+          </a>
+        </div>
+      </div>
 
     </div>
 
-  </main>
-
-  <!-- Complete, High-End SaaS Footer -->
-    <!-- Universal Sleek Footer Bar -->
-      <footer class="site-footer" id="mainFooter">
-    <div class="container footer-container">
-      <div class="footer-brand-col">
-        <a href="index.html" class="footer-brand-lockup">
-          <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
-          <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
+    <!-- Related Tools Section -->
+    <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid #e2e8f0;">
+      <h3 style="font-size: 1.125rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Related Payment Tools</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px;">
+        <a href="payments.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">Online Payments →</div>
+          <div style="font-size: 0.75rem; color: #64748b;">Configure Stripe, PayPal, and bank wire transfer methods.</div>
         </a>
-        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
-      </div>
-
-      <div class="footer-nav-grid">
-        <div class="footer-col">
-          <div class="footer-col-title">Product</div>
-          <ul class="footer-links-list">
-            <li><a href="index.html">Create Invoice</a></li>
-            <li><a href="templates.html">Templates</a></li>
-            <li><a href="dashboard.html">My Invoices</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="payments.html">Payments</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <div class="footer-col-title">Resources</div>
-          <ul class="footer-links-list">
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="contact.html">Help</a></li>
-            <li><a href="features.html">Tools</a></li>
-            <li><a href="sitemap.html">Sitemap</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <div class="footer-col-title">Legal</div>
-          <ul class="footer-links-list">
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Service</a></li>
-            <li><a href="security.html">Security</a></li>
-            <li><a href="refunds.html">Refund Policy</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <div class="footer-col-title">Contact</div>
-          <ul class="footer-links-list">
-            <li><a href="contact.html">Support</a></li>
-            <li><a href="about.html">About Us</a></li>
-          </ul>
-        </div>
+        <a href="payment-calculator.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">Payment Calculator →</div>
+          <div style="font-size: 0.75rem; color: #64748b;">Estimate gateway transaction fees and installment breakdowns.</div>
+        </a>
       </div>
     </div>
 
+  </div>
+
+  <footer class="footer-saas" style="margin-top: 60px;">
     <div class="container footer-bottom-bar">
-      <p class="footer-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net. All rights reserved.</p>
-      <div class="footer-bottom-badges">
-        <span class="footer-badge-pill">Zero Data Tracking</span>
-        <span class="footer-badge-pill">100% Client-Side</span>
+      <div class="footer-copyright">&copy; 2026 Invoice-Gen.net. All rights reserved.</div>
+      <div class="footer-legal-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="tools.html">Tools Hub</a>
       </div>
     </div>
   </footer>
 
-  <!-- Toast Notice -->
-  <div class="toast-notice" id="toastNotice"></div>
-
-  <!-- Scripts -->
-  <script src="js/i18n.js?v=4.0"></script>
-  <script>
-    // Mobile nav toggle
-    const mobileBtn = document.getElementById('btnMobileNavToggle');
-    const mobileDrawer = document.getElementById('mobileNavDrawer');
-    mobileBtn?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      mobileDrawer?.classList.toggle('active');
-    });
-    document.addEventListener('click', (e) => {
-      if (mobileDrawer && !mobileDrawer.contains(e.target) && !mobileBtn?.contains(e.target)) {
-        mobileDrawer.classList.remove('active');
-      }
-    });
-  </script>
   <script src="js/instant-nav.js?v=6.0"></script>
+  <script src="js/tools-engine.js"></script>
 </body>
 </html>

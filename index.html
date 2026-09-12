@@ -8,19 +8,12 @@
   <link rel="canonical" href="https://invoice-gen.net/">
   <meta name="theme-color" content="#00c875">
 
-  <!-- Favicon & App Icons -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3.0">
-  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg?v=3.0">
-  <link rel="shortcut icon" href="/favicon.ico?v=3.0">
-  <link rel="apple-touch-icon" href="/assets/icons/logo.svg?v=3.0">
-
-  <!-- Disable Browser HTTP Caching for Instant Updates -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <!-- Stylesheets -->
-    <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=5.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=5.0">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon.svg?v=5.0">
+  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
@@ -29,14 +22,15 @@
 
   <!-- Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="js/google-auth.js?v=6.0"></script>
 </head>
-<body>
+<body class="has-mobile-sticky-actions">
 
   <!-- Authentic SaaS Top Navigation with Login & Sign Up -->
   <!-- Clean Minimalist SaaS Top Navigation -->
     <!-- Universal SaaS Top Navigation Bar -->
-  <header class="navbar-saas">
-    <div class="container">
+            <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
       <!-- Brand Lockup -->
       <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
         <div class="brand-logo-frame">
@@ -49,11 +43,205 @@
 
       <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-link-item active" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="nav-link-item">Payments</a>
+        <a href="index.html" class="nav-link-item active" data-i18n="nav_generator">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="nav-link-item" title="View your saved invoices and history">
+          <span data-i18n="nav_my_invoices">My Invoices</span>
+          <span class="nav-count-badge" id="headerSavedInvoicesBadge" style="display: none;"></span>
+        </a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav_tools">Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+            <div class="mega-menu-grid">
+              <!-- INVOICE -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Invoice</div>
+                <a href="index.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Generator</span>
+                    <span class="mega-desc">Fast web invoice builder</span>
+                  </div>
+                </a>
+                <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pdf">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Invoice Generator</span>
+                    <span class="mega-desc">A4 vector PDF export</span>
+                  </div>
+                </a>
+                <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Freelancer Invoice</span>
+                    <span class="mega-desc">Hourly &amp; milestone billing</span>
+                  </div>
+                </a>
+                <a href="gst-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">GST &amp; Tax Invoice</span>
+                    <span class="mega-desc">Tax breakdowns &amp; HSN</span>
+                  </div>
+                </a>
+                <a href="invoice-number-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Invoice Number Generator</span>
+                    <span class="mega-desc">Auto-sequential numbering</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- DOCUMENTS -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Documents</div>
+                <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF to JPG</span>
+                    <span class="mega-desc">Convert PDF pages to image</span>
+                  </div>
+                </a>
+                <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">JPG to PDF</span>
+                    <span class="mega-desc">Combine images to PDF</span>
+                  </div>
+                </a>
+                <a href="pdf-merger.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Merger</span>
+                    <span class="mega-desc">Merge multiple PDF files</span>
+                  </div>
+                </a>
+                <a href="pdf-splitter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">PDF Splitter</span>
+                    <span class="mega-desc">Extract pages &amp; ranges</span>
+                  </div>
+                </a>
+                <a href="image-compressor.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Image Compressor</span>
+                    <span class="mega-desc">Reduce JPG &amp; PNG size</span>
+                  </div>
+                </a>
+              </div>
+
+              <!-- CALCULATORS, PAYMENTS & CLOUD -->
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Calculators</div>
+                <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Tax Calculator</span>
+                    <span class="mega-desc">Inclusive &amp; exclusive tax</span>
+                  </div>
+                </a>
+                <a href="payment-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Calculator</span>
+                    <span class="mega-desc">Installments &amp; schedules</span>
+                  </div>
+                </a>
+                <a href="due-date-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Due Date Calculator</span>
+                    <span class="mega-desc">Payment terms &amp; calendar</span>
+                  </div>
+                </a>
+                <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Currency Converter</span>
+                    <span class="mega-desc">Live genuine exchange rates</span>
+                  </div>
+                </a>
+
+                <div class="mega-menu-heading" style="margin-top: 8px;">Payments &amp; Cloud</div>
+                <a href="payments.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Online Payments</span>
+                    <span class="mega-desc">Stripe, PayPal &amp; Bank</span>
+                  </div>
+                </a>
+                <a href="payment-link.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pay">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">Payment Link Generator</span>
+                    <span class="mega-desc">Shareable invoice links</span>
+                  </div>
+                </a>
+                <a href="files.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-cloud">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                  </div>
+                  <div>
+                    <span class="mega-title">My Files (Cloud)</span>
+                    <span class="mega-desc">Private cloud file storage</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="mega-menu-footer">
+              <a href="tools.html" class="mega-footer-link">
+                <span>Browse All 17 Professional Tools</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
+          <span>Pricing</span>
+        </a>
       </nav>
 
       <!-- Right Header Actions -->
@@ -73,13 +261,27 @@
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item active" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="mobile-nav-item">Payments</a>
-        <a href="blog.html" class="mobile-nav-item">Blog &amp; Guides</a>
-        <a href="dashboard.html" class="mobile-nav-item">Dashboard</a>
+        <a href="index.html" class="mobile-nav-item active">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="mobile-nav-item">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="mobile-nav-item">
+          <span>My Invoices</span>
+          <span class="mobile-nav-count-badge" style="display: none;"></span>
+        </a>
+        <div class="mobile-nav-group-title">Tools &amp; Solutions</div>
+        <div class="mobile-nav-sublinks">
+          <a href="pdf-invoice-generator.html" class="mobile-nav-subitem">PDF Generator</a>
+          <a href="gst-invoice-generator.html" class="mobile-nav-subitem">GST Invoices</a>
+          <a href="invoice-generator-for-freelancers.html" class="mobile-nav-subitem">Freelancers</a>
+          <a href="invoice-number-generator.html" class="mobile-nav-subitem">Invoice Numbers</a>
+          <a href="payments.html" class="mobile-nav-subitem">Payments</a>
+        </div>
+        <a href="pricing.html" class="mobile-nav-item">
+          <span>Pricing</span>
+        </a>
       </div>
       <div class="mobile-nav-auth">
         <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
@@ -99,27 +301,32 @@
 
         <!-- Sender Block (Left) -->
         <div class="sender-info-box">
+          <div class="sheet-col-header" style="margin-bottom: 8px;">
+            <span class="sheet-col-title">From</span>
+          </div>
+
           <!-- Logo Uploader -->
           <div class="logo-slot-wrap">
             <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
             <div class="logo-uploader-card" id="btnUploadLogo">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              <span>+ Add your logo</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>+ Add Logo</span>
             </div>
             <div class="logo-preview-container" id="logoPreviewBox">
               <img src="" alt="Uploaded Logo" id="logoImg">
-              <button type="button" class="btn-remove-logo-badge" id="btnRemoveLogo" title="Remove logo">&times;</button>
+              <div class="logo-actions-overlay">
+                <button type="button" class="btn-logo-action" id="btnReplaceLogo" title="Replace logo">Replace</button>
+                <button type="button" class="btn-logo-action btn-logo-remove" id="btnRemoveLogo" title="Remove logo">Remove</button>
+              </div>
             </div>
           </div>
 
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="senderName">From (Your Business)</label>
-            <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="Your Business or Studio Name">
+            <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="e.g. Your Business Name">
           </div>
 
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="senderAddress">Address &amp; Contact</label>
-            <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Street address, City, Postal Code, Country&#10;Email, Phone or Tax ID"></textarea>
+            <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. 123 Innovation Way, Suite 400&#10;San Francisco, CA 94105&#10;contact@yourbusiness.com"></textarea>
           </div>
         </div>
 
@@ -129,10 +336,10 @@
 
           <div class="meta-inputs-grid">
             <label class="meta-field-label" for="invoiceNumber">Invoice #:</label>
-            <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="e.g. 001">
+            <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="INV-001">
 
             <label class="meta-field-label" for="invoiceDate">Date:</label>
-            <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="e.g. Sep 7, 2026">
+            <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="Date">
 
             <label class="meta-field-label" for="paymentTerms">Terms:</label>
             <select id="paymentTerms" class="form-select sheet-paper-select">
@@ -143,24 +350,18 @@
             </select>
 
             <label class="meta-field-label due-date-field-row" for="dueDateInput" style="display: none;">Due Date:</label>
-            <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="e.g. Sep 21, 2026" style="display: none;">
+            <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="Due date" style="display: none;">
 
             <!-- PO Number (Toggleable) -->
             <label class="meta-field-label po-field-row" for="poNumber" style="display: none;">PO Number:</label>
-            <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="Optional PO#" style="display: none;">
-
-            <!-- Dedicated Balance Due Strip -->
-            <div class="balance-due-strip">
-              <span class="strip-label" data-i18n="lbl_balance_due">Balance Due:</span>
-              <span class="strip-val" id="balanceDueDisplay">$0.00</span>
-            </div>
+            <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="PO number" style="display: none;">
           </div>
         </div>
 
       </div>
 
-      <!-- Middle Section: Bill To & Ship To Side-by-Side (Clean Stationery Cards) -->
-      <div class="sheet-billing-row">
+      <!-- Middle Section: Bill To & Ship To Side-by-Side (Clean Document Canvas) -->
+      <div class="sheet-billing-row" id="sheetBillingRow">
 
         <!-- Bill To -->
         <div class="sheet-billing-col" id="billToCol">
@@ -168,12 +369,10 @@
             <span class="sheet-col-title">Bill To</span>
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="clientName">Client / Company Name</label>
-            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="Who is this invoice to?">
+            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="e.g. Client or Company Name">
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="clientAddress">Billing Address</label>
-            <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Client street address, City, Country&#10;Email, Phone or Tax ID"></textarea>
+            <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. 742 Evergreen Terrace&#10;Springfield, OR 97477"></textarea>
           </div>
         </div>
 
@@ -183,15 +382,18 @@
             <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="shipToName">Recipient Name</label>
-            <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Destination Name">
+            <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Recipient or Warehouse Name">
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="shipToAddress">Shipping Destination</label>
-            <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Shipping destination address, City, Country"></textarea>
+            <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. Shipping destination address..."></textarea>
           </div>
         </div>
 
+      </div>
+
+      <!-- Items Section Header -->
+      <div class="sheet-col-header items-section-header" style="margin-bottom: 8px;">
+        <span class="sheet-col-title">Items</span>
       </div>
 
       <!-- Items Table (Modern Crisp Ledger) -->
@@ -199,9 +401,9 @@
         <table class="invoice-items-table" id="refTable">
           <thead>
             <tr>
-              <th class="col-desc" style="width: 48%;" data-i18n="tbl_item">Item / Service Description</th>
+              <th class="col-desc" style="width: 48%;" data-i18n="tbl_item">Description</th>
               <th class="col-qty" style="width: 13%;" data-i18n="tbl_qty">Qty</th>
-              <th class="col-rate" style="width: 17%;" data-i18n="tbl_rate">Rate / Price</th>
+              <th class="col-rate" style="width: 17%;" data-i18n="tbl_rate">Rate</th>
               <th class="col-amount" style="width: 17%;" data-i18n="tbl_amount">Amount</th>
               <th class="col-action" style="width: 5%;"></th>
             </tr>
@@ -228,18 +430,18 @@
 
         <!-- Left: Notes, Bank Details, IBAN, VAT & Signature -->
         <div class="sheet-notes-col">
+          <div class="sheet-col-header" style="border: none; padding-bottom: 4px; margin-bottom: 6px;">
+            <span class="sheet-col-title">Notes / Terms</span>
+          </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="invoiceNotes">
-              Payment Terms &amp; Notes
-            </label>
-            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="5" placeholder="Bank: Silicon Valley Bank&#10;IBAN / Swift: SVBUS6S&#10;Thank you for your business!"></textarea>
+            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="e.g. Payment due within 30 days via bank transfer or online checkout.&#10;Thank you for your business!"></textarea>
           </div>
 
           <!-- Digital Signature Line (Toggleable) -->
           <div class="signature-block-wrap" id="signatureBlockWrap" style="display: none; margin-top: 16px;">
             <label class="sheet-field-label">Authorized Signature</label>
             <div style="border-top: 1.5px solid #cbd5e1; width: 220px; padding-top: 6px;">
-              <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer Full Name" style="padding: 6px 10px; font-weight: 700;">
+              <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer full name" style="padding: 6px 10px; font-weight: 700;">
               <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Authorized Representative</div>
             </div>
           </div>
@@ -279,6 +481,12 @@
             <span data-i18n="lbl_amount_paid">Amount Paid:</span>
             <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00">
           </div>
+
+          <!-- Balance Due Row (Visible ONLY when Deposit / Amount Paid is enabled) -->
+          <div class="total-line balance-due-line-row" id="balanceDueLineRow" style="display: none;">
+            <span class="lbl" data-i18n="lbl_balance_due">Balance Due:</span>
+            <span class="val" id="balanceDueDisplay">$0.00</span>
+          </div>
         </div>
 
       </div>
@@ -289,57 +497,83 @@
     <!-- Right Sidebar: Unified Studio Inspector Panel -->
     <aside class="action-sidebar-panel studio-inspector">
 
-      <!-- Section 1: Hero Export & Quick Tools -->
+      <!-- Section 1: Hero Export & Document Actions -->
       <div class="inspector-section inspector-hero-section">
         <div class="inspector-section-header">
           <span class="inspector-eyebrow">Document Actions</span>
         </div>
 
-        <!-- Primary Emerald Gradient Download Button -->
-        <button type="button" class="btn-generate-pdf" id="btnDownloadPDF">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span data-i18n="btn_download_pdf">Download PDF</span>
-        </button>
+        <!-- Primary Action: Full Width Dominant Download PDF (Brand Emerald Green) -->
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button type="button" class="btn-download-pdf-primary" id="btnDownloadPDF" title="Download professional A4 vector PDF">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span data-i18n="btn_download_pdf">Download PDF</span>
+          </button>
 
-        <!-- Secondary Actions 4-Button Utility Toolbar -->
-        <div class="inspector-toolbar-grid">
-          <button type="button" class="inspector-tool-btn" id="btnPrintSidebar" title="Print Invoice">
+          <!-- Secondary Actions: Draft & Preview Directly Underneath -->
+          <div class="sidebar-secondary-row">
+            <button type="button" class="btn-secondary-action" id="btnSaveDraft" title="Save as editable draft">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <span>Draft</span>
+            </button>
+            <button type="button" class="btn-secondary-action btn-preview-trigger" id="btnPreviewInvoice" title="Live A4 document preview">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <span>Preview</span>
+            </button>
+            <button type="button" class="btn-secondary-action" id="btnSaveToCloud" style="color:#059669; border-color:#a7f3d0; background:#ecfdf5; font-weight:700;" title="Save to Private Cloud Storage">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+              <span>Cloud</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Sub-Tools Grid: Print Invoice, Send via Email, Demo Sample, Reset Form -->
+        <div class="inspector-subtools-grid">
+          <button type="button" class="inspector-tool-btn-compact" id="btnPrintSidebar" title="Print Invoice">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="6 9 6 2 18 2 18 9"></polyline>
               <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
               <rect x="6" y="14" width="12" height="8"></rect>
             </svg>
-            <span data-i18n="btn_print">Print</span>
+            <span data-i18n="btn_print">Print Invoice</span>
           </button>
 
-          <button type="button" class="inspector-tool-btn" id="btnOpenSendEmail" title="Send via Email">
+          <button type="button" class="inspector-tool-btn-compact" id="btnOpenSendEmail" title="Send via Email">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
-            <span data-i18n="btn_send_email">Email</span>
+            <span data-i18n="btn_send_email">Send via Email</span>
           </button>
 
-          <button type="button" class="inspector-tool-btn" id="btnLoadSample" title="Load Sample Invoice">
+          <button type="button" class="inspector-tool-btn-compact" id="btnLoadSample" title="Load Demo Sample">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
               <line x1="16" y1="13" x2="8" y2="13"></line>
               <line x1="16" y1="17" x2="8" y2="17"></line>
             </svg>
-            <span data-i18n="btn_sample_demo">Sample</span>
+            <span data-i18n="btn_sample_demo">Demo Sample</span>
           </button>
 
-          <button type="button" class="inspector-tool-btn tool-btn-danger" id="btnClearInvoice" title="Clear All Fields">
+          <button type="button" class="inspector-tool-btn-compact tool-btn-danger" id="btnClearInvoice" title="Reset Form">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="3 6 5 6 21 6"></polyline>
               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
             </svg>
-            <span data-i18n="btn_reset_form">Clear</span>
+            <span data-i18n="btn_reset_form">Reset Form</span>
           </button>
         </div>
       </div>
@@ -366,6 +600,7 @@
               <option value="AUD">AU$ — Australian Dollar (AUD)</option>
               <option value="JPY">¥ — Japanese Yen (JPY)</option>
               <option value="AED">د.إ — UAE Dirham (AED)</option>
+              <option value="SAR">﷼ — Saudi Riyal (SAR)</option>
             </select>
           </div>
         </div>
@@ -373,7 +608,7 @@
 
       <div class="inspector-divider"></div>
 
-      <!-- Section 3: Document Fields & Toggles (Clean, modern Linear-style list with NO BOXES) -->
+      <!-- Section 3: Document Fields & Toggles -->
       <div class="inspector-section">
         <div class="inspector-section-header">
           <span class="inspector-eyebrow">Document Options</span>
@@ -430,33 +665,99 @@
         </div>
       </div>
 
+      <div class="inspector-divider"></div>
+
+      <!-- Section 4: Bottom Save Invoice Database Action -->
+      <div class="inspector-section inspector-bottom-save-section">
+        <button type="button" class="btn-save-invoice-bottom" id="btnSaveInvoice" title="Save invoice to cloud database">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          <span id="btnSaveInvoiceText">Save Invoice</span>
+        </button>
+        <span class="save-status-subtext" id="saveStatusSubtext">Saves invoice to your cloud database</span>
+      </div>
+
     </aside>
 
   </main>
 
+  <!-- Mobile Sticky Bottom Action Bar -->
+  <div class="mobile-sticky-action-bar" id="mobileStickyActionBar">
+    <button type="button" class="btn-mobile-action-primary" id="btnMobileDownloadPdf">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <span>Download PDF</span>
+    </button>
+    <button type="button" class="btn-mobile-action-secondary" id="btnMobileSaveInvoice">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline></svg>
+      <span>Save</span>
+    </button>
+    <button type="button" class="btn-mobile-action-icon" id="btnMobileOpenOptions" aria-label="Open invoice options">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+    </button>
+  </div>
+
   <!-- Sleek Horizontal Footer Bar (Matching Reference Image) -->
     <!-- Universal Sleek Footer Bar -->
-  <footer class="site-footer-bar">
-    <div class="container">
-      <div class="footer-bar-left">
+      <footer class="site-footer" id="mainFooter">
+    <div class="container footer-container">
+      <div class="footer-brand-col">
         <a href="index.html" class="footer-brand-lockup">
           <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
           <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
         </a>
-        <span class="footer-bar-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net</span>
+        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
       </div>
-      <div class="footer-bar-right">
-        <nav class="footer-nav-links" aria-label="Footer Navigation">
-          <a href="templates.html">Templates</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="payments.html">Payments</a>
-          <a href="blog.html">Blog</a>
-          <a href="contact.html">Help</a>
-          <a href="sitemap.html">Sitemap</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+
+      <div class="footer-nav-grid">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Create Invoice</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="dashboard.html">My Invoices</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="payments.html">Payments</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html">Help</a></li>
+            <li><a href="features.html">Tools</a></li>
+            <li><a href="sitemap.html">Sitemap</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="refunds.html">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-links-list">
+            <li><a href="contact.html">Support</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom-bar">
+      <p class="footer-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net. All rights reserved.</p>
+      <div class="footer-bottom-badges">
+        <span class="footer-badge-pill">Zero Data Tracking</span>
+        <span class="footer-badge-pill">100% Client-Side</span>
       </div>
     </div>
   </footer>
@@ -544,15 +845,48 @@
     </div>
   </div>
 
+  <!-- Live Invoice Preview Modal -->
+  <div class="modal-overlay preview-modal-overlay" id="previewModal" role="dialog" aria-modal="true">
+    <div class="preview-modal-card">
+      <div class="preview-modal-header">
+        <div class="preview-modal-title-wrap">
+          <div class="preview-icon-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path></svg>
+          </div>
+          <div>
+            <h3 class="preview-modal-title">Live Document Preview</h3>
+            <span class="preview-modal-sub">Exact A4 vector print &amp; PDF preview</span>
+          </div>
+        </div>
+        <div class="preview-modal-actions">
+          <button type="button" class="btn-preview-tool" id="btnPreviewPrint" title="Print document">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <span>Print</span>
+          </button>
+          <button type="button" class="btn-preview-tool btn-preview-primary" id="btnPreviewDownload" title="Download vector PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download PDF</span>
+          </button>
+          <button type="button" class="btn-close-modal" id="btnClosePreviewModal" aria-label="Close preview modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div class="preview-modal-body" id="previewModalBody">
+        <!-- Exact rendered invoice document injected dynamically -->
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notice -->
   <div class="toast-notice" id="toastNotice"></div>
 
   <!-- Scripts (Versioned for Instant Updates) -->
-  <script src="js/i18n.js?v=4.0"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/i18n.js?v=5.0"></script>
   <script src="js/invoice-state.js?v=2.2"></script>
   <script src="js/pdf-generator.js?v=2.2"></script>
   <script src="js/app.js?v=2.2"></script>
-  <script src="js/google-auth.js?v=4.0"></script>
-  <script src="js/instant-nav.js?v=4.0"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
 </body>
 </html>

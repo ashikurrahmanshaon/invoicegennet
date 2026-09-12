@@ -8,14 +8,12 @@
   <meta name="robots" content="noindex, follow">
   <meta name="theme-color" content="#00c875">
 
-  <!-- Favicon & App Icons -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/svg+xml" href="/assets/icons/logo.svg">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/icons/logo.svg">
-
-  <!-- Stylesheets -->
-    <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
+  <!-- Favicon & App Icons (Fixed, Cached & Rock-Solid) -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=5.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=5.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=5.0">
+  <link rel="apple-touch-icon" href="/assets/icons/favicon.svg?v=5.0">
+  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
@@ -78,17 +76,19 @@
       align-items: center;
       gap: 8px;
       padding: 12px 24px;
-      background: #00c875;
+      background: #059669;
       color: #ffffff;
+      border: 1px solid #047857;
       font-weight: 700;
       font-size: 0.95rem;
       border-radius: 8px;
       text-decoration: none;
-      transition: background 0.15s ease, transform 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
     }
     .btn-error-primary:hover {
-      background: #00b067;
-      transform: translateY(-1px);
+      background: #047857;
+      border-color: #065f46;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
     }
     .btn-error-secondary {
       display: inline-flex;
@@ -102,20 +102,20 @@
       font-size: 0.95rem;
       border-radius: 8px;
       text-decoration: none;
-      transition: background 0.15s ease, border-color 0.15s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
     }
     .btn-error-secondary:hover {
       background: #f1f5f9;
       border-color: #94a3b8;
     }
   </style>
+  <script src="js/google-auth.js?v=6.0"></script>
 </head>
 <body style="background-color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
-
   <!-- Authentic SaaS Top Navigation -->
     <!-- Universal SaaS Top Navigation Bar -->
-  <header class="navbar-saas">
-    <div class="container">
+            <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
       <!-- Brand Lockup -->
       <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
         <div class="brand-logo-frame">
@@ -128,11 +128,73 @@
 
       <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="nav-link-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="nav-link-item">Payments</a>
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="nav-link-item" title="View your saved invoices and history">
+          <span data-i18n="nav_my_invoices">My Invoices</span>
+          <span class="nav-count-badge" id="headerSavedInvoicesBadge" style="display: none;"></span>
+        </a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav_tools">Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav-dropdown-menu" id="toolsDropdownMenu" role="menu">
+            <div class="dropdown-menu-header">Invoicing Tools</div>
+            <a href="pdf-invoice-generator.html" class="dropdown-menu-link" role="menuitem">
+              <div class="dropdown-link-icon-box icon-pdf">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              </div>
+              <div class="dropdown-link-text">
+                <span class="dropdown-link-title">PDF Invoice Generator</span>
+                <span class="dropdown-link-desc">Instant 0ms vector PDF download</span>
+              </div>
+            </a>
+            <a href="gst-invoice-generator.html" class="dropdown-menu-link" role="menuitem">
+              <div class="dropdown-link-icon-box icon-gst">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
+              </div>
+              <div class="dropdown-link-text">
+                <span class="dropdown-link-title">GST &amp; Tax Invoices</span>
+                <span class="dropdown-link-desc">CGST, SGST &amp; IGST tax breakdowns</span>
+              </div>
+            </a>
+            <a href="invoice-generator-for-freelancers.html" class="dropdown-menu-link" role="menuitem">
+              <div class="dropdown-link-icon-box icon-freelance">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+              </div>
+              <div class="dropdown-link-text">
+                <span class="dropdown-link-title">Freelancer Invoices</span>
+                <span class="dropdown-link-desc">Hourly rates &amp; milestone billing</span>
+              </div>
+            </a>
+            <a href="invoice-number-generator.html" class="dropdown-menu-link" role="menuitem">
+              <div class="dropdown-link-icon-box icon-num">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
+              </div>
+              <div class="dropdown-link-text">
+                <span class="dropdown-link-title">Invoice Number Generator</span>
+                <span class="dropdown-link-desc">Auto-sequential numbering system</span>
+              </div>
+            </a>
+            <a href="payments.html" class="dropdown-menu-link" role="menuitem">
+              <div class="dropdown-link-icon-box icon-pay">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+              <div class="dropdown-link-text">
+                <span class="dropdown-link-title">Online Payments</span>
+                <span class="dropdown-link-desc">Stripe, PayPal, Bank &amp; QR checkout</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
+          <span>Pricing</span>
+        </a>
       </nav>
 
       <!-- Right Header Actions -->
@@ -152,13 +214,27 @@
     <!-- Mobile Navigation Drawer -->
     <div class="mobile-nav-drawer" id="mobileNavDrawer">
       <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item" data-i18n="nav_generator">Editor</a>
-        <a href="templates.html" class="mobile-nav-item" data-i18n="nav_templates">Templates</a>
-        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav_pricing">Pricing</a>
-        <a href="features.html" class="mobile-nav-item" data-i18n="nav_features">Features</a>
-        <a href="payments.html" class="mobile-nav-item">Payments</a>
-        <a href="blog.html" class="mobile-nav-item">Blog &amp; Guides</a>
-        <a href="dashboard.html" class="mobile-nav-item">Dashboard</a>
+        <a href="index.html" class="mobile-nav-item">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="mobile-nav-item">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="mobile-nav-item">
+          <span>My Invoices</span>
+          <span class="mobile-nav-count-badge" style="display: none;"></span>
+        </a>
+        <div class="mobile-nav-group-title">Tools &amp; Solutions</div>
+        <div class="mobile-nav-sublinks">
+          <a href="pdf-invoice-generator.html" class="mobile-nav-subitem">PDF Generator</a>
+          <a href="gst-invoice-generator.html" class="mobile-nav-subitem">GST Invoices</a>
+          <a href="invoice-generator-for-freelancers.html" class="mobile-nav-subitem">Freelancers</a>
+          <a href="invoice-number-generator.html" class="mobile-nav-subitem">Invoice Numbers</a>
+          <a href="payments.html" class="mobile-nav-subitem">Payments</a>
+        </div>
+        <a href="pricing.html" class="mobile-nav-item">
+          <span>Pricing</span>
+        </a>
       </div>
       <div class="mobile-nav-auth">
         <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
@@ -192,34 +268,69 @@
 
   <!-- Global Footer -->
     <!-- Universal Sleek Footer Bar -->
-  <footer class="site-footer-bar">
-    <div class="container">
-      <div class="footer-bar-left">
+      <footer class="site-footer" id="mainFooter">
+    <div class="container footer-container">
+      <div class="footer-brand-col">
         <a href="index.html" class="footer-brand-lockup">
           <img src="/assets/icons/logo.svg?v=4.1" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
           <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
         </a>
-        <span class="footer-bar-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net</span>
+        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
       </div>
-      <div class="footer-bar-right">
-        <nav class="footer-nav-links" aria-label="Footer Navigation">
-          <a href="templates.html">Templates</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="payments.html">Payments</a>
-          <a href="blog.html">Blog</a>
-          <a href="contact.html">Help</a>
-          <a href="sitemap.html">Sitemap</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+
+      <div class="footer-nav-grid">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Create Invoice</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="dashboard.html">My Invoices</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="payments.html">Payments</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html">Help</a></li>
+            <li><a href="features.html">Tools</a></li>
+            <li><a href="sitemap.html">Sitemap</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="refunds.html">Refund Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-links-list">
+            <li><a href="contact.html">Support</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom-bar">
+      <p class="footer-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net. All rights reserved.</p>
+      <div class="footer-bottom-badges">
+        <span class="footer-badge-pill">Zero Data Tracking</span>
+        <span class="footer-badge-pill">100% Client-Side</span>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="js/i18n.js?v=4.0"></script>
-  <script src="js/google-auth.js?v=4.0"></script>
-  <script src="js/instant-nav.js?v=4.0"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
 </body>
 </html>
