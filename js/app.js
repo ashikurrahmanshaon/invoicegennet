@@ -37,6 +37,24 @@ window.initInvoiceEditorPage = function () {
   // DOM Elements - Table
   const itemsTableBody = document.getElementById('itemsTableBody');
   const btnAddItem = document.getElementById('btnAddItem');
+  const btnAddItemHeader = document.getElementById('btnAddItemHeader');
+  const saveStatusIndicator = document.getElementById('saveStatusIndicator');
+  const saveStatusText = document.getElementById('saveStatusText');
+
+  // Helper for quiet autosave feedback
+  function setAutoSaveStatus(status) {
+    if (!saveStatusIndicator || !saveStatusText) return;
+    if (status === 'saving') {
+      saveStatusIndicator.classList.add('is-saving');
+      saveStatusText.textContent = 'Saving…';
+    } else if (status === 'saved') {
+      saveStatusIndicator.classList.remove('is-saving');
+      saveStatusText.textContent = 'Saved ✓';
+    } else {
+      saveStatusIndicator.classList.remove('is-saving');
+      saveStatusText.textContent = 'Ready';
+    }
+  }
 
   // DOM Elements - Notes & Tax & Calculations
   const invoiceNotes = document.getElementById('invoiceNotes');
@@ -147,29 +165,32 @@ window.initInvoiceEditorPage = function () {
     // Tax & Discount & Amount Paid
     if (taxRateInput) taxRateInput.value = state.taxRate ?? 0;
     if (discountRateInput) discountRateInput.value = state.discountValue ?? 0;
-    if (amountPaidInput) amountPaidInput.value = state.amountPaid ? state.amountPaid : '';
-
-    // Auto-fill from saved business profile if current sender fields are blank
-    if (!state.sender?.name) {
-      try {
-        const rawProfile = localStorage.getItem('invoicegen_business_profile');
-        if (rawProfile) {
-          const bp = JSON.parse(rawProfile);
-          if (bp.businessName && senderName) {
-            senderName.value = bp.businessName;
-            state.sender.name = bp.businessName;
-          }
-          if (bp.address && senderAddress) {
-            senderAddress.value = bp.address;
-            state.sender.address = bp.address;
-          }
-          if (bp.notes && invoiceNotes && !state.notes) {
-            invoiceNotes.value = bp.notes;
-            state.notes = bp.notes;
-          }
+    if (amountPaidInput) amountPaidInput.value = state.amountPaid ? state.amountPaid : '';    // Auto-fill from saved business profile if current sender fields are blank
+    const linkEditProfile = document.getElementById('linkEditProfile');
+    try {
+      const rawProfile = localStorage.getItem('invoicegen_business_profile');
+      const rawUser = localStorage.getItem('invoicegen_user');
+      const bp = rawProfile ? JSON.parse(rawProfile) : (rawUser ? JSON.parse(rawUser) : null);
+      if (bp && (bp.businessName || bp.business_name || bp.name)) {
+        const bName = bp.businessName || bp.business_name || bp.name;
+        const bAddr = bp.address || bp.business_address || '';
+        if (!state.sender?.name && senderName) {
+          senderName.value = bName;
+          state.sender.name = bName;
         }
-      } catch (e) {}
-    }
+        if (!state.sender?.address && senderAddress && bAddr) {
+          senderAddress.value = bAddr;
+          state.sender.address = bAddr;
+        }
+        if (bp.notes && invoiceNotes && !state.notes) {
+          invoiceNotes.value = bp.notes;
+          state.notes = bp.notes;
+        }
+        if (linkEditProfile) {
+          linkEditProfile.style.display = 'inline-block';
+        }
+      }
+    } catch (e) {}
 
     // Currency
     if (currencySelect) currencySelect.value = state.currency || 'USD';
@@ -204,15 +225,20 @@ window.initInvoiceEditorPage = function () {
   }
 
   // ---------------------------------------------------------------------------
-  // Debounced Auto-Save for Drafts
+  // Debounced Auto-Save for Drafts & Local State
   // ---------------------------------------------------------------------------
   let autoSaveTimer = null;
   function triggerAutoSaveDebounced() {
-    if (!activeInvoiceId) return;
     clearTimeout(autoSaveTimer);
+    setAutoSaveStatus('saving');
     autoSaveTimer = setTimeout(() => {
-      autoSaveDraftSilently();
-    }, 2000);
+      if (activeInvoiceId) {
+        autoSaveDraftSilently();
+      } else {
+        setAutoSaveStatus('saved');
+        setTimeout(() => setAutoSaveStatus('ready'), 2200);
+      }
+    }, 1200);
   }
 
   async function autoSaveDraftSilently() {
@@ -228,6 +254,8 @@ window.initInvoiceEditorPage = function () {
         body: JSON.stringify(payload)
       });
       if (res.ok) {
+        setAutoSaveStatus('saved');
+        setTimeout(() => setAutoSaveStatus('ready'), 2200);
         if (btnSaveInvoiceText && !btnSaveInvoiceText.textContent.includes('...')) {
           const original = btnSaveInvoiceText.textContent;
           btnSaveInvoiceText.textContent = 'Saved (Draft)';
@@ -335,6 +363,9 @@ window.initInvoiceEditorPage = function () {
 
   // Helper to add empty line item and focus description smoothly
   function addNewRowAndFocus() {
+    const emptyRow = itemsTableBody ? itemsTableBody.querySelector('.items-empty-row') : null;
+    if (emptyRow) emptyRow.remove();
+
     const newId = store.addItem('', 1, 0);
     const stateItems = store.getState().items || [];
     const newItem = stateItems.find(it => it.id === newId) || { id: newId, description: '', quantity: 1, rate: 0 };
@@ -357,6 +388,20 @@ window.initInvoiceEditorPage = function () {
     if (!itemsTableBody) return;
     itemsTableBody.innerHTML = '';
 
+    if (!items || items.length === 0) {
+      const emptyRow = document.createElement('tr');
+      emptyRow.className = 'items-empty-row';
+      emptyRow.innerHTML = `
+        <td colspan="5" style="text-align: center; padding: 26px 16px; color: #94a3b8; font-size: 0.85rem;">
+          No line items added yet.
+          <button type="button" class="btn-ghost-add-item" style="margin-left: 10px; font-size: 0.78rem; padding: 4px 12px;" id="btnEmptyStateAddItem">+ Add Item</button>
+        </td>
+      `;
+      itemsTableBody.appendChild(emptyRow);
+      emptyRow.querySelector('#btnEmptyStateAddItem')?.addEventListener('click', addNewRowAndFocus);
+      return;
+    }
+
     items.forEach((item) => {
       itemsTableBody.appendChild(createRowElement(item, false));
     });
@@ -372,6 +417,13 @@ window.initInvoiceEditorPage = function () {
     }
   }
 
+  // Bind both Add Item buttons (Header and Table bottom)
+  if (btnAddItem) {
+    btnAddItem.addEventListener('click', addNewRowAndFocus);
+  }
+  if (btnAddItemHeader) {
+    btnAddItemHeader.addEventListener('click', addNewRowAndFocus);
+  }
   function updateCalculations() {
     const totals = store.calculateTotals();
 
@@ -1203,66 +1255,84 @@ window.initInvoiceEditorPage = function () {
     }
 
     // Populate client dropdown if user has existing clients
+    const picker = document.getElementById('clientQuickSelect');
     fetch('/api/clients')
       .then(res => res.json())
       .then(clData => {
-        if (clData && clData.success && Array.isArray(clData.clients) && clData.clients.length > 0) {
-          let picker = document.getElementById('clientQuickSelect');
-          if (!picker) {
-            const billToHeader = document.querySelector('#billToCol .sheet-col-header');
-            if (billToHeader) {
-              billToHeader.style.display = 'flex';
-              billToHeader.style.alignItems = 'center';
-              billToHeader.style.justifyContent = 'space-between';
-              picker = document.createElement('select');
-              picker.id = 'clientQuickSelect';
-              picker.className = 'form-select client-quick-picker';
-              picker.style.cssText = 'width: auto; max-width: 170px; height: 26px; padding: 2px 8px; font-size: 0.72rem; border-radius: 6px; border: 1px solid #cbd5e1; background-color: #ffffff; color: #334155; font-weight: 500; cursor: pointer;';
-              billToHeader.appendChild(picker);
+        const clientsList = (clData && clData.success && Array.isArray(clData.clients)) ? clData.clients : [];
+        
+        // Fallback: check localStorage for saved clients from prior invoices if API returns empty
+        if (clientsList.length === 0) {
+          try {
+            const rawInvs = localStorage.getItem('invoicegen_invoices');
+            if (rawInvs) {
+              const invs = JSON.parse(rawInvs);
+              const seen = new Set();
+              invs.forEach(inv => {
+                if (inv.client_name && !seen.has(inv.client_name)) {
+                  seen.add(inv.client_name);
+                  clientsList.push({ id: 'loc_' + seen.size, name: inv.client_name, billing_address: inv.client_address || '' });
+                }
+              });
             }
-          }
-          if (picker) {
-            picker.style.display = 'inline-block';
-            picker.innerHTML = '<option value="">+ Existing Client</option>' + clData.clients.map(c => 
-              `<option value="${c.id}">${c.name}${c.company ? ' (' + c.company + ')' : ''}</option>`
-            ).join('');
+          } catch (e) {}
+        }
 
-            picker.addEventListener('change', (e) => {
-              const selectedId = e.target.value;
-              if (!selectedId) return;
-              const chosen = clData.clients.find(c => c.id === selectedId);
-              if (chosen) {
-                const displayName = chosen.company ? `${chosen.name} (${chosen.company})` : chosen.name;
-                if (clientName) {
-                  clientName.value = displayName;
-                  store.updateState('client.name', displayName);
-                }
-                if (clientAddress) {
-                  clientAddress.value = chosen.billing_address || '';
-                  store.updateState('client.address', chosen.billing_address || '');
-                }
-                if (chosen.shipping_address && shipToAddress) {
-                  shipToAddress.value = chosen.shipping_address;
-                  store.updateState('shipTo.address', chosen.shipping_address);
-                  if (shipToName && chosen.name) {
-                    shipToName.value = chosen.name;
-                    store.updateState('shipTo.name', chosen.name);
-                  }
-                  if (toggleShipTo && !toggleShipTo.checked) {
-                    toggleShipTo.checked = true;
-                    const bRow = document.getElementById('sheetBillingRow');
-                    if (bRow) bRow.classList.remove('ship-to-hidden');
-                    store.updateState('shipTo.enabled', true);
-                  }
-                }
-                triggerAutoSaveDebounced();
-                if (window.showToast) window.showToast(`Selected client "${chosen.name}"`, 'info');
-              }
-            });
+        if (picker) {
+          if (clientsList.length > 0) {
+            picker.innerHTML = '<option value="">Select Client ▾</option>' + clientsList.map(c => 
+              `<option value="${c.id}">${c.name}${c.company ? ' (' + c.company + ')' : ''}</option>`
+            ).join('') + '<option value="__new__">+ Add New Client</option>';
+          } else {
+            picker.innerHTML = '<option value="">Select Client ▾</option><option value="__new__">+ Add New Client</option>';
           }
+
+          picker.addEventListener('change', (e) => {
+            const selectedId = e.target.value;
+            if (selectedId === '__new__') {
+              window.location.href = '/clients';
+              return;
+            }
+            if (!selectedId) return;
+            const chosen = clientsList.find(c => c.id === selectedId);
+            if (chosen) {
+              const displayName = chosen.company ? `${chosen.name} (${chosen.company})` : chosen.name;
+              if (clientName) {
+                clientName.value = displayName;
+                store.updateState('client.name', displayName);
+              }
+              if (clientAddress) {
+                clientAddress.value = chosen.billing_address || '';
+                store.updateState('client.address', chosen.billing_address || '');
+              }
+              if (chosen.shipping_address && shipToAddress) {
+                shipToAddress.value = chosen.shipping_address;
+                store.updateState('shipTo.address', chosen.shipping_address);
+                if (shipToName && chosen.name) {
+                  shipToName.value = chosen.name;
+                  store.updateState('shipTo.name', chosen.name);
+                }
+                if (toggleShipTo && !toggleShipTo.checked) {
+                  toggleShipTo.checked = true;
+                  const bRow = document.getElementById('sheetBillingRow');
+                  if (bRow) bRow.classList.remove('ship-to-hidden');
+                  store.updateState('shipTo.enabled', true);
+                }
+              }
+              triggerAutoSaveDebounced();
+              if (window.showToast) window.showToast(`Selected client "${chosen.name}"`, 'info');
+            }
+          });
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (picker) {
+          picker.innerHTML = '<option value="">Select Client ▾</option><option value="__new__">+ Add New Client</option>';
+          picker.addEventListener('change', (e) => {
+            if (e.target.value === '__new__') window.location.href = '/clients';
+          });
+        }
+      });
 
     const requestedTemplate = urlParams.get('template');
     if (requestedTemplate && requestedTemplate !== 'emerald') {

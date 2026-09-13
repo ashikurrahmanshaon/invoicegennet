@@ -297,7 +297,7 @@
   <!-- Main Application Workspace -->
   <main class="app-workspace-layout" id="workspace">
 
-    <!-- The Invoice Sheet Card (Blank by default) -->
+    <!-- The Invoice Sheet Card (Luxury Minimalist Document Workspace) -->
     <div class="invoice-sheet-card" id="invoicePaper">
 
       <!-- Top Section: Sender Details & Document Meta -->
@@ -305,14 +305,18 @@
 
         <!-- Sender Block (Left) -->
         <div class="sender-info-box">
-          <div class="sheet-col-header" style="margin-bottom: 8px;">
-            <span class="sheet-col-title">From</span>
+          <div class="sheet-col-header">
+            <div class="sheet-col-header-text">
+              <span class="sheet-col-title">From</span>
+              <span class="sheet-col-sub">Your business information</span>
+            </div>
+            <a href="/business-profile" class="edit-profile-sublink" id="linkEditProfile" style="display: none;" title="Edit Business Profile Defaults">Edit Profile</a>
           </div>
 
           <!-- Logo Uploader -->
           <div class="logo-slot-wrap">
             <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
-            <div class="logo-uploader-card" id="btnUploadLogo">
+            <div class="logo-uploader-card" id="btnUploadLogo" title="Upload your company or brand logo">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
               <span>+ Add Logo</span>
             </div>
@@ -326,17 +330,25 @@
           </div>
 
           <div class="sheet-field-group">
+            <label class="sheet-field-label" for="senderName">Business Name</label>
             <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="e.g. Your Business Name">
           </div>
 
           <div class="sheet-field-group">
+            <label class="sheet-field-label" for="senderAddress">Address &amp; Contact</label>
             <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. 123 Innovation Way, Suite 400&#10;San Francisco, CA 94105&#10;contact@yourbusiness.com"></textarea>
           </div>
         </div>
 
         <!-- Document Title & Meta (Right) -->
         <div class="doc-meta-box">
-          <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename (e.g. INVOICE, ESTIMATE, RECEIPT, QUOTE)">
+          <div class="doc-title-row">
+            <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename (e.g. INVOICE, ESTIMATE, RECEIPT, QUOTE)">
+            <div class="save-status-indicator" id="saveStatusIndicator" title="Cloud auto-save status">
+              <span class="status-dot"></span>
+              <span class="status-text" id="saveStatusText">Ready</span>
+            </div>
+          </div>
 
           <div class="meta-inputs-grid">
             <label class="meta-field-label" for="invoiceNumber">Invoice #:</label>
@@ -370,12 +382,22 @@
         <!-- Bill To -->
         <div class="sheet-billing-col" id="billToCol">
           <div class="sheet-col-header">
-            <span class="sheet-col-title">Bill To</span>
+            <div class="sheet-col-header-text">
+              <span class="sheet-col-title">Bill To</span>
+              <span class="sheet-col-sub">Client information</span>
+            </div>
+            <div class="client-picker-wrap" id="clientPickerWrap">
+              <select id="clientQuickSelect" class="client-quick-picker" aria-label="Select existing client">
+                <option value="">Select Client ▾</option>
+              </select>
+            </div>
           </div>
           <div class="sheet-field-group">
+            <label class="sheet-field-label" for="clientName">Client Name / Company</label>
             <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="e.g. Client or Company Name">
           </div>
           <div class="sheet-field-group">
+            <label class="sheet-field-label" for="clientAddress">Billing Address &amp; Email</label>
             <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. 742 Evergreen Terrace&#10;Springfield, OR 97477"></textarea>
           </div>
         </div>
@@ -383,12 +405,17 @@
         <!-- Ship To (Optional or Default) -->
         <div class="sheet-billing-col" id="shipToCardPanel">
           <div class="sheet-col-header">
-            <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
+            <div class="sheet-col-header-text">
+              <span class="sheet-col-title">Ship To</span>
+              <span class="sheet-optional-tag">Optional</span>
+            </div>
           </div>
           <div class="sheet-field-group">
+            <label class="sheet-field-label" for="shipToName">Recipient / Warehouse</label>
             <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Recipient or Warehouse Name">
           </div>
           <div class="sheet-field-group">
+            <label class="sheet-field-label" for="shipToAddress">Shipping Address</label>
             <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. Shipping destination address..."></textarea>
           </div>
         </div>
@@ -396,8 +423,18 @@
       </div>
 
       <!-- Items Section Header -->
-      <div class="sheet-col-header items-section-header" style="margin-bottom: 8px;">
-        <span class="sheet-col-title">Items</span>
+      <div class="sheet-col-header items-section-header">
+        <div class="sheet-col-header-text">
+          <span class="sheet-col-title">Items</span>
+          <span class="sheet-col-sub">Products, services or deliverables</span>
+        </div>
+        <button type="button" class="btn-ghost-add-item" id="btnAddItemHeader" title="Add another line item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>+ Add Item</span>
+        </button>
       </div>
 
       <!-- Items Table (Modern Crisp Ledger) -->
@@ -406,9 +443,9 @@
           <thead>
             <tr>
               <th class="col-desc" style="width: 48%;" data-i18n="tbl_item">Description</th>
-              <th class="col-qty" style="width: 13%;" data-i18n="tbl_qty">Qty</th>
-              <th class="col-rate" style="width: 17%;" data-i18n="tbl_rate">Rate</th>
-              <th class="col-amount" style="width: 17%;" data-i18n="tbl_amount">Amount</th>
+              <th class="col-qty" style="width: 14%; text-align: right;" data-i18n="tbl_qty">Qty</th>
+              <th class="col-rate" style="width: 18%; text-align: right;" data-i18n="tbl_rate">Rate</th>
+              <th class="col-amount" style="width: 15%; text-align: right;" data-i18n="tbl_amount">Amount</th>
               <th class="col-action" style="width: 5%;"></th>
             </tr>
           </thead>
@@ -418,14 +455,14 @@
         </table>
       </div>
 
-      <!-- Add Line Item Button -->
-      <div>
-        <button type="button" class="btn-add-item-bar" id="btnAddItem">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <!-- Add Line Item Button (Bottom row) -->
+      <div class="items-bottom-action-bar">
+        <button type="button" class="btn-ghost-add-item" id="btnAddItem" title="Add another line item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
-          <span data-i18n="btn_add_item">Add Line Item</span>
+          <span>+ Add Item</span>
         </button>
       </div>
 
@@ -435,10 +472,12 @@
         <!-- Left: Notes, Bank Details, IBAN, VAT & Signature -->
         <div class="sheet-notes-col">
           <div class="sheet-col-header" style="border: none; padding-bottom: 4px; margin-bottom: 6px;">
-            <span class="sheet-col-title">Notes / Terms</span>
+            <div class="sheet-col-header-text">
+              <span class="sheet-col-title">Payment Terms &amp; Notes</span>
+            </div>
           </div>
           <div class="sheet-field-group">
-            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="e.g. Payment due within 30 days via bank transfer or online checkout.&#10;Thank you for your business!"></textarea>
+            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="Payment terms, bank transfer details, or notes to client..."></textarea>
           </div>
 
           <!-- Digital Signature Line (Toggleable) -->
@@ -454,42 +493,44 @@
         <!-- Right: Real-time Totals Breakdown -->
         <div class="totals-summary-card">
           <div class="total-line">
-            <span data-i18n="lbl_subtotal">Subtotal:</span>
-            <span class="val" id="subtotalDisplay">$0.00</span>
+            <span class="totals-lbl" data-i18n="lbl_subtotal">Subtotal</span>
+            <span class="val totals-num" id="subtotalDisplay">$0.00</span>
           </div>
 
           <!-- Discount Row (Toggleable) -->
           <div class="total-line discount-line-row" id="discountLineRow" style="display: none;">
             <div class="discount-edit-group">
-              <span data-i18n="opt_discount">Discount</span>
+              <span class="totals-lbl" data-i18n="opt_discount">Discount</span>
               <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0"><i>%</i></span>
             </div>
-            <span class="val" id="discountAmountDisplay">-$0.00</span>
+            <span class="val totals-num text-discount" id="discountAmountDisplay">-$0.00</span>
           </div>
 
-          <div class="total-line">
+          <div class="total-line tax-line-row" id="taxLineRow">
             <div class="tax-edit-group">
-              <span data-i18n="lbl_tax">Tax / VAT</span>
+              <span class="totals-lbl" data-i18n="lbl_tax">Tax</span>
               <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0"><i>%</i></span>
             </div>
-            <span class="val" id="taxAmountDisplay">$0.00</span>
-          </div>
-
-          <div class="total-line grand-total-line">
-            <span class="lbl" data-i18n="lbl_total">Total:</span>
-            <span class="val" id="grandTotalDisplay">$0.00</span>
+            <span class="val totals-num" id="taxAmountDisplay">$0.00</span>
           </div>
 
           <!-- Amount Paid Row (Toggleable) -->
           <div class="total-line amount-paid-row" id="amountPaidLineRow" style="display: none;">
-            <span data-i18n="lbl_amount_paid">Amount Paid:</span>
+            <span class="totals-lbl" data-i18n="lbl_amount_paid">Amount Paid</span>
             <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00">
+          </div>
+
+          <div class="total-divider-line"></div>
+
+          <div class="total-line grand-total-line">
+            <span class="lbl grand-total-lbl" data-i18n="lbl_total">TOTAL</span>
+            <span class="val grand-total-val" id="grandTotalDisplay">$0.00</span>
           </div>
 
           <!-- Balance Due Row (Visible ONLY when Deposit / Amount Paid is enabled) -->
           <div class="total-line balance-due-line-row" id="balanceDueLineRow" style="display: none;">
-            <span class="lbl" data-i18n="lbl_balance_due">Balance Due:</span>
-            <span class="val" id="balanceDueDisplay">$0.00</span>
+            <span class="lbl balance-due-lbl" data-i18n="lbl_balance_due">Balance Due</span>
+            <span class="val balance-due-val" id="balanceDueDisplay">$0.00</span>
           </div>
         </div>
 
