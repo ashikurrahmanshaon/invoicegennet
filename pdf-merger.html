@@ -15,59 +15,7 @@
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
   <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
 
-  <style>
-    .tool-workspace-wrap {
-      max-width: 1040px;
-      margin: 32px auto 48px;
-    }
-    .tool-page-header { margin-bottom: 28px; }
-    .tool-breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8125rem;
-      color: #64748b;
-      margin-bottom: 12px;
-    }
-    .tool-breadcrumb a { color: #059669; text-decoration: none; font-weight: 600; }
-    .tool-page-title {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-    .tool-page-desc { font-size: 1rem; color: #64748b; line-height: 1.5; }
-    .tool-main-grid {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 28px;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .tool-main-grid { grid-template-columns: 1fr; }
-    }
-    .tool-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-    }
-    .upload-zone {
-      border: 2px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 36px 20px;
-      text-align: center;
-      background: #f8fafc;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .upload-zone:hover, .upload-zone.dragover {
-      border-color: #059669;
-      background: #ecfdf5;
-    }
-  </style>
+
 
   <script src="js/google-auth.js?v=6.0"></script>
   <link rel="manifest" href="site.webmanifest">
@@ -298,40 +246,53 @@
       <!-- Left: Upload & Reorder List -->
       <div>
         <div class="tool-card" style="margin-bottom: 24px;">
-          <div class="upload-zone" id="mergeDropZone">
+          <div class="upload-zone-saas" id="mergeDropZone">
             <input type="file" id="mergeFileInput" accept="application/pdf" multiple style="display: none;">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <div class="upload-icon-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
             </div>
-            <div style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Drag &amp; Drop PDF Files Here</div>
-            <div style="font-size: 0.8125rem; color: #64748b; margin-bottom: 14px;">Select 2 or more PDFs to combine into one</div>
-            <button type="button" class="btn-secondary" style="font-size: 0.8125rem; padding: 6px 14px; pointer-events: none;">Select PDF Documents</button>
+            <div class="upload-title">Drag &amp; Drop PDF Files Here</div>
+            <div class="upload-subtitle">Select 2 or more PDF documents to combine into one unified file</div>
+            <button type="button" class="btn btn-secondary btn-sm" style="pointer-events: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>Select PDF Documents</span>
+            </button>
           </div>
 
-          <div style="margin-top: 20px;">
+          <div style="margin-top: 24px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
               <h3 style="font-size: 0.9375rem; font-weight: 700; color: #0f172a; margin: 0;">PDF Merge Sequence</h3>
-              <button type="button" id="btnClearMergeList" style="background: none; border: none; font-size: 0.75rem; font-weight: 700; color: #dc2626; cursor: pointer;">Clear List</button>
+              <button type="button" id="btnClearMergeList" class="btn btn-ghost btn-sm" style="color: #dc2626; height: 28px; padding: 0 8px; font-size: 0.75rem;">Clear List</button>
             </div>
 
-            <div id="mergeEmptyState" style="text-align: center; padding: 24px; color: #94a3b8; font-size: 0.8125rem; border: 1px dashed #e2e8f0; border-radius: 8px;">
-              No PDFs added yet. Upload documents to order and combine them.
+            <div id="mergeEmptyState" class="empty-state-box" style="padding: 32px 16px; margin: 0; border-radius: 10px;">
+              <div class="empty-state-icon-frame" style="width: 44px; height: 44px; border-radius: 10px; margin-bottom: 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              </div>
+              <div class="empty-state-title" style="font-size: 0.9375rem; margin-bottom: 4px;">No PDFs added yet</div>
+              <div class="empty-state-desc" style="font-size: 0.8125rem; margin-bottom: 0; max-width: 340px;">Upload documents to arrange page order and merge them into one continuous file.</div>
             </div>
 
-            <div id="mergePdfList"></div>
+            <div id="mergePdfList" style="margin-top: 8px;"></div>
           </div>
         </div>
 
         <!-- Success & Output Area -->
-        <div class="tool-card" id="mergeResultArea" style="display: none;">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div class="tool-card" id="mergeResultArea" style="display: none; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
             <div>
               <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin: 0;">PDFs Merged Successfully</h3>
-              <div id="mergeResultInfo" style="font-size: 0.8125rem; color: #059669; font-weight: 600; margin-top: 2px;">Ready for download</div>
+              <div id="mergeResultInfo" style="font-size: 0.8125rem; color: #059669; font-weight: 600; margin-top: 2px;">Ready for instant download &amp; cloud storage</div>
             </div>
             <div style="display: flex; gap: 8px;">
-              <button type="button" id="btnDownloadMergedPdf" class="btn-primary" style="font-size: 0.8125rem; padding: 8px 14px;">Download Merged PDF</button>
-              <button type="button" id="btnSaveMergedPdfToCloud" class="btn-secondary" style="font-size: 0.8125rem; padding: 8px 14px;">Save to Cloud</button>
+              <button type="button" id="btnDownloadMergedPdf" class="btn btn-primary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Download Merged PDF</span>
+              </button>
+              <button type="button" id="btnSaveMergedPdfToCloud" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                <span>Save to Cloud</span>
+              </button>
             </div>
           </div>
         </div>
@@ -339,20 +300,24 @@
 
       <!-- Right: Action Panel -->
       <div>
-        <div class="tool-card">
-          <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;">Merge Actions</h3>
+        <div class="tool-settings-panel">
+          <div class="tool-settings-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span>Merge Options</span>
+          </div>
 
-          <p style="font-size: 0.8125rem; color: #64748b; line-height: 1.5; margin-bottom: 20px;">
-            Arrange your PDF files using the up and down arrow buttons. The generated document will preserve the exact sequence shown on the left.
+          <p style="font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 20px;">
+            Reorder your documents using the arrow buttons. The generated PDF will preserve the exact sequence and formatting of all pages.
           </p>
 
-          <button type="button" id="btnMergePdfs" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px 18px;" disabled>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          <button type="button" id="btnMergePdfs" class="btn btn-primary btn-lg" style="width: 100%;" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
             <span>Merge PDFs Now</span>
           </button>
 
-          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid #f1f5f9; font-size: 0.75rem; color: #64748b; line-height: 1.5;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:2px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg><strong>Lossless Merging</strong>: Vector fonts, text layers, and image clarity are preserved verbatim during merge operations.
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; display: flex; gap: 8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span><strong>Lossless Merging</strong>: Vector fonts, text layers, and high-DPI graphics are merged verbatim with zero quality loss.</span>
           </div>
         </div>
       </div>
@@ -360,16 +325,36 @@
     </div>
 
     <!-- Related Tools Section -->
-    <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid #e2e8f0;">
-      <h3 style="font-size: 1.125rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Related Document Tools</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px;">
-        <a href="pdf-splitter.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">PDF Splitter →</div>
-          <div style="font-size: 0.75rem; color: #64748b;">Extract individual pages or ranges from any PDF document.</div>
+    <div class="tool-related-section">
+      <h3 class="tool-related-title">Related Document Tools</h3>
+      <div class="tool-related-grid">
+        <a href="pdf-splitter.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF Splitter</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Extract individual pages or ranges from any PDF document.</div>
         </a>
-        <a href="pdf-to-jpg.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">PDF to JPG →</div>
-          <div style="font-size: 0.75rem; color: #64748b;">Convert PDF pages into high-resolution JPG images.</div>
+        <a href="pdf-to-jpg.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF to JPG</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Convert PDF pages into high-resolution JPG images.</div>
+        </a>
+        <a href="jpg-to-pdf.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>JPG to PDF</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Combine photos, receipts, or document scans into a multi-page PDF.</div>
+        </a>
+        <a href="image-compressor.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>Image Compressor</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Compress JPG, PNG, and WEBP images while maintaining clarity.</div>
         </a>
       </div>
     </div>

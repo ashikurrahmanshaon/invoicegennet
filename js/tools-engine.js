@@ -1108,23 +1108,32 @@
       imageList.innerHTML = '';
       images.forEach((img, idx) => {
         const item = document.createElement('div');
-        item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px;gap:12px;box-shadow:0 1px 3px rgba(15,23,42,0.03);';
+        item.className = 'tool-queue-item';
         item.innerHTML = `
-          <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-            <span style="font-weight:700;font-size:0.75rem;color:#94a3b8;width:20px;">#${idx + 1}</span>
-            <div style="width:48px;height:48px;border-radius:6px;overflow:hidden;background:#f8fafc;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <img src="${img.dataUrl}" style="max-width:100%;max-height:100%;object-fit:cover;transform:rotate(${img.rotation}deg);" />
+          <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1;">
+            <span class="tool-queue-badge">#${idx + 1}</span>
+            <div class="tool-queue-thumb">
+              <img src="${img.dataUrl}" style="max-width:100%;max-height:100%;object-fit:cover;transform:rotate(${img.rotation}deg);" alt="${img.name}" />
             </div>
-            <div style="min-width:0;">
-              <div style="font-weight:700;font-size:0.875rem;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${img.name}</div>
-              <div style="font-size:0.75rem;color:#64748b;">${formatBytes(img.size)} • ${img.rotation}°</div>
+            <div class="tool-queue-info">
+              <div class="tool-queue-name">${img.name}</div>
+              <div class="tool-queue-meta">${formatBytes(img.size)} • ${img.rotation}°</div>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-            <button type="button" class="btn-rotate" title="Rotate 90°" style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;cursor:pointer;font-size:0.75rem;font-weight:600;">↻ 90°</button>
-            <button type="button" class="btn-up" title="Move Up" ${idx === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : 'style="cursor:pointer;"'} style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;">↑</button>
-            <button type="button" class="btn-down" title="Move Down" ${idx === images.length - 1 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : 'style="cursor:pointer;"'} style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;">↓</button>
-            <button type="button" class="btn-remove" title="Remove" style="padding:6px 10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;cursor:pointer;font-size:0.75rem;font-weight:700;color:#991b1b;">✕</button>
+          <div class="tool-queue-actions">
+            <button type="button" class="btn btn-secondary btn-sm btn-rotate" title="Rotate 90°" style="gap:4px;font-size:0.75rem;padding:0 8px;height:30px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+              <span>90°</span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-icon btn-sm btn-up" title="Move Up" ${idx === 0 ? 'disabled' : ''}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+            <button type="button" class="btn btn-secondary btn-icon btn-sm btn-down" title="Move Down" ${idx === images.length - 1 ? 'disabled' : ''}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <button type="button" class="btn btn-danger btn-icon btn-sm btn-remove" title="Remove Image">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
           </div>
         `;
 
@@ -1510,20 +1519,26 @@
       listContainer.innerHTML = '';
       pdfFiles.forEach((item, idx) => {
         const row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#ffffff;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:8px;gap:12px;';
+        row.className = 'tool-queue-item';
         row.innerHTML = `
-          <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-            <span style="font-weight:700;font-size:0.75rem;color:#94a3b8;width:24px;">#${idx + 1}</span>
-            <div style="width:36px;height:36px;border-radius:6px;background:#fee2e2;color:#dc2626;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0;">PDF</div>
-            <div style="min-width:0;">
-              <div style="font-weight:700;font-size:0.875rem;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.file.name}</div>
-              <div style="font-size:0.75rem;color:#64748b;">${formatBytes(item.file.size)} • ${item.pageCount} ${item.pageCount === 1 ? 'page' : 'pages'}</div>
+          <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1;">
+            <span class="tool-queue-badge">#${idx + 1}</span>
+            <div style="width:36px;height:36px;border-radius:6px;background:#fee2e2;color:#dc2626;border:1px solid #fecaca;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0;">PDF</div>
+            <div class="tool-queue-info">
+              <div class="tool-queue-name">${item.file.name}</div>
+              <div class="tool-queue-meta">${formatBytes(item.file.size)} • ${item.pageCount} ${item.pageCount === 1 ? 'page' : 'pages'}</div>
             </div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-            <button type="button" class="btn-up" title="Move Up" ${idx === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : 'style="cursor:pointer;"'} style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;">↑</button>
-            <button type="button" class="btn-down" title="Move Down" ${idx === pdfFiles.length - 1 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : 'style="cursor:pointer;"'} style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;">↓</button>
-            <button type="button" class="btn-remove" title="Remove" style="padding:6px 10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;cursor:pointer;font-size:0.75rem;font-weight:700;color:#991b1b;">✕</button>
+          <div class="tool-queue-actions">
+            <button type="button" class="btn btn-secondary btn-icon btn-sm btn-up" title="Move Up" ${idx === 0 ? 'disabled' : ''}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+            <button type="button" class="btn btn-secondary btn-icon btn-sm btn-down" title="Move Down" ${idx === pdfFiles.length - 1 ? 'disabled' : ''}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <button type="button" class="btn btn-danger btn-icon btn-sm btn-remove" title="Remove PDF">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
           </div>
         `;
 
@@ -2429,9 +2444,9 @@
             <td style="padding:14px 16px;border-bottom:1px solid #f1f5f9;color:#64748b;font-size:0.8125rem;">${new Date(f.created_at).toLocaleDateString()}</td>
             <td style="padding:14px 16px;border-bottom:1px solid #f1f5f9;text-align:right;">
               <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">
-                <a href="/api/files/${f.id}/download" class="btn-download-file" title="Download" style="padding:6px 10px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;font-weight:700;color:#0f172a;text-decoration:none;">Download</a>
-                <button type="button" class="btn-rename-file" title="Rename" style="padding:6px 8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;cursor:pointer;color:#475569;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
-                <button type="button" class="btn-delete-file" title="Delete" style="padding:6px 8px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;font-size:0.75rem;cursor:pointer;color:#991b1b;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                <a href="/api/files/${f.id}/download" class="btn btn-secondary btn-sm" title="Download">Download</a>
+                <button type="button" class="btn btn-ghost btn-icon btn-sm btn-rename-file" title="Rename"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                <button type="button" class="btn btn-danger btn-icon btn-sm btn-delete-file" title="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
               </div>
             </td>
           `;
@@ -2457,9 +2472,9 @@
               <span style="font-size:0.7rem;font-weight:700;background:#f1f5f9;color:#475569;padding:2px 6px;border-radius:4px;">${f.file_type}</span>
             </div>
             <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:1px solid #f8fafc;padding-top:8px;">
-              <a href="/api/files/${f.id}/download" style="padding:5px 10px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;font-weight:700;color:#0f172a;text-decoration:none;">Download</a>
-              <button type="button" class="btn-mobile-rename" style="padding:5px 8px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:6px;font-size:0.75rem;cursor:pointer;">Rename</button>
-              <button type="button" class="btn-mobile-delete" style="padding:5px 8px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;font-size:0.75rem;color:#991b1b;cursor:pointer;">Delete</button>
+              <a href="/api/files/${f.id}/download" class="btn btn-secondary btn-sm">Download</a>
+              <button type="button" class="btn btn-ghost btn-sm btn-mobile-rename">Rename</button>
+              <button type="button" class="btn btn-danger btn-sm btn-mobile-delete">Delete</button>
             </div>
           `;
           card.querySelector('.btn-mobile-rename').onclick = () => handleRename(f);

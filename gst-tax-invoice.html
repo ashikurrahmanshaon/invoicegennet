@@ -83,6 +83,15 @@
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
       box-sizing: border-box;
     }
+    .gst-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px 16px;
+      padding-right: 36px;
+    }
     .gst-input:focus, .gst-select:focus, .gst-textarea:focus {
       outline: none;
       border-color: #059669;
@@ -568,7 +577,7 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
             <span>Taxable Line Items</span>
           </div>
-          <button type="button" id="btnAddItemRow" class="btn-gst-secondary" style="padding: 6px 14px; font-size: 0.8125rem;">+ Add Item</button>
+          <button type="button" id="btnAddItemRow" class="btn btn-secondary btn-sm">+ Add Item</button>
         </div>
 
         <div class="gst-table-wrapper">
@@ -643,23 +652,23 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="gst-actions-bar">
-        <button type="button" id="btnDownloadGstPdf" class="btn-gst-primary">
+      <div class="gst-actions-bar" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; align-items: center; justify-content: flex-end;">
+        <button type="button" id="btnDownloadGstPdf" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           <span>Download PDF</span>
         </button>
 
-        <button type="button" id="btnSaveGstCloud" class="btn-gst-cloud">
+        <button type="button" id="btnSaveGstCloud" class="btn btn-outline">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
           <span>Save to Cloud</span>
         </button>
 
-        <button type="button" id="btnPrintGstInvoice" class="btn-gst-secondary">
+        <button type="button" id="btnPrintGstInvoice" class="btn btn-secondary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
           <span>Print</span>
         </button>
 
-        <button type="button" id="btnResetGstForm" class="btn-gst-secondary" style="color: #dc2626;">
+        <button type="button" id="btnResetGstForm" class="btn btn-ghost" style="color: #dc2626;">
           <span>Reset Form</span>
         </button>
       </div>

@@ -15,59 +15,7 @@
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
   <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
 
-  <style>
-    .tool-workspace-wrap {
-      max-width: 1040px;
-      margin: 32px auto 48px;
-    }
-    .tool-page-header { margin-bottom: 28px; }
-    .tool-breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8125rem;
-      color: #64748b;
-      margin-bottom: 12px;
-    }
-    .tool-breadcrumb a { color: #059669; text-decoration: none; font-weight: 600; }
-    .tool-page-title {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-    .tool-page-desc { font-size: 1rem; color: #64748b; line-height: 1.5; }
-    .tool-main-grid {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 28px;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .tool-main-grid { grid-template-columns: 1fr; }
-    }
-    .tool-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-    }
-    .upload-zone {
-      border: 2px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 36px 20px;
-      text-align: center;
-      background: #f8fafc;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .upload-zone:hover, .upload-zone.dragover {
-      border-color: #059669;
-      background: #ecfdf5;
-    }
-  </style>
+
 
   <script src="js/google-auth.js?v=6.0"></script>
   <link rel="manifest" href="site.webmanifest">
@@ -295,91 +243,109 @@
 
     <div class="tool-main-grid">
 
-      <!-- Left: Upload & Images List -->
+      <!-- Left: Upload & Images Workspace -->
       <div>
         <div class="tool-card" style="margin-bottom: 24px;">
-          <div class="upload-zone" id="jpgDropZone">
+          <div class="upload-zone-saas" id="jpgDropZone">
             <input type="file" id="jpgFileInput" accept="image/jpeg,image/png,image/webp" multiple style="display: none;">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><circle cx="10" cy="13" r="2"></circle><path d="M20 17l-5-5-5 5"></path></svg>
+            <div class="upload-icon-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><circle cx="10" cy="13" r="2"></circle><path d="M20 17l-5-5-5 5"></path></svg>
             </div>
-            <div style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Drag &amp; Drop Images Here</div>
-            <div style="font-size: 0.8125rem; color: #64748b; margin-bottom: 14px;">JPG, PNG, or WEBP • Select multiple images</div>
-            <button type="button" class="btn-secondary" style="font-size: 0.8125rem; padding: 6px 14px; pointer-events: none;">Browse Images</button>
+            <div class="upload-title">Drag &amp; Drop Images Here</div>
+            <div class="upload-subtitle">JPG, PNG, or WEBP • Select multiple images for multi-page export</div>
+            <button type="button" class="btn btn-secondary btn-sm" style="pointer-events: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>Browse Images</span>
+            </button>
           </div>
 
           <!-- Uploaded images container -->
-          <div style="margin-top: 20px;">
+          <div style="margin-top: 24px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
               <h3 style="font-size: 0.9375rem; font-weight: 700; color: #0f172a; margin: 0;">Selected Images (Page Order)</h3>
-              <button type="button" id="btnClearJpgList" style="background: none; border: none; font-size: 0.75rem; font-weight: 700; color: #dc2626; cursor: pointer;">Clear All</button>
+              <button type="button" id="btnClearJpgList" class="btn btn-ghost btn-sm" style="color: #dc2626; height: 28px; padding: 0 8px; font-size: 0.75rem;">Clear All</button>
             </div>
 
-            <div id="jpgEmptyState" style="text-align: center; padding: 24px; color: #94a3b8; font-size: 0.8125rem; border: 1px dashed #e2e8f0; border-radius: 8px;">
-              No images uploaded yet. Added images will appear in sequence here.
+            <div id="jpgEmptyState" class="empty-state-box" style="padding: 32px 16px; margin: 0; border-radius: 10px;">
+              <div class="empty-state-icon-frame" style="width: 44px; height: 44px; border-radius: 10px; margin-bottom: 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              </div>
+              <div class="empty-state-title" style="font-size: 0.9375rem; margin-bottom: 4px;">No images uploaded yet</div>
+              <div class="empty-state-desc" style="font-size: 0.8125rem; margin-bottom: 0; max-width: 340px;">Added images will appear in page sequence here. You can rotate 90° and reorder pages before compiling.</div>
             </div>
 
-            <div id="jpgImageList"></div>
+            <div id="jpgImageList" style="margin-top: 8px;"></div>
           </div>
         </div>
 
         <!-- Generated PDF Preview -->
-        <div class="tool-card" id="jpgPdfPreviewContainer" style="display: none;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div class="tool-card" id="jpgPdfPreviewContainer" style="display: none; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
             <div>
               <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin: 0;">PDF Generated Successfully</h3>
-              <span style="font-size: 0.8125rem; color: #059669; font-weight: 600;">Ready for download &amp; cloud storage</span>
+              <span style="font-size: 0.8125rem; color: #059669; font-weight: 600;">Ready for instant download &amp; cloud storage</span>
             </div>
             <div style="display: flex; gap: 8px;">
-              <button type="button" id="btnDownloadJpgPdf" class="btn-primary" style="font-size: 0.8125rem; padding: 8px 14px;">Download PDF</button>
-              <button type="button" id="btnSaveJpgPdfToCloud" class="btn-secondary" style="font-size: 0.8125rem; padding: 8px 14px;">Save to Cloud</button>
+              <button type="button" id="btnDownloadJpgPdf" class="btn btn-primary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Download PDF</span>
+              </button>
+              <button type="button" id="btnSaveJpgPdfToCloud" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                <span>Save to Cloud</span>
+              </button>
             </div>
           </div>
 
-          <div style="aspect-ratio: 16/10; width: 100%; border-radius: 8px; overflow: hidden; background: #f8fafc; border: 1px solid #e2e8f0;">
+          <div style="aspect-ratio: 16/10; width: 100%; border-radius: 10px; overflow: hidden; background: #f8fafc; border: 1px solid #e2e8f0;">
             <iframe id="jpgPdfObjectPreview" style="width: 100%; height: 100%; border: none;"></iframe>
           </div>
         </div>
       </div>
 
-      <!-- Right: Document Layout Settings -->
+      <!-- Right: Document Layout Settings Panel -->
       <div>
-        <div class="tool-card">
-          <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;">PDF Page Settings</h3>
+        <div class="tool-settings-panel">
+          <div class="tool-settings-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>PDF Page Settings</span>
+          </div>
 
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Page Size</label>
-            <select id="jpgPageSize" class="input-control" style="width: 100%;">
+          <div class="form-group">
+            <label for="jpgPageSize" class="form-label">Page Size</label>
+            <select id="jpgPageSize" class="input-control">
               <option value="a4" selected>A4 (210 × 297 mm)</option>
               <option value="letter">US Letter (8.5 × 11 in)</option>
               <option value="auto">Auto (Match Image Dimension)</option>
             </select>
+            <div class="form-hint">Standard document standard for international or US business</div>
           </div>
 
-          <div style="margin-bottom: 14px;">
-            <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Orientation</label>
-            <select id="jpgOrientation" class="input-control" style="width: 100%;">
+          <div class="form-group">
+            <label for="jpgOrientation" class="form-label">Orientation</label>
+            <select id="jpgOrientation" class="input-control">
               <option value="portrait" selected>Portrait (Vertical)</option>
               <option value="landscape">Landscape (Horizontal)</option>
             </select>
           </div>
 
-          <div style="margin-bottom: 24px;">
-            <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Page Margins</label>
-            <select id="jpgMargin" class="input-control" style="width: 100%;">
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label for="jpgMargin" class="form-label">Page Margins</label>
+            <select id="jpgMargin" class="input-control">
               <option value="none" selected>No Margin (Fit Full Page)</option>
               <option value="small">Small Margin (20pt)</option>
               <option value="large">Large Margin (40pt)</option>
             </select>
           </div>
 
-          <button type="button" id="btnCreateJpgToPdf" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px 18px;" disabled>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-            <span>Create PDF</span>
+          <button type="button" id="btnCreateJpgToPdf" class="btn btn-primary btn-lg" style="width: 100%;" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span>Create PDF Document</span>
           </button>
 
-          <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid #f1f5f9; font-size: 0.75rem; color: #64748b; line-height: 1.5;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:2px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg><strong>Sequential Multi-Page</strong>: Each uploaded image is scaled cleanly to a dedicated page without clipping or quality degradation.
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; display: flex; gap: 8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span><strong>Multi-Page Sequential Engine</strong>: Each image is scaled to its own dedicated page without quality loss. Runs locally in your browser.</span>
           </div>
         </div>
       </div>
@@ -387,20 +353,36 @@
     </div>
 
     <!-- Related Tools Section -->
-    <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid #e2e8f0;">
-      <h3 style="font-size: 1.125rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Related Document Tools</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px;">
-        <a href="pdf-to-jpg.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">PDF to JPG →</div>
-          <div style="font-size: 0.75rem; color: #64748b;">Convert PDF pages into high-resolution JPG images.</div>
+    <div class="tool-related-section">
+      <h3 class="tool-related-title">Related Document Tools</h3>
+      <div class="tool-related-grid">
+        <a href="pdf-to-jpg.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF to JPG</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Convert PDF document pages into high-resolution JPG images.</div>
         </a>
-        <a href="pdf-merger.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">PDF Merger →</div>
-          <div style="font-size: 0.75rem; color: #64748b;">Merge multiple PDF documents into a single cohesive document.</div>
+        <a href="pdf-merger.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF Merger</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Combine multiple PDF documents into a single cohesive document.</div>
         </a>
-        <a href="image-compressor.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">Image Compressor →</div>
-          <div style="font-size: 0.75rem; color: #64748b;">Reduce JPG, PNG, and WEBP image sizes efficiently.</div>
+        <a href="image-compressor.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>Image Compressor</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Compress JPG, PNG, and WEBP images while maintaining clarity.</div>
+        </a>
+        <a href="pdf-splitter.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF Splitter</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Extract custom page ranges and individual pages into separate PDFs.</div>
         </a>
       </div>
     </div>

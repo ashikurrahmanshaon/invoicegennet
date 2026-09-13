@@ -15,59 +15,7 @@
   <link rel="stylesheet" href="css/design-system.css?v=4.0">
   <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
 
-  <style>
-    .tool-workspace-wrap {
-      max-width: 1040px;
-      margin: 32px auto 48px;
-    }
-    .tool-page-header { margin-bottom: 28px; }
-    .tool-breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8125rem;
-      color: #64748b;
-      margin-bottom: 12px;
-    }
-    .tool-breadcrumb a { color: #059669; text-decoration: none; font-weight: 600; }
-    .tool-page-title {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-    .tool-page-desc { font-size: 1rem; color: #64748b; line-height: 1.5; }
-    .tool-main-grid {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 28px;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .tool-main-grid { grid-template-columns: 1fr; }
-    }
-    .tool-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-    }
-    .upload-zone {
-      border: 2px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 36px 20px;
-      text-align: center;
-      background: #f8fafc;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .upload-zone:hover, .upload-zone.dragover {
-      border-color: #059669;
-      background: #ecfdf5;
-    }
-  </style>
+
 
   <script src="js/google-auth.js?v=6.0"></script>
   <link rel="manifest" href="site.webmanifest">
@@ -298,40 +246,49 @@
       <!-- Left: Upload & Before/After Workspace -->
       <div>
         <div class="tool-card" style="margin-bottom: 24px;">
-          <div class="upload-zone" id="compressDropZone">
+          <div class="upload-zone-saas" id="compressDropZone">
             <input type="file" id="compressFileInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
-            <div style="width: 48px; height: 48px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            <div class="upload-icon-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
             </div>
-            <div style="font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Drag &amp; Drop Image to Compress</div>
-            <div style="font-size: 0.8125rem; color: #64748b; margin-bottom: 14px;">Supports JPG, PNG, and WEBP</div>
-            <button type="button" class="btn-secondary" style="font-size: 0.8125rem; padding: 6px 14px; pointer-events: none;">Select Image</button>
+            <div class="upload-title">Drag &amp; Drop Image to Compress</div>
+            <div class="upload-subtitle">Supports JPG, PNG, and WEBP • Real-time compression engine</div>
+            <button type="button" class="btn btn-secondary btn-sm" style="pointer-events: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>Select Image</span>
+            </button>
           </div>
         </div>
 
         <!-- Before / After Workspace -->
-        <div class="tool-card" id="compressWorkspace" style="display: none;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+        <div class="tool-card" id="compressWorkspace" style="display: none; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
             <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin: 0;">Compression Comparison</h3>
             <div style="display: flex; gap: 8px;">
-              <button type="button" id="btnDownloadCompressed" class="btn-primary" style="font-size: 0.8125rem; padding: 8px 14px;">Download</button>
-              <button type="button" id="btnSaveCompressedToCloud" class="btn-secondary" style="font-size: 0.8125rem; padding: 8px 14px;">Save to Cloud</button>
+              <button type="button" id="btnDownloadCompressed" class="btn btn-primary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Download Compressed</span>
+              </button>
+              <button type="button" id="btnSaveCompressedToCloud" class="btn btn-secondary btn-sm">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                <span>Save to Cloud</span>
+              </button>
             </div>
           </div>
 
           <!-- Stats comparison cards -->
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;">
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px; padding: 12px; text-align: center;">
               <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Original Size</div>
-              <div id="compressOriginalSize" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem; font-weight: 700; color: #0f172a; margin-top: 4px;">0 KB</div>
+              <div id="compressOriginalSize" class="font-tabular" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem; font-weight: 700; color: #0f172a; margin-top: 4px;">0 KB</div>
             </div>
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center;">
+            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px; padding: 12px; text-align: center;">
               <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Compressed Size</div>
-              <div id="compressCompressedSize" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem; font-weight: 700; color: #059669; margin-top: 4px;">0 KB</div>
+              <div id="compressCompressedSize" class="font-tabular" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem; font-weight: 700; color: #059669; margin-top: 4px;">0 KB</div>
             </div>
             <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 12px; text-align: center;">
-              <div style="font-size: 0.75rem; color: #059669; font-weight: 700;">Saved</div>
-              <div id="compressSavedPct" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem; font-weight: 800; color: #059669; margin-top: 4px;">0%</div>
+              <div style="font-size: 0.75rem; color: #059669; font-weight: 700;">Reduction</div>
+              <div id="compressSavedPct" class="font-tabular" style="font-family: 'JetBrains Mono', monospace; font-size: 1.125rem; font-weight: 800; color: #059669; margin-top: 4px;">0%</div>
             </div>
           </div>
 
@@ -339,13 +296,13 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
             <div>
               <div style="font-size: 0.8125rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Original Preview</div>
-              <div style="aspect-ratio: 4/3; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+              <div style="aspect-ratio: 4/3; background: #f8fafc; border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
                 <img id="compressOriginalPreview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </div>
             </div>
             <div>
               <div style="font-size: 0.8125rem; font-weight: 700; color: #059669; margin-bottom: 6px;">Compressed Preview</div>
-              <div style="aspect-ratio: 4/3; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+              <div style="aspect-ratio: 4/3; background: #f8fafc; border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
                 <img id="compressCompressedPreview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </div>
             </div>
@@ -355,29 +312,33 @@
 
       <!-- Right: Settings -->
       <div>
-        <div class="tool-card">
-          <h3 style="font-size: 1.0625rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;">Compression Options</h3>
+        <div class="tool-settings-panel">
+          <div class="tool-settings-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Compression Options</span>
+          </div>
 
-          <div style="margin-bottom: 16px;">
-            <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Compression Strength</label>
-            <select id="compressPreset" class="input-control" style="width: 100%;">
+          <div class="form-group">
+            <label for="compressPreset" class="form-label">Compression Preset</label>
+            <select id="compressPreset" class="input-control">
               <option value="medium" selected>Medium (Optimal Balance - 70%)</option>
               <option value="low">Low Compression (High Quality - 85%)</option>
               <option value="high">High Compression (Smallest Size - 45%)</option>
-              <option value="custom">Custom Slider</option>
+              <option value="custom">Custom Slider Control</option>
             </select>
           </div>
 
-          <div id="compressSliderGroup" style="display: none; margin-bottom: 20px;">
+          <div id="compressSliderGroup" class="form-group" style="display: none; margin-bottom: 20px;">
             <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">
-              <span>Quality Level</span>
+              <span>Target Quality</span>
               <span id="compressSliderVal" style="color: #059669;">70%</span>
             </div>
             <input type="range" id="compressSlider" min="10" max="100" value="70" style="width: 100%; accent-color: #059669;">
           </div>
 
-          <div style="padding-top: 14px; border-top: 1px solid #f1f5f9; font-size: 0.75rem; color: #64748b; line-height: 1.5;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:-2px;margin-right:2px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><strong>Instant Processing</strong>: Adjusting settings applies real-time compression so you can dial in the perfect file size.
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-light); font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; display: flex; gap: 8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span><strong>Instant Local Processing</strong>: Real-time compression engine with zero server upload for maximum confidentiality.</span>
           </div>
         </div>
       </div>
@@ -385,16 +346,36 @@
     </div>
 
     <!-- Related Tools Section -->
-    <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid #e2e8f0;">
-      <h3 style="font-size: 1.125rem; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Related Tools</h3>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 16px;">
-        <a href="jpg-to-pdf.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">JPG to PDF →</div>
-          <div style="font-size: 0.75rem; color: #64748b;">Convert images into organized PDF documents.</div>
+    <div class="tool-related-section">
+      <h3 class="tool-related-title">Related Document Tools</h3>
+      <div class="tool-related-grid">
+        <a href="jpg-to-pdf.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>JPG to PDF</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Convert pictures and scans into formatted PDF documents.</div>
         </a>
-        <a href="pdf-to-jpg.html" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;">
-          <div style="font-weight: 700; color: #0f172a; font-size: 0.9375rem;">PDF to JPG →</div>
-          <div style="font-size: 0.75rem; color: #64748b;">Extract high-res JPG images from any PDF.</div>
+        <a href="pdf-to-jpg.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF to JPG</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Convert PDF pages into high-resolution JPG images.</div>
+        </a>
+        <a href="pdf-merger.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF Merger</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Combine multiple invoices or receipts into a single PDF.</div>
+        </a>
+        <a href="pdf-splitter.html" class="tool-card-related">
+          <div class="tool-card-related-title">
+            <span>PDF Splitter</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+          <div class="tool-card-related-desc">Extract individual pages or range-split large PDF files.</div>
         </a>
       </div>
     </div>
