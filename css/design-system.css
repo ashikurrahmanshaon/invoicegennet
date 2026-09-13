@@ -839,7 +839,7 @@ ul, ol {
 .box-icon-frame.icon-neutral:hover {
   background-color: #f1f5f9;
   border-color: #cbd5e1;
-  color: #00c875;
+  color: #059669;
 }
 
 /* Micro-interaction on buttons (Rock-solid, zero text shaking/jumping) */
@@ -880,7 +880,7 @@ ul, ol {
 .badge-dot {
   width: 6px;
   height: 6px;
-  background: #00c875;
+  background: #059669;
   border-radius: 50%;
   display: inline-block;
 }
@@ -963,14 +963,14 @@ ul, ol {
   font-size: 1.28rem !important;
   font-weight: 800 !important;
   letter-spacing: -0.03em !important;
-  color: #00c875 !important;
+  color: #059669 !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
   margin-left: 0 !important;
   line-height: 1 !important;
   vertical-align: baseline !important;
-  -webkit-text-fill-color: #00c875 !important;
+  -webkit-text-fill-color: #059669 !important;
 }
 
 /* ==========================================================================
@@ -1052,7 +1052,7 @@ ul, ol {
 .header-auth-dashboard:hover {
   color: #047857;
   background-color: #f0fdf4;
-  border-color: #00c875;
+  border-color: #059669;
   box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
 }
 
@@ -1263,7 +1263,7 @@ ul, ol {
 }
 
 .footer-brand-name .net-accent {
-  color: #00c875;
+  color: #059669;
 }
 
 .footer-tagline {
@@ -1312,7 +1312,7 @@ ul, ol {
 }
 
 .footer-links-list a:hover {
-  color: #00c875;
+  color: #059669;
 }
 
 .footer-bottom-bar {
@@ -2479,3 +2479,57 @@ body.mobile-drawer-open .mobile-nav-drawer,
 
 
 
+
+/* Tabular Numbers for Financial Rigor */
+.font-tabular,
+.financial-figure,
+.kpi-value,
+.item-amount,
+.item-rate,
+.total-amount,
+.table-amount-display,
+.invoice-total-display,
+td.amount-col,
+.stat-amount {
+  font-variant-numeric: tabular-nums !important;
+  font-feature-settings: "tnum" 1 !important;
+}
+
+/* Reusable Premium Empty State Component */
+.empty-state-box {
+  padding: 48px 24px;
+  text-align: center;
+  background-color: var(--color-white);
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius-md);
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.empty-state-icon-frame {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.empty-state-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+.empty-state-desc {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  max-width: 420px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}

@@ -1,19 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-  <!-- Invoice-Gen.net Premium Brand Mark -->
-  <!-- Squircle Base with Deep Emerald Tone -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" width="200" height="48" fill="none">
+  <!-- Invoice-Gen.net Dark Background Variant -->
+  <!-- Logo Mark -->
   <rect width="48" height="48" rx="11" fill="#059669" />
   <rect x="0.5" y="0.5" width="47" height="47" rx="10.5" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1" />
-
-  <!-- Crisp White Stationery Document Sheet -->
   <path d="M 14 11.5 C 14 10.12 15.12 9 16.5 9 L 27.5 9 L 34 15.5 L 34 36.5 C 34 37.88 32.88 39 31.5 39 L 16.5 39 C 15.12 39 14 37.88 14 36.5 Z" fill="#FFFFFF" />
-
-  <!-- Precision 45-Degree Folded Flap -->
   <path d="M 27.5 9 L 27.5 14 C 27.5 14.83 28.17 15.5 29 15.5 L 34 15.5 Z" fill="#D1FAE5" />
   <path d="M 27.5 9 L 34 15.5" stroke="#A7F3D0" stroke-width="0.75" />
-
-  <!-- Ledger Lines: Title, Line Item, and Emerald Total Accent -->
   <rect x="18" y="19.5" width="12" height="2.5" rx="1.25" fill="#0F172A" />
   <rect x="18" y="24.5" width="9" height="2" rx="1" fill="#64748B" />
   <rect x="18" y="29" width="7" height="2" rx="1" fill="#059669" />
   <circle cx="29.5" cy="30" r="1.5" fill="#059669" />
+
+  <!-- Wordmark for Dark Backgrounds -->
+  <text x="60" y="31" font-family="'Plus Jakarta Sans', -apple-system, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF" letter-spacing="-0.02em">Invoice-Gen<tspan fill="#34D399">.net</tspan></text>
 </svg>

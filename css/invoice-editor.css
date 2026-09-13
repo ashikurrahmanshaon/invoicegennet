@@ -1451,14 +1451,14 @@
   font-size: 1.28rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #00c875 !important;
+  color: #059669 !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
   margin-left: 0 !important;
   line-height: 1 !important;
   vertical-align: baseline !important;
-  -webkit-text-fill-color: #00c875 !important;
+  -webkit-text-fill-color: #059669 !important;
 }
 
 .header-tagline-text {
@@ -2463,7 +2463,7 @@
   height: 46px;
   border-radius: 12px;
   background: #ecfdf5;
-  color: #00c875;
+  color: #059669;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2523,7 +2523,7 @@
 
 .auth-modal-card .form-input:focus {
   background: #ffffff;
-  border-color: #00c875;
+  border-color: #059669;
   box-shadow: 0 0 0 3px rgba(0, 200, 117, 0.16);
   outline: none;
 }
@@ -2551,7 +2551,7 @@
 
 .auth-modal-card .form-textarea:focus {
   background: #ffffff;
-  border-color: #00c875;
+  border-color: #059669;
   box-shadow: 0 0 0 3px rgba(0, 200, 117, 0.16);
   outline: none;
 }
@@ -2643,7 +2643,7 @@
 }
 
 .auth-toggle-link a {
-  color: #00c875;
+  color: #059669;
   font-weight: 700;
   text-decoration: none;
 }
@@ -2656,7 +2656,7 @@
    DYNAMIC COLOR THEMES
    ========================================================================== */
 .theme-emerald {
-  --theme-accent: #00c875;
+  --theme-accent: #059669;
   --theme-accent-dark: #059669;
   --theme-heading: #065f46;
   --theme-table-header: #047857;
@@ -2768,7 +2768,7 @@
 }
 
 .footer-nav-list a:hover {
-  color: #00c875;
+  color: #059669;
 }
 
 .live-status-pill {
@@ -2783,7 +2783,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #00c875;
+  background-color: #059669;
 }
 
 
@@ -2834,7 +2834,7 @@
 }
 
 .page-hero-title .accent {
-  color: #00c875;
+  color: #059669;
 }
 
 .page-hero-sub {
@@ -3614,7 +3614,7 @@
 }
 
 .btn-plan-primary {
-  background: #00c875;
+  background: #059669;
   color: #ffffff;
   border-radius: 6px;
   box-shadow: none;
@@ -3655,12 +3655,12 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  background: #00c875;
+  background: #059669;
   color: #022c22;
   font-size: 0.95rem;
   font-weight: 700;
   border-radius: 6px;
-  border: 1px solid #00c875;
+  border: 1px solid #059669;
   text-decoration: none;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
   transition: background-color 150ms ease, border-color 150ms ease;
@@ -3747,7 +3747,7 @@
 
 .toast-notice.toast-success .toast-icon-badge {
   background: rgba(0, 200, 117, 0.2);
-  color: #00c875;
+  color: #059669;
   border: 1px solid rgba(0, 200, 117, 0.4);
 }
 
@@ -4083,14 +4083,14 @@
 }
 
 .auth-checkbox-label input {
-  accent-color: #00c875;
+  accent-color: #059669;
   width: 16px;
   height: 16px;
   cursor: pointer;
 }
 
 .auth-forgot-link {
-  color: #00c875;
+  color: #059669;
   font-weight: 600;
   text-decoration: none;
 }
@@ -4208,7 +4208,7 @@
 }
 
 .auth-bottom-switch a {
-  color: #00c875;
+  color: #059669;
   font-weight: 700;
   text-decoration: none;
 }
@@ -4447,7 +4447,7 @@
 }
 
 .check-circle.checked-emerald {
-  background: #00c875;
+  background: #059669;
   color: #ffffff;
 }
 
@@ -4497,8 +4497,8 @@
 }
 
 .btn-plan-primary:hover {
-  background: #00c875;
-  border-color: #00c875;
+  background: #059669;
+  border-color: #059669;
   color: #ffffff;
   box-shadow: none;
 }
@@ -4780,8 +4780,8 @@ html[dir="rtl"] .lang-item-en {
 }
 
 .dashboard-tab-btn.active {
-  color: #00c875;
-  border-bottom-color: #00c875;
+  color: #059669;
+  border-bottom-color: #059669;
   font-weight: 700;
 }
 
@@ -4796,7 +4796,7 @@ html[dir="rtl"] .lang-item-en {
 
 .dashboard-tab-btn.active .dashboard-tab-count {
   background: #ecfdf5;
-  color: #00c875;
+  color: #059669;
 }
 
 /* Cards & Content Panels */
@@ -4863,7 +4863,7 @@ html[dir="rtl"] .lang-item-en {
 
 .dashboard-search-input:focus {
   background: #ffffff;
-  border-color: #00c875;
+  border-color: #059669;
   box-shadow: 0 0 0 3px rgba(0, 200, 117, 0.15);
   outline: none;
 }
@@ -4910,7 +4910,7 @@ html[dir="rtl"] .lang-item-en {
 }
 
 .doc-number-link:hover {
-  color: #00c875;
+  color: #059669;
 }
 
 .status-badge {
@@ -4988,7 +4988,7 @@ html[dir="rtl"] .lang-item-en {
   height: 54px;
   border-radius: 14px;
   background: #ecfdf5;
-  color: #00c875;
+  color: #059669;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5054,7 +5054,7 @@ html[dir="rtl"] .lang-item-en {
 
 .profile-field-input:focus {
   background: #ffffff;
-  border-color: #00c875;
+  border-color: #059669;
   box-shadow: 0 0 0 3px rgba(0, 200, 117, 0.15);
   outline: none;
 }
@@ -5082,14 +5082,14 @@ html[dir="rtl"] .lang-item-en {
 
 .profile-field-textarea:focus {
   background: #ffffff;
-  border-color: #00c875;
+  border-color: #059669;
   box-shadow: 0 0 0 3px rgba(0, 200, 117, 0.15);
   outline: none;
 }
 
 .btn-save-profile {
   padding: 12px 24px;
-  background: #00c875;
+  background: #059669;
   color: #ffffff;
   font-weight: 700;
   font-size: 0.9375rem;
@@ -5125,14 +5125,14 @@ html[dir="rtl"] .lang-item-en {
   height: 64px;
   border-radius: 50%;
   background: #ecfdf5;
-  color: #00c875;
+  color: #059669;
   font-size: 1.5rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 12px;
-  border: 2px solid #00c875;
+  border: 2px solid #059669;
   overflow: hidden;
 }
 
@@ -5274,7 +5274,7 @@ html[dir="rtl"] .lang-item-en {
 }
 
 .footer-brand-name .net-accent {
-  color: #00c875;
+  color: #059669;
   font-weight: 800;
 }
 
@@ -5307,7 +5307,7 @@ html[dir="rtl"] .lang-item-en {
 }
 
 .footer-nav-links a:hover {
-  color: #00c875;
+  color: #059669;
 }
 
 .footer-bar-copyright {
@@ -6548,4 +6548,16 @@ html[dir="rtl"] .lang-item-en {
   .related-tools-grid {
     grid-template-columns: 1fr !important;
   }
+}
+/* Dynamic Invoice Save State Micro-interactions */
+.btn-save-state-saving {
+  background-color: #334155 !important;
+  color: #ffffff !important;
+  pointer-events: none;
+}
+.btn-save-state-success {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border-color: #047857 !important;
+  pointer-events: none;
 }
