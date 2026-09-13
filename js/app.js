@@ -204,34 +204,15 @@ window.initInvoiceEditorPage = function () {
   }
 
   // ---------------------------------------------------------------------------
-  // Debounced Auto-Save with Live Pill Feedback
+  // Debounced Auto-Save for Drafts
   // ---------------------------------------------------------------------------
   let autoSaveTimer = null;
   function triggerAutoSaveDebounced() {
-    const saveIndicator = document.getElementById('saveStatusIndicator');
-    const saveText = document.getElementById('saveStatusText');
-    if (saveIndicator && saveText) {
-      saveIndicator.className = 'save-status-indicator is-saving';
-      saveText.textContent = 'Saving…';
-    }
-
+    if (!activeInvoiceId) return;
     clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(async () => {
-      try {
-        if (store && typeof store.saveToStorage === 'function') {
-          store.saveToStorage();
-        }
-        if (activeInvoiceId) {
-          await autoSaveDraftSilently();
-        }
-      } catch (e) {
-      } finally {
-        if (saveIndicator && saveText) {
-          saveIndicator.className = 'save-status-indicator is-saved';
-          saveText.textContent = 'Saved';
-        }
-      }
-    }, 600);
+    autoSaveTimer = setTimeout(() => {
+      autoSaveDraftSilently();
+    }, 2000);
   }
 
   async function autoSaveDraftSilently() {
@@ -268,19 +249,19 @@ window.initInvoiceEditorPage = function () {
 
     row.innerHTML = `
       <td class="col-desc">
-        <input type="text" class="item-table-input item-desc-field item-desc-input" placeholder="e.g. Website Design &amp; Consulting" value="${escapeHtml(item.description || '')}" aria-label="Item description">
+        <input type="text" class="table-input-field item-desc-field item-desc-input" placeholder="e.g. Website Design &amp; Consulting" value="${escapeHtml(item.description || '')}" aria-label="Item description">
       </td>
       <td class="col-qty">
-        <input type="number" min="0" step="any" class="item-table-input item-qty-field item-qty-input text-right" value="${item.quantity !== undefined && item.quantity !== '' ? item.quantity : 1}" placeholder="1" aria-label="Quantity">
+        <input type="number" min="0" step="any" class="table-input-field item-qty-field item-qty-input" style="text-align: right;" value="${item.quantity !== undefined && item.quantity !== '' ? item.quantity : 1}" placeholder="1" aria-label="Quantity">
       </td>
       <td class="col-rate">
-        <input type="number" min="0" step="0.01" class="item-table-input item-rate-field item-rate-input text-right" value="${item.rate !== undefined && item.rate !== 0 ? item.rate : (item.rate === 0 && !item.description ? '' : item.rate)}" placeholder="0.00" aria-label="Rate or unit price">
+        <input type="number" min="0" step="0.01" class="table-input-field item-rate-field item-rate-input" style="text-align: right;" value="${item.rate !== undefined && item.rate !== 0 ? item.rate : (item.rate === 0 && !item.description ? '' : item.rate)}" placeholder="0.00" aria-label="Rate or unit price">
       </td>
       <td class="col-amount">
-        <div class="item-amount-val item-amount-col">${store.formatMoney(itemTotal)}</div>
+        <div class="table-amount-val item-amount-col">${store.formatMoney(itemTotal)}</div>
       </td>
-      <td class="col-action" style="text-align: center;">
-        <button type="button" class="item-delete-btn btn-trash-row" title="Delete Item" data-id="${item.id}" aria-label="Delete line item">
+      <td class="col-action">
+        <button type="button" class="btn-trash-row" title="Delete Row" data-id="${item.id}" aria-label="Delete line item">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -376,24 +357,9 @@ window.initInvoiceEditorPage = function () {
     if (!itemsTableBody) return;
     itemsTableBody.innerHTML = '';
 
-    const countBadge = document.getElementById('itemsCountBadge');
-    const emptyState = document.getElementById('itemsEmptyState');
-    const tableWrap = document.querySelector('.items-ledger-table-wrap');
-
-    if (countBadge) {
-      countBadge.textContent = items.length === 1 ? '1 item' : `${items.length} items`;
-    }
-
-    if (!items || items.length === 0) {
-      if (emptyState) emptyState.style.display = 'block';
-      if (tableWrap) tableWrap.style.display = 'none';
-    } else {
-      if (emptyState) emptyState.style.display = 'none';
-      if (tableWrap) tableWrap.style.display = 'block';
-      items.forEach((item) => {
-        itemsTableBody.appendChild(createRowElement(item, false));
-      });
-    }
+    items.forEach((item) => {
+      itemsTableBody.appendChild(createRowElement(item, false));
+    });
   }
 
   function updateRowTotal(row, itemId) {
@@ -406,20 +372,6 @@ window.initInvoiceEditorPage = function () {
     }
   }
 
-  function updateLivePreview() {
-    const paper = document.getElementById('invoicePaper');
-    if (!paper || !window.pdfEngine) return;
-    try {
-      paper.innerHTML = '';
-      const printable = window.pdfEngine.buildPrintableA4Element();
-      if (printable) {
-        paper.appendChild(printable);
-      }
-    } catch (err) {
-      console.warn('Live preview render warning:', err);
-    }
-  }
-
   function updateCalculations() {
     const totals = store.calculateTotals();
 
@@ -428,7 +380,6 @@ window.initInvoiceEditorPage = function () {
     if (taxAmountDisplay) taxAmountDisplay.textContent = store.formatMoney(totals.taxAmount);
     if (grandTotalDisplay) grandTotalDisplay.textContent = store.formatMoney(totals.grandTotal);
     if (balanceDueDisplay) balanceDueDisplay.textContent = store.formatMoney(totals.balanceDue);
-    updateLivePreview();
   }
 
   function escapeHtml(text) {
@@ -1322,423 +1273,24 @@ window.initInvoiceEditorPage = function () {
 
     // Wire Mobile Sticky Bottom Action Bar
     const btnMobileDownload = document.getElementById('btnMobileDownloadPdf');
-    if (btnMobileDownload && btnDownloadPDF) {
-      btnMobileDownload.addEventListener('click', () => btnDownloadPDF.click());
+    const btnMobileSave = document.getElementById('btnMobileSaveInvoice');
+    const btnMobileOpts = document.getElementById('btnMobileOpenOptions');
+    if (btnMobileDownload && downloadPdfBtn) {
+      btnMobileDownload.addEventListener('click', () => downloadPdfBtn.click());
     }
-  } catch (e) {
-    console.error('URL params or initial load error:', e);
-  }
-
-  // ---------------------------------------------------------------------------
-  // ULTIMATE EDITOR: PREVIEW CONTROLS, CLIENT SELECTOR, PROFILE, OPTIONAL DETAILS
-  // ---------------------------------------------------------------------------
-
-  // Preview Zoom & Scale Controls
-  function initPreviewControls() {
-    let currentZoom = 1.0;
-    const zoomText = document.getElementById('zoomLevelDisplay');
-    const a4Sheet = document.getElementById('invoicePaper');
-    const btnIn = document.getElementById('btnZoomIn');
-    const btnOut = document.getElementById('btnZoomOut');
-    const btnFit = document.getElementById('btnZoomFit');
-
-    function applyZoom(z) {
-      currentZoom = Math.max(0.6, Math.min(1.4, Math.round(z * 10) / 10));
-      if (zoomText) zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
-      if (a4Sheet) a4Sheet.style.transform = `scale(${currentZoom})`;
+    if (btnMobileSave && btnSaveInvoice) {
+      btnMobileSave.addEventListener('click', () => btnSaveInvoice.click());
     }
-
-    if (btnIn) btnIn.addEventListener('click', () => applyZoom(currentZoom + 0.1));
-    if (btnOut) btnOut.addEventListener('click', () => applyZoom(currentZoom - 0.1));
-    if (btnFit) btnFit.addEventListener('click', () => applyZoom(1.0));
-
-    const btnScroll = document.getElementById('btnPreviewScroll');
-    if (btnScroll) {
-      btnScroll.addEventListener('click', () => {
-        if (window.innerWidth <= 1024) {
-          openPreviewModal();
-        } else {
-          const col = document.getElementById('editorPreviewCol');
-          if (col) col.scrollIntoView({ behavior: 'smooth' });
+    if (btnMobileOpts) {
+      btnMobileOpts.addEventListener('click', () => {
+        const sidebar = document.getElementById('inspectorSidebar');
+        if (sidebar) {
+          sidebar.scrollIntoView({ behavior: 'smooth' });
         }
       });
     }
-
-    const btnMobPrev = document.getElementById('btnMobilePreview');
-    if (btnMobPrev) {
-      btnMobPrev.addEventListener('click', openPreviewModal);
-    }
-  }
-
-  // Smart Searchable Client Selector
-  let cachedClientsList = [];
-  async function initSmartClientSelector() {
-    const trigger = document.getElementById('clientSelectTrigger');
-    const dropdown = document.getElementById('clientDropdownMenu');
-    const searchInput = document.getElementById('clientSearchInput');
-    const optionsList = document.getElementById('clientOptionsList');
-    const selectedCard = document.getElementById('clientSelectedCard');
-    const selName = document.getElementById('selectedClientName');
-    const selEmail = document.getElementById('selectedClientEmail');
-    const selAddress = document.getElementById('selectedClientAddress');
-    const btnChange = document.getElementById('btnChangeClient');
-    const btnClear = document.getElementById('btnClearClient');
-    const btnCreate = document.getElementById('btnCreateClientFromDropdown');
-    const btnNewInline = document.getElementById('btnOpenNewClientInline');
-    const manualInputs = document.getElementById('manualClientInputs');
-
-    if (!trigger || !dropdown) return;
-
-    try {
-      const res = await fetch('/api/clients');
-      const data = await res.json();
-      if (data && data.success && Array.isArray(data.clients)) {
-        cachedClientsList = data.clients;
-        localStorage.setItem('invoicegen_clients_cache', JSON.stringify(cachedClientsList));
-      }
-    } catch (e) {
-      const cached = localStorage.getItem('invoicegen_clients_cache');
-      if (cached) {
-        try { cachedClientsList = JSON.parse(cached); } catch(err) {}
-      }
-    }
-
-    function renderOptions(filter = '') {
-      if (!optionsList) return;
-      optionsList.innerHTML = '';
-      const q = filter.trim().toLowerCase();
-      const filtered = cachedClientsList.filter(c => {
-        if (!q) return true;
-        return (c.name && c.name.toLowerCase().includes(q)) ||
-               (c.company && c.company.toLowerCase().includes(q)) ||
-               (c.email && c.email.toLowerCase().includes(q));
-      });
-
-      if (filtered.length === 0) {
-        optionsList.innerHTML = `<div style="padding: 12px; text-align: center; color: #94a3b8; font-size: 13px;">${q ? 'No clients matching "' + escapeHtml(q) + '"' : 'No clients found'}</div>`;
-        return;
-      }
-
-      filtered.forEach(client => {
-        const item = document.createElement('div');
-        item.className = 'client-option-item';
-        item.innerHTML = `
-          <div class="client-option-name">${escapeHtml(client.name)}${client.company ? ' <span style="font-weight:400; color:#64748b;">(' + escapeHtml(client.company) + ')</span>' : ''}</div>
-          <div class="client-option-company">${escapeHtml(client.email || client.billing_address || '')}</div>
-        `;
-        item.addEventListener('click', () => {
-          selectClient(client);
-          dropdown.style.display = 'none';
-          trigger.setAttribute('aria-expanded', 'false');
-        });
-        optionsList.appendChild(item);
-      });
-    }
-
-    function selectClient(client) {
-      const displayName = client.company ? `${client.name} (${client.company})` : client.name;
-      if (clientName) {
-        clientName.value = displayName;
-        store.updateState('client.name', displayName);
-      }
-      if (clientAddress) {
-        clientAddress.value = client.billing_address || '';
-        store.updateState('client.address', client.billing_address || '');
-      }
-      if (client.shipping_address && shipToAddress) {
-        shipToAddress.value = client.shipping_address;
-        store.updateState('shipTo.address', client.shipping_address);
-        if (shipToName) {
-          shipToName.value = client.name;
-          store.updateState('shipTo.name', client.name);
-        }
-      }
-
-      if (selectedCard && selName && manualInputs) {
-        selName.textContent = displayName;
-        if (selEmail) selEmail.textContent = client.email || '';
-        if (selAddress) selAddress.textContent = client.billing_address || '';
-        selectedCard.style.display = 'flex';
-        manualInputs.style.display = 'none';
-        trigger.style.display = 'none';
-      }
-
-      updateCalculations();
-      triggerAutoSaveDebounced();
-      if (window.showToast) window.showToast(`Selected client "${client.name}"`, 'info');
-    }
-
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isVis = dropdown.style.display === 'flex';
-      dropdown.style.display = isVis ? 'none' : 'flex';
-      trigger.setAttribute('aria-expanded', !isVis);
-      if (!isVis) {
-        renderOptions(searchInput ? searchInput.value : '');
-        if (searchInput) searchInput.focus();
-      }
-    });
-
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        renderOptions(e.target.value);
-      });
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!dropdown.contains(e.target) && e.target !== trigger) {
-        dropdown.style.display = 'none';
-        trigger.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    if (btnChange) {
-      btnChange.addEventListener('click', () => {
-        if (selectedCard) selectedCard.style.display = 'none';
-        if (trigger) {
-          trigger.style.display = 'flex';
-          dropdown.style.display = 'flex';
-          trigger.setAttribute('aria-expanded', 'true');
-          renderOptions('');
-          if (searchInput) searchInput.focus();
-        }
-      });
-    }
-
-    if (btnClear) {
-      btnClear.addEventListener('click', () => {
-        if (selectedCard) selectedCard.style.display = 'none';
-        if (trigger) trigger.style.display = 'flex';
-        if (manualInputs) manualInputs.style.display = 'block';
-        if (clientName) clientName.value = '';
-        if (clientAddress) clientAddress.value = '';
-        store.updateState('client.name', '');
-        store.updateState('client.address', '');
-        updateCalculations();
-        triggerAutoSaveDebounced();
-      });
-    }
-
-    async function handleAddClient() {
-      const name = prompt('Enter Client or Company Name:');
-      if (!name || !name.trim()) return;
-      const email = prompt('Enter Client Email (optional):') || '';
-      const address = prompt('Enter Client Billing Address (optional):') || '';
-
-      const newCl = {
-        name: name.trim(),
-        email: email.trim(),
-        billing_address: address.trim(),
-        company: ''
-      };
-
-      try {
-        const res = await fetch('/api/clients', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newCl)
-        });
-        const d = await res.json();
-        if (d && d.client) {
-          cachedClientsList.unshift(d.client);
-          selectClient(d.client);
-        } else {
-          newCl.id = 'client_' + Date.now();
-          cachedClientsList.unshift(newCl);
-          selectClient(newCl);
-        }
-      } catch (err) {
-        newCl.id = 'client_' + Date.now();
-        cachedClientsList.unshift(newCl);
-        selectClient(newCl);
-      }
-      localStorage.setItem('invoicegen_clients_cache', JSON.stringify(cachedClientsList));
-      dropdown.style.display = 'none';
-    }
-
-    if (btnCreate) btnCreate.addEventListener('click', handleAddClient);
-    if (btnNewInline) btnNewInline.addEventListener('click', handleAddClient);
-  }
-
-  // Business Profile Block
-  function initBusinessProfileBlock() {
-    const bizDisplay = document.getElementById('bizProfileDisplay');
-    const bizInputs = document.getElementById('bizInputFields');
-    const btnToggle = document.getElementById('btnToggleEditProfile');
-    const titleEl = document.getElementById('bizDisplayTitle');
-    const contactEl = document.getElementById('bizDisplayContact');
-    const addrEl = document.getElementById('bizDisplayAddress');
-
-    let profile = null;
-    try {
-      const stored = localStorage.getItem('invoicegen_business_profile');
-      if (stored) profile = JSON.parse(stored);
-      else if (window.currentUser && (window.currentUser.business_name || window.currentUser.name)) {
-        profile = {
-          name: window.currentUser.business_name || window.currentUser.name,
-          email: window.currentUser.business_email || window.currentUser.email,
-          phone: window.currentUser.business_phone,
-          address: window.currentUser.business_address
-        };
-      }
-    } catch(e) {}
-
-    if (profile && profile.name && profile.name.trim()) {
-      if (titleEl) titleEl.textContent = profile.name;
-      if (contactEl) {
-        const parts = [profile.email, profile.phone].filter(Boolean);
-        contactEl.textContent = parts.join(' • ');
-      }
-      if (addrEl) addrEl.textContent = profile.address || '';
-      if (senderName && !senderName.value) {
-        senderName.value = profile.name;
-        store.updateState('sender.name', profile.name);
-      }
-      if (senderAddress && !senderAddress.value) {
-        senderAddress.value = profile.address || '';
-        store.updateState('sender.address', profile.address || '');
-      }
-      if (bizDisplay && bizInputs) {
-        bizDisplay.style.display = 'flex';
-        bizInputs.style.display = 'none';
-      }
-    }
-
-    if (btnToggle) {
-      btnToggle.addEventListener('click', () => {
-        if (!bizInputs || !bizDisplay) return;
-        const isEditing = bizInputs.style.display !== 'none';
-        bizInputs.style.display = isEditing ? 'none' : 'block';
-        bizDisplay.style.display = isEditing ? 'flex' : 'none';
-        btnToggle.textContent = isEditing ? 'Edit Business Profile' : 'Done Editing';
-      });
-    }
-  }
-
-  // Optional Details Drawer
-  function initOptionalDetails() {
-    const btnToggle = document.getElementById('btnToggleMoreDetails');
-    const tray = document.getElementById('optionalChipsTray');
-    if (!btnToggle || !tray) return;
-
-    btnToggle.addEventListener('click', () => {
-      const isVis = tray.style.display === 'flex';
-      tray.style.display = isVis ? 'none' : 'flex';
-      btnToggle.setAttribute('aria-expanded', !isVis);
-    });
-
-    const setupChip = (chipId, targetId, onToggle) => {
-      const chip = document.getElementById(chipId);
-      const target = document.getElementById(targetId);
-      if (!chip || !target) return;
-
-      chip.addEventListener('click', () => {
-        const isVisible = target.style.display !== 'none';
-        target.style.display = isVisible ? 'none' : (target.tagName === 'DIV' && target.classList.contains('totals-row') ? 'flex' : 'block');
-        chip.classList.toggle('is-active', !isVisible);
-        if (onToggle) onToggle(!isVisible);
-        updateCalculations();
-        triggerAutoSaveDebounced();
-      });
-    };
-
-    setupChip('chipTax', 'taxLineRow', (active) => {
-      if (!active && taxRateInput) {
-        taxRateInput.value = 0;
-        store.updateState('taxRate', 0);
-      }
-    });
-
-    setupChip('chipDiscount', 'discountLineRow', (active) => {
-      if (!active && discountRateInput) {
-        discountRateInput.value = 0;
-        store.updateState('discountValue', 0);
-      }
-    });
-
-    setupChip('chipPo', 'poFieldRow', (active) => {
-      if (!active && poNumberInput) {
-        poNumberInput.value = '';
-        store.updateState('poNumber', '');
-      }
-    });
-
-    setupChip('chipShipping', 'shipToCardPanel', (active) => {
-      store.updateState('shipTo.enabled', active);
-    });
-
-    setupChip('chipAmountPaid', 'amountPaidLineRow', (active) => {
-      const balRow = document.getElementById('balanceDueLineRow');
-      if (balRow) balRow.style.display = active ? 'flex' : 'none';
-      if (!active && amountPaidInput) {
-        amountPaidInput.value = 0;
-        store.updateState('amountPaid', 0);
-      }
-    });
-
-    setupChip('chipSignature', 'signatureBlockWrap', (active) => {
-      if (!active && signatureInput) {
-        signatureInput.value = '';
-        store.updateState('signature', '');
-      }
-    });
-
-    const btnRemoveShip = document.getElementById('btnRemoveShipTo');
-    if (btnRemoveShip) {
-      btnRemoveShip.addEventListener('click', () => {
-        const panel = document.getElementById('shipToCardPanel');
-        if (panel) panel.style.display = 'none';
-        const chip = document.getElementById('chipShipping');
-        if (chip) chip.classList.remove('is-active');
-        store.updateState('shipTo.enabled', false);
-        updateCalculations();
-      });
-    }
-
-    const btnRemoveSig = document.getElementById('btnRemoveSignature');
-    if (btnRemoveSig) {
-      btnRemoveSig.addEventListener('click', () => {
-        const wrap = document.getElementById('signatureBlockWrap');
-        if (wrap) wrap.style.display = 'none';
-        const chip = document.getElementById('chipSignature');
-        if (chip) chip.classList.remove('is-active');
-        if (signatureInput) signatureInput.value = '';
-        store.updateState('signature', '');
-        updateCalculations();
-      });
-    }
-  }
-
-  // More Options Dropdown in Subnav
-  function initEditorMoreMenu() {
-    const btnMore = document.getElementById('btnEditorMoreActions');
-    const menu = document.getElementById('editorMoreMenu');
-    if (!btnMore || !menu) return;
-
-    btnMore.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isVis = menu.style.display === 'block';
-      menu.style.display = isVis ? 'none' : 'block';
-      btnMore.setAttribute('aria-expanded', !isVis);
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!menu.contains(e.target) && e.target !== btnMore) {
-        menu.style.display = 'none';
-        btnMore.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-
-  // Wire up and initialize
-  initPreviewControls();
-  initSmartClientSelector();
-  initBusinessProfileBlock();
-  initOptionalDetails();
-  initEditorMoreMenu();
-  updateLivePreview();
-
     document.body.classList.add('has-mobile-sticky-actions');
+  } catch (e) {}
 };
 
 if (document.readyState === 'loading') {
