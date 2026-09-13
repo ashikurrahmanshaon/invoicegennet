@@ -3,7 +3,17 @@
    Native node:sqlite relational database storage with scoped user isolation
    ========================================================================== */
 
-const { DatabaseSync } = require('node:sqlite');
+let DatabaseSync;
+try {
+  ({ DatabaseSync } = require('node:sqlite'));
+} catch (err) {
+  console.error('\n===============================================================');
+  console.error('[INVOICEGEN RUNTIME ERROR] Current Node version: ' + process.version);
+  console.error('InvoiceGen requires Node.js v22.5.0 or higher for native node:sqlite support.');
+  console.error('In Hostinger hPanel -> Advanced / Node.js, please select Node.js 22.x or later.');
+  console.error('===============================================================\n');
+  throw err;
+}
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');

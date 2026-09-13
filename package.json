@@ -22,7 +22,7 @@
   "author": "ashikurrahmanshaon",
   "license": "MIT",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.5.0"
   },
   "dependencies": {
     "html2pdf.js": "^0.14.0",

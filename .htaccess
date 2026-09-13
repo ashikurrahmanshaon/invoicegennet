@@ -2,6 +2,9 @@
 # Invoice-Gen.net - Hostinger / Apache / LiteSpeed Configuration
 # ----------------------------------------------------------------------
 
+# 0. Default Index Document
+DirectoryIndex index.html
+
 # 1. Enable Rewrite Engine
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -14,7 +17,7 @@
 
   # Clean URLs: Serve .html automatically without showing .html extension
   # 1a. Sitemap rewrites
-  RewriteRule ^sitemap\.xml$ sitemap.xml [L]
+  RewriteRule ^sitemap\.xml$ - [L]
   RewriteRule ^sitemap$ sitemap.html [L]
 
   # 1b. Clean HTML URLs
