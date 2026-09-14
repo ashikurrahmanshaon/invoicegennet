@@ -495,8 +495,24 @@
 
     if (!btnToggle || !drawer) return;
 
-    // Ensure Tools link is present in drawer links
+    // Ensure Search trigger exists at top of drawer
     const linksContainer = drawer.querySelector('.mobile-nav-links');
+    if (linksContainer && !linksContainer.querySelector('#btnMobileDrawerSearch')) {
+      const searchBtn = document.createElement('button');
+      searchBtn.type = 'button';
+      searchBtn.id = 'btnMobileDrawerSearch';
+      searchBtn.className = 'btn-mobile-drawer-search';
+      searchBtn.setAttribute('aria-label', 'Search invoices, clients, tools...');
+      searchBtn.style.cssText = 'width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 14px; min-height: 44px; height: 44px; border-radius: 8px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; font-size: 0.875rem; margin-bottom: 12px; cursor: pointer; font-family: inherit; font-weight: 500; text-align: left; box-sizing: border-box;';
+      searchBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <span>Search invoices, clients, tools...</span>
+        <span style="margin-left: auto; font-size: 0.6875rem; background: #e2e8f0; color: #475569; padding: 2px 6px; border-radius: 4px; font-weight: 600;">⌘K</span>
+      `;
+      linksContainer.prepend(searchBtn);
+    }
+
+    // Ensure Tools link is present in drawer links
     if (linksContainer && !linksContainer.querySelector('a[href*="tools"]')) {
       const pricingLink = linksContainer.querySelector('a[href*="pricing"]');
       const toolsLink = document.createElement('a');
@@ -574,6 +590,17 @@
       btnClose.onclick = (e) => {
         e.stopPropagation();
         closeDrawer();
+      };
+    }
+
+    const btnDrawerSearch = drawer.querySelector('#btnMobileDrawerSearch');
+    if (btnDrawerSearch) {
+      btnDrawerSearch.onclick = (e) => {
+        e.stopPropagation();
+        closeDrawer();
+        if (typeof window.openGlobalSearch === 'function') {
+          window.openGlobalSearch();
+        }
       };
     }
 

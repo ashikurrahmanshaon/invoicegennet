@@ -570,6 +570,10 @@ class PDFEngine {
       await html2pdf().set(opt).from(printableElement).save();
 
       this.showToast('Invoice PDF downloaded successfully!', 'success');
+      const banner = document.getElementById('downloadSuccessBanner');
+      if (banner) {
+        banner.style.display = 'flex';
+      }
     } catch (err) {
       console.error('PDF Generation Error:', err);
       this.showToast('Could not generate PDF. Please try again.', 'warning');

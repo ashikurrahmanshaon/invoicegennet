@@ -338,8 +338,46 @@
           <!-- ============================================================= -->
           <div id="panelOverview" class="workspace-panel" role="tabpanel">
 
+            <!-- Onboarding Hero for New Users with 0 Invoices -->
+            <div class="dashboard-zero-hero" id="dashZeroState" style="display: none;">
+              <div class="zero-hero-icon-wrap">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+              </div>
+              <h2 class="zero-hero-title">Create your first invoice</h2>
+              <p class="zero-hero-desc">Create your first professional invoice in minutes. Customize line items, calculate taxes, and download print-ready A4 PDFs.</p>
+              <div class="zero-hero-cta-row">
+                <a href="index.html" class="btn btn-primary" style="min-height: 44px; padding: 0 24px; font-size: 0.9375rem; font-weight: 700;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>+ Create Invoice</span>
+                </a>
+              </div>
+              <div class="zero-steps-grid">
+                <button type="button" class="zero-step-card" id="btnZeroStepProfile">
+                  <span class="zero-step-num">1</span>
+                  <div>
+                    <div class="zero-step-title">Add Business Profile</div>
+                    <div class="zero-step-desc">Save your trading name, address, and logo once</div>
+                  </div>
+                </button>
+                <button type="button" class="zero-step-card" id="btnZeroStepClients">
+                  <span class="zero-step-num">2</span>
+                  <div>
+                    <div class="zero-step-title">Add Client</div>
+                    <div class="zero-step-desc">Store client contacts for 1-click invoice filling</div>
+                  </div>
+                </button>
+                <a href="templates.html" class="zero-step-card">
+                  <span class="zero-step-num">3</span>
+                  <div>
+                    <div class="zero-step-title">Explore Templates</div>
+                    <div class="zero-step-desc">Select from Emerald, Navy, Indigo, and Charcoal</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+
             <!-- Executive KPI Cards Grid (4 Primary Cards) -->
-            <div class="dashboard-stats-grid" style="margin-bottom: 16px;">
+            <div class="dashboard-stats-grid" id="dashStatsGrid" style="margin-bottom: 16px;">
               <div class="dashboard-stat-card">
                 <div class="stat-top">
                   <span class="stat-label">Total Invoices</span>
@@ -386,7 +424,7 @@
             </div>
 
             <!-- Financial Metric Row -->
-            <div class="financial-metrics-row">
+            <div class="financial-metrics-row" id="dashFinSummaryRow">
               <div class="financial-metric-card">
                 <div>
                   <div class="financial-metric-label">Total Invoiced</div>
@@ -1212,6 +1250,8 @@
       document.getElementById('btnQuickViewInvoices')?.addEventListener('click', () => switchWorkspaceTab('invoices'));
       document.getElementById('btnOvViewAllInvoices')?.addEventListener('click', () => switchWorkspaceTab('invoices'));
       document.getElementById('btnSidebarEditProfile')?.addEventListener('click', () => switchWorkspaceTab('business'));
+      document.getElementById('btnZeroStepProfile')?.addEventListener('click', () => switchWorkspaceTab('business'));
+      document.getElementById('btnZeroStepClients')?.addEventListener('click', () => switchWorkspaceTab('clients'));
 
       // -----------------------------------------------------------------------
       // 3. Command Center Overview Data Loading (/api/dashboard/summary)
@@ -1223,6 +1263,21 @@
           if (res.ok && data.success && data.summary) {
             const s = data.summary;
             const stats = s.stats;
+
+            // Zero State vs Stats Grid
+            const zeroState = document.getElementById('dashZeroState');
+            const statsGrid = document.getElementById('dashStatsGrid');
+            const finRow = document.getElementById('dashFinSummaryRow');
+
+            if (stats.totalInvoices === 0) {
+              if (zeroState) zeroState.style.display = 'block';
+              if (statsGrid) statsGrid.style.display = 'none';
+              if (finRow) finRow.style.display = 'none';
+            } else {
+              if (zeroState) zeroState.style.display = 'none';
+              if (statsGrid) statsGrid.style.display = 'grid';
+              if (finRow) finRow.style.display = 'grid';
+            }
 
             // 4 KPI Cards
             document.getElementById('ovStatTotalInvoices').textContent = stats.totalInvoices;

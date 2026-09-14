@@ -46,7 +46,7 @@ const BLANK_INVOICE = {
   },
 
   shipTo: {
-    enabled: true,
+    enabled: false,
     name: '',
     address: ''
   },
@@ -268,6 +268,31 @@ class InvoiceStore {
     this.state = JSON.parse(JSON.stringify(BLANK_INVOICE));
     this.state.date = getTodayDateString();
     this.notify();
+  }
+
+  createNewInvoice(options = {}) {
+    const preserveSender = options.preserveSender !== false;
+    const preserveCurrency = options.preserveCurrency !== false;
+    const currentSender = preserveSender ? JSON.parse(JSON.stringify(this.state.sender || {})) : { name: '', address: '', email: '', phone: '' };
+    const currentLogo = preserveSender ? this.state.logo : null;
+    const currentCurrency = preserveCurrency ? (this.state.currency || 'USD') : 'USD';
+    const currentTerms = this.state.paymentTerms || 'Due on Receipt';
+
+    this.state = JSON.parse(JSON.stringify(BLANK_INVOICE));
+    this.state.date = getTodayDateString();
+    if (preserveSender) {
+      this.state.sender = currentSender;
+      this.state.logo = currentLogo;
+    }
+    if (preserveCurrency) {
+      this.state.currency = currentCurrency;
+    }
+    this.state.paymentTerms = currentTerms;
+    if (options.nextNumber) {
+      this.state.number = options.nextNumber;
+    }
+    this.notify();
+    return this.state;
   }
 
   saveToStorage() {

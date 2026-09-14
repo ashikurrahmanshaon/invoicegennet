@@ -7102,3 +7102,220 @@ html[dir="rtl"] .lang-item-en {
   font-variant-numeric: tabular-nums;
 }
 
+/* ==========================================================================
+   DOWNLOAD SUCCESS BANNER & NEXT ACTION PROMPT
+   ========================================================================== */
+.download-success-banner {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  max-width: 440px;
+  width: calc(100% - 32px);
+  background: #ffffff;
+  border: 1.5px solid #10b981;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slideUpFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.download-success-banner.visible {
+  display: flex !important;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.download-success-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.download-success-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.download-success-title {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #0f172a;
+}
+
+.download-success-sub {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.download-success-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .download-success-banner {
+    bottom: 84px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+  }
+}
+
+/* Subtle Inline Add Detail Trigger */
+.btn-subtle-add-detail {
+  background: none;
+  border: none;
+  color: #059669;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-subtle-add-detail:hover {
+  color: #047857;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   DASHBOARD ZERO STATE ONBOARDING HERO
+   ========================================================================== */
+.dashboard-zero-hero {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.zero-hero-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #ecfdf5;
+  color: #059669;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  border: 1px solid #a7f3d0;
+}
+
+.zero-hero-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px;
+}
+
+.zero-hero-desc {
+  font-size: 0.9375rem;
+  color: #64748b;
+  max-width: 520px;
+  margin: 0 auto 24px;
+  line-height: 1.5;
+}
+
+.zero-hero-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.zero-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  text-align: left;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 24px;
+}
+
+.zero-step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  font-family: inherit;
+}
+
+.zero-step-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  transform: translateY(-1px);
+}
+
+.zero-step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #059669;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.zero-step-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.zero-step-desc {
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .zero-steps-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+

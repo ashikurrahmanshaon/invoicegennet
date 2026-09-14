@@ -1215,6 +1215,38 @@ window.initInvoiceEditorPage = function () {
             }
           }
         }).catch(() => {});
+
+      // Fallback: load business profile from localStorage for offline/unauthenticated users
+      try {
+        const rawBiz = localStorage.getItem('invoicegen_business_profile');
+        if (rawBiz) {
+          const biz = JSON.parse(rawBiz);
+          if (biz.name && senderName && !senderName.value) {
+            senderName.value = biz.name;
+            store.updateState('sender.name', biz.name);
+          }
+          if (biz.address && senderAddress && !senderAddress.value) {
+            let fullAddr = biz.address;
+            const contactLine = [biz.email, biz.phone].filter(Boolean).join(' • ');
+            if (contactLine && !fullAddr.includes(biz.email) && !fullAddr.includes(biz.phone)) {
+              fullAddr = fullAddr ? `${fullAddr}\n${contactLine}` : contactLine;
+            }
+            if (biz.taxId && !fullAddr.includes(biz.taxId)) {
+              fullAddr = `${fullAddr}\nTax ID: ${biz.taxId}`;
+            }
+            senderAddress.value = fullAddr;
+            store.updateState('sender.address', fullAddr);
+          }
+          if (biz.currency && currencySelect && (!currencySelect.value || currencySelect.value === 'USD')) {
+            currencySelect.value = biz.currency;
+            store.setCurrency(biz.currency);
+          }
+          if (biz.paymentTerms && paymentTermsSelect) {
+            paymentTermsSelect.value = biz.paymentTerms;
+            store.updateState('paymentTerms', biz.paymentTerms);
+          }
+        }
+      } catch (e) {}
     }
 
     // Check if client_id was passed in URL
@@ -1245,6 +1277,8 @@ window.initInvoiceEditorPage = function () {
                 toggleShipTo.checked = true;
                 const bRow = document.getElementById('sheetBillingRow');
                 if (bRow) bRow.classList.remove('ship-to-hidden');
+                const panel = document.getElementById('shipToCardPanel');
+                if (panel) panel.style.display = 'block';
                 store.updateState('shipTo.enabled', true);
               }
             }
@@ -1254,43 +1288,325 @@ window.initInvoiceEditorPage = function () {
         .catch(() => {});
     }
 
+    // Modal: Quick Add Client Directly in Invoice
+    function openQuickAddClientModal() {
+      const modal = document.getElementById('modalQuickAddClient');
+      if (modal) {
+        modal.style.display = 'flex';
+        const nameInput = document.getElementById('quickClientName');
+        if (nameInput) {
+          nameInput.value = '';
+          nameInput.focus();
+        }
+        const comp = document.getElementById('quickClientCompany');
+        if (comp) comp.value = '';
+        const em = document.getElementById('quickClientEmail');
+        if (em) em.value = '';
+        const ph = document.getElementById('quickClientPhone');
+        if (ph) ph.value = '';
+        const addr = document.getElementById('quickClientAddress');
+        if (addr) addr.value = '';
+        const shp = document.getElementById('quickClientShipping');
+        if (shp) shp.value = '';
+      }
+    }
+    window.openQuickAddClientModal = openQuickAddClientModal;
+
+    window.saveQuickClientModal = async function () {
+      const name = (document.getElementById('quickClientName')?.value || '').trim();
+      if (!name) {
+        if (window.showToast) window.showToast('Please enter client name', 'warning');
+        return;
+      }
+      const company = (document.getElementById('quickClientCompany')?.value || '').trim();
+      const email = (document.getElementById('quickClientEmail')?.value || '').trim();
+      const phone = (document.getElementById('quickClientPhone')?.value || '').trim();
+      const billing_address = (document.getElementById('quickClientAddress')?.value || '').trim();
+      const shipping_address = (document.getElementById('quickClientShipping')?.value || '').trim();
+
+      const btnSave = document.getElementById('btnSaveQuickClient');
+      const origText = btnSave ? btnSave.innerHTML : 'Save & Use in Invoice';
+      if (btnSave) {
+        btnSave.disabled = true;
+        btnSave.innerHTML = '<span>Saving...</span>';
+      }
+
+      let newClient = {
+        id: 'cl_' + Date.now(),
+        name,
+        company,
+        email,
+        phone,
+        billing_address,
+        shipping_address
+      };
+
+      try {
+        const res = await fetch('/api/clients', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            company,
+            email,
+            phone,
+            billingAddress: billing_address,
+            shippingAddress: shipping_address
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.success && data.client) {
+          newClient = data.client;
+          newClient.billing_address = newClient.billingAddress || billing_address;
+          newClient.shipping_address = newClient.shippingAddress || shipping_address;
+        }
+      } catch (e) {}
+
+      // Save locally to persist clients across sessions for unauthenticated users
+      try {
+        const rawClients = localStorage.getItem('invoicegen_clients');
+        const localClients = rawClients ? JSON.parse(rawClients) : [];
+        localClients.push(newClient);
+        localStorage.setItem('invoicegen_clients', JSON.stringify(localClients));
+      } catch (e) {}
+
+      // Add to clientsList in memory and dropdown
+      clientsList.push(newClient);
+      if (picker) {
+        const opt = document.createElement('option');
+        opt.value = newClient.id;
+        opt.textContent = newClient.company ? `${newClient.name} (${newClient.company})` : newClient.name;
+        const newOpt = picker.querySelector('option[value="__new__"]');
+        if (newOpt) {
+          picker.insertBefore(opt, newOpt);
+        } else {
+          picker.appendChild(opt);
+        }
+        picker.value = newClient.id;
+      }
+
+      // Populate into invoice fields
+      const displayName = newClient.company ? `${newClient.name} (${newClient.company})` : newClient.name;
+      if (clientName) {
+        clientName.value = displayName;
+        store.updateState('client.name', displayName);
+      }
+      if (clientAddress) {
+        clientAddress.value = newClient.billing_address || '';
+        store.updateState('client.address', newClient.billing_address || '');
+      }
+      if (newClient.shipping_address && shipToAddress) {
+        shipToAddress.value = newClient.shipping_address;
+        store.updateState('shipTo.address', newClient.shipping_address);
+        if (shipToName) {
+          shipToName.value = newClient.name;
+          store.updateState('shipTo.name', newClient.name);
+        }
+        if (toggleShipTo && !toggleShipTo.checked) {
+          toggleShipTo.checked = true;
+          const bRow = document.getElementById('sheetBillingRow');
+          if (bRow) bRow.classList.remove('ship-to-hidden');
+          const panel = document.getElementById('shipToCardPanel');
+          if (panel) panel.style.display = 'block';
+          store.updateState('shipTo.enabled', true);
+        }
+      }
+
+      const modal = document.getElementById('modalQuickAddClient');
+      if (modal) modal.style.display = 'none';
+      if (btnSave) {
+        btnSave.disabled = false;
+        btnSave.innerHTML = origText;
+      }
+      triggerAutoSaveDebounced();
+      if (window.showToast) window.showToast(`Client "${newClient.name}" added & selected!`, 'success');
+    };
+
+    // Modal: Edit Business Profile Defaults
+    function openEditBizModal() {
+      const modal = document.getElementById('modalEditBusinessProfile');
+      if (!modal) return;
+      modal.style.display = 'flex';
+      
+      let savedBiz = {};
+      try {
+        const raw = localStorage.getItem('invoicegen_business_profile');
+        if (raw) savedBiz = JSON.parse(raw);
+      } catch (e) {}
+
+      const nameEl = document.getElementById('editBizName');
+      if (nameEl) nameEl.value = senderName?.value || savedBiz.name || '';
+      const emailEl = document.getElementById('editBizEmail');
+      if (emailEl) emailEl.value = savedBiz.email || '';
+      const phoneEl = document.getElementById('editBizPhone');
+      if (phoneEl) phoneEl.value = savedBiz.phone || '';
+      const webEl = document.getElementById('editBizWebsite');
+      if (webEl) webEl.value = savedBiz.website || '';
+      const taxEl = document.getElementById('editBizTaxId');
+      if (taxEl) taxEl.value = savedBiz.taxId || '';
+      const addrEl = document.getElementById('editBizAddress');
+      if (addrEl) addrEl.value = senderAddress?.value || savedBiz.address || '';
+      const curEl = document.getElementById('editBizCurrency');
+      if (curEl && currencySelect?.value) curEl.value = currencySelect.value;
+      const termsEl = document.getElementById('editBizPaymentTerms');
+      if (termsEl && paymentTermsSelect?.value) termsEl.value = paymentTermsSelect.value;
+    }
+    window.openEditBizModal = openEditBizModal;
+
+    window.saveEditBizModal = async function () {
+      const name = (document.getElementById('editBizName')?.value || '').trim();
+      if (!name) {
+        if (window.showToast) window.showToast('Business name is required', 'warning');
+        return;
+      }
+      const email = (document.getElementById('editBizEmail')?.value || '').trim();
+      const phone = (document.getElementById('editBizPhone')?.value || '').trim();
+      const website = (document.getElementById('editBizWebsite')?.value || '').trim();
+      const taxId = (document.getElementById('editBizTaxId')?.value || '').trim();
+      const address = (document.getElementById('editBizAddress')?.value || '').trim();
+      const currency = document.getElementById('editBizCurrency')?.value || 'USD';
+      const paymentTerms = document.getElementById('editBizPaymentTerms')?.value || 'Due on Receipt';
+
+      const bizProfile = { name, email, phone, website, taxId, address, currency, paymentTerms };
+      localStorage.setItem('invoicegen_business_profile', JSON.stringify(bizProfile));
+
+      if (senderName) {
+        senderName.value = name;
+        store.updateState('sender.name', name);
+      }
+      let fullAddr = address;
+      if (email || phone) {
+        const contactLine = [email, phone].filter(Boolean).join(' • ');
+        if (!fullAddr.includes(email) && !fullAddr.includes(phone)) {
+          fullAddr = fullAddr ? `${fullAddr}\n${contactLine}` : contactLine;
+        }
+      }
+      if (taxId && !fullAddr.includes(taxId)) {
+        fullAddr = `${fullAddr}\nTax ID: ${taxId}`;
+      }
+      if (senderAddress) {
+        senderAddress.value = fullAddr;
+        store.updateState('sender.address', fullAddr);
+      }
+      if (currencySelect && currencySelect.value !== currency) {
+        currencySelect.value = currency;
+        store.setCurrency(currency);
+        updateCalculations();
+      }
+      if (paymentTermsSelect && paymentTermsSelect.value !== paymentTerms) {
+        paymentTermsSelect.value = paymentTerms;
+        store.updateState('paymentTerms', paymentTerms);
+      }
+
+      try {
+        fetch('/api/auth/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            business_name: name,
+            business_email: email,
+            business_phone: phone,
+            business_website: website,
+            business_tax_id: taxId,
+            business_address: address,
+            default_currency: currency,
+            default_payment_terms: paymentTerms
+          })
+        }).catch(() => {});
+      } catch (e) {}
+
+      const modal = document.getElementById('modalEditBusinessProfile');
+      if (modal) modal.style.display = 'none';
+      triggerAutoSaveDebounced();
+      if (window.showToast) window.showToast('Business profile defaults updated!', 'success');
+    };
+
+    // Action: Create Another Invoice
+    window.handleCreateAnotherInvoice = async function () {
+      const banner = document.getElementById('downloadSuccessBanner');
+      if (banner) banner.style.display = 'none';
+
+      let nextNum = 'INV-001';
+      try {
+        const r = await fetch('/api/invoices/next-number');
+        const numData = await r.json();
+        if (numData && numData.nextNumber) {
+          nextNum = numData.nextNumber;
+        } else {
+          const curVal = invoiceNumberInput?.value || '001';
+          const match = curVal.match(/(\d+)$/);
+          if (match) {
+            const nextInt = parseInt(match[1], 10) + 1;
+            nextNum = curVal.replace(/(\d+)$/, String(nextInt).padStart(match[1].length, '0'));
+          }
+        }
+      } catch (e) {}
+
+      store.createNewInvoice({ preserveSender: true, preserveCurrency: true, nextNumber: nextNum });
+
+      if (invoiceNumberInput) invoiceNumberInput.value = nextNum;
+      if (invoiceDateInput) invoiceDateInput.value = store.getState().date;
+      if (clientName) clientName.value = '';
+      if (clientAddress) clientAddress.value = '';
+      if (shipToName) shipToName.value = '';
+      if (shipToAddress) shipToAddress.value = '';
+      if (picker) picker.value = '';
+
+      renderItems(store.getState().items);
+      updateCalculations();
+
+      activeInvoiceId = null;
+      if (window.location.search) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        if (clientName) clientName.focus();
+      }, 300);
+
+      if (window.showToast) window.showToast(`New invoice #${nextNum} ready!`, 'info');
+    };
+
     // Populate client dropdown if user has existing clients
     const picker = document.getElementById('clientQuickSelect');
+    let clientsList = [];
     fetch('/api/clients')
       .then(res => res.json())
       .then(clData => {
-        const clientsList = (clData && clData.success && Array.isArray(clData.clients)) ? clData.clients : [];
+        clientsList = (clData && clData.success && Array.isArray(clData.clients)) ? clData.clients : [];
         
-        // Fallback: check localStorage for saved clients from prior invoices if API returns empty
+        // Fallback: check localStorage for saved clients
         if (clientsList.length === 0) {
           try {
-            const rawInvs = localStorage.getItem('invoicegen_invoices');
-            if (rawInvs) {
-              const invs = JSON.parse(rawInvs);
-              const seen = new Set();
-              invs.forEach(inv => {
-                if (inv.client_name && !seen.has(inv.client_name)) {
-                  seen.add(inv.client_name);
-                  clientsList.push({ id: 'loc_' + seen.size, name: inv.client_name, billing_address: inv.client_address || '' });
-                }
-              });
+            const rawStored = localStorage.getItem('invoicegen_clients');
+            if (rawStored) clientsList = JSON.parse(rawStored);
+            if (!clientsList.length) {
+              const rawInvs = localStorage.getItem('invoicegen_invoices');
+              if (rawInvs) {
+                const invs = JSON.parse(rawInvs);
+                const seen = new Set();
+                invs.forEach(inv => {
+                  if (inv.client_name && !seen.has(inv.client_name)) {
+                    seen.add(inv.client_name);
+                    clientsList.push({ id: 'loc_' + seen.size, name: inv.client_name, billing_address: inv.client_address || '' });
+                  }
+                });
+              }
             }
           } catch (e) {}
         }
 
         if (picker) {
-          if (clientsList.length > 0) {
-            picker.innerHTML = '<option value="">Select Client ▾</option>' + clientsList.map(c => 
-              `<option value="${c.id}">${c.name}${c.company ? ' (' + c.company + ')' : ''}</option>`
-            ).join('') + '<option value="__new__">+ Add New Client</option>';
-          } else {
-            picker.innerHTML = '<option value="">Select Client ▾</option><option value="__new__">+ Add New Client</option>';
-          }
+          picker.innerHTML = '<option value="">Select Client ▾</option>' + clientsList.map(c => 
+            `<option value="${c.id}">${c.name}${c.company ? ' (' + c.company + ')' : ''}</option>`
+          ).join('') + '<option value="__new__">+ Add New Client</option>';
 
           picker.addEventListener('change', (e) => {
             const selectedId = e.target.value;
             if (selectedId === '__new__') {
-              window.location.href = '/clients';
+              picker.value = '';
+              openQuickAddClientModal();
               return;
             }
             if (!selectedId) return;
@@ -1302,12 +1618,13 @@ window.initInvoiceEditorPage = function () {
                 store.updateState('client.name', displayName);
               }
               if (clientAddress) {
-                clientAddress.value = chosen.billing_address || '';
-                store.updateState('client.address', chosen.billing_address || '');
+                clientAddress.value = chosen.billing_address || chosen.billingAddress || '';
+                store.updateState('client.address', chosen.billing_address || chosen.billingAddress || '');
               }
-              if (chosen.shipping_address && shipToAddress) {
-                shipToAddress.value = chosen.shipping_address;
-                store.updateState('shipTo.address', chosen.shipping_address);
+              const shipAddr = chosen.shipping_address || chosen.shippingAddress;
+              if (shipAddr && shipToAddress) {
+                shipToAddress.value = shipAddr;
+                store.updateState('shipTo.address', shipAddr);
                 if (shipToName && chosen.name) {
                   shipToName.value = chosen.name;
                   store.updateState('shipTo.name', chosen.name);
@@ -1316,6 +1633,8 @@ window.initInvoiceEditorPage = function () {
                   toggleShipTo.checked = true;
                   const bRow = document.getElementById('sheetBillingRow');
                   if (bRow) bRow.classList.remove('ship-to-hidden');
+                  const panel = document.getElementById('shipToCardPanel');
+                  if (panel) panel.style.display = 'block';
                   store.updateState('shipTo.enabled', true);
                 }
               }
@@ -1329,10 +1648,68 @@ window.initInvoiceEditorPage = function () {
         if (picker) {
           picker.innerHTML = '<option value="">Select Client ▾</option><option value="__new__">+ Add New Client</option>';
           picker.addEventListener('change', (e) => {
-            if (e.target.value === '__new__') window.location.href = '/clients';
+            if (e.target.value === '__new__') {
+              picker.value = '';
+              openQuickAddClientModal();
+            }
           });
         }
       });
+
+    // Wire Edit Profile, Modals & Banner
+    document.getElementById('linkEditProfile')?.addEventListener('click', openEditBizModal);
+    document.getElementById('btnCloseEditBizModal')?.addEventListener('click', () => {
+      const m = document.getElementById('modalEditBusinessProfile');
+      if (m) m.style.display = 'none';
+    });
+    document.getElementById('btnCancelEditBiz')?.addEventListener('click', () => {
+      const m = document.getElementById('modalEditBusinessProfile');
+      if (m) m.style.display = 'none';
+    });
+    document.getElementById('btnSaveEditBiz')?.addEventListener('click', window.saveEditBizModal);
+
+    document.getElementById('btnCloseQuickClientModal')?.addEventListener('click', () => {
+      const m = document.getElementById('modalQuickAddClient');
+      if (m) m.style.display = 'none';
+    });
+    document.getElementById('btnCancelQuickClient')?.addEventListener('click', () => {
+      const m = document.getElementById('modalQuickAddClient');
+      if (m) m.style.display = 'none';
+    });
+    document.getElementById('btnSaveQuickClient')?.addEventListener('click', window.saveQuickClientModal);
+
+    document.getElementById('btnCloseDownloadBanner')?.addEventListener('click', () => {
+      const b = document.getElementById('downloadSuccessBanner');
+      if (b) b.style.display = 'none';
+    });
+    document.getElementById('btnBannerCreateAnother')?.addEventListener('click', window.handleCreateAnotherInvoice);
+
+    // Wire Inline Shipping Toggles
+    const btnEnableShip = document.getElementById('btnEnableShipToInline');
+    const btnDisableShip = document.getElementById('btnDisableShipToInline');
+    if (btnEnableShip) {
+      btnEnableShip.addEventListener('click', () => {
+        if (toggleShipTo) toggleShipTo.checked = true;
+        const bRow = document.getElementById('sheetBillingRow');
+        if (bRow) bRow.classList.remove('ship-to-hidden');
+        const panel = document.getElementById('shipToCardPanel');
+        if (panel) {
+          panel.style.display = 'block';
+          panel.querySelector('input')?.focus();
+        }
+        store.updateState('shipTo.enabled', true);
+      });
+    }
+    if (btnDisableShip) {
+      btnDisableShip.addEventListener('click', () => {
+        if (toggleShipTo) toggleShipTo.checked = false;
+        const bRow = document.getElementById('sheetBillingRow');
+        if (bRow) bRow.classList.add('ship-to-hidden');
+        const panel = document.getElementById('shipToCardPanel');
+        if (panel) panel.style.display = 'none';
+        store.updateState('shipTo.enabled', false);
+      });
+    }
 
     const requestedTemplate = urlParams.get('template');
     if (requestedTemplate && requestedTemplate !== 'emerald') {
@@ -1345,6 +1722,7 @@ window.initInvoiceEditorPage = function () {
     const btnMobileDownload = document.getElementById('btnMobileDownloadPdf');
     const btnMobileSave = document.getElementById('btnMobileSaveInvoice');
     const btnMobileOpts = document.getElementById('btnMobileOpenOptions');
+    const downloadPdfBtn = document.getElementById('btnDownloadPDF');
     if (btnMobileDownload && downloadPdfBtn) {
       btnMobileDownload.addEventListener('click', () => downloadPdfBtn.click());
     }
@@ -1360,7 +1738,9 @@ window.initInvoiceEditorPage = function () {
       });
     }
     document.body.classList.add('has-mobile-sticky-actions');
-  } catch (e) {}
+  } catch (e) {
+    console.error('Invoice editor initialization error:', e);
+  }
 };
 
 if (document.readyState === 'loading') {

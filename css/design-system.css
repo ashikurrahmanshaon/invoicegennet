@@ -2540,6 +2540,33 @@ textarea:disabled {
   color: #94a3b8;
 }
 
+@media (max-width: 640px) {
+  .search-modal-backdrop {
+    padding: 0 !important;
+    align-items: stretch !important;
+  }
+  .search-modal-box {
+    max-width: 100% !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    border-radius: 0 !important;
+    border: none !important;
+  }
+  .search-input-header {
+    padding: 16px !important;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .search-results-body {
+    max-height: none !important;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .search-footer-info {
+    padding: 12px 16px !important;
+  }
+}
+
 /* Financial Sub-Row Metrics */
 .financial-metrics-row {
   display: grid;
