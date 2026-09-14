@@ -414,22 +414,23 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         const mobileAuth = document.querySelector('.mobile-nav-auth');
         if (mobileAuth) {
           mobileAuth.innerHTML = `
-            <div style="padding: 12px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; width:100%; box-sizing:border-box;">
-              <div style="display:flex; align-items:center; gap:10px; padding-bottom:8px; border-bottom:1px solid #e2e8f0;">
-                <div style="width:34px; height:34px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.875rem;">${initial}</div>
+            <div style="padding: 14px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; width:100%; box-sizing:border-box;">
+              <div style="display:flex; align-items:center; gap:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.875rem;">${initial}</div>
                 <div style="overflow:hidden;">
                   <div style="font-weight:700; font-size:0.875rem; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.user.name || 'User'}</div>
                   <div style="font-size:0.75rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.user.email || ''}</div>
                 </div>
               </div>
               <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
-                <a href="dashboard.html#dashboard" class="user-menu-link" style="padding:6px 8px; border-radius:6px; font-weight:600; color:#0f172a;">Dashboard Overview</a>
-                <a href="dashboard.html#invoices" class="user-menu-link" style="padding:6px 8px; border-radius:6px; font-weight:600; color:#0f172a;">My Invoices</a>
-                <a href="dashboard.html#clients" class="user-menu-link" style="padding:6px 8px; border-radius:6px; font-weight:600; color:#0f172a;">Clients</a>
-                <a href="dashboard.html#business" class="user-menu-link" style="padding:6px 8px; border-radius:6px; font-weight:600; color:#0f172a;">Business Profile</a>
-                <a href="dashboard.html#billing" class="user-menu-link" style="padding:6px 8px; border-radius:6px; font-weight:600; color:#0f172a;">Billing &amp; Subscription</a>
-                <a href="dashboard.html#settings" class="user-menu-link" style="padding:6px 8px; border-radius:6px; font-weight:600; color:#0f172a;">Account Settings</a>
-                <button type="button" class="btn-danger" id="btnMobileLogout" style="height:34px; font-size:0.8125rem; width:100%; justify-content:center; margin-top:4px;">Log out</button>
+                <a href="dashboard.html#dashboard" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Dashboard Overview</a>
+                <a href="dashboard.html#invoices" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">My Invoices</a>
+                <a href="dashboard.html#clients" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Clients</a>
+                <a href="dashboard.html#business" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Business Profile</a>
+                <a href="dashboard.html#billing" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Billing &amp; Subscription</a>
+                <a href="dashboard.html#settings" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Account Settings</a>
+                <a href="dashboard.html#help" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Help &amp; FAQ</a>
+                <button type="button" class="btn btn-danger" id="btnMobileLogout" style="min-height:44px; height:44px; font-size:0.875rem; border-radius:8px; width:100%; justify-content:center; margin-top:8px;">Log out</button>
               </div>
             </div>
           `;
@@ -452,8 +453,8 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         const mobileAuth = document.querySelector('.mobile-nav-auth');
         if (mobileAuth) {
           mobileAuth.innerHTML = `
-            <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
-            <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" style="width:100%; text-align:center;">Sign Up Free</a>
+            <a href="login.html" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Log In</a>
+            <a href="signup.html" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Sign Up Free</a>
           `;
         }
       }

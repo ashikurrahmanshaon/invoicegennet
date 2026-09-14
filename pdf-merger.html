@@ -230,6 +230,26 @@
         <div class="lang-switcher-container"></div>
         <a href="login.html" class="btn-login" id="btnHeaderLogin">Log In</a>
         <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">Sign Up Free</a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer">
+      <div class="mobile-nav-links">
+        <a href="dashboard.html" class="mobile-nav-link">Dashboard</a>
+        <a href="index.html" class="mobile-nav-link">Create Invoice</a>
+        <a href="dashboard.html#invoices" class="mobile-nav-link">Invoices</a>
+        <a href="dashboard.html#clients" class="mobile-nav-link">Clients</a>
+        <a href="templates.html" class="mobile-nav-link">Templates</a>
+        <a href="tools.html" class="mobile-nav-link">Tools</a>
+        <a href="pricing.html" class="mobile-nav-link">Pricing</a>
+      </div>
+      <div class="mobile-nav-auth">
+        <a href="login.html" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
+        <a href="signup.html" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center;">Sign Up Free</a>
       </div>
     </div>
   </header>
@@ -267,7 +287,7 @@
           <div style="margin-top: 24px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
               <h3 style="font-size: 0.9375rem; font-weight: 700; color: #0f172a; margin: 0;">PDF Merge Sequence</h3>
-              <button type="button" id="btnClearMergeList" class="btn btn-ghost btn-sm" style="color: #dc2626; height: 28px; padding: 0 8px; font-size: 0.75rem;">Clear List</button>
+              <button type="button" id="btnClearMergeList" class="btn btn-ghost btn-sm" style="color: #dc2626; min-height: 36px; height: 36px; padding: 0 12px; font-size: 0.8125rem; border-radius: 8px;">Clear List</button>
             </div>
 
             <div id="mergeEmptyState" class="empty-state-box" style="padding: 32px 16px; margin: 0; border-radius: 10px;">

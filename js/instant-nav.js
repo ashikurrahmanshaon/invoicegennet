@@ -452,9 +452,63 @@
 
   // 11. Universal Mobile Navigation Drawer Handler
   function initMobileNav() {
-    const btnToggle = document.getElementById('btnMobileNavToggle');
-    const drawer = document.getElementById('mobileNavDrawer');
+    let btnToggle = document.getElementById('btnMobileNavToggle');
+    let drawer = document.getElementById('mobileNavDrawer');
+    const header = document.querySelector('.navbar-saas');
+
+    // Ensure toggle button exists inside navbar actions
+    if (!btnToggle && header) {
+      const actionsWrap = header.querySelector('.nav-actions-wrap');
+      if (actionsWrap) {
+        btnToggle = document.createElement('button');
+        btnToggle.type = 'button';
+        btnToggle.className = 'btn-mobile-nav-toggle';
+        btnToggle.id = 'btnMobileNavToggle';
+        btnToggle.setAttribute('aria-label', 'Toggle navigation menu');
+        btnToggle.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+        actionsWrap.appendChild(btnToggle);
+      }
+    }
+
+    // Ensure mobile drawer exists
+    if (!drawer) {
+      drawer = document.createElement('div');
+      drawer.id = 'mobileNavDrawer';
+      drawer.className = 'mobile-nav-drawer';
+      drawer.innerHTML = `
+        <div class="mobile-nav-links">
+          <a href="dashboard.html" class="mobile-nav-link">Dashboard</a>
+          <a href="index.html" class="mobile-nav-link">Create Invoice</a>
+          <a href="dashboard.html#invoices" class="mobile-nav-link">Invoices</a>
+          <a href="dashboard.html#clients" class="mobile-nav-link">Clients</a>
+          <a href="templates.html" class="mobile-nav-link">Templates</a>
+          <a href="tools.html" class="mobile-nav-link">Tools</a>
+          <a href="pricing.html" class="mobile-nav-link">Pricing</a>
+        </div>
+        <div class="mobile-nav-auth">
+          <a href="login.html" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Log In</a>
+          <a href="signup.html" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Sign Up Free</a>
+        </div>
+      `;
+      document.body.appendChild(drawer);
+    }
+
     if (!btnToggle || !drawer) return;
+
+    // Ensure Tools link is present in drawer links
+    const linksContainer = drawer.querySelector('.mobile-nav-links');
+    if (linksContainer && !linksContainer.querySelector('a[href*="tools"]')) {
+      const pricingLink = linksContainer.querySelector('a[href*="pricing"]');
+      const toolsLink = document.createElement('a');
+      toolsLink.href = 'tools.html';
+      toolsLink.className = 'mobile-nav-link';
+      toolsLink.textContent = 'Tools';
+      if (pricingLink) {
+        linksContainer.insertBefore(toolsLink, pricingLink);
+      } else {
+        linksContainer.appendChild(toolsLink);
+      }
+    }
 
     // Ensure drawer is on root body to guarantee it sits above backdrop stacking context
     if (drawer.parentElement !== document.body) {
