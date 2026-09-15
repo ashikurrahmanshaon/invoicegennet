@@ -410,27 +410,34 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
           };
         }
 
+        // Mobile Avatar Button sync
+        const mobileAvatar = document.getElementById('mobileHeaderAvatarBtn');
+        if (mobileAvatar) {
+          mobileAvatar.href = 'dashboard.html#settings';
+          mobileAvatar.innerHTML = this.user.avatar
+            ? `<img src="${this.user.avatar}" alt="${this.user.name}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">`
+            : `<span style="width:32px; height:32px; border-radius:50%; background:#10b981; color:#ffffff; font-weight:700; font-size:0.875rem; display:flex; align-items:center; justify-content:center;">${initial}</span>`;
+        }
+
         // Mobile Nav sync
         const mobileAuth = document.querySelector('.mobile-nav-auth');
+        const mobNavLogout = document.getElementById('mobNavLogout');
+        if (mobNavLogout) mobNavLogout.style.display = 'flex';
         if (mobileAuth) {
           mobileAuth.innerHTML = `
-            <div style="padding: 14px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; width:100%; box-sizing:border-box;">
-              <div style="display:flex; align-items:center; gap:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0;">
+            <div style="padding: 12px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; width:100%; box-sizing:border-box;">
+              <div style="display:flex; align-items:center; gap:10px; padding-bottom:8px; border-bottom:1px solid #e2e8f0;">
                 <div style="width:36px; height:36px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.875rem;">${initial}</div>
                 <div style="overflow:hidden;">
                   <div style="font-weight:700; font-size:0.875rem; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.user.name || 'User'}</div>
                   <div style="font-size:0.75rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.user.email || ''}</div>
                 </div>
               </div>
-              <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
-                <a href="dashboard.html#dashboard" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Dashboard Overview</a>
-                <a href="dashboard.html#invoices" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">My Invoices</a>
-                <a href="dashboard.html#clients" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Clients</a>
-                <a href="dashboard.html#business" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Business Profile</a>
-                <a href="dashboard.html#billing" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Billing &amp; Subscription</a>
-                <a href="dashboard.html#settings" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Account Settings</a>
-                <a href="dashboard.html#help" class="user-menu-link" style="padding:8px 10px; border-radius:8px; font-weight:600; color:#0f172a; min-height:36px; display:flex; align-items:center;">Help &amp; FAQ</a>
-                <button type="button" class="btn btn-danger" id="btnMobileLogout" style="min-height:44px; height:44px; font-size:0.875rem; border-radius:8px; width:100%; justify-content:center; margin-top:8px;">Log out</button>
+              <div style="margin-top: 10px;">
+                <button type="button" class="btn btn-danger" id="btnMobileLogout" style="min-height:44px; height:44px; font-size:0.875rem; border-radius:8px; width:100%; justify-content:center;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                  Log out
+                </button>
               </div>
             </div>
           `;
@@ -449,6 +456,15 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         if (notifWrapper) notifWrapper.style.display = 'none';
         if (btnLogin) btnLogin.style.display = 'inline-flex';
         if (btnSignup) btnSignup.style.display = 'inline-flex';
+
+        const mobNavLogout = document.getElementById('mobNavLogout');
+        if (mobNavLogout) mobNavLogout.style.display = 'none';
+
+        const mobileAvatar = document.getElementById('mobileHeaderAvatarBtn');
+        if (mobileAvatar) {
+          mobileAvatar.href = 'login.html';
+          mobileAvatar.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+        }
 
         const mobileAuth = document.querySelector('.mobile-nav-auth');
         if (mobileAuth) {

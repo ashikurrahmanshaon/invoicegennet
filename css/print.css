@@ -32,6 +32,12 @@
   .auth-modal-overlay,
   .lang-switcher-container,
   .col-action,
+  .mobile-sticky-action-bar,
+  .mobile-nav-drawer,
+  .mobile-drawer-backdrop,
+  .btn-mobile-avatar,
+  .btn-mobile-nav-toggle,
+  .sheet-client-quick-select-wrap,
   .no-print {
     display: none !important;
   }

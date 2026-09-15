@@ -297,7 +297,7 @@
   <!-- Main Application Workspace -->
   <main class="app-workspace-layout" id="workspace">
 
-    <!-- The Invoice Sheet Card (Luxury Minimalist Document Workspace) -->
+    <!-- The Invoice Sheet Card (Blank by default) -->
     <div class="invoice-sheet-card" id="invoicePaper">
 
       <!-- Top Section: Sender Details & Document Meta -->
@@ -305,12 +305,8 @@
 
         <!-- Sender Block (Left) -->
         <div class="sender-info-box">
-          <div class="sheet-col-header">
-            <div class="sheet-col-header-text">
-              <span class="sheet-col-title">From</span>
-              <span class="sheet-col-sub">Your business information</span>
-            </div>
-            <button type="button" class="edit-profile-sublink" id="linkEditProfile" title="Edit Business Profile Defaults">Edit Profile</button>
+          <div class="sheet-col-header" style="margin-bottom: 8px;">
+            <span class="sheet-col-title">From</span>
           </div>
 
           <!-- Logo Uploader -->
@@ -330,25 +326,17 @@
           </div>
 
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="senderName">Business Name</label>
             <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="e.g. Your Business Name">
           </div>
 
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="senderAddress">Address &amp; Contact</label>
             <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. 123 Innovation Way, Suite 400&#10;San Francisco, CA 94105&#10;contact@yourbusiness.com"></textarea>
           </div>
         </div>
 
         <!-- Document Title & Meta (Right) -->
         <div class="doc-meta-box">
-          <div class="doc-title-row">
-            <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename (e.g. INVOICE, ESTIMATE, RECEIPT, QUOTE)">
-            <div class="save-status-indicator" id="saveStatusIndicator" title="Cloud auto-save status">
-              <span class="status-dot"></span>
-              <span class="status-text" id="saveStatusText">Ready</span>
-            </div>
-          </div>
+          <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename (e.g. INVOICE, ESTIMATE, RECEIPT, QUOTE)">
 
           <div class="meta-inputs-grid">
             <label class="meta-field-label" for="invoiceNumber">Invoice #:</label>
@@ -377,47 +365,36 @@
       </div>
 
       <!-- Middle Section: Bill To & Ship To Side-by-Side (Clean Document Canvas) -->
-      <div class="sheet-billing-row ship-to-hidden" id="sheetBillingRow">
+      <div class="sheet-billing-row" id="sheetBillingRow">
 
         <!-- Bill To -->
         <div class="sheet-billing-col" id="billToCol">
           <div class="sheet-col-header">
-            <div class="sheet-col-header-text">
-              <span class="sheet-col-title">Bill To</span>
-              <span class="sheet-col-sub">Client information</span>
-            </div>
-            <div class="client-picker-wrap" id="clientPickerWrap">
-              <select id="clientQuickSelect" class="client-quick-picker" aria-label="Select existing client">
-                <option value="">Select Client ▾</option>
+            <span class="sheet-col-title">Bill To</span>
+            <div class="sheet-client-quick-select-wrap" id="clientSelectWrap" style="display: none;">
+              <select id="clientPickerSelect" class="sheet-client-picker-select" aria-label="Select saved client">
+                <option value="">Select Client ▼</option>
               </select>
             </div>
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="clientName">Client Name / Company</label>
-            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="e.g. Client or Company Name">
+            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="e.g. Client or Company Name" list="clientsDatalist">
+            <datalist id="clientsDatalist"></datalist>
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="clientAddress">Billing Address &amp; Email</label>
             <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. 742 Evergreen Terrace&#10;Springfield, OR 97477"></textarea>
           </div>
-          <button type="button" class="btn-subtle-add-detail" id="btnEnableShipToInline">+ Add Shipping Address</button>
         </div>
 
         <!-- Ship To (Optional or Default) -->
-        <div class="sheet-billing-col" id="shipToCardPanel" style="display: none;">
+        <div class="sheet-billing-col" id="shipToCardPanel">
           <div class="sheet-col-header">
-            <div class="sheet-col-header-text">
-              <span class="sheet-col-title">Ship To</span>
-              <span class="sheet-optional-tag">Optional</span>
-            </div>
-            <button type="button" class="btn-subtle-add-detail" id="btnDisableShipToInline" style="color: #94a3b8; font-size: 0.75rem;">Remove</button>
+            <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="shipToName">Recipient / Warehouse</label>
             <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Recipient or Warehouse Name">
           </div>
           <div class="sheet-field-group">
-            <label class="sheet-field-label" for="shipToAddress">Shipping Address</label>
             <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. Shipping destination address..."></textarea>
           </div>
         </div>
@@ -425,18 +402,8 @@
       </div>
 
       <!-- Items Section Header -->
-      <div class="sheet-col-header items-section-header">
-        <div class="sheet-col-header-text">
-          <span class="sheet-col-title">Items</span>
-          <span class="sheet-col-sub">Products, services or deliverables</span>
-        </div>
-        <button type="button" class="btn-ghost-add-item" id="btnAddItemHeader" title="Add another line item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          <span>+ Add Item</span>
-        </button>
+      <div class="sheet-col-header items-section-header" style="margin-bottom: 8px;">
+        <span class="sheet-col-title">Items</span>
       </div>
 
       <!-- Items Table (Modern Crisp Ledger) -->
@@ -445,9 +412,9 @@
           <thead>
             <tr>
               <th class="col-desc" style="width: 48%;" data-i18n="tbl_item">Description</th>
-              <th class="col-qty" style="width: 14%; text-align: right;" data-i18n="tbl_qty">Qty</th>
-              <th class="col-rate" style="width: 18%; text-align: right;" data-i18n="tbl_rate">Rate</th>
-              <th class="col-amount" style="width: 15%; text-align: right;" data-i18n="tbl_amount">Amount</th>
+              <th class="col-qty" style="width: 13%;" data-i18n="tbl_qty">Qty</th>
+              <th class="col-rate" style="width: 17%;" data-i18n="tbl_rate">Rate</th>
+              <th class="col-amount" style="width: 17%;" data-i18n="tbl_amount">Amount</th>
               <th class="col-action" style="width: 5%;"></th>
             </tr>
           </thead>
@@ -457,14 +424,14 @@
         </table>
       </div>
 
-      <!-- Add Line Item Button (Bottom row) -->
-      <div class="items-bottom-action-bar">
-        <button type="button" class="btn-ghost-add-item" id="btnAddItem" title="Add another line item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Add Line Item Button -->
+      <div>
+        <button type="button" class="btn-add-item-bar" id="btnAddItem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
-          <span>+ Add Item</span>
+          <span data-i18n="btn_add_item">Add Line Item</span>
         </button>
       </div>
 
@@ -474,12 +441,10 @@
         <!-- Left: Notes, Bank Details, IBAN, VAT & Signature -->
         <div class="sheet-notes-col">
           <div class="sheet-col-header" style="border: none; padding-bottom: 4px; margin-bottom: 6px;">
-            <div class="sheet-col-header-text">
-              <span class="sheet-col-title">Payment Terms &amp; Notes</span>
-            </div>
+            <span class="sheet-col-title">Notes / Terms</span>
           </div>
           <div class="sheet-field-group">
-            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="Payment terms, bank transfer details, or notes to client..."></textarea>
+            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="e.g. Payment due within 30 days via bank transfer or online checkout.&#10;Thank you for your business!"></textarea>
           </div>
 
           <!-- Digital Signature Line (Toggleable) -->
@@ -495,44 +460,42 @@
         <!-- Right: Real-time Totals Breakdown -->
         <div class="totals-summary-card">
           <div class="total-line">
-            <span class="totals-lbl" data-i18n="lbl_subtotal">Subtotal</span>
-            <span class="val totals-num" id="subtotalDisplay">$0.00</span>
+            <span data-i18n="lbl_subtotal">Subtotal:</span>
+            <span class="val" id="subtotalDisplay">$0.00</span>
           </div>
 
           <!-- Discount Row (Toggleable) -->
           <div class="total-line discount-line-row" id="discountLineRow" style="display: none;">
             <div class="discount-edit-group">
-              <span class="totals-lbl" data-i18n="opt_discount">Discount</span>
+              <span data-i18n="opt_discount">Discount</span>
               <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0"><i>%</i></span>
             </div>
-            <span class="val totals-num text-discount" id="discountAmountDisplay">-$0.00</span>
+            <span class="val" id="discountAmountDisplay">-$0.00</span>
           </div>
 
-          <div class="total-line tax-line-row" id="taxLineRow">
+          <div class="total-line">
             <div class="tax-edit-group">
-              <span class="totals-lbl" data-i18n="lbl_tax">Tax</span>
+              <span data-i18n="lbl_tax">Tax / VAT</span>
               <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0"><i>%</i></span>
             </div>
-            <span class="val totals-num" id="taxAmountDisplay">$0.00</span>
+            <span class="val" id="taxAmountDisplay">$0.00</span>
+          </div>
+
+          <div class="total-line grand-total-line">
+            <span class="lbl" data-i18n="lbl_total">Total:</span>
+            <span class="val" id="grandTotalDisplay">$0.00</span>
           </div>
 
           <!-- Amount Paid Row (Toggleable) -->
           <div class="total-line amount-paid-row" id="amountPaidLineRow" style="display: none;">
-            <span class="totals-lbl" data-i18n="lbl_amount_paid">Amount Paid</span>
+            <span data-i18n="lbl_amount_paid">Amount Paid:</span>
             <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00">
-          </div>
-
-          <div class="total-divider-line"></div>
-
-          <div class="total-line grand-total-line">
-            <span class="lbl grand-total-lbl" data-i18n="lbl_total">TOTAL</span>
-            <span class="val grand-total-val" id="grandTotalDisplay">$0.00</span>
           </div>
 
           <!-- Balance Due Row (Visible ONLY when Deposit / Amount Paid is enabled) -->
           <div class="total-line balance-due-line-row" id="balanceDueLineRow" style="display: none;">
-            <span class="lbl balance-due-lbl" data-i18n="lbl_balance_due">Balance Due</span>
-            <span class="val balance-due-val" id="balanceDueDisplay">$0.00</span>
+            <span class="lbl" data-i18n="lbl_balance_due">Balance Due:</span>
+            <span class="val" id="balanceDueDisplay">$0.00</span>
           </div>
         </div>
 
@@ -665,7 +628,7 @@
           <label class="inspector-toggle-row" for="toggleShipTo">
             <span class="toggle-text">Shipping details</span>
             <div class="switch-box">
-              <input type="checkbox" id="toggleShipTo">
+              <input type="checkbox" id="toggleShipTo" checked>
               <span class="switch-slider"></span>
             </div>
           </label>
@@ -922,144 +885,6 @@
       <div class="preview-modal-body" id="previewModalBody">
         <!-- Exact rendered invoice document injected dynamically -->
       </div>
-    </div>
-  </div>
-
-  <!-- Modal: Quick Edit Business Profile Defaults -->
-  <div class="saas-modal-backdrop" id="modalEditBusinessProfile" style="display: none;">
-    <div class="saas-modal-box" style="max-width: 580px;">
-      <div class="saas-modal-header">
-        <div>
-          <h3 class="saas-modal-title">Edit Business Profile</h3>
-          <span style="font-size: 0.8125rem; color: #64748b;">Saved defaults automatically pre-populate every new invoice</span>
-        </div>
-        <button type="button" class="saas-modal-close" id="btnCloseEditBizModal" aria-label="Close modal">&times;</button>
-      </div>
-      <div class="saas-modal-body">
-        <form id="formEditBizModal" onsubmit="event.preventDefault(); window.saveEditBizModal();">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="editBizName">Business / Freelancer Name *</label>
-              <input type="text" id="editBizName" class="form-input" placeholder="e.g. Acme Creative Studio LLC" required>
-            </div>
-            <div>
-              <label class="form-label" for="editBizEmail">Work Email</label>
-              <input type="email" id="editBizEmail" class="form-input" placeholder="contact@yourbusiness.com">
-            </div>
-            <div>
-              <label class="form-label" for="editBizPhone">Phone Number</label>
-              <input type="tel" id="editBizPhone" class="form-input" placeholder="+1 (555) 019-2834">
-            </div>
-            <div>
-              <label class="form-label" for="editBizWebsite">Website</label>
-              <input type="url" id="editBizWebsite" class="form-input" placeholder="https://yourbusiness.com">
-            </div>
-            <div>
-              <label class="form-label" for="editBizTaxId">Tax ID / VAT / GST</label>
-              <input type="text" id="editBizTaxId" class="form-input" placeholder="e.g. US-982341-X or GB123456789">
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="editBizAddress">Full Street Address</label>
-              <textarea id="editBizAddress" class="form-textarea" rows="2" placeholder="Street address, Suite, City, State, Country"></textarea>
-            </div>
-            <div>
-              <label class="form-label" for="editBizCurrency">Default Currency</label>
-              <select id="editBizCurrency" class="form-select">
-                <option value="USD">$ — US Dollar (USD)</option>
-                <option value="EUR">€ — Euro (EUR)</option>
-                <option value="GBP">£ — British Pound (GBP)</option>
-                <option value="BDT">৳ — Bangladeshi Taka (BDT)</option>
-                <option value="INR">₹ — Indian Rupee (INR)</option>
-                <option value="CAD">CA$ — Canadian Dollar (CAD)</option>
-                <option value="AUD">AU$ — Australian Dollar (AUD)</option>
-                <option value="JPY">¥ — Japanese Yen (JPY)</option>
-                <option value="AED">د.إ — UAE Dirham (AED)</option>
-                <option value="SAR">﷼ — Saudi Riyal (SAR)</option>
-              </select>
-            </div>
-            <div>
-              <label class="form-label" for="editBizPaymentTerms">Default Payment Terms</label>
-              <select id="editBizPaymentTerms" class="form-select">
-                <option value="Due on Receipt">Due on Receipt</option>
-                <option value="Net 7 Days">Net 7 Days</option>
-                <option value="Net 14 Days">Net 14 Days</option>
-                <option value="Net 15 Days">Net 15 Days</option>
-                <option value="Net 30 Days">Net 30 Days</option>
-                <option value="Net 60 Days">Net 60 Days</option>
-              </select>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="saas-modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" id="btnCancelEditBiz">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm" id="btnSaveEditBiz">Save Business Defaults</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Quick Add Client Directly in Invoice -->
-  <div class="saas-modal-backdrop" id="modalQuickAddClient" style="display: none;">
-    <div class="saas-modal-box" style="max-width: 540px;">
-      <div class="saas-modal-header">
-        <div>
-          <h3 class="saas-modal-title">Add New Client</h3>
-          <span style="font-size: 0.8125rem; color: #64748b;">Instantly saves client and auto-fills this invoice</span>
-        </div>
-        <button type="button" class="saas-modal-close" id="btnCloseQuickClientModal" aria-label="Close modal">&times;</button>
-      </div>
-      <div class="saas-modal-body">
-        <form id="formQuickAddClient" onsubmit="event.preventDefault(); window.saveQuickClientModal();">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientName">Client Name / Contact Person *</label>
-              <input type="text" id="quickClientName" class="form-input" placeholder="e.g. John Doe or Sarah Jenkins" required>
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientCompany">Company Name</label>
-              <input type="text" id="quickClientCompany" class="form-input" placeholder="e.g. Starlight Media Ventures Inc.">
-            </div>
-            <div>
-              <label class="form-label" for="quickClientEmail">Email Address</label>
-              <input type="email" id="quickClientEmail" class="form-input" placeholder="billing@clientcompany.com">
-            </div>
-            <div>
-              <label class="form-label" for="quickClientPhone">Phone Number</label>
-              <input type="tel" id="quickClientPhone" class="form-input" placeholder="+1 (555) 012-3456">
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientAddress">Billing Address</label>
-              <textarea id="quickClientAddress" class="form-textarea" rows="2" placeholder="Street, Suite, City, State, ZIP, Country"></textarea>
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientShipping">Shipping Address (Optional)</label>
-              <textarea id="quickClientShipping" class="form-textarea" rows="2" placeholder="Warehouse, Street, Delivery location..."></textarea>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="saas-modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" id="btnCancelQuickClient">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm" id="btnSaveQuickClient">Save &amp; Use in Invoice</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Download Success Banner & Next Action Prompt -->
-  <div class="download-success-banner" id="downloadSuccessBanner" style="display: none;">
-    <div class="download-success-top">
-      <div class="download-success-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      </div>
-      <div style="flex: 1;">
-        <div class="download-success-title">Invoice PDF downloaded successfully!</div>
-        <div class="download-success-sub">Document ready. What would you like to do next?</div>
-      </div>
-      <button type="button" class="btn btn-ghost btn-sm" id="btnCloseDownloadBanner" style="min-height: 36px; height: 36px; width: 36px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; line-height: 1; border-radius: 6px;" aria-label="Dismiss banner">&times;</button>
-    </div>
-    <div class="download-success-actions">
-      <button type="button" class="btn btn-primary btn-sm" id="btnBannerCreateAnother">+ Create Another Invoice</button>
-      <a href="dashboard.html#invoices" class="btn btn-secondary btn-sm" id="btnBannerViewInvoices">View in Invoices</a>
     </div>
   </div>
 

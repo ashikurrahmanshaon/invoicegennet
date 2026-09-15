@@ -46,7 +46,7 @@ const BLANK_INVOICE = {
   },
 
   shipTo: {
-    enabled: false,
+    enabled: true,
     name: '',
     address: ''
   },

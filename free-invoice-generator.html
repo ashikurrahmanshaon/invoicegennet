@@ -258,7 +258,6 @@
         <div class="sender-info-box">
           <div class="sheet-col-header" style="margin-bottom: 8px;">
             <span class="sheet-col-title">From</span>
-            <button type="button" class="edit-profile-sublink" id="linkEditProfile" title="Edit Business Profile Defaults">Edit Profile</button>
           </div>
 
           <!-- Logo Uploader -->
@@ -317,32 +316,26 @@
       </div>
 
       <!-- Middle Section: Bill To & Ship To Side-by-Side -->
-      <div class="sheet-billing-row ship-to-hidden" id="sheetBillingRow">
+      <div class="sheet-billing-row" id="sheetBillingRow">
 
         <!-- Bill To -->
         <div class="sheet-billing-col" id="billToCol">
           <div class="sheet-col-header">
             <span class="sheet-col-title">Bill To</span>
-            <div class="client-picker-wrap" id="clientPickerWrap">
-              <select id="clientQuickSelect" class="client-quick-picker" aria-label="Select existing client">
-                <option value="">Select Client ▾</option>
-              </select>
-            </div>
           </div>
           <div class="sheet-field-group">
-            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="Who is this to? (Client name or company)">
+            <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="Who is this to? (Client name or company)" list="clientsDatalist">
+            <datalist id="clientsDatalist"></datalist>
           </div>
           <div class="sheet-field-group">
             <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="Client billing address, email, tax ID..."></textarea>
           </div>
-          <button type="button" class="btn-subtle-add-detail" id="btnEnableShipToInline">+ Add Shipping Address</button>
         </div>
 
         <!-- Ship To (Optional or Default) -->
-        <div class="sheet-billing-col" id="shipToCardPanel" style="display: none;">
+        <div class="sheet-billing-col" id="shipToCardPanel">
           <div class="sheet-col-header">
             <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
-            <button type="button" class="btn-subtle-add-detail" id="btnDisableShipToInline" style="color: #94a3b8; font-size: 0.75rem;">Remove</button>
           </div>
           <div class="sheet-field-group">
             <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="Recipient name / company">
@@ -575,7 +568,7 @@
           <label class="inspector-toggle-row" for="toggleShipTo">
             <span class="toggle-text">Shipping details</span>
             <div class="switch-box">
-              <input type="checkbox" id="toggleShipTo">
+              <input type="checkbox" id="toggleShipTo" checked>
               <span class="switch-slider"></span>
             </div>
           </label>
@@ -840,144 +833,6 @@
       <div class="preview-modal-body" id="previewModalBody">
         <!-- Exact rendered invoice document injected dynamically -->
       </div>
-    </div>
-  </div>
-
-  <!-- Modal: Quick Edit Business Profile Defaults -->
-  <div class="saas-modal-backdrop" id="modalEditBusinessProfile" style="display: none;">
-    <div class="saas-modal-box" style="max-width: 580px;">
-      <div class="saas-modal-header">
-        <div>
-          <h3 class="saas-modal-title">Edit Business Profile</h3>
-          <span style="font-size: 0.8125rem; color: #64748b;">Saved defaults automatically pre-populate every new invoice</span>
-        </div>
-        <button type="button" class="saas-modal-close" id="btnCloseEditBizModal" aria-label="Close modal">&times;</button>
-      </div>
-      <div class="saas-modal-body">
-        <form id="formEditBizModal" onsubmit="event.preventDefault(); window.saveEditBizModal();">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="editBizName">Business / Freelancer Name *</label>
-              <input type="text" id="editBizName" class="form-input" placeholder="e.g. Acme Creative Studio LLC" required>
-            </div>
-            <div>
-              <label class="form-label" for="editBizEmail">Work Email</label>
-              <input type="email" id="editBizEmail" class="form-input" placeholder="contact@yourbusiness.com">
-            </div>
-            <div>
-              <label class="form-label" for="editBizPhone">Phone Number</label>
-              <input type="tel" id="editBizPhone" class="form-input" placeholder="+1 (555) 019-2834">
-            </div>
-            <div>
-              <label class="form-label" for="editBizWebsite">Website</label>
-              <input type="url" id="editBizWebsite" class="form-input" placeholder="https://yourbusiness.com">
-            </div>
-            <div>
-              <label class="form-label" for="editBizTaxId">Tax ID / VAT / GST</label>
-              <input type="text" id="editBizTaxId" class="form-input" placeholder="e.g. US-982341-X or GB123456789">
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="editBizAddress">Full Street Address</label>
-              <textarea id="editBizAddress" class="form-textarea" rows="2" placeholder="Street address, Suite, City, State, Country"></textarea>
-            </div>
-            <div>
-              <label class="form-label" for="editBizCurrency">Default Currency</label>
-              <select id="editBizCurrency" class="form-select">
-                <option value="USD">$ — US Dollar (USD)</option>
-                <option value="EUR">€ — Euro (EUR)</option>
-                <option value="GBP">£ — British Pound (GBP)</option>
-                <option value="BDT">৳ — Bangladeshi Taka (BDT)</option>
-                <option value="INR">₹ — Indian Rupee (INR)</option>
-                <option value="CAD">CA$ — Canadian Dollar (CAD)</option>
-                <option value="AUD">AU$ — Australian Dollar (AUD)</option>
-                <option value="JPY">¥ — Japanese Yen (JPY)</option>
-                <option value="AED">د.إ — UAE Dirham (AED)</option>
-                <option value="SAR">﷼ — Saudi Riyal (SAR)</option>
-              </select>
-            </div>
-            <div>
-              <label class="form-label" for="editBizPaymentTerms">Default Payment Terms</label>
-              <select id="editBizPaymentTerms" class="form-select">
-                <option value="Due on Receipt">Due on Receipt</option>
-                <option value="Net 7 Days">Net 7 Days</option>
-                <option value="Net 14 Days">Net 14 Days</option>
-                <option value="Net 15 Days">Net 15 Days</option>
-                <option value="Net 30 Days">Net 30 Days</option>
-                <option value="Net 60 Days">Net 60 Days</option>
-              </select>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="saas-modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" id="btnCancelEditBiz">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm" id="btnSaveEditBiz">Save Business Defaults</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Quick Add Client Directly in Invoice -->
-  <div class="saas-modal-backdrop" id="modalQuickAddClient" style="display: none;">
-    <div class="saas-modal-box" style="max-width: 540px;">
-      <div class="saas-modal-header">
-        <div>
-          <h3 class="saas-modal-title">Add New Client</h3>
-          <span style="font-size: 0.8125rem; color: #64748b;">Instantly saves client and auto-fills this invoice</span>
-        </div>
-        <button type="button" class="saas-modal-close" id="btnCloseQuickClientModal" aria-label="Close modal">&times;</button>
-      </div>
-      <div class="saas-modal-body">
-        <form id="formQuickAddClient" onsubmit="event.preventDefault(); window.saveQuickClientModal();">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientName">Client Name / Contact Person *</label>
-              <input type="text" id="quickClientName" class="form-input" placeholder="e.g. John Doe or Sarah Jenkins" required>
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientCompany">Company Name</label>
-              <input type="text" id="quickClientCompany" class="form-input" placeholder="e.g. Starlight Media Ventures Inc.">
-            </div>
-            <div>
-              <label class="form-label" for="quickClientEmail">Email Address</label>
-              <input type="email" id="quickClientEmail" class="form-input" placeholder="billing@clientcompany.com">
-            </div>
-            <div>
-              <label class="form-label" for="quickClientPhone">Phone Number</label>
-              <input type="tel" id="quickClientPhone" class="form-input" placeholder="+1 (555) 012-3456">
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientAddress">Billing Address</label>
-              <textarea id="quickClientAddress" class="form-textarea" rows="2" placeholder="Street, Suite, City, State, ZIP, Country"></textarea>
-            </div>
-            <div style="grid-column: 1 / -1;">
-              <label class="form-label" for="quickClientShipping">Shipping Address (Optional)</label>
-              <textarea id="quickClientShipping" class="form-textarea" rows="2" placeholder="Warehouse, Street, Delivery location..."></textarea>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="saas-modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" id="btnCancelQuickClient">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm" id="btnSaveQuickClient">Save &amp; Use in Invoice</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Download Success Banner & Next Action Prompt -->
-  <div class="download-success-banner" id="downloadSuccessBanner" style="display: none;">
-    <div class="download-success-top">
-      <div class="download-success-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      </div>
-      <div style="flex: 1;">
-        <div class="download-success-title">Invoice PDF downloaded successfully!</div>
-        <div class="download-success-sub">Document ready. What would you like to do next?</div>
-      </div>
-      <button type="button" class="btn btn-ghost btn-sm" id="btnCloseDownloadBanner" style="min-height: 36px; height: 36px; width: 36px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; line-height: 1; border-radius: 6px;" aria-label="Dismiss banner">&times;</button>
-    </div>
-    <div class="download-success-actions">
-      <button type="button" class="btn btn-primary btn-sm" id="btnBannerCreateAnother">+ Create Another Invoice</button>
-      <a href="dashboard.html#invoices" class="btn btn-secondary btn-sm" id="btnBannerViewInvoices">View in Invoices</a>
     </div>
   </div>
 

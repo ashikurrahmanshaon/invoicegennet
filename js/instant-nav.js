@@ -452,22 +452,34 @@
 
   // 11. Universal Mobile Navigation Drawer Handler
   function initMobileNav() {
+    const header = document.querySelector('.navbar-saas');
+    const navbarContainer = document.querySelector('.navbar-container');
     let btnToggle = document.getElementById('btnMobileNavToggle');
     let drawer = document.getElementById('mobileNavDrawer');
-    const header = document.querySelector('.navbar-saas');
+    const actionsWrap = header ? header.querySelector('.nav-actions-wrap') : null;
 
-    // Ensure toggle button exists inside navbar actions
-    if (!btnToggle && header) {
-      const actionsWrap = header.querySelector('.nav-actions-wrap');
-      if (actionsWrap) {
-        btnToggle = document.createElement('button');
-        btnToggle.type = 'button';
-        btnToggle.className = 'btn-mobile-nav-toggle';
-        btnToggle.id = 'btnMobileNavToggle';
-        btnToggle.setAttribute('aria-label', 'Toggle navigation menu');
-        btnToggle.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
-        actionsWrap.appendChild(btnToggle);
-      }
+    // Ensure toggle button exists inside navbar container as first item
+    if (!btnToggle && navbarContainer) {
+      btnToggle = document.createElement('button');
+      btnToggle.type = 'button';
+      btnToggle.className = 'btn-mobile-nav-toggle';
+      btnToggle.id = 'btnMobileNavToggle';
+      btnToggle.setAttribute('aria-label', 'Toggle navigation menu');
+      btnToggle.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+      navbarContainer.prepend(btnToggle);
+    } else if (btnToggle && navbarContainer && btnToggle.parentElement !== navbarContainer) {
+      navbarContainer.prepend(btnToggle);
+    }
+
+    // Ensure mobile avatar button exists on right for [Hamburger] [Logo] [Avatar] hierarchy
+    if (actionsWrap && !document.getElementById('mobileHeaderAvatarBtn')) {
+      const mobAvatar = document.createElement('a');
+      mobAvatar.id = 'mobileHeaderAvatarBtn';
+      mobAvatar.className = 'btn-mobile-avatar';
+      mobAvatar.href = (window.Auth && window.Auth.isAuthenticated()) ? 'dashboard.html#settings' : 'login.html';
+      mobAvatar.setAttribute('aria-label', 'Account profile');
+      mobAvatar.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+      actionsWrap.appendChild(mobAvatar);
     }
 
     // Ensure mobile drawer exists
@@ -475,56 +487,69 @@
       drawer = document.createElement('div');
       drawer.id = 'mobileNavDrawer';
       drawer.className = 'mobile-nav-drawer';
-      drawer.innerHTML = `
-        <div class="mobile-nav-links">
-          <a href="dashboard.html" class="mobile-nav-link">Dashboard</a>
-          <a href="index.html" class="mobile-nav-link">Create Invoice</a>
-          <a href="dashboard.html#invoices" class="mobile-nav-link">Invoices</a>
-          <a href="dashboard.html#clients" class="mobile-nav-link">Clients</a>
-          <a href="templates.html" class="mobile-nav-link">Templates</a>
-          <a href="tools.html" class="mobile-nav-link">Tools</a>
-          <a href="pricing.html" class="mobile-nav-link">Pricing</a>
-        </div>
-        <div class="mobile-nav-auth">
-          <a href="login.html" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Log In</a>
-          <a href="signup.html" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Sign Up Free</a>
-        </div>
-      `;
       document.body.appendChild(drawer);
     }
 
-    if (!btnToggle || !drawer) return;
-
-    // Ensure Search trigger exists at top of drawer
-    const linksContainer = drawer.querySelector('.mobile-nav-links');
-    if (linksContainer && !linksContainer.querySelector('#btnMobileDrawerSearch')) {
-      const searchBtn = document.createElement('button');
-      searchBtn.type = 'button';
-      searchBtn.id = 'btnMobileDrawerSearch';
-      searchBtn.className = 'btn-mobile-drawer-search';
-      searchBtn.setAttribute('aria-label', 'Search invoices, clients, tools...');
-      searchBtn.style.cssText = 'width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 14px; min-height: 44px; height: 44px; border-radius: 8px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; font-size: 0.875rem; margin-bottom: 12px; cursor: pointer; font-family: inherit; font-weight: 500; text-align: left; box-sizing: border-box;';
-      searchBtn.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <span>Search invoices, clients, tools...</span>
-        <span style="margin-left: auto; font-size: 0.6875rem; background: #e2e8f0; color: #475569; padding: 2px 6px; border-radius: 4px; font-weight: 600;">⌘K</span>
-      `;
-      linksContainer.prepend(searchBtn);
-    }
-
-    // Ensure Tools link is present in drawer links
-    if (linksContainer && !linksContainer.querySelector('a[href*="tools"]')) {
-      const pricingLink = linksContainer.querySelector('a[href*="pricing"]');
-      const toolsLink = document.createElement('a');
-      toolsLink.href = 'tools.html';
-      toolsLink.className = 'mobile-nav-link';
-      toolsLink.textContent = 'Tools';
-      if (pricingLink) {
-        linksContainer.insertBefore(toolsLink, pricingLink);
-      } else {
-        linksContainer.appendChild(toolsLink);
-      }
-    }
+    // Populate drawer with the exact 9 standard items
+    drawer.innerHTML = `
+      <div class="mobile-drawer-header">
+        <a href="index.html" class="mobile-drawer-brand" title="Invoice-Gen.net Home">
+          <img src="/assets/icons/logo.svg" alt="Invoice-Gen.net Logo" width="28" height="28">
+          <span style="font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: var(--font-sans);">Invoice-Gen<span style="color: #059669;">.net</span></span>
+        </a>
+        <button type="button" class="btn-drawer-close" id="btnDrawerClose" aria-label="Close navigation menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="mobile-nav-links">
+        <button type="button" class="btn-mobile-drawer-search" id="btnMobileDrawerSearch" aria-label="Search invoices, clients, tools..." style="width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 14px; min-height: 44px; height: 44px; border-radius: 8px; background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; font-size: 0.875rem; margin-bottom: 8px; cursor: pointer; font-family: inherit; font-weight: 500; text-align: left; box-sizing: border-box;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>Search invoices, tools...</span>
+          <span style="margin-left: auto; font-size: 0.6875rem; background: #e2e8f0; color: #475569; padding: 2px 6px; border-radius: 4px; font-weight: 600;">⌘K</span>
+        </button>
+        <a href="dashboard.html#dashboard" class="mobile-nav-link" id="mobNavDashboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="dashboard.html#invoices" class="mobile-nav-link" id="mobNavInvoices">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span>Invoices</span>
+          <span class="mobile-nav-count-badge" id="mobInvoicesCountBadge" style="display: none; margin-left: auto; font-size: 0.72rem; padding: 2px 7px; border-radius: 99px; background: #ecfdf5; color: #059669; font-weight: 700;"></span>
+        </a>
+        <a href="dashboard.html#clients" class="mobile-nav-link" id="mobNavClients">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Clients</span>
+        </a>
+        <a href="templates.html" class="mobile-nav-link" id="mobNavTemplates">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          <span>Templates</span>
+        </a>
+        <a href="tools.html" class="mobile-nav-link" id="mobNavTools">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Tools</span>
+        </a>
+        <a href="pricing.html" class="mobile-nav-link" id="mobNavPricing">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>Pricing</span>
+        </a>
+        <a href="dashboard.html#settings" class="mobile-nav-link" id="mobNavSettings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
+        </a>
+        <a href="dashboard.html#help" class="mobile-nav-link" id="mobNavHelp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Help</span>
+        </a>
+        <button type="button" class="mobile-nav-link mobile-nav-logout-btn" id="mobNavLogout" style="display: none; width: 100%; border: none; background: transparent; cursor: pointer; text-align: left; color: #ef4444; font-family: inherit;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span>Logout</span>
+        </button>
+      </div>
+      <div class="mobile-nav-auth" id="mobileNavAuthArea">
+        <a href="login.html" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Log In</a>
+        <a href="signup.html" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Sign Up Free</a>
+      </div>
+    `;
 
     // Ensure drawer is on root body to guarantee it sits above backdrop stacking context
     if (drawer.parentElement !== document.body) {
@@ -540,39 +565,18 @@
       document.body.appendChild(backdrop);
     }
 
-    // Ensure header with close button inside drawer
-    let drawerHeader = drawer.querySelector('.mobile-drawer-header');
-    if (!drawerHeader) {
-      drawerHeader = document.createElement('div');
-      drawerHeader.className = 'mobile-drawer-header';
-      drawerHeader.innerHTML = `
-        <a href="index.html" class="mobile-drawer-brand">
-          <img src="/assets/icons/logo.svg" alt="Invoice-Gen.net Logo" width="28" height="28">
-          <span style="font-size: 1.15rem; font-weight: 800; color: #0f172a; font-family: var(--font-sans);">Invoice-Gen<span style="color: #059669;">.net</span></span>
-        </a>
-        <button type="button" class="btn-drawer-close" id="btnDrawerClose" aria-label="Close navigation menu">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      `;
-      drawer.prepend(drawerHeader);
-    }
-
     const btnClose = drawer.querySelector('#btnDrawerClose');
 
     function openDrawer() {
-      drawer.classList.add('active');
-      drawer.classList.add('open');
-      backdrop.classList.add('active');
-      backdrop.classList.add('open');
+      drawer.classList.add('active', 'open');
+      backdrop.classList.add('active', 'open');
       document.body.classList.add('mobile-drawer-open');
       btnToggle.setAttribute('aria-expanded', 'true');
     }
 
     function closeDrawer() {
-      drawer.classList.remove('active');
-      drawer.classList.remove('open');
-      backdrop.classList.remove('active');
-      backdrop.classList.remove('open');
+      drawer.classList.remove('active', 'open');
+      backdrop.classList.remove('active', 'open');
       document.body.classList.remove('mobile-drawer-open');
       btnToggle.setAttribute('aria-expanded', 'false');
     }
@@ -606,6 +610,19 @@
 
     backdrop.onclick = closeDrawer;
 
+    const btnMobLogout = drawer.querySelector('#mobNavLogout');
+    if (btnMobLogout) {
+      btnMobLogout.onclick = (e) => {
+        e.preventDefault();
+        closeDrawer();
+        if (window.Auth && typeof window.Auth.logout === 'function') {
+          window.Auth.logout();
+        } else {
+          window.location.assign('login.html');
+        }
+      };
+    }
+
     // Close when tapping any link inside the drawer
     drawer.addEventListener('click', (e) => {
       const a = e.target.closest('a');
@@ -619,6 +636,11 @@
         closeDrawer();
       }
     });
+
+    // Sync auth state into mobile header and drawer if Auth is initialized
+    if (window.Auth && typeof window.Auth.renderHeader === 'function') {
+      window.Auth.renderHeader();
+    }
   }
 
   // Expose Router API Globally

@@ -260,8 +260,16 @@ html.user-logged-in #btnMobileSignup {
   display: none !important;
 }
 
-html.user-logged-in #btnHeaderDashboard {
-  display: inline-flex !important;
+@media (min-width: 769px) {
+  html.user-logged-in #btnHeaderDashboard {
+    display: inline-flex !important;
+  }
+}
+@media (max-width: 768px) {
+  #btnHeaderDashboard,
+  html.user-logged-in #btnHeaderDashboard {
+    display: none !important;
+  }
 }
 
 /* Page Transition (Subtle opacity 0.98 -> 1, translateY 3px -> 0 over 160ms) */
@@ -2883,19 +2891,23 @@ textarea:disabled {
    Covers 320px to 768px: Drawer, Header, Form Controls, Modals, Toasts
    ========================================================================== */
 
-/* 1. Mobile Header & Toggle */
+/* 1. Mobile Header: [Hamburger] [Invoice-Gen.net Logo] [Avatar] */
 @media (max-width: 768px) {
   .navbar-saas {
-    height: 60px !important;
+    height: 58px !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 999 !important;
   }
   .navbar-saas .container,
   .navbar-saas .navbar-container {
-    height: 60px !important;
+    height: 58px !important;
     padding-left: var(--container-gutter, 16px) !important;
     padding-right: var(--container-gutter, 16px) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
+    position: relative !important;
   }
   .nav-center-links {
     display: none !important;
@@ -2905,15 +2917,21 @@ textarea:disabled {
   .nav-actions-wrap .btn-header-search,
   .nav-actions-wrap .btn-header-notif,
   .nav-actions-wrap .header-search-wrap,
+  .nav-actions-wrap .header-auth-dashboard,
+  .nav-actions-wrap .user-account-dropdown,
+  .nav-actions-wrap #headerNotifWrapper,
   .nav-actions-wrap .lang-switcher-container {
     display: none !important;
   }
+  /* Left Hamburger (Touch Target >= 44px) */
   .btn-mobile-nav-toggle {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     width: var(--touch-target-min, 44px) !important;
     height: var(--touch-target-min, 44px) !important;
+    min-width: var(--touch-target-min, 44px) !important;
+    min-height: var(--touch-target-min, 44px) !important;
     padding: 0 !important;
     border: 1px solid var(--border-light, #e2e8f0) !important;
     border-radius: 10px !important;
@@ -2921,6 +2939,8 @@ textarea:disabled {
     color: var(--text-main, #0f172a) !important;
     cursor: pointer !important;
     flex-shrink: 0 !important;
+    order: 1 !important;
+    margin: 0 !important;
     transition: background 0.15s ease, border-color 0.15s ease !important;
   }
   .btn-mobile-nav-toggle:hover,
@@ -2928,13 +2948,106 @@ textarea:disabled {
     background: #f8fafc !important;
     border-color: #cbd5e1 !important;
   }
+  /* Center Crisp Brand Logo */
+  .navbar-saas .brand-wrapper {
+    order: 2 !important;
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+    flex-shrink: 0 !important;
+    pointer-events: auto !important;
+  }
+  .navbar-saas .brand-logo-frame {
+    width: 30px !important;
+    height: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .navbar-saas .brand-icon-svg {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .navbar-saas .brand-name {
+    font-size: 1.125rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--text-main, #0f172a) !important;
+    white-space: nowrap !important;
+  }
+  /* Right Avatar / User Touch Target */
+  .nav-actions-wrap {
+    order: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+    min-width: 44px !important;
+  }
+  .btn-mobile-avatar {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: var(--touch-target-min, 44px) !important;
+    height: var(--touch-target-min, 44px) !important;
+    min-width: var(--touch-target-min, 44px) !important;
+    min-height: var(--touch-target-min, 44px) !important;
+    border-radius: 50% !important;
+    background: #f8fafc !important;
+    border: 1px solid var(--border-light, #e2e8f0) !important;
+    color: #475569 !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    transition: all 0.15s ease !important;
+  }
+  .btn-mobile-avatar:active {
+    background: #f1f5f9 !important;
+    transform: scale(0.96) !important;
+  }
+  .btn-user-avatar {
+    width: var(--touch-target-min, 44px) !important;
+    height: var(--touch-target-min, 44px) !important;
+    min-width: var(--touch-target-min, 44px) !important;
+    min-height: var(--touch-target-min, 44px) !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar-saas .container,
+  .navbar-saas .navbar-container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .navbar-saas .brand-name {
+    font-size: 0.95rem !important;
+  }
+  .navbar-saas .brand-logo-frame,
+  .navbar-saas .brand-icon-svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+}
+
+/* Desktop Header Guard: Ensure mobile elements are completely hidden */
+@media (min-width: 769px) {
+  .btn-mobile-nav-toggle,
+  .btn-mobile-avatar {
+    display: none !important;
+  }
 }
 
 /* 2. Mobile Navigation Drawer & Backdrop */
 .mobile-drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.48);
+  background: rgba(15, 23, 42, 0.44);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 9998;
@@ -2962,22 +3075,25 @@ body.mobile-drawer-open .mobile-drawer-backdrop {
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(340px, 86vw);
+  width: min(320px, 85vw);
   background: #ffffff;
   z-index: 9999;
   transform: translateX(100%);
   visibility: hidden;
-  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.26s;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.24s;
   display: flex !important;
   flex-direction: column;
-  box-shadow: -10px 0 30px rgba(15, 23, 42, 0.16);
+  box-shadow: -10px 0 30px rgba(15, 23, 42, 0.14);
   padding: 0;
+  padding-top: max(0px, env(safe-area-inset-top, 0px));
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
 body.mobile-drawer-open .mobile-nav-drawer,
-.mobile-nav-drawer.active {
+.mobile-nav-drawer.active,
+.mobile-nav-drawer.open {
   transform: translateX(0);
   visibility: visible;
 }
@@ -2986,7 +3102,7 @@ body.mobile-drawer-open .mobile-nav-drawer,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 16px 18px;
   border-bottom: 1px solid #e2e8f0;
   flex-shrink: 0;
 }
@@ -3001,6 +3117,8 @@ body.mobile-drawer-open .mobile-nav-drawer,
 .btn-drawer-close {
   width: var(--touch-target-min, 44px);
   height: var(--touch-target-min, 44px);
+  min-width: var(--touch-target-min, 44px);
+  min-height: var(--touch-target-min, 44px);
   border-radius: 10px;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
@@ -3010,6 +3128,7 @@ body.mobile-drawer-open .mobile-nav-drawer,
   justify-content: center;
   cursor: pointer;
   transition: all 0.15s ease;
+  padding: 0;
 }
 
 .btn-drawer-close:hover {
@@ -3018,20 +3137,25 @@ body.mobile-drawer-open .mobile-nav-drawer,
   border-color: #fca5a5;
 }
 
+.btn-drawer-close:active {
+  transform: scale(0.95);
+}
+
 .mobile-nav-section-title {
   font-size: 0.6875rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #94a3b8;
-  padding: 14px 20px 6px;
+  padding: 12px 18px 4px;
 }
 
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
   padding: 8px 12px;
-  gap: 4px;
+  gap: 3px;
+  flex: 1;
 }
 
 .mobile-nav-link,
@@ -3057,13 +3181,18 @@ body.mobile-drawer-open .mobile-nav-drawer,
   color: #059669;
 }
 
+.mobile-nav-link svg,
+.mobile-nav-item svg {
+  flex-shrink: 0;
+}
+
 .mobile-nav-auth {
-  padding: 16px;
+  padding: 14px 16px;
   margin-top: auto;
   border-top: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex-shrink: 0;
   background: #fbfcfe;
 }
