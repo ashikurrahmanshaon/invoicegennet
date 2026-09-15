@@ -1001,6 +1001,31 @@ const requestHandler = async (req, res) => {
     }
   }
 
+  // POST /api/contact - Record user contact inquiry in SQLite
+  if (pathname === '/api/contact' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody(req);
+      const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+      const saved = db.saveContactMessage({
+        name: body.name,
+        email: body.email,
+        category: body.category || 'general',
+        message: body.message,
+        ip: Array.isArray(clientIp) ? clientIp[0] : String(clientIp)
+      });
+      return sendJson(res, 200, {
+        success: true,
+        message: 'Thank you! Your message has been received and our team will get back to you promptly.',
+        id: saved.id
+      });
+    } catch (err) {
+      return sendJson(res, 400, {
+        success: false,
+        error: err.message || 'Invalid contact submission data.'
+      });
+    }
+  }
+
   // GET /api/config/public - Public environment & gateway readiness metadata
   if (pathname === '/api/config/public' && req.method === 'GET') {
     return sendJson(res, 200, {
@@ -1026,7 +1051,7 @@ const requestHandler = async (req, res) => {
     '/invoices', '/clients',
     '/profile', '/business-profile',
     '/billing', '/payment-methods', '/payment-history',
-    '/settings', '/security'
+    '/settings'
   ];
   if (privateRoutes.includes(pathname) && !session) {
     res.writeHead(302, { 'Location': '/login.html?redirect=' + encodeURIComponent(pathname) });
@@ -1044,6 +1069,40 @@ const requestHandler = async (req, res) => {
   // STATIC ASSET SERVING & CLEAN URL ROUTING
   // ========================================================================
   const TOOL_ROUTE_MAP = {
+    // Public Company & Resource Routes
+    '/about': 'about.html',
+    '/about/': 'about.html',
+    '/contact': 'contact.html',
+    '/contact/': 'contact.html',
+    '/help': 'help.html',
+    '/help/': 'help.html',
+    '/faq': 'faq.html',
+    '/faq/': 'faq.html',
+    '/getting-started': 'getting-started.html',
+    '/getting-started/': 'getting-started.html',
+    '/cookies': 'cookies.html',
+    '/cookies/': 'cookies.html',
+    '/blog': 'blog.html',
+    '/blog/': 'blog.html',
+    '/pricing': 'pricing.html',
+    '/pricing/': 'pricing.html',
+    '/security': 'security.html',
+    '/security/': 'security.html',
+    '/privacy': 'privacy.html',
+    '/privacy/': 'privacy.html',
+    '/terms': 'terms.html',
+    '/terms/': 'terms.html',
+    '/refunds': 'refunds.html',
+    '/refunds/': 'refunds.html',
+    '/sitemap': 'sitemap.html',
+    '/sitemap/': 'sitemap.html',
+    '/404': '404.html',
+    '/invoice-guide': 'invoice-guide.html',
+    '/invoice-guide/': 'invoice-guide.html',
+    '/invoicing-guide': 'invoice-guide.html',
+    '/invoicing-guide/': 'invoice-guide.html',
+
+    // Tools & Suite Routes
     '/tools': 'tools.html',
     '/tools/': 'tools.html',
     '/files': 'files.html',
@@ -1066,6 +1125,7 @@ const requestHandler = async (req, res) => {
     '/tools/currency-converter': 'currency-converter.html',
     '/tools/online-payments': 'payments.html',
     '/tools/payment-link': 'payment-link.html',
+
     // Authenticated deep tab routes mapped directly to dashboard.html
     '/invoices': 'dashboard.html',
     '/clients': 'dashboard.html',
@@ -1074,8 +1134,7 @@ const requestHandler = async (req, res) => {
     '/billing': 'dashboard.html',
     '/payment-methods': 'dashboard.html',
     '/payment-history': 'dashboard.html',
-    '/settings': 'dashboard.html',
-    '/security': 'dashboard.html'
+    '/settings': 'dashboard.html'
   };
 
   let assetPath = pathname;

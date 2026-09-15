@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security Architecture &amp; Data Protection | Invoice-Gen.net</title>
-  <meta name="description" content="Detailed technical overview of Invoice-Gen.net security: salted password hashing, HttpOnly session cookies, parameterized SQLite queries, and client-side vector PDF isolation.">
-  <link rel="canonical" href="https://invoice-gen.net/security">
+  <title>Invoice Guide: Elements, Structure &amp; Best Practices | Invoice-Gen.net</title>
+  <meta name="description" content="A clear, practical guide to professional invoicing. Learn what an invoice is, essential line items, payment terms, and how to create audit-ready commercial invoices.">
+  <link rel="canonical" href="https://invoice-gen.net/invoice-guide">
   <meta name="theme-color" content="#0F172A">
 
   <!-- Open Graph / SEO Social -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://invoice-gen.net/security">
-  <meta property="og:title" content="Security Architecture &amp; Data Protection | Invoice-Gen.net">
-  <meta property="og:description" content="Technical overview of security practices, client-side data isolation, and user privacy safeguards on Invoice-Gen.net.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://invoice-gen.net/invoice-guide">
+  <meta property="og:title" content="Invoice Guide: What Every Professional Invoice Must Include">
+  <meta property="og:description" content="Practical guide to creating audit-ready commercial invoices. Detailed breakdown of invoice numbers, line items, taxes, discounts, and payment terms.">
   <meta property="og:image" content="https://invoice-gen.net/assets/icons/logo.svg?v=6.0">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Invoice Guide | Invoice-Gen.net">
+  <meta name="twitter:description" content="What every invoice must include: numbering, business info, line items, taxes, and payment terms.">
 
   <!-- Favicon & Brand Icons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico?v=6.0">
@@ -24,84 +27,43 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=6.0">
   <link rel="manifest" href="/site.webmanifest?v=6.0">
 
-  <!-- Preload Local Fonts -->
+  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/design-system.css?v=5.0">
-  <link rel="stylesheet" href="css/invoice-editor.css?v=5.0">
-  <style>
-    .sec-pillar-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 32px;
-      margin-bottom: 24px;
-      transition: border-color 0.15s ease;
-    }
-    .sec-pillar-card:hover {
-      border-color: #cbd5e1;
-    }
-    .sec-pillar-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-    .sec-icon-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      background: #ecfdf5;
-      color: #059669;
-      border: 1px solid #bbf7d0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .sec-pillar-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #0f172a;
-      margin: 0;
-    }
-    .sec-pillar-body p {
-      color: #475569;
-      font-size: 0.9375rem;
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-    .sec-details-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-    }
-    .sec-detail-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 16px;
-    }
-    .sec-detail-box strong {
-      display: block;
-      color: #0f172a;
-      font-size: 0.8875rem;
-      margin-bottom: 4px;
-    }
-    .sec-detail-box span {
-      color: #64748b;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-      display: block;
-    }
-  </style>
+  <link rel="stylesheet" href="css/design-system.css?v=4.0">
+  <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Invoice Guide: What Every Professional Invoice Must Include",
+    "description": "A comprehensive, practical guide to professional invoicing for freelancers, contractors, and businesses.",
+    "author": {
+      "@type": "Organization",
+      "name": "Invoice-Gen.net"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Invoice-Gen.net",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://invoice-gen.net/assets/icons/logo.svg"
+      }
+    },
+    "datePublished": "2026-01-10",
+    "dateModified": "2026-09-15"
+  }
+  </script>
   <script src="js/google-auth.js?v=6.0"></script>
 </head>
 <body>
 
-  <!-- Universal SaaS Header -->
+  <!-- Universal SaaS Top Navigation Bar -->
   <header class="navbar-saas" id="mainHeader">
     <div class="container navbar-container">
+      <!-- Brand Lockup -->
       <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
         <div class="brand-logo-frame">
           <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36">
@@ -111,6 +73,7 @@
         </div>
       </a>
 
+      <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
         <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
           <span>Create Invoice</span>
@@ -125,7 +88,7 @@
         <div class="nav-dropdown-item-wrap">
           <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
             <span data-i18n="nav_tools">Tools</span>
-            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
           <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
             <div class="mega-menu-grid">
@@ -195,159 +158,203 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Editorial Layout -->
   <main class="page-container">
-    <div class="breadcrumbs-nav">
+    <div class="breadcrumbs-nav" style="max-width: 860px; margin: 0 auto 24px;">
       <a href="index.html" class="breadcrumb-link">Home</a>
       <span class="breadcrumb-sep">/</span>
-      <span class="breadcrumb-current">Security</span>
+      <a href="blog.html" class="breadcrumb-link">Resources</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">Invoice Guide</span>
     </div>
 
+    <!-- Hero Section -->
     <div class="page-hero-wrap">
-      <h1 class="page-hero-title">Security &amp; Architecture Overview</h1>
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        PRACTICAL INVOICING GUIDE
+      </div>
+      <h1 class="page-hero-title">What Is an Invoice and What Must It Include?</h1>
       <p class="page-hero-sub">
-        An honest, transparent look into how Invoice-Gen.net protects customer data, isolates client-side documents, secures authentication, and safeguards infrastructure.
+        A practical, comprehensive breakdown of commercial invoice elements, tax compliance rules, and best practices to ensure your invoices get processed and paid without delay.
       </p>
     </div>
 
-    <div style="max-width: 920px; margin: 0 auto 56px;">
+    <!-- Long-Form Reading Container -->
+    <div class="content-body-wrap">
 
-      <!-- Section 1: Account Security -->
-      <div class="sec-pillar-card">
-        <div class="sec-pillar-header">
-          <div class="sec-icon-badge">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          </div>
-          <h2 class="sec-pillar-title">1. Account &amp; Authentication Security</h2>
-        </div>
-        <div class="sec-pillar-body">
-          <p>
-            User accounts are secured using industry-standard cryptographic techniques in our Node.js runtime. We do not store plaintext passwords under any circumstances.
-          </p>
-          <div class="sec-details-grid">
-            <div class="sec-detail-box">
-              <strong>Salted SHA-256 Hashing</strong>
-              <span>Every password is hashed with a unique 32-byte cryptographic salt generated via <code>crypto.randomBytes</code> before database persistence.</span>
-            </div>
-            <div class="sec-detail-box">
-              <strong>HttpOnly Session Cookies</strong>
-              <span>Session tokens are stored in strict <code>HttpOnly</code> cookies inaccessible to client-side scripts, neutralizing Cross-Site Scripting (XSS) session theft.</span>
-            </div>
-            <div class="sec-detail-box">
-              <strong>Google OAuth Token Validation</strong>
-              <span>Google authentication tokens are verified against Google's official identity endpoints before account creation.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 2: Data Protection & Isolation -->
-      <div class="sec-pillar-card">
-        <div class="sec-pillar-header">
-          <div class="sec-icon-badge">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-          </div>
-          <h2 class="sec-pillar-title">2. Relational Database &amp; Data Isolation</h2>
-        </div>
-        <div class="sec-pillar-body">
-          <p>
-            Customer data is stored in an embedded SQLite database using Write-Ahead Logging (WAL) mode for fast, atomic transactions and complete relational data integrity.
-          </p>
-          <div class="sec-details-grid">
-            <div class="sec-detail-box">
-              <strong>Parameterized Queries</strong>
-              <span>All database queries use prepared statements with strict parameter binding, completely eliminating SQL Injection vulnerabilities.</span>
-            </div>
-            <div class="sec-detail-box">
-              <strong>Scoped User Isolation</strong>
-              <span>Every invoice, client, and file lookup enforces a mandatory <code>user_id</code> foreign key constraint to ensure users cannot view or modify others' data.</span>
-            </div>
-            <div class="sec-detail-box">
-              <strong>Cascading Deletes</strong>
-              <span>Foreign keys are enforced (<code>PRAGMA foreign_keys = ON</code>). When an account is deleted, associated invoices, clients, and activity logs are permanently purged.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 3: File Privacy & Guest Mode -->
-      <div class="sec-pillar-card">
-        <div class="sec-pillar-header">
-          <div class="sec-icon-badge">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-          </div>
-          <h2 class="sec-pillar-title">3. Guest Mode &amp; Client-Side PDF Generation</h2>
-        </div>
-        <div class="sec-pillar-body">
-          <p>
-            For visitors using Invoice-Gen.net without creating an account, your sensitive business data is completely isolated to your device.
-          </p>
-          <div class="sec-details-grid">
-            <div class="sec-detail-box">
-              <strong>Zero-Server Guest Drafting</strong>
-              <span>Guest drafts, line item prices, customer names, and bank accounts remain strictly in your browser's private LocalStorage sandbox.</span>
-            </div>
-            <div class="sec-detail-box">
-              <strong>Client-Side Vector Engine</strong>
-              <span>Vector PDFs are generated locally in JavaScript memory using client-side engines. No document payload is transmitted across the internet.</span>
-            </div>
-            <div class="sec-detail-box">
-              <strong>Instant Local Purge</strong>
-              <span>Clicking 'Reset Form' or clearing browser cookies instantly destroys all locally cached invoice drafts.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 4: Payment Security -->
-      <div class="sec-pillar-card">
-        <div class="sec-pillar-header">
-          <div class="sec-icon-badge">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-          </div>
-          <h2 class="sec-pillar-title">4. Payment Security &amp; Tokenization</h2>
-        </div>
-        <div class="sec-pillar-body">
-          <p>
-            When utilizing optional payment links or checkout integrations:
-          </p>
-          <div class="sec-details-grid">
-            <div class="sec-detail-box">
-              <strong>No Cardholder Data Stored</strong>
-              <span>Credit card numbers and bank credentials never touch our web servers. Payments execute through direct tokenization with Stripe and PayPal.</span>
-            </div>
-            <div class="sec-detail-box">
-              <strong>Static Payment Hyperlinks</strong>
-              <span>Payment links embedded on invoices use standard HTTPS URLs (e.g. Stripe Payment Links, PayPal.me, or direct bank transfer numbers).</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 5: Infrastructure & Transport Security -->
-      <div class="sec-pillar-card">
-        <div class="sec-pillar-header">
-          <div class="sec-icon-badge">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="8" rx="2"></rect><rect x="2" y="14" width="20" height="8" rx="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
-          </div>
-          <h2 class="sec-pillar-title">5. Infrastructure &amp; Transport Security</h2>
-        </div>
-        <div class="sec-pillar-body">
-          <p>
-            All web traffic between your browser and Invoice-Gen.net is protected by Transport Layer Security (TLS 1.2 and TLS 1.3) with modern cryptographic cipher suites. Private file attachments and API endpoints enforce strict session route guards.
-          </p>
-        </div>
-      </div>
-
-      <!-- Section 6: Vulnerability Disclosure -->
-      <div class="sec-pillar-card" style="background: #f8fafc;">
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0 0 10px;">Responsible Vulnerability Disclosure</h3>
-        <p style="color: #64748b; font-size: 0.9rem; line-height: 1.6; margin: 0 0 14px;">
-          We welcome vulnerability reports from security researchers. If you identify a potential security flaw, please notify our team responsibly:
+      <!-- Section 1: What is an invoice? -->
+      <section class="content-section-block">
+        <h2>What is an invoice?</h2>
+        <p>
+          An <strong>invoice</strong> is a time-stamped commercial document issued by a seller (such as a freelancer, independent contractor, or business entity) to a buyer. It itemizes the products delivered or services rendered, states the agreed-upon prices, specifies applicable taxes, and formally requests payment under established payment terms.
         </p>
-        <a href="mailto:security@invoice-gen.net" style="color: #059669; font-weight: 700; text-decoration: none; font-size: 0.95rem;">
-          security@invoice-gen.net &rarr;
-        </a>
+        <p>
+          Unlike an estimate or quote (which is issued before work commences to agree on pricing), or a receipt (which is issued after funds are received to acknowledge payment), an invoice serves as an <em>official demand for payment</em> and a legally binding record for accounting, tax reporting, and audit verification.
+        </p>
+      </section>
+
+      <!-- Section 2: What should an invoice include? -->
+      <section class="content-section-block">
+        <h2>What should an invoice include?</h2>
+        <p>
+          To prevent payment delays and satisfy tax authority requirements in most jurisdictions, every commercial invoice should clearly feature twelve key elements:
+        </p>
+
+        <div class="step-hierarchy-list" style="margin-top: 24px;">
+
+          <div class="step-row-card">
+            <div class="step-number-badge">1</div>
+            <div class="step-card-content">
+              <h3>Invoice Number</h3>
+              <p>
+                A unique, sequential identifier assigned to each invoice (e.g., <code>INV-2026-001</code>). Unique numbering prevents duplicate payments, simplifies tracking for both parties' accounting departments, and is required by tax authorities worldwide.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">2</div>
+            <div class="step-card-content">
+              <h3>Business Information (Sender)</h3>
+              <p>
+                Your legal business name (or personal name for sole proprietors), registered physical or mailing address, business phone number, contact email, and official tax identifier (such as an EIN, VAT ID, or GST number).
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">3</div>
+            <div class="step-card-content">
+              <h3>Client Information (Recipient)</h3>
+              <p>
+                The client's legal entity or full name, department or contact person (e.g., "Accounts Payable"), billing address, and email. If the client is a registered business subject to VAT/GST reverse charges, include their tax number.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">4</div>
+            <div class="step-card-content">
+              <h3>Invoice Date</h3>
+              <p>
+                The exact date the invoice is issued. This anchors the billing cycle and establishes the starting point for calculating payment due dates under terms like Net 15 or Net 30.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">5</div>
+            <div class="step-card-content">
+              <h3>Due Date</h3>
+              <p>
+                The unambiguous deadline by which payment must be received (e.g., "Due: October 15, 2026"). Specifying an exact date avoids confusion over whether "Net 30" begins upon invoice dispatch, project delivery, or receipt.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">6</div>
+            <div class="step-card-content">
+              <h3>Line Items &amp; Descriptions</h3>
+              <p>
+                A clear, itemized breakdown of the deliverables or services provided. Instead of vague descriptions like "Design work", write specific descriptions such as "UX wireframes and high-fidelity prototypes for customer onboarding flow (Milestone 1)".
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">7</div>
+            <div class="step-card-content">
+              <h3>Quantity</h3>
+              <p>
+                The measurable volume for each line item—such as the number of hours worked, units produced, days on-site, or project milestones completed.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">8</div>
+            <div class="step-card-content">
+              <h3>Rate / Unit Price</h3>
+              <p>
+                The agreed rate per unit of deliverable—such as an hourly rate ($85.00/hr) or a fixed unit cost ($350.00/milestone). The line item subtotal equals Quantity multiplied by Rate.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">9</div>
+            <div class="step-card-content">
+              <h3>Tax (GST / VAT / Sales Tax)</h3>
+              <p>
+                Any applicable taxes calculated on taxable line items. State the applied percentage rate (e.g., "VAT 20%" or "CGST 9% + SGST 9%") and the monetary amount so the client's accountant can correctly claim input tax credits.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">10</div>
+            <div class="step-card-content">
+              <h3>Discount</h3>
+              <p>
+                Any promotional discounts, agreed retainer concessions, or early-payment incentives deducted from the line items before or after tax, clearly indicated as a negative line or dedicated subtotal adjustment.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">11</div>
+            <div class="step-card-content">
+              <h3>Total Amount Due</h3>
+              <p>
+                The final grand total prominently displayed with its currency symbol (e.g., "$2,450.00 USD" or "€1,820.00 EUR"). This must equal: <code>Subtotal − Discounts + Taxes + Shipping/Fees</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row-card">
+            <div class="step-number-badge">12</div>
+            <div class="step-card-content">
+              <h3>Payment Terms &amp; Instructions</h3>
+              <p>
+                Clear instructions explaining how the client should settle the balance: your bank account number / IBAN and SWIFT/BIC code, an online payment link (Stripe / credit card), PayPal address, or QR code checkout. State any early-pay discounts or late-fee policies.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 3: How to create a professional invoice -->
+      <section class="content-section-block">
+        <h2>How to create a professional invoice</h2>
+        <p>
+          Creating an audit-ready invoice does not require complex accounting software. Follow this streamlined four-step workflow:
+        </p>
+
+        <ol style="padding-left: 20px; line-height: 1.8; color: #334155; font-size: 0.95rem; margin-top: 16px; margin-bottom: 24px;">
+          <li><strong>Gather transaction details:</strong> Keep track of your billable hours, completed deliverables, purchase order (PO) numbers, and client contact details before writing the invoice.</li>
+          <li><strong>Use a dedicated generator:</strong> Open <a href="index.html" style="color: #059669; font-weight: 700; text-decoration: none;">Invoice-Gen.net</a> to enter your items with 0ms visual latency, automatic calculation of taxes and discounts, and custom logo upload.</li>
+          <li><strong>Review the printable preview:</strong> Check that your business details, client details, payment terms, and total amounts match your agreement precisely.</li>
+          <li><strong>Export vector PDF &amp; send:</strong> Download a crisp A4 vector PDF that renders consistently on any device or printer, and attach it to an email sent directly to your client's accounts payable contact.</li>
+        </ol>
+      </section>
+
+      <!-- CTA Card -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 36px 32px; text-align: center; margin-top: 36px; box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.04);">
+        <h3 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin: 0 0 10px;">Ready to create your invoice?</h3>
+        <p style="color: #64748b; font-size: 0.95rem; margin: 0 0 24px; max-width: 520px; margin-left: auto; margin-right: auto;">
+          Generate high-DPI vector PDFs in seconds with zero watermarks and no mandatory sign-up.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a href="index.html" class="btn btn-primary" style="padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px;">
+            Create Invoice &rarr;
+          </a>
+          <a href="templates.html" class="btn btn-secondary" style="padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem;">
+            Browse Templates
+          </a>
+        </div>
       </div>
 
     </div>
@@ -394,7 +401,7 @@
           <div class="footer-col-title">Resources</div>
           <ul class="footer-links-list">
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="invoicing-guide.html">Invoice Guide</a></li>
+            <li><a href="invoice-guide.html">Invoice Guide</a></li>
             <li><a href="help.html">Help Center</a></li>
             <li><a href="faq.html">FAQ</a></li>
             <li><a href="getting-started.html">Getting Started</a></li>

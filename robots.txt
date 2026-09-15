@@ -1,4 +1,21 @@
 User-agent: *
 Allow: /
 
+# Disallow private user routes and internal endpoints
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /profile
+Disallow: /business-profile
+Disallow: /billing
+Disallow: /files
+Disallow: /cloud
+Disallow: /invoices
+Disallow: /clients
+Disallow: /invoice-details
+Disallow: /payment-methods
+Disallow: /payment-history
+Disallow: /api/
+Disallow: /admin
+
 Sitemap: https://invoice-gen.net/sitemap.xml
+

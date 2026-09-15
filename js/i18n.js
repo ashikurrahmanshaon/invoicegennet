@@ -283,7 +283,7 @@
       zh: '清空重置'
     },
     btn_add_item: {
-      en: 'Add Line Item',
+      en: '+ Add Item',
       bn: 'নতুন আইটেম যোগ করুন',
       es: 'Agregar Artículo',
       fr: 'Ajouter une Ligne',

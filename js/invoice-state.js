@@ -25,7 +25,7 @@ const getTodayDateString = () => {
 // Blank default state as requested ("faka rakho")
 const BLANK_INVOICE = {
   title: 'INVOICE',
-  number: '001',
+  number: 'INV-001',
   date: getTodayDateString(),
   dueDate: '',
   poNumber: '',

@@ -305,17 +305,20 @@
 
         <!-- Sender Block (Left) -->
         <div class="sender-info-box">
-          <div class="sheet-col-header" style="margin-bottom: 8px;">
-            <span class="sheet-col-title">From</span>
+          <div class="sheet-section-header">
+            <div class="sheet-section-heading-wrap">
+              <span class="sheet-section-title">FROM</span>
+              <span class="sheet-section-subtitle">Your business information</span>
+            </div>
           </div>
 
           <!-- Logo Uploader -->
           <div class="logo-slot-wrap">
             <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
-            <div class="logo-uploader-card" id="btnUploadLogo" title="Upload your company or brand logo">
+            <button type="button" class="logo-uploader-card" id="btnUploadLogo" title="Upload your company or brand logo">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
               <span>+ Add Logo</span>
-            </div>
+            </button>
             <div class="logo-preview-container" id="logoPreviewBox">
               <img src="" alt="Uploaded Logo" id="logoImg">
               <div class="logo-actions-overlay">
@@ -326,10 +329,12 @@
           </div>
 
           <div class="sheet-field-group">
+            <label class="sheet-input-label sr-only" for="senderName">Business Name</label>
             <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="e.g. Your Business Name">
           </div>
 
           <div class="sheet-field-group">
+            <label class="sheet-input-label sr-only" for="senderAddress">Business Address</label>
             <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. 123 Innovation Way, Suite 400&#10;San Francisco, CA 94105&#10;contact@yourbusiness.com"></textarea>
           </div>
         </div>
@@ -339,13 +344,13 @@
           <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename (e.g. INVOICE, ESTIMATE, RECEIPT, QUOTE)">
 
           <div class="meta-inputs-grid">
-            <label class="meta-field-label" for="invoiceNumber">Invoice #:</label>
+            <label class="meta-field-label" for="invoiceNumber">Invoice Number</label>
             <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="INV-001">
 
-            <label class="meta-field-label" for="invoiceDate">Date:</label>
-            <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="Date">
+            <label class="meta-field-label" for="invoiceDate">Issue Date</label>
+            <input type="text" id="invoiceDate" class="form-input sheet-paper-input" placeholder="Select date">
 
-            <label class="meta-field-label" for="paymentTerms">Terms:</label>
+            <label class="meta-field-label" for="paymentTerms">Payment Terms</label>
             <select id="paymentTerms" class="form-select sheet-paper-select">
               <option value="Due on Receipt">Due on Receipt</option>
               <option value="Net 15 Days">Net 15 Days</option>
@@ -353,12 +358,12 @@
               <option value="Net 60 Days">Net 60 Days</option>
             </select>
 
-            <label class="meta-field-label due-date-field-row" for="dueDateInput" style="display: none;">Due Date:</label>
-            <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="Due date" style="display: none;">
+            <label class="meta-field-label due-date-field-row" for="dueDateInput" style="display: none;">Payment Due Date</label>
+            <input type="text" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" placeholder="Select due date" style="display: none;">
 
             <!-- PO Number (Toggleable) -->
-            <label class="meta-field-label po-field-row" for="poNumber" style="display: none;">PO Number:</label>
-            <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="PO number" style="display: none;">
+            <label class="meta-field-label po-field-row" for="poNumber" style="display: none;">Purchase Order (PO#)</label>
+            <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="e.g. PO-8921" style="display: none;">
           </div>
         </div>
 
@@ -369,8 +374,11 @@
 
         <!-- Bill To -->
         <div class="sheet-billing-col" id="billToCol">
-          <div class="sheet-col-header">
-            <span class="sheet-col-title">Bill To</span>
+          <div class="sheet-section-header">
+            <div class="sheet-section-heading-wrap">
+              <span class="sheet-section-title">BILL TO</span>
+              <span class="sheet-section-subtitle">Customer information</span>
+            </div>
             <div class="sheet-client-quick-select-wrap" id="clientSelectWrap" style="display: none;">
               <select id="clientPickerSelect" class="sheet-client-picker-select" aria-label="Select saved client">
                 <option value="">Select Client ▼</option>
@@ -378,32 +386,45 @@
             </div>
           </div>
           <div class="sheet-field-group">
+            <label class="sheet-input-label sr-only" for="clientName">Client or Company Name</label>
             <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="e.g. Client or Company Name" list="clientsDatalist">
             <datalist id="clientsDatalist"></datalist>
           </div>
           <div class="sheet-field-group">
-            <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. 742 Evergreen Terrace&#10;Springfield, OR 97477"></textarea>
+            <label class="sheet-input-label sr-only" for="clientAddress">Billing Address</label>
+            <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. 742 Evergreen Terrace&#10;Springfield, OR 97477"></textarea>
           </div>
         </div>
 
         <!-- Ship To (Optional or Default) -->
         <div class="sheet-billing-col" id="shipToCardPanel">
-          <div class="sheet-col-header">
-            <span class="sheet-col-title">Ship To <span class="sheet-optional-tag">Optional</span></span>
+          <div class="sheet-section-header">
+            <div class="sheet-section-heading-wrap">
+              <div class="sheet-title-with-badge">
+                <span class="sheet-section-title">SHIP TO</span>
+                <span class="sheet-optional-badge">Optional</span>
+              </div>
+              <span class="sheet-section-subtitle">Where should the order be delivered?</span>
+            </div>
           </div>
           <div class="sheet-field-group">
+            <label class="sheet-input-label sr-only" for="shipToName">Recipient or Warehouse Name</label>
             <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Recipient or Warehouse Name">
           </div>
           <div class="sheet-field-group">
-            <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="2" placeholder="e.g. Shipping destination address..."></textarea>
+            <label class="sheet-input-label sr-only" for="shipToAddress">Shipping Address</label>
+            <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. Shipping destination address..."></textarea>
           </div>
         </div>
 
       </div>
 
       <!-- Items Section Header -->
-      <div class="sheet-col-header items-section-header" style="margin-bottom: 8px;">
-        <span class="sheet-col-title">Items</span>
+      <div class="sheet-section-header items-section-header">
+        <div class="sheet-section-heading-wrap">
+          <span class="sheet-section-title">ITEMS</span>
+          <span class="sheet-section-subtitle">Products or services you're charging for</span>
+        </div>
       </div>
 
       <!-- Items Table (Modern Crisp Ledger) -->
@@ -411,11 +432,11 @@
         <table class="invoice-items-table" id="refTable">
           <thead>
             <tr>
-              <th class="col-desc" style="width: 48%;" data-i18n="tbl_item">Description</th>
-              <th class="col-qty" style="width: 13%;" data-i18n="tbl_qty">Qty</th>
-              <th class="col-rate" style="width: 17%;" data-i18n="tbl_rate">Rate</th>
-              <th class="col-amount" style="width: 17%;" data-i18n="tbl_amount">Amount</th>
-              <th class="col-action" style="width: 5%;"></th>
+              <th class="col-desc" style="width: 48%;" data-i18n="tbl_item">DESCRIPTION</th>
+              <th class="col-qty" style="width: 13%;" data-i18n="tbl_qty">QTY</th>
+              <th class="col-rate" style="width: 17%;" data-i18n="tbl_rate">RATE</th>
+              <th class="col-amount" style="width: 17%;" data-i18n="tbl_amount">AMOUNT</th>
+              <th class="col-action" style="width: 5%;"><span class="sr-only">ACTION</span></th>
             </tr>
           </thead>
           <tbody id="itemsTableBody">
@@ -424,15 +445,16 @@
         </table>
       </div>
 
-      <!-- Add Line Item Button -->
-      <div>
+      <!-- Add Item Bar & Calculation Note -->
+      <div class="items-table-footer-bar">
         <button type="button" class="btn-add-item-bar" id="btnAddItem">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
-          <span data-i18n="btn_add_item">Add Line Item</span>
+          <span data-i18n="btn_add_item">+ Add Item</span>
         </button>
+        <span class="items-calc-hint">Amount is calculated automatically (Qty × Rate)</span>
       </div>
 
       <!-- Bottom Section: Notes & Calculations Summary -->
@@ -440,16 +462,20 @@
 
         <!-- Left: Notes, Bank Details, IBAN, VAT & Signature -->
         <div class="sheet-notes-col">
-          <div class="sheet-col-header" style="border: none; padding-bottom: 4px; margin-bottom: 6px;">
-            <span class="sheet-col-title">Notes / Terms</span>
+          <div class="sheet-section-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 12px;">
+            <div class="sheet-section-heading-wrap">
+              <span class="sheet-section-title">NOTES / PAYMENT TERMS</span>
+              <span class="sheet-section-subtitle">Optional instructions for your customer</span>
+            </div>
           </div>
           <div class="sheet-field-group">
-            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="e.g. Payment due within 30 days via bank transfer or online checkout.&#10;Thank you for your business!"></textarea>
+            <label class="sheet-input-label sr-only" for="invoiceNotes">Invoice Notes and Terms</label>
+            <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="e.g. Payment due within 30 days via bank transfer.&#10;Thank you for your business!"></textarea>
           </div>
 
           <!-- Digital Signature Line (Toggleable) -->
           <div class="signature-block-wrap" id="signatureBlockWrap" style="display: none; margin-top: 16px;">
-            <label class="sheet-field-label">Authorized Signature</label>
+            <label class="sheet-field-label" for="signatureInput">Authorized Signature</label>
             <div style="border-top: 1.5px solid #cbd5e1; width: 220px; padding-top: 6px;">
               <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer full name" style="padding: 6px 10px; font-weight: 700;">
               <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Authorized Representative</div>
@@ -460,36 +486,36 @@
         <!-- Right: Real-time Totals Breakdown -->
         <div class="totals-summary-card">
           <div class="total-line">
-            <span data-i18n="lbl_subtotal">Subtotal:</span>
+            <span class="total-line-label" data-i18n="lbl_subtotal">Subtotal</span>
             <span class="val" id="subtotalDisplay">$0.00</span>
           </div>
 
           <!-- Discount Row (Toggleable) -->
           <div class="total-line discount-line-row" id="discountLineRow" style="display: none;">
             <div class="discount-edit-group">
-              <span data-i18n="opt_discount">Discount</span>
-              <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0"><i>%</i></span>
+              <span class="total-line-label" data-i18n="opt_discount">Discount</span>
+              <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0" aria-label="Discount percentage"><i>%</i></span>
             </div>
             <span class="val" id="discountAmountDisplay">-$0.00</span>
           </div>
 
-          <div class="total-line">
+          <div class="total-line tax-line-row">
             <div class="tax-edit-group">
-              <span data-i18n="lbl_tax">Tax / VAT</span>
-              <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0"><i>%</i></span>
+              <span class="total-line-label" data-i18n="lbl_tax">Tax</span>
+              <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0" placeholder="0" aria-label="Tax rate percentage"><i>%</i></span>
             </div>
             <span class="val" id="taxAmountDisplay">$0.00</span>
           </div>
 
           <div class="total-line grand-total-line">
-            <span class="lbl" data-i18n="lbl_total">Total:</span>
+            <span class="lbl" data-i18n="lbl_total">TOTAL</span>
             <span class="val" id="grandTotalDisplay">$0.00</span>
           </div>
 
           <!-- Amount Paid Row (Toggleable) -->
           <div class="total-line amount-paid-row" id="amountPaidLineRow" style="display: none;">
-            <span data-i18n="lbl_amount_paid">Amount Paid:</span>
-            <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00">
+            <span class="total-line-label" data-i18n="lbl_amount_paid">Amount Paid:</span>
+            <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00" aria-label="Amount paid">
           </div>
 
           <!-- Balance Due Row (Visible ONLY when Deposit / Amount Paid is enabled) -->
@@ -710,64 +736,80 @@
   </div>
 
   <!-- Sleek Horizontal Footer Bar (Matching Reference Image) -->
-    <!-- Universal Sleek Footer Bar -->
-      <footer class="site-footer" id="mainFooter">
+  <!-- Universal 5-Column SaaS Footer -->
+  <footer class="site-footer" id="mainFooter">
     <div class="container footer-container">
       <div class="footer-brand-col">
         <a href="index.html" class="footer-brand-lockup">
-          <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
+          <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="footer-logo-img" width="28" height="28">
           <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
         </a>
-        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
+        <p class="footer-tagline">Modern, fast, and secure online invoice generator for freelancers, contractors, and small businesses.</p>
       </div>
 
       <div class="footer-nav-grid">
         <div class="footer-col">
           <div class="footer-col-title">Product</div>
           <ul class="footer-links-list">
-            <li><a href="index.html">Create Invoice</a></li>
+            <li><a href="index.html">Invoice Generator</a></li>
             <li><a href="templates.html">Templates</a></li>
-            <li><a href="dashboard.html">My Invoices</a></li>
+            <li><a href="pdf-invoice-generator.html">PDF Invoice Generator</a></li>
+            <li><a href="invoice-generator-for-freelancers.html">Freelancer Invoice</a></li>
+            <li><a href="gst-invoice-generator.html">GST &amp; Tax Invoice</a></li>
             <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="payments.html">Payments</a></li>
           </ul>
         </div>
-
+        <div class="footer-col">
+          <div class="footer-col-title">Tools</div>
+          <ul class="footer-links-list">
+            <li><a href="invoice-number-generator.html">Invoice Number Generator</a></li>
+            <li><a href="pdf-to-jpg.html">PDF to JPG</a></li>
+            <li><a href="jpg-to-pdf.html">JPG to PDF</a></li>
+            <li><a href="image-compressor.html">Image Compressor</a></li>
+            <li><a href="pdf-merger.html">PDF Merger</a></li>
+            <li><a href="pdf-splitter.html">PDF Splitter</a></li>
+            <li><a href="tax-calculator.html">Tax Calculator</a></li>
+            <li><a href="payment-calculator.html">Payment Calculator</a></li>
+            <li><a href="currency-converter.html">Currency Converter</a></li>
+          </ul>
+        </div>
         <div class="footer-col">
           <div class="footer-col-title">Resources</div>
           <ul class="footer-links-list">
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="contact.html">Help</a></li>
-            <li><a href="features.html">Tools</a></li>
+            <li><a href="invoice-guide.html">Invoice Guide</a></li>
+            <li><a href="help.html">Help Center</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links-list">
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
             <li><a href="sitemap.html">Sitemap</a></li>
           </ul>
         </div>
-
         <div class="footer-col">
           <div class="footer-col-title">Legal</div>
           <ul class="footer-links-list">
             <li><a href="privacy.html">Privacy Policy</a></li>
             <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
             <li><a href="security.html">Security</a></li>
             <li><a href="refunds.html">Refund Policy</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <div class="footer-col-title">Contact</div>
-          <ul class="footer-links-list">
-            <li><a href="contact.html">Support</a></li>
-            <li><a href="about.html">About Us</a></li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="container footer-bottom-bar">
-      <p class="footer-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net. All rights reserved.</p>
+      <p class="footer-copyright">&copy; 2026 Invoice-Gen.net. All rights reserved.</p>
       <div class="footer-bottom-badges">
+        <span class="footer-badge-pill">Client-Side PDF</span>
         <span class="footer-badge-pill">Zero Data Tracking</span>
-        <span class="footer-badge-pill">100% Client-Side</span>
       </div>
     </div>
   </footer>

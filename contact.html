@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact &amp; Support | Invoice-Gen.net - Help &amp; Inquiries</title>
-  <meta name="description" content="Contact Invoice-Gen.net support team. Get assistance with invoice generation, template customization, billing, or security inquiries.">
-  <link rel="canonical" href="https://invoice-gen.net/contact.html">
+  <title>Contact &amp; Support | Invoice-Gen.net - We're Here to Help</title>
+  <meta name="description" content="Get in touch with the Invoice-Gen.net support team. Contact us for technical assistance, template questions, billing inquiries, or security disclosures.">
+  <link rel="canonical" href="https://invoice-gen.net/contact">
   <meta name="theme-color" content="#0F172A">
+
+  <!-- Open Graph / SEO Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://invoice-gen.net/contact">
+  <meta property="og:title" content="Contact &amp; Support | Invoice-Gen.net">
+  <meta property="og:description" content="Reach out to Invoice-Gen.net engineering and support for inquiries, feature requests, or technical assistance.">
+  <meta property="og:image" content="https://invoice-gen.net/assets/icons/logo.svg?v=6.0">
 
   <!-- Favicon & Brand Icons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico?v=6.0">
@@ -17,162 +24,107 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=6.0">
   <link rel="manifest" href="/site.webmanifest?v=6.0">
 
-  <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
+  <!-- Preload Local Fonts -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/design-system.css?v=4.0">
-  <link rel="stylesheet" href="css/invoice-editor.css?v=4.0">
+  <link rel="stylesheet" href="css/design-system.css?v=5.0">
+  <link rel="stylesheet" href="css/invoice-editor.css?v=5.0">
   <style>
-    .contact-grid {
+    .contact-layout-grid {
       display: grid;
-      grid-template-columns: 1fr 1.3fr;
+      grid-template-columns: 1fr 1.35fr;
       gap: 36px;
-      margin-top: 36px;
+      margin-bottom: 60px;
     }
-    @media (max-width: 860px) {
-      .contact-grid {
+    @media (max-width: 880px) {
+      .contact-layout-grid {
         grid-template-columns: 1fr;
+        gap: 28px;
       }
     }
-    .contact-card {
+    .contact-sidebar-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
-      padding: 36px;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+      padding: 32px;
     }
-    .contact-channel-item {
+    .channel-row {
       display: flex;
       gap: 16px;
       padding: 16px 0;
       border-bottom: 1px solid #f1f5f9;
     }
-    .contact-channel-item:last-child {
+    .channel-row:last-child {
       border-bottom: none;
+      padding-bottom: 0;
     }
-    .contact-channel-icon {
-      width: 44px;
-      height: 44px;
+    .channel-icon-frame {
+      width: 42px;
+      height: 42px;
       border-radius: 10px;
-      background: #f0fdf4;
+      background: #ecfdf5;
+      color: #059669;
       border: 1px solid #bbf7d0;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #059669;
       flex-shrink: 0;
     }
-    .contact-channel-title {
+    .channel-title {
       font-size: 0.95rem;
       font-weight: 700;
       color: #0f172a;
       margin-bottom: 4px;
     }
-    .contact-channel-desc {
+    .channel-desc {
       font-size: 0.85rem;
       color: #64748b;
       margin-bottom: 6px;
       line-height: 1.5;
     }
-    .contact-channel-link {
+    .channel-link {
       font-size: 0.875rem;
-      color: #059669;
       font-weight: 600;
+      color: #059669;
       text-decoration: none;
     }
-    .contact-channel-link:hover {
+    .channel-link:hover {
       text-decoration: underline;
     }
-    .form-group-contact {
-      margin-bottom: 18px;
-    }
-    .form-label-contact {
-      display: block;
-      font-size: 0.8125rem;
-      font-weight: 700;
-      color: #334155;
-      margin-bottom: 6px;
-    }
-    .form-input-contact {
-      width: 100%;
-      height: 42px;
-      padding: 0 14px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      color: #0f172a;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      box-sizing: border-box;
-      font-family: inherit;
-    }
-    .form-input-contact:focus {
-      border-color: #059669;
-      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
-    }
-    textarea.form-input-contact {
-      height: 120px;
-      padding: 12px 14px;
-      resize: vertical;
-    }
-    .btn-contact-submit {
-      width: 100%;
-      height: 44px;
-      background: #059669;
-      color: #ffffff;
-      border: 1px solid #059669;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-      box-shadow: 0 1px 2px rgba(5, 150, 105, 0.15);
-    }
-    .btn-contact-submit:hover {
-      background: #047857;
-      border-color: #047857;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-    }
-    .faq-block {
-      margin-top: 56px;
+    .contact-form-card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
-      padding: 40px;
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+      padding: 32px;
     }
-    .faq-item {
-      margin-bottom: 24px;
+    .status-alert {
+      display: none;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 0.8875rem;
+      margin-bottom: 20px;
+      line-height: 1.5;
     }
-    .faq-item:last-child {
-      margin-bottom: 0;
+    .status-alert.alert-success {
+      display: block;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
     }
-    .faq-q {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 8px;
-    }
-    .faq-a {
-      font-size: 0.9rem;
-      color: #64748b;
-      line-height: 1.65;
+    .status-alert.alert-error {
+      display: block;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
     }
   </style>
   <script src="js/google-auth.js?v=6.0"></script>
 </head>
 <body>
 
-  <!-- Authentic SaaS Top Navigation -->
-    <!-- Universal SaaS Top Navigation Bar -->
-            <header class="navbar-saas" id="mainHeader">
+  <!-- Universal SaaS Header -->
+  <header class="navbar-saas" id="mainHeader">
     <div class="container navbar-container">
-      <!-- Brand Lockup -->
       <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
         <div class="brand-logo-frame">
           <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36">
@@ -182,7 +134,6 @@
         </div>
       </a>
 
-      <!-- Center SaaS Navigation Links -->
       <nav class="nav-center-links" aria-label="Main navigation">
         <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
           <span>Create Invoice</span>
@@ -201,457 +152,340 @@
           </button>
           <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
             <div class="mega-menu-grid">
-              <!-- INVOICE -->
               <div class="mega-menu-col">
                 <div class="mega-menu-heading">Invoice</div>
                 <a href="index.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-inv">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Invoice Generator</span>
-                    <span class="mega-desc">Fast web invoice builder</span>
-                  </div>
+                  <div class="mega-icon-box icon-inv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+                  <div><span class="mega-title">Invoice Generator</span><span class="mega-desc">Fast web invoice builder</span></div>
                 </a>
                 <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-pdf">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">PDF Invoice Generator</span>
-                    <span class="mega-desc">A4 vector PDF export</span>
-                  </div>
+                  <div class="mega-icon-box icon-pdf"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                  <div><span class="mega-title">PDF Invoice Generator</span><span class="mega-desc">A4 vector PDF export</span></div>
                 </a>
                 <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-inv">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Freelancer Invoice</span>
-                    <span class="mega-desc">Hourly &amp; milestone billing</span>
-                  </div>
-                </a>
-                <a href="gst-invoice-generator.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-inv">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M7 15h0M2 9.5h20"></path></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">GST &amp; Tax Invoice</span>
-                    <span class="mega-desc">Tax breakdowns &amp; HSN</span>
-                  </div>
-                </a>
-                <a href="invoice-number-generator.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-calc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="8" y2="21"></line><line x1="16" y1="3" x2="14" y2="21"></line></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Invoice Number Generator</span>
-                    <span class="mega-desc">Auto-sequential numbering</span>
-                  </div>
+                  <div class="mega-icon-box icon-inv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
+                  <div><span class="mega-title">Freelancer Invoice</span><span class="mega-desc">Hourly &amp; milestone billing</span></div>
                 </a>
               </div>
-
-              <!-- DOCUMENTS -->
               <div class="mega-menu-col">
                 <div class="mega-menu-heading">Documents</div>
                 <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-doc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">PDF to JPG</span>
-                    <span class="mega-desc">Convert PDF pages to image</span>
-                  </div>
+                  <div class="mega-icon-box icon-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg></div>
+                  <div><span class="mega-title">PDF to JPG</span><span class="mega-desc">Convert PDF to image</span></div>
                 </a>
                 <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-doc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">JPG to PDF</span>
-                    <span class="mega-desc">Combine images to PDF</span>
-                  </div>
+                  <div class="mega-icon-box icon-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                  <div><span class="mega-title">JPG to PDF</span><span class="mega-desc">Combine images to PDF</span></div>
                 </a>
                 <a href="pdf-merger.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-doc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">PDF Merger</span>
-                    <span class="mega-desc">Merge multiple PDF files</span>
-                  </div>
-                </a>
-                <a href="pdf-splitter.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-doc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">PDF Splitter</span>
-                    <span class="mega-desc">Extract pages &amp; ranges</span>
-                  </div>
-                </a>
-                <a href="image-compressor.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-doc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Image Compressor</span>
-                    <span class="mega-desc">Reduce JPG &amp; PNG size</span>
-                  </div>
+                  <div class="mega-icon-box icon-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path></svg></div>
+                  <div><span class="mega-title">PDF Merger</span><span class="mega-desc">Merge multiple PDFs</span></div>
                 </a>
               </div>
-
-              <!-- CALCULATORS, PAYMENTS & CLOUD -->
               <div class="mega-menu-col">
                 <div class="mega-menu-heading">Calculators</div>
                 <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-calc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Tax Calculator</span>
-                    <span class="mega-desc">Inclusive &amp; exclusive tax</span>
-                  </div>
-                </a>
-                <a href="payment-calculator.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-calc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Payment Calculator</span>
-                    <span class="mega-desc">Installments &amp; schedules</span>
-                  </div>
-                </a>
-                <a href="due-date-calculator.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-calc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Due Date Calculator</span>
-                    <span class="mega-desc">Payment terms &amp; calendar</span>
-                  </div>
+                  <div class="mega-icon-box icon-calc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect></svg></div>
+                  <div><span class="mega-title">Tax Calculator</span><span class="mega-desc">Inclusive &amp; exclusive tax</span></div>
                 </a>
                 <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-calc">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Currency Converter</span>
-                    <span class="mega-desc">Live genuine exchange rates</span>
-                  </div>
-                </a>
-
-                <div class="mega-menu-heading" style="margin-top: 8px;">Payments &amp; Cloud</div>
-                <a href="payments.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-pay">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Online Payments</span>
-                    <span class="mega-desc">Stripe, PayPal &amp; Bank</span>
-                  </div>
-                </a>
-                <a href="payment-link.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-pay">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">Payment Link Generator</span>
-                    <span class="mega-desc">Shareable invoice links</span>
-                  </div>
-                </a>
-                <a href="files.html" class="mega-menu-link" role="menuitem">
-                  <div class="mega-icon-box icon-cloud">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-                  </div>
-                  <div>
-                    <span class="mega-title">My Files (Cloud)</span>
-                    <span class="mega-desc">Private cloud file storage</span>
-                  </div>
+                  <div class="mega-icon-box icon-calc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                  <div><span class="mega-title">Currency Converter</span><span class="mega-desc">Live exchange rates</span></div>
                 </a>
               </div>
             </div>
-
             <div class="mega-menu-footer">
-              <a href="tools.html" class="mega-footer-link">
-                <span>Browse All 17 Professional Tools</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-              </a>
+              <a href="tools.html" class="mega-footer-link"><span>Browse All Tools &rarr;</span></a>
             </div>
-          </div></div>
+          </div>
+        </div>
         <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
           <span>Pricing</span>
         </a>
       </nav>
 
-      <!-- Right Header Actions -->
       <div class="nav-actions-wrap">
         <div class="lang-switcher-container"></div>
         <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
         <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">
           <span data-i18n="btn_signup">Sign Up Free</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
         <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
-      </div>
-    </div>
-
-    <!-- Mobile Navigation Drawer -->
-    <div class="mobile-nav-drawer" id="mobileNavDrawer">
-      <div class="mobile-nav-links">
-        <a href="index.html" class="mobile-nav-item">
-          <span>Create Invoice</span>
-        </a>
-        <a href="templates.html" class="mobile-nav-item">
-          <span>Templates</span>
-        </a>
-        <a href="dashboard.html" class="mobile-nav-item">
-          <span>My Invoices</span>
-          <span class="mobile-nav-count-badge" style="display: none;"></span>
-        </a>
-        <div class="mobile-nav-group-title">Tools &amp; Solutions</div>
-        <div class="mobile-nav-sublinks">
-          <a href="pdf-invoice-generator.html" class="mobile-nav-subitem">PDF Generator</a>
-          <a href="gst-invoice-generator.html" class="mobile-nav-subitem">GST Invoices</a>
-          <a href="invoice-generator-for-freelancers.html" class="mobile-nav-subitem">Freelancers</a>
-          <a href="invoice-number-generator.html" class="mobile-nav-subitem">Invoice Numbers</a>
-          <a href="payments.html" class="mobile-nav-subitem">Payments</a>
-        </div>
-        <a href="pricing.html" class="mobile-nav-item">
-          <span>Pricing</span>
-        </a>
-      </div>
-      <div class="mobile-nav-auth">
-        <a href="login.html" class="btn-login" id="btnMobileLogin" style="width:100%; text-align:center;">Log In</a>
-        <a href="signup.html" class="btn-signup-free" id="btnMobileSignup" style="width:100%; text-align:center;">Sign Up Free</a>
       </div>
     </div>
   </header>
 
   <!-- Main Content -->
   <main class="page-container">
+    <div class="breadcrumbs-nav">
+      <a href="index.html" class="breadcrumb-link">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">Contact</span>
+    </div>
 
-    <!-- Hero Header -->
     <div class="page-hero-wrap">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        SUPPORT &amp; INQUIRIES
-      </div>
-      <h1 class="hero-title" style="font-size: 2.75rem; margin-top: 14px;">
-        How Can We Help You Today?
-      </h1>
-      <p class="hero-subtitle" style="max-width: 680px; margin: 16px auto 0;">
-        Have questions about creating vector invoices, requesting new currencies, payment gateway configurations, or enterprise licensing? Send us a message and our team will get back to you promptly.
+      <h1 class="page-hero-title">Contact Invoice-Gen.net</h1>
+      <p class="page-hero-sub">
+        Have questions about creating vector invoices, requesting new currencies, payment gateway configurations, or enterprise setups? Send us a message and our team will get back to you promptly.
       </p>
     </div>
 
     <!-- Contact Grid -->
-    <div class="contact-grid">
+    <div class="contact-layout-grid">
 
-      <!-- Left: Direct Channels -->
-      <div class="contact-card">
-        <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 20px;">Direct Channels</h2>
+      <!-- Left Column: Supported Direct Channels -->
+      <div class="contact-sidebar-card">
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 16px;">Direct Support Channels</h2>
         
-        <div class="contact-channel-item">
-          <div class="contact-channel-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div class="channel-row">
+          <div class="channel-icon-frame">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
           </div>
           <div>
-            <div class="contact-channel-title">Technical Support</div>
-            <div class="contact-channel-desc">For bugs, PDF rendering issues, and browser local storage questions.</div>
-            <a href="mailto:support@invoice-gen.net" class="contact-channel-link">support@invoice-gen.net</a>
+            <div class="channel-title">Technical Support</div>
+            <div class="channel-desc">For bug reports, PDF rendering questions, or browser storage assistance.</div>
+            <a href="mailto:support@invoice-gen.net" class="channel-link">support@invoice-gen.net</a>
           </div>
         </div>
 
-        <div class="contact-channel-item">
-          <div class="contact-channel-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <div class="channel-row">
+          <div class="channel-icon-frame">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
           </div>
           <div>
-            <div class="contact-channel-title">Billing &amp; Refunds</div>
-            <div class="contact-channel-desc">Questions regarding Pro $5/mo or Lifetime $70 purchases and 14-day refunds.</div>
-            <a href="mailto:billing@invoice-gen.net" class="contact-channel-link">billing@invoice-gen.net</a>
+            <div class="channel-title">Billing &amp; Refunds</div>
+            <div class="channel-desc">Questions regarding Pro subscriptions and our 14-day refund policy.</div>
+            <a href="mailto:billing@invoice-gen.net" class="channel-link">billing@invoice-gen.net</a>
           </div>
         </div>
 
-        <div class="contact-channel-item">
-          <div class="contact-channel-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="channel-row">
+          <div class="channel-icon-frame">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           </div>
           <div>
-            <div class="contact-channel-title">Security &amp; Privacy Desk</div>
-            <div class="contact-channel-desc">Audits, vulnerability disclosures, and data protection compliance.</div>
-            <a href="mailto:security@invoice-gen.net" class="contact-channel-link">security@invoice-gen.net</a>
+            <div class="channel-title">Security &amp; Privacy</div>
+            <div class="channel-desc">Security audits, data queries, and responsible vulnerability disclosures.</div>
+            <a href="mailto:security@invoice-gen.net" class="channel-link">security@invoice-gen.net</a>
           </div>
         </div>
 
         <div style="margin-top: 24px; padding: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-          <div style="font-size: 0.8125rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Guaranteed Response Time</div>
-          <div style="font-size: 0.8125rem; color: #64748b; line-height: 1.5;">All inquiries are answered by human engineers within 12 to 24 business hours.</div>
+          <div style="font-size: 0.8125rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Human Support</div>
+          <div style="font-size: 0.8125rem; color: #64748b; line-height: 1.5;">All genuine inquiries are reviewed by our engineering and product team.</div>
         </div>
       </div>
 
-      <!-- Right: Interactive Message Form -->
-      <div class="contact-card">
-        <h2 style="font-size: 1.35rem; font-weight: 800; color: #0f172a; margin-bottom: 20px;">Send a Message</h2>
-        <form id="contactForm" onsubmit="handleContactSubmit(event)">
-          <div class="form-group-contact">
-            <label class="form-label-contact" for="contactName">Your Name</label>
-            <input type="text" id="contactName" class="form-input-contact" placeholder="e.g. Alex Turner" required>
+      <!-- Right Column: Interactive Contact Form -->
+      <div class="contact-form-card">
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 18px;">Send a Message</h2>
+        
+        <div id="contactAlert" class="status-alert" role="alert"></div>
+
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="contactName">Your Name *</label>
+            <input type="text" id="contactName" class="form-input" placeholder="e.g. Sarah Jenkins" required>
+            <div class="form-error-msg" id="nameError"></div>
           </div>
-          <div class="form-group-contact">
-            <label class="form-label-contact" for="contactEmail">Work Email</label>
-            <input type="email" id="contactEmail" class="form-input-contact" placeholder="alex@company.com" required>
+
+          <div class="form-group">
+            <label class="form-label" for="contactEmail">Your Email *</label>
+            <input type="email" id="contactEmail" class="form-input" placeholder="sarah@company.com" required>
+            <div class="form-error-msg" id="emailError"></div>
           </div>
-          <div class="form-group-contact">
-            <label class="form-label-contact" for="contactCategory">Category</label>
-            <select id="contactCategory" class="form-input-contact" style="cursor: pointer;">
-              <option value="technical">Technical Support / PDF Issue</option>
-              <option value="templates">Template Request / Custom Styling</option>
+
+          <div class="form-group">
+            <label class="form-label" for="contactCategory">Subject / Category</label>
+            <select id="contactCategory" class="form-select">
+              <option value="technical">Technical Support &amp; PDF Issues</option>
+              <option value="templates">Template Customization</option>
               <option value="billing">Billing &amp; Refunds</option>
               <option value="security">Security &amp; Privacy</option>
               <option value="general">General Inquiries</option>
             </select>
           </div>
-          <div class="form-group-contact">
-            <label class="form-label-contact" for="contactMessage">Message Details</label>
-            <textarea id="contactMessage" class="form-input-contact" placeholder="Describe what you need help with in detail..." required></textarea>
+
+          <div class="form-group">
+            <label class="form-label" for="contactMessage">Message Details *</label>
+            <textarea id="contactMessage" class="form-textarea" placeholder="How can we assist you today? Please describe in detail..." style="min-height: 120px;" required></textarea>
+            <div class="form-error-msg" id="messageError"></div>
           </div>
-          <button type="submit" class="btn-contact-submit" id="btnSubmitContact">
-            Send Message
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+
+          <button type="submit" class="btn btn-primary" id="btnContactSubmit" style="width: 100%; height: 44px; justify-content: center; font-weight: 700; border-radius: 8px;">
+            <span>Send Message</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
         </form>
       </div>
 
     </div>
 
-    <!-- FAQ Block -->
-    <div class="faq-block">
-      <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 28px; text-align: center;">
-        Frequently Asked Support Questions
-      </h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
-        <div class="faq-item">
-          <div class="faq-q">Where is my invoice data stored?</div>
-          <div class="faq-a">Your data never leaves your device. Everything is saved locally in your browser's private local storage. No invoice details are sent to external web servers.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Can I request new international currencies?</div>
-          <div class="faq-a">Yes! If your preferred regional currency or symbol isn't listed on our Currencies Hub, contact us and our developers will add it to the engine.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">How does the 14-day refund work?</div>
-          <div class="faq-a">If you purchase the Pro Plan ($5/mo) or Lifetime Deal ($70) and are not 100% satisfied, simply email billing@invoice-gen.net within 14 days for a full refund.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Can I print or email the generated PDF?</div>
-          <div class="faq-a">Yes. Invoices are generated as true vector A4 PDFs, meaning they can be attached directly to emails or sent to physical commercial printers with zero pixelation.</div>
-        </div>
+    <!-- Additional Quick FAQ Links -->
+    <div style="padding: 28px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center;">
+      <h3 style="margin: 0 0 8px; font-size: 1.15rem; color: #0f172a;">Looking for immediate answers?</h3>
+      <p style="margin: 0 0 16px; color: #64748b; font-size: 0.9rem;">Check our searchable knowledge base or browse the frequently asked questions.</p>
+      <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+        <a href="faq.html" class="btn btn-secondary" style="text-decoration: none; padding: 9px 18px; border-radius: 8px;">Browse FAQ &rarr;</a>
+        <a href="help.html" class="btn btn-secondary" style="text-decoration: none; padding: 9px 18px; border-radius: 8px;">Help Center &rarr;</a>
       </div>
     </div>
-
   </main>
 
-  <!-- Global Footer -->
-    <!-- Universal Sleek Footer Bar -->
-      <footer class="site-footer" id="mainFooter">
+  <!-- Universal 5-Column SaaS Footer -->
+  <footer class="site-footer" id="mainFooter">
     <div class="container footer-container">
       <div class="footer-brand-col">
         <a href="index.html" class="footer-brand-lockup">
-          <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net" class="footer-logo-img" width="28" height="28">
+          <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="footer-logo-img" width="28" height="28">
           <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
         </a>
-        <p class="footer-tagline">Simple professional invoice generation for businesses and freelancers.</p>
+        <p class="footer-tagline">Modern, fast, and secure online invoice generator for freelancers, contractors, and small businesses.</p>
       </div>
 
       <div class="footer-nav-grid">
         <div class="footer-col">
           <div class="footer-col-title">Product</div>
           <ul class="footer-links-list">
-            <li><a href="index.html">Create Invoice</a></li>
+            <li><a href="index.html">Invoice Generator</a></li>
             <li><a href="templates.html">Templates</a></li>
-            <li><a href="dashboard.html">My Invoices</a></li>
+            <li><a href="pdf-invoice-generator.html">PDF Invoice Generator</a></li>
+            <li><a href="invoice-generator-for-freelancers.html">Freelancer Invoice</a></li>
+            <li><a href="gst-invoice-generator.html">GST &amp; Tax Invoice</a></li>
             <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="payments.html">Payments</a></li>
           </ul>
         </div>
-
+        <div class="footer-col">
+          <div class="footer-col-title">Tools</div>
+          <ul class="footer-links-list">
+            <li><a href="invoice-number-generator.html">Invoice Number Generator</a></li>
+            <li><a href="pdf-to-jpg.html">PDF to JPG</a></li>
+            <li><a href="jpg-to-pdf.html">JPG to PDF</a></li>
+            <li><a href="image-compressor.html">Image Compressor</a></li>
+            <li><a href="pdf-merger.html">PDF Merger</a></li>
+            <li><a href="pdf-splitter.html">PDF Splitter</a></li>
+            <li><a href="tax-calculator.html">Tax Calculator</a></li>
+            <li><a href="payment-calculator.html">Payment Calculator</a></li>
+            <li><a href="currency-converter.html">Currency Converter</a></li>
+          </ul>
+        </div>
         <div class="footer-col">
           <div class="footer-col-title">Resources</div>
           <ul class="footer-links-list">
             <li><a href="blog.html">Blog</a></li>
-            <li><a href="contact.html">Help</a></li>
-            <li><a href="features.html">Tools</a></li>
+            <li><a href="invoicing-guide.html">Invoice Guide</a></li>
+            <li><a href="help.html">Help Center</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links-list">
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
             <li><a href="sitemap.html">Sitemap</a></li>
           </ul>
         </div>
-
         <div class="footer-col">
           <div class="footer-col-title">Legal</div>
           <ul class="footer-links-list">
             <li><a href="privacy.html">Privacy Policy</a></li>
             <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
             <li><a href="security.html">Security</a></li>
             <li><a href="refunds.html">Refund Policy</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <div class="footer-col-title">Contact</div>
-          <ul class="footer-links-list">
-            <li><a href="contact.html">Support</a></li>
-            <li><a href="about.html">About Us</a></li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="container footer-bottom-bar">
-      <p class="footer-copyright">&copy; 2016&ndash;2026 Invoice-Gen.net. All rights reserved.</p>
+      <p class="footer-copyright">&copy; 2026 Invoice-Gen.net. All rights reserved.</p>
       <div class="footer-bottom-badges">
+        <span class="footer-badge-pill">Client-Side PDF</span>
         <span class="footer-badge-pill">Zero Data Tracking</span>
-        <span class="footer-badge-pill">100% Client-Side</span>
       </div>
     </div>
   </footer>
 
-  <!-- Toast Notice -->
-  <div class="toast-notice" id="toastNotice"></div>
-
-  <!-- Scripts -->
   <script src="js/i18n.js?v=4.0"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
   <script>
-    function handleContactSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('btnSubmitContact');
-      btn.innerHTML = 'Sending message...';
-      btn.disabled = true;
+    // Real form submission with full client and server validation
+    const form = document.getElementById('contactForm');
+    const alertBox = document.getElementById('contactAlert');
+    const btnSubmit = document.getElementById('btnContactSubmit');
 
-      setTimeout(() => {
-        btn.innerHTML = 'Message Sent!';
-        btn.style.background = '#059669';
-        btn.style.borderColor = '#047857';
+    function clearErrors() {
+      document.getElementById('nameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('messageError').textContent = '';
+      alertBox.className = 'status-alert';
+      alertBox.style.display = 'none';
+      alertBox.textContent = '';
+    }
 
-        const toast = document.getElementById('toastNotice');
-        if (toast) {
-          toast.className = 'toast-notice toast-success show';
-          toast.innerHTML = '<span class="toast-icon-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="toast-text">Thank you! Your inquiry has been dispatched to our engineering team.</span>';
-          setTimeout(() => toast.classList.remove('show'), 4000);
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const name = document.getElementById('contactName').value.trim();
+        const email = document.getElementById('contactEmail').value.trim();
+        const category = document.getElementById('contactCategory').value;
+        const message = document.getElementById('contactMessage').value.trim();
+
+        let hasError = false;
+        if (!name) {
+          document.getElementById('nameError').textContent = 'Please enter your name.';
+          hasError = true;
         }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+          hasError = true;
+        }
+        if (!message || message.length < 5) {
+          document.getElementById('messageError').textContent = 'Message must be at least 5 characters.';
+          hasError = true;
+        }
+        if (hasError) return;
 
-        document.getElementById('contactForm').reset();
-        setTimeout(() => {
-          btn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
-          btn.style.background = '';
-          btn.style.borderColor = '';
-          btn.disabled = false;
-        }, 3000);
-      }, 750);
+        btnSubmit.disabled = true;
+        btnSubmit.classList.add('is-loading');
+
+        try {
+          const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, category, message })
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            alertBox.className = 'status-alert alert-success';
+            alertBox.style.display = 'block';
+            alertBox.textContent = data.message || 'Thank you! Your message has been received.';
+            form.reset();
+          } else {
+            alertBox.className = 'status-alert alert-error';
+            alertBox.style.display = 'block';
+            alertBox.textContent = data.error || 'Failed to submit your message. Please try again or email support directly.';
+          }
+        } catch (err) {
+          alertBox.className = 'status-alert alert-error';
+          alertBox.style.display = 'block';
+          alertBox.textContent = 'Network error. Please try again or email support@invoice-gen.net directly.';
+        } finally {
+          btnSubmit.disabled = false;
+          btnSubmit.classList.remove('is-loading');
+        }
+      });
     }
   </script>
-  <script src="js/instant-nav.js?v=6.0"></script>
 </body>
 </html>

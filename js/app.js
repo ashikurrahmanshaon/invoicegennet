@@ -270,7 +270,7 @@ window.initInvoiceEditorPage = function () {
 
     row.innerHTML = `
       <td class="col-desc">
-        <input type="text" class="table-input-field item-desc-field item-desc-input" placeholder="e.g. Website Design &amp; Consulting" value="${escapeHtml(item.description || '')}" aria-label="Item description">
+        <input type="text" class="table-input-field item-desc-field item-desc-input" placeholder="e.g. Website Design" value="${escapeHtml(item.description || '')}" aria-label="Item description">
       </td>
       <td class="col-qty">
         <input type="number" min="0" step="any" class="table-input-field item-qty-field item-qty-input item-qty" style="text-align: right;" value="${item.quantity !== undefined && item.quantity !== '' ? item.quantity : 1}" placeholder="1" aria-label="Quantity">
@@ -282,7 +282,7 @@ window.initInvoiceEditorPage = function () {
         <div class="table-amount-val item-amount-col">${store.formatMoney(itemTotal)}</div>
       </td>
       <td class="col-action">
-        <button type="button" class="btn-trash-row btn-del-item" title="Delete Row" data-id="${item.id}" aria-label="Delete line item">
+        <button type="button" class="btn-trash-row btn-del-item" title="Delete item" data-id="${item.id}" aria-label="Delete item">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="3 6 5 6 21 6"></polyline>
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -382,16 +382,11 @@ window.initInvoiceEditorPage = function () {
     itemsTableBody.innerHTML = '';
 
     if (!items || items.length === 0) {
-      const emptyRow = document.createElement('tr');
-      emptyRow.className = 'items-empty-row';
-      emptyRow.innerHTML = `
-        <td colspan="5" style="text-align: center; padding: 26px 16px; color: #94a3b8; font-size: 0.85rem;">
-          No line items added yet.
-          <button type="button" class="btn-ghost-add-item" style="margin-left: 10px; font-size: 0.78rem; padding: 4px 12px;" id="btnEmptyStateAddItem">+ Add Item</button>
-        </td>
-      `;
-      itemsTableBody.appendChild(emptyRow);
-      emptyRow.querySelector('#btnEmptyStateAddItem')?.addEventListener('click', addNewRowAndFocus);
+      const defaultId = store.addItem('', 1, 0);
+      const newItems = store.getState().items || [];
+      const initialItem = newItems.find(it => it.id === defaultId) || { id: defaultId, description: '', quantity: 1, rate: 0 };
+      itemsTableBody.appendChild(createRowElement(initialItem, false));
+      updateCalculations();
       return;
     }
 

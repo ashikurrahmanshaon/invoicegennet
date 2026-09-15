@@ -177,28 +177,52 @@
     <priority>0.80</priority>
   </url>
 
-  <!-- Blog & Guides -->
+  <!-- Guides, Help & Resources -->
   <url>
     <loc>https://invoice-gen.net/blog.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
+    <loc>https://invoice-gen.net/invoice-guide.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://invoice-gen.net/help.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://invoice-gen.net/faq.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://invoice-gen.net/getting-started.html</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://invoice-gen.net/invoicing-guide.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://invoice-gen.net/getting-paid-faster.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://invoice-gen.net/stripe-vs-paypal.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -206,39 +230,45 @@
   <!-- Company & Trust Pages -->
   <url>
     <loc>https://invoice-gen.net/about.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.75</priority>
   </url>
   <url>
     <loc>https://invoice-gen.net/security.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://invoice-gen.net/contact.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.75</priority>
   </url>
 
   <!-- Legal & Compliance -->
   <url>
     <loc>https://invoice-gen.net/privacy.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://invoice-gen.net/terms.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://invoice-gen.net/cookies.html</loc>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://invoice-gen.net/refunds.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>

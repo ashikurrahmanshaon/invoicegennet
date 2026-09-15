@@ -234,6 +234,16 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   );
 
+  CREATE TABLE IF NOT EXISTS contact_messages (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    category TEXT DEFAULT 'general',
+    message TEXT NOT NULL,
+    ip_address TEXT DEFAULT '',
+    created_at TEXT NOT NULL
+  );
+
   CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoices_user ON invoices(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
@@ -249,6 +259,7 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_payment_links_user ON payment_links(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoice_payments_user ON invoice_payments(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoice_payments_invoice ON invoice_payments(invoice_id);
+  CREATE INDEX IF NOT EXISTS idx_contact_messages_email ON contact_messages(email);
 `);
 
 // Safe column migrations for users table
@@ -1955,6 +1966,27 @@ function updatePaymentStatus(userId, paymentId, newStatus) {
   return db.prepare('SELECT * FROM invoice_payments WHERE id = ?').get(paymentId);
 }
 
+function saveContactMessage({ name, email, category = 'general', message, ip = '' }) {
+  if (!name || typeof name !== 'string' || name.trim().length === 0) {
+    throw new Error('Name is required.');
+  }
+  if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    throw new Error('Valid email address is required.');
+  }
+  if (!message || typeof message !== 'string' || message.trim().length < 5) {
+    throw new Error('Message must be at least 5 characters long.');
+  }
+
+  const id = crypto.randomUUID();
+  const now = new Date().toISOString();
+  const stmt = db.prepare(`
+    INSERT INTO contact_messages (id, name, email, category, message, ip_address, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `);
+  stmt.run(id, name.trim(), email.trim().toLowerCase(), (category || 'general').trim(), message.trim(), ip || '', now);
+  return { id, name: name.trim(), email: email.trim().toLowerCase(), category: (category || 'general').trim(), created_at: now };
+}
+
 module.exports = {
   db,
   UPLOADS_DIR,
@@ -2009,5 +2041,7 @@ module.exports = {
   checkInvoiceNumberExists,
   recordInvoicePayment,
   listInvoicePayments,
-  updatePaymentStatus
+  updatePaymentStatus,
+  saveContactMessage
 };
+

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions (FAQ) | Invoice-Gen.net</title>
+  <meta name="description" content="Answers to common questions about generating free invoices, PDF exports, privacy, payment methods, and account features on Invoice-Gen.net.">
+  <link rel="canonical" href="https://invoice-gen.net/faq">
+  <meta name="theme-color" content="#0F172A">
+
+  <!-- Open Graph / SEO Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://invoice-gen.net/faq">
+  <meta property="og:title" content="Frequently Asked Questions (FAQ) | Invoice-Gen.net">
+  <meta property="og:description" content="Answers to common questions about generating free invoices, PDF exports, privacy, payment methods, and account features.">
+  <meta property="og:image" content="https://invoice-gen.net/assets/icons/logo.svg?v=6.0">
+
+  <!-- Schema.org FAQPage Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Invoice-Gen.net really free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can generate, customize, and export unlimited vector A4 PDF invoices for free without watermarks or forced sign-ups."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you store my client and invoice details?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For guests, all invoice draft details remain strictly in your browser's LocalStorage. For registered users, data is securely stored in our isolated SQLite database."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I download invoices as A4 vector PDFs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Our engine outputs clean, publication-ready vector A4 PDFs with embedded fonts that are crisp when printed and easy to email."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Favicon & Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=6.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=6.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png?v=6.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png?v=6.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=6.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=6.0">
+  <link rel="manifest" href="/site.webmanifest?v=6.0">
+
+  <!-- Preload Local Fonts -->
+  <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/design-system.css?v=5.0">
+  <link rel="stylesheet" href="css/invoice-editor.css?v=5.0">
+  <script src="js/google-auth.js?v=6.0"></script>
+</head>
+<body>
+
+  <!-- Universal SaaS Header -->
+  <header class="navbar-saas" id="mainHeader">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-wrapper" title="Invoice-Gen.net Home">
+        <div class="brand-logo-frame">
+          <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36">
+        </div>
+        <div class="brand-text-block">
+          <div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div>
+        </div>
+      </a>
+
+      <nav class="nav-center-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link-item" data-i18n="nav_generator">
+          <span>Create Invoice</span>
+        </a>
+        <a href="templates.html" class="nav-link-item" data-i18n="nav_templates">
+          <span>Templates</span>
+        </a>
+        <a href="dashboard.html" class="nav-link-item" title="View your saved invoices and history">
+          <span data-i18n="nav_my_invoices">My Invoices</span>
+          <span class="nav-count-badge" id="headerSavedInvoicesBadge" style="display: none;"></span>
+        </a>
+        <div class="nav-dropdown-item-wrap">
+          <button type="button" class="nav-link-item nav-dropdown-btn" id="toolsDropdownBtn" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav_tools">Tools</span>
+            <svg class="dropdown-chevron-svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="nav-dropdown-menu nav-mega-menu" id="toolsDropdownMenu" role="menu">
+            <div class="mega-menu-grid">
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Invoice</div>
+                <a href="index.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
+                  <div><span class="mega-title">Invoice Generator</span><span class="mega-desc">Fast web invoice builder</span></div>
+                </a>
+                <a href="pdf-invoice-generator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-pdf"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                  <div><span class="mega-title">PDF Invoice Generator</span><span class="mega-desc">A4 vector PDF export</span></div>
+                </a>
+                <a href="invoice-generator-for-freelancers.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-inv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg></div>
+                  <div><span class="mega-title">Freelancer Invoice</span><span class="mega-desc">Hourly &amp; milestone billing</span></div>
+                </a>
+              </div>
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Documents</div>
+                <a href="pdf-to-jpg.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg></div>
+                  <div><span class="mega-title">PDF to JPG</span><span class="mega-desc">Convert PDF to image</span></div>
+                </a>
+                <a href="jpg-to-pdf.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                  <div><span class="mega-title">JPG to PDF</span><span class="mega-desc">Combine images to PDF</span></div>
+                </a>
+              </div>
+              <div class="mega-menu-col">
+                <div class="mega-menu-heading">Calculators</div>
+                <a href="tax-calculator.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect></svg></div>
+                  <div><span class="mega-title">Tax Calculator</span><span class="mega-desc">Inclusive &amp; exclusive tax</span></div>
+                </a>
+                <a href="currency-converter.html" class="mega-menu-link" role="menuitem">
+                  <div class="mega-icon-box icon-calc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                  <div><span class="mega-title">Currency Converter</span><span class="mega-desc">Live exchange rates</span></div>
+                </a>
+              </div>
+            </div>
+            <div class="mega-menu-footer">
+              <a href="tools.html" class="mega-footer-link"><span>Browse All Tools &rarr;</span></a>
+            </div>
+          </div>
+        </div>
+        <a href="pricing.html" class="nav-link-item" data-i18n="nav_pricing">
+          <span>Pricing</span>
+        </a>
+      </nav>
+
+      <div class="nav-actions-wrap">
+        <div class="lang-switcher-container"></div>
+        <a href="login.html" class="btn-login" id="btnHeaderLogin" data-i18n="btn_login">Log In</a>
+        <a href="signup.html" class="btn-signup-free" id="btnHeaderSignup">
+          <span data-i18n="btn_signup">Sign Up Free</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+        <button type="button" class="btn-mobile-nav-toggle" id="btnMobileNavToggle" aria-label="Toggle navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main FAQ Content -->
+  <main class="page-container">
+    <div class="breadcrumbs-nav">
+      <a href="index.html" class="breadcrumb-link">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">FAQ</span>
+    </div>
+
+    <div class="page-hero-wrap">
+      <h1 class="page-hero-title">Frequently Asked Questions</h1>
+      <p class="page-hero-sub">
+        Clear, accurate answers about our invoicing tools, data privacy, PDF outputs, and payment features.
+      </p>
+    </div>
+
+    <!-- Category Filter Buttons -->
+    <div class="filter-pills-wrap" role="tablist" aria-label="FAQ Categories">
+      <button type="button" class="filter-pill active" data-category="all" role="tab" aria-selected="true">All Questions</button>
+      <button type="button" class="filter-pill" data-category="general" role="tab" aria-selected="false">General</button>
+      <button type="button" class="filter-pill" data-category="invoices" role="tab" aria-selected="false">Invoices</button>
+      <button type="button" class="filter-pill" data-category="pdf" role="tab" aria-selected="false">PDF &amp; Print</button>
+      <button type="button" class="filter-pill" data-category="clients" role="tab" aria-selected="false">Clients</button>
+      <button type="button" class="filter-pill" data-category="payments" role="tab" aria-selected="false">Payments</button>
+      <button type="button" class="filter-pill" data-category="tools" role="tab" aria-selected="false">Tools</button>
+      <button type="button" class="filter-pill" data-category="account" role="tab" aria-selected="false">Account</button>
+      <button type="button" class="filter-pill" data-category="billing" role="tab" aria-selected="false">Billing</button>
+    </div>
+
+    <!-- Accordion Group -->
+    <div class="content-body-wrap">
+      <div class="accordion-group" id="faqAccordionGroup">
+
+        <!-- GENERAL -->
+        <div class="accordion-item is-open" data-category="general">
+          <button type="button" class="accordion-trigger" id="faqTrigger1" aria-expanded="true" aria-controls="faqPanel1">
+            <span>Is Invoice-Gen.net really free to use?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel1" role="region" aria-labelledby="faqTrigger1">
+            <div class="accordion-panel-inner">
+              <p>Yes. The core invoice generator and essential tools on Invoice-Gen.net are permanently free. You can build invoices, customize branding, calculate taxes, and export unlimited high-resolution A4 vector PDFs without watermarks or mandatory registration.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-category="general">
+          <button type="button" class="accordion-trigger" id="faqTrigger2" aria-expanded="false" aria-controls="faqPanel2">
+            <span>Do I need to install any desktop software or browser extension?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel2" role="region" aria-labelledby="faqTrigger2">
+            <div class="accordion-panel-inner">
+              <p>No installation is required. Invoice-Gen runs entirely in standard modern web browsers (Chrome, Firefox, Safari, Edge) across Windows, macOS, Linux, iOS, and Android.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- INVOICES -->
+        <div class="accordion-item" data-category="invoices">
+          <button type="button" class="accordion-trigger" id="faqTrigger3" aria-expanded="false" aria-controls="faqPanel3">
+            <span>How does sequential invoice numbering work?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel3" role="region" aria-labelledby="faqTrigger3">
+            <div class="accordion-panel-inner">
+              <p>When you finish and save an invoice, Invoice-Gen inspects your latest invoice number (e.g. <code>INV-2026-001</code>) and automatically proposes the next sequential number (<code>INV-2026-002</code>) for your subsequent bill. You can edit the prefix or number formatting at any time.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-category="invoices">
+          <button type="button" class="accordion-trigger" id="faqTrigger4" aria-expanded="false" aria-controls="faqPanel4">
+            <span>Can I customize tax rates, discounts, and currencies?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel4" role="region" aria-labelledby="faqTrigger4">
+            <div class="accordion-panel-inner">
+              <p>Yes. You can specify exact tax percentages (VAT, GST, Sales Tax), apply flat or percentage-based discounts, and select from over 40 global currencies. Subtotals, tax sums, and balances due update dynamically in real time.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PDF & PRINT -->
+        <div class="accordion-item" data-category="pdf">
+          <button type="button" class="accordion-trigger" id="faqTrigger5" aria-expanded="false" aria-controls="faqPanel5">
+            <span>Are the exported PDFs high-resolution and vector-based?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel5" role="region" aria-labelledby="faqTrigger5">
+            <div class="accordion-panel-inner">
+              <p>Yes. Our PDF engine generates genuine vector A4 documents with embedded system typography and precise printable margins. Texts and vector lines stay ultra-sharp regardless of zoom level or commercial printing quality.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item" data-category="pdf">
+          <button type="button" class="accordion-trigger" id="faqTrigger6" aria-expanded="false" aria-controls="faqPanel6">
+            <span>Will there be an Invoice-Gen watermark on my exported PDF?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel6" role="region" aria-labelledby="faqTrigger6">
+            <div class="accordion-panel-inner">
+              <p>Never. Every invoice generated on Invoice-Gen.net is 100% clean and watermark-free on both free and account tiers.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- CLIENTS -->
+        <div class="accordion-item" data-category="clients">
+          <button type="button" class="accordion-trigger" id="faqTrigger7" aria-expanded="false" aria-controls="faqPanel7">
+            <span>Can I save repeat clients so I don't have to retype their details?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel7" role="region" aria-labelledby="faqTrigger7">
+            <div class="accordion-panel-inner">
+              <p>Yes. When you type client information or save an invoice, client profiles can be saved to your Client Directory. The next time you create an invoice, simply choose their name from the autofill dropdown to instantly populate addresses and tax IDs.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAYMENTS -->
+        <div class="accordion-item" data-category="payments">
+          <button type="button" class="accordion-trigger" id="faqTrigger8" aria-expanded="false" aria-controls="faqPanel8">
+            <span>How do click-to-pay payment links work?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel8" role="region" aria-labelledby="faqTrigger8">
+            <div class="accordion-panel-inner">
+              <p>You can enter your direct payment links (such as your Stripe Payment Link, PayPal.me link, or bank transfer instructions) in the Payment Methods section. These links become clickable hyperlinks directly in the exported vector PDF so your clients can settle bills with one click.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOOLS -->
+        <div class="accordion-item" data-category="tools">
+          <button type="button" class="accordion-trigger" id="faqTrigger9" aria-expanded="false" aria-controls="faqPanel9">
+            <span>Are the PDF and image conversion tools secure?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel9" role="region" aria-labelledby="faqTrigger9">
+            <div class="accordion-panel-inner">
+              <p>Yes. Our document utilities (PDF to JPG, JPG to PDF, Image Compressor, PDF Merger, PDF Splitter) execute client-side processing using WebAssembly and HTML5 canvas where possible, ensuring files never linger on third-party public servers.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCOUNT -->
+        <div class="accordion-item" data-category="account">
+          <button type="button" class="accordion-trigger" id="faqTrigger10" aria-expanded="false" aria-controls="faqPanel10">
+            <span>What are the benefits of creating a free account?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel10" role="region" aria-labelledby="faqTrigger10">
+            <div class="accordion-panel-inner">
+              <p>While guest mode stores invoices locally in your browser, a free account connects to our relational SQLite cloud database. This allows you to log in from any computer or mobile device, sync past invoices, track payment status, and manage client directories across multiple sessions.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- BILLING -->
+        <div class="accordion-item" data-category="billing">
+          <button type="button" class="accordion-trigger" id="faqTrigger11" aria-expanded="false" aria-controls="faqPanel11">
+            <span>What is your refund policy for upgraded plans?</span>
+            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="accordion-panel" id="faqPanel11" role="region" aria-labelledby="faqTrigger11">
+            <div class="accordion-panel-inner">
+              <p>We offer a straightforward 14-day money-back guarantee on all paid plans. If you are not satisfied for any reason, email <code>billing@invoice-gen.net</code> within 14 days of your purchase for a prompt, courteous refund.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick CTA -->
+      <div style="text-align: center; margin-top: 48px; padding-top: 32px; border-top: 1px solid #e2e8f0;">
+        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 16px;">Have a specific question not addressed above?</p>
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+          <a href="contact.html" class="btn btn-primary" style="text-decoration: none; padding: 10px 20px; border-radius: 8px;">Contact Support</a>
+          <a href="index.html" class="btn btn-secondary" style="text-decoration: none; padding: 10px 20px; border-radius: 8px;">Create Invoice</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Universal 5-Column SaaS Footer -->
+  <footer class="site-footer" id="mainFooter">
+    <div class="container footer-container">
+      <div class="footer-brand-col">
+        <a href="index.html" class="footer-brand-lockup">
+          <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="footer-logo-img" width="28" height="28">
+          <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
+        </a>
+        <p class="footer-tagline">Modern, fast, and secure online invoice generator for freelancers, contractors, and small businesses.</p>
+      </div>
+
+      <div class="footer-nav-grid">
+        <div class="footer-col">
+          <div class="footer-col-title">Product</div>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Invoice Generator</a></li>
+            <li><a href="templates.html">Templates</a></li>
+            <li><a href="pdf-invoice-generator.html">PDF Invoice Generator</a></li>
+            <li><a href="invoice-generator-for-freelancers.html">Freelancer Invoice</a></li>
+            <li><a href="gst-invoice-generator.html">GST &amp; Tax Invoice</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Tools</div>
+          <ul class="footer-links-list">
+            <li><a href="invoice-number-generator.html">Invoice Number Generator</a></li>
+            <li><a href="pdf-to-jpg.html">PDF to JPG</a></li>
+            <li><a href="jpg-to-pdf.html">JPG to PDF</a></li>
+            <li><a href="image-compressor.html">Image Compressor</a></li>
+            <li><a href="pdf-merger.html">PDF Merger</a></li>
+            <li><a href="pdf-splitter.html">PDF Splitter</a></li>
+            <li><a href="tax-calculator.html">Tax Calculator</a></li>
+            <li><a href="payment-calculator.html">Payment Calculator</a></li>
+            <li><a href="currency-converter.html">Currency Converter</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links-list">
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="invoicing-guide.html">Invoice Guide</a></li>
+            <li><a href="help.html">Help Center</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links-list">
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="sitemap.html">Sitemap</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Legal</div>
+          <ul class="footer-links-list">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+            <li><a href="cookies.html">Cookie Policy</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="refunds.html">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom-bar">
+      <p class="footer-copyright">&copy; 2026 Invoice-Gen.net. All rights reserved.</p>
+      <div class="footer-bottom-badges">
+        <span class="footer-badge-pill">Client-Side PDF</span>
+        <span class="footer-badge-pill">Zero Data Tracking</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js?v=4.0"></script>
+  <script src="js/instant-nav.js?v=6.0"></script>
+  <script>
+    // Accessible Accordion Interaction Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = document.querySelectorAll('.accordion-item');
+      items.forEach(item => {
+        const trigger = item.querySelector('.accordion-trigger');
+        if (!trigger) return;
+
+        trigger.addEventListener('click', () => {
+          const isOpen = item.classList.contains('is-open');
+          // Toggle current
+          if (isOpen) {
+            item.classList.remove('is-open');
+            trigger.setAttribute('aria-expanded', 'false');
+          } else {
+            item.classList.add('is-open');
+            trigger.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+
+      // Category Pill Filters
+      const pills = document.querySelectorAll('.filter-pill');
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => {
+            p.classList.remove('active');
+            p.setAttribute('aria-selected', 'false');
+          });
+          pill.classList.add('active');
+          pill.setAttribute('aria-selected', 'true');
+
+          const cat = pill.getAttribute('data-category');
+          items.forEach(item => {
+            const itemCat = item.getAttribute('data-category');
+            if (cat === 'all' || itemCat === cat) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
