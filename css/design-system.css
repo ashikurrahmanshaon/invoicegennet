@@ -6094,3 +6094,73 @@ td.amount-col,
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
 }
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.article-lead {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.workspace-panel {
+  display: block;
+}
+
+.dash-welcome-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sheet-input-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.due-date-field-row,
+.po-field-row,
+.signature-block-wrap,
+.discount-line-row {
+  transition: opacity 0.15s ease, max-height 0.2s ease;
+}
+
+.btn-preview-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.email-attachment-group {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+}
+
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+

@@ -9,33 +9,33 @@
   <meta name="theme-color" content="#0F172A">
 
   <!-- Favicon & Brand Icons -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=6.0">
-  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=6.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png?v=6.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png?v=6.0">
-  <link rel="shortcut icon" href="/favicon.ico?v=6.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=6.0">
-  <link rel="manifest" href="/site.webmanifest?v=6.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=8.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=6.0?v=8.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png?v=6.0?v=8.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png?v=6.0?v=8.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=6.0?v=8.0">
+  <link rel="manifest" href="/site.webmanifest?v=8.0">
 
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/design-system.css?v=4.0">
-  <link rel="stylesheet" href="/css/invoice-editor.css?v=4.0">
+  <link rel="stylesheet" href="/css/design-system.css?v=8.0">
+  <link rel="stylesheet" href="/css/invoice-editor.css?v=8.0">
 
 
 
-  <script src="/js/google-auth.js?v=6.0"></script>
+  <script src="/js/google-auth.js?v=8.0"></script>
 
   <!-- Open Graph & Social Sharing Metadata -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://invoice-gen.net/image-compressor">
   <meta property="og:title" content="Invoice-Gen Image Compressor">
   <meta property="og:description" content="Compress JPG, PNG, and WebP images to reduce file sizes without sacrificing visual clarity.">
-  <meta property="og:image" content="https://invoice-gen.net/assets/icons/og-image.png">
+  <meta property="og:image" content="https://invoice-gen.net/assets/icons/og-image.png?v=8.0">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Invoice-Gen Image Compressor">
   <meta name="twitter:description" content="Compress JPG, PNG, and WebP images to reduce file sizes without sacrificing visual clarity.">
-  <meta name="twitter:image" content="https://invoice-gen.net/assets/icons/og-image.png">
+  <meta name="twitter:image" content="https://invoice-gen.net/assets/icons/og-image.png?v=8.0">
 
   <!-- JSON-LD Structured Data for Google Search -->
   <script type="application/ld+json">
@@ -87,7 +87,7 @@
   <header class="navbar-saas" id="mainHeader">
     <div class="container navbar-container">
       <a href="/" class="brand-wrapper">
-        <div class="brand-logo-frame"><img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36"></div>
+        <div class="brand-logo-frame"><img src="/assets/icons/logo.svg?v=6.0?v=8.0" alt="Invoice-Gen.net Logo" class="brand-icon-svg" width="36" height="36"></div>
         <div class="brand-text-block"><div class="brand-name">Invoice-Gen<span class="dot-net">.net</span></div></div>
       </a>
       <nav class="nav-center-links">
@@ -309,7 +309,7 @@
     </div>
   </header>
 
-  <div class="container tool-workspace-wrap">
+  <main class="container tool-workspace-wrap">
 
     <div class="tool-page-header">
       <div class="tool-breadcrumb">
@@ -377,13 +377,13 @@
             <div>
               <div style="font-size: 0.8125rem; font-weight: 700; color: #475569; margin-bottom: 6px;">Original Preview</div>
               <div style="aspect-ratio: 4/3; background: #f8fafc; border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                <img id="compressOriginalPreview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                <img id="compressOriginalPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Original Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </div>
             </div>
             <div>
               <div style="font-size: 0.8125rem; font-weight: 700; color: #059669; margin-bottom: 6px;">Compressed Preview</div>
               <div style="aspect-ratio: 4/3; background: #f8fafc; border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                <img id="compressCompressedPreview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                <img id="compressCompressedPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Compressed Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </div>
             </div>
           </div>
@@ -460,14 +460,13 @@
       </div>
     </div>
 
-  </div>
-
+  </main>
     <!-- Universal 5-Column SaaS Footer -->
   <footer class="site-footer" id="mainFooter">
     <div class="container footer-container">
       <div class="footer-brand-col">
         <a href="/" class="footer-brand-lockup">
-          <img src="/assets/icons/logo.svg?v=6.0" alt="Invoice-Gen.net Logo" class="footer-logo-img" width="28" height="28">
+          <img src="/assets/icons/logo.svg?v=6.0?v=8.0" alt="Invoice-Gen.net Logo" class="footer-logo-img" width="28" height="28">
           <span class="footer-brand-name">Invoice-Gen<span class="net-accent">.net</span></span>
         </a>
         <p class="footer-tagline">Modern, fast, and secure online invoice generator for freelancers, contractors, and small businesses.</p>
@@ -540,7 +539,7 @@
     </div>
   </footer>
 
-  <script src="/js/instant-nav.js?v=6.0"></script>
+  <script src="/js/instant-nav.js?v=8.0"></script>
   <script src="/js/tools-engine.js"></script>
 </body>
 </html>

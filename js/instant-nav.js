@@ -20,9 +20,9 @@
   function pinFavicon() {
     try {
       const ico = new Image();
-      ico.src = '/favicon.ico?v=5.0';
+      ico.src = '/favicon.ico?v=8.0';
       const svg = new Image();
-      svg.src = '/assets/icons/favicon.svg?v=5.0';
+      svg.src = '/assets/icons/favicon.svg?v=8.0';
     } catch (e) {}
   }
   pinFavicon();
