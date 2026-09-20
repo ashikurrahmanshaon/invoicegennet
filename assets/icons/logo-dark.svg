@@ -1,13 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-  <!-- Invoice-Gen.net Official Brand Mark: Dark Mode -->
-  <!-- Main Body in Pure White #FFFFFF -->
-  <path d="M 28 4 L 12 4 C 7.58 4 4 7.58 4 12 L 4 36 C 4 40.42 7.58 44 12 44 L 36 44 C 40.42 44 44 40.42 44 36 L 44 24 C 44 22.34 42.66 21 41 21 L 28 21 C 26.34 21 25 22.34 25 24 C 25 25.66 26.34 27 28 27 L 36 27 L 36 34 C 36 35.1 35.1 36 34 36 L 14 36 C 12.9 36 12 35.1 12 34 L 12 14 C 12 12.9 12.9 12 14 12 L 28 12 C 29.66 12 31 10.66 31 9 L 31 4 Z" fill="#FFFFFF" />
+  <!-- Main G contour: White body -->
+  <path d="M 27 6 L 14 6 C 9.58 6 6 9.58 6 14 L 6 34 C 6 38.42 9.58 42 14 42 L 34 42 C 38.42 42 42 38.42 42 34 L 42 24 C 42 22.9 41.1 22 40 22 L 27 22 C 25.9 22 25 22.9 25 24 C 25 25.1 25.9 26 27 26 L 38 26 L 38 33 C 38 35.21 36.21 37 34 37 L 14 37 C 11.79 37 10 35.21 10 33 L 10 15 C 10 12.79 11.79 11 14 11 L 26 11 C 27.1 11 28 10.1 28 9 L 28 7 C 28 6.45 27.55 6 27 6 Z" fill="#FFFFFF" />
   
-  <!-- Precision Flap in Vibrant Emerald #10B981 -->
-  <path d="M 31 4 L 31 11 C 31 12.66 32.34 14 34 14 L 44 14 Z" fill="#10B981" />
-  <path d="M 31 4 L 44 14 L 44 4 Z" fill="#10B981" opacity="0.3" />
+  <!-- Vibrant Emerald Fold Flap at Top Right -->
+  <path d="M 30 6 L 30 11.5 C 30 12.88 31.12 14 32.5 14 L 42 14 Z" fill="#10B981" />
 
-  <!-- Two Rounded Horizontal Invoice Lines in Brand Emerald #10B981 -->
-  <rect x="16" y="17" width="14" height="4.5" rx="2.25" fill="#10B981" />
-  <rect x="16" y="25" width="10" height="4.5" rx="2.25" fill="#10B981" />
+  <!-- Two Rounded Horizontal Invoice Ledger Lines -->
+  <rect x="15" y="18" width="13" height="3.5" rx="1.75" fill="#10B981" />
+  <rect x="15" y="25" width="9" height="3.5" rx="1.75" fill="#10B981" />
 </svg>
