@@ -41,7 +41,7 @@ class PDFEngine {
 
     return new Promise((resolve) => {
       const script = document.createElement('script');
-      script.src = 'js/html2pdf.bundle.min.js';
+      script.src = '/js/html2pdf.bundle.min.js';
       script.onload = () => resolve(typeof window.html2pdf !== 'undefined' || typeof html2pdf !== 'undefined');
       script.onerror = () => resolve(false);
       document.head.appendChild(script);

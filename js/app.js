@@ -1722,6 +1722,20 @@ window.initInvoiceEditorPage = function () {
         handleSaveInvoice('draft');
       });
     }
+    const btnHeroCreate = document.getElementById('btnHeroCreateInvoice');
+    if (btnHeroCreate) {
+      btnHeroCreate.addEventListener('click', (e) => {
+        e.preventDefault();
+        const paper = document.getElementById('invoicePaper');
+        if (paper) {
+          paper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(() => {
+            const firstInput = document.getElementById('senderName') || document.getElementById('clientName');
+            if (firstInput && !firstInput.value) firstInput.focus();
+          }, 400);
+        }
+      });
+    }
     document.body.classList.add('has-mobile-sticky-actions');
   } catch (e) {
     console.error('Invoice editor initialization error:', e);

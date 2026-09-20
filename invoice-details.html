@@ -617,7 +617,7 @@
         const invoiceId = urlParams.get('id');
 
         if (!invoiceId) {
-          window.location.replace('dashboard.html');
+          window.location.replace('/dashboard');
           return;
         }
 
@@ -846,7 +846,7 @@
           const data = await res.json();
           if (res.ok && data.success) {
             showToast('Invoice deleted permanently. Redirecting...');
-            setTimeout(() => window.location.href = 'dashboard.html', 700);
+            setTimeout(() => window.location.href = '/dashboard', 700);
           } else {
             showToast(data.error || 'Failed to delete invoice', 'warning');
           }

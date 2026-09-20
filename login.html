@@ -516,12 +516,14 @@
       function completeLogin(userProfile) {
         showToast(`Welcome back, ${userProfile.name || 'User'}!`);
         const urlParams = new URLSearchParams(window.location.search);
-        const redirectPage = urlParams.get('redirect') || 'dashboard.html';
+        let redirectPage = urlParams.get('redirect') || '/dashboard';
+        if (redirectPage.endsWith('.html')) redirectPage = redirectPage.replace(/\.html$/, '');
+        if (!redirectPage.startsWith('/')) redirectPage = '/' + redirectPage;
         const pendingTpl = urlParams.get('template') || sessionStorage.getItem('pending_template');
 
         if (pendingTpl) {
           sessionStorage.removeItem('pending_template');
-          const target = `index.html?template=${pendingTpl}`;
+          const target = `/?template=${pendingTpl}`;
           if (window.router && typeof window.router.navigate === 'function') {
             window.router.navigate(target);
           } else {
@@ -620,7 +622,9 @@
       window.Auth?.onReady((state, user) => {
         if (state === 'AUTHENTICATED' && user) {
           const urlParams = new URLSearchParams(window.location.search);
-          const redirect = urlParams.get('redirect') || 'dashboard.html';
+          let redirect = urlParams.get('redirect') || '/dashboard';
+          if (redirect.endsWith('.html')) redirect = redirect.replace(/\.html$/, '');
+          if (!redirect.startsWith('/')) redirect = '/' + redirect;
           if (window.router && typeof window.router.navigate === 'function') {
             window.router.navigate(redirect);
           } else {

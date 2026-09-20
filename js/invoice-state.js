@@ -196,30 +196,35 @@ class InvoiceStore {
   }
 
   calculateTotals() {
-    const subtotal = (this.state.items || []).reduce((acc, item) => {
+    const roundCents = (val) => Math.round((Number(val || 0) + Number.EPSILON) * 100) / 100;
+
+    let subtotalCents = 0;
+    (this.state.items || []).forEach((item) => {
       const qty = parseFloat(item.quantity) || 0;
       const rate = parseFloat(item.rate) || 0;
-      return acc + (qty * rate);
-    }, 0);
+      subtotalCents += Math.round((qty * rate) * 100);
+    });
+
+    const subtotal = roundCents(subtotalCents / 100);
 
     let discount = 0;
     const discountVal = parseFloat(this.state.discountValue) || 0;
     if (this.state.discountType === 'percent') {
-      discount = (subtotal * discountVal) / 100;
+      discount = roundCents((subtotal * discountVal) / 100);
     } else {
-      discount = discountVal;
+      discount = roundCents(discountVal);
     }
     discount = Math.min(discount, subtotal);
 
     const taxRate = parseFloat(this.state.taxRate) || 0;
-    const taxAmount = (subtotal * taxRate) / 100;
+    const taxAmount = roundCents((subtotal * taxRate) / 100);
 
-    const shipping = parseFloat(this.state.shippingFee) || 0;
+    const shipping = roundCents(parseFloat(this.state.shippingFee) || 0);
 
-    // Subtotal + Tax - Discount = Grand Total (Clear, standard order)
-    const grandTotal = Math.max(0, subtotal + taxAmount - discount + shipping);
-    const amountPaid = parseFloat(this.state.amountPaid) || 0;
-    const balanceDue = Math.max(0, grandTotal - amountPaid);
+    // Subtotal + Tax - Discount + Shipping = Grand Total
+    const grandTotal = roundCents(Math.max(0, subtotal + taxAmount - discount + shipping));
+    const amountPaid = roundCents(parseFloat(this.state.amountPaid) || 0);
+    const balanceDue = roundCents(Math.max(0, grandTotal - amountPaid));
 
     return {
       subtotal,

@@ -545,46 +545,48 @@ function createInvoice(userId, data) {
   }
 
   // Calculate financials server-side if not explicitly provided
+  const roundCents = (val) => Math.round((Number(val || 0) + Number.EPSILON) * 100) / 100;
   const items = Array.isArray(data.items) ? data.items : [];
   let calculatedSubtotal = 0;
   items.forEach(it => {
     calculatedSubtotal += (Number(it.quantity || 0) * Number(it.rate || 0));
   });
+  calculatedSubtotal = roundCents(calculatedSubtotal);
 
-  const subtotal = data.subtotal !== undefined 
+  const subtotal = roundCents(data.subtotal !== undefined 
     ? Number(data.subtotal) 
-    : (data.totals?.subtotal !== undefined ? Number(data.totals.subtotal) : calculatedSubtotal);
+    : (data.totals?.subtotal !== undefined ? Number(data.totals.subtotal) : calculatedSubtotal));
 
   const discountType = data.discountType || data.discount_type || 'percent';
   const discountVal = Number(data.discountValue !== undefined ? data.discountValue : (data.discount_value || 0));
   let calculatedDiscount = 0;
   if (discountType === 'percent') {
-    calculatedDiscount = (subtotal * discountVal) / 100;
+    calculatedDiscount = roundCents((subtotal * discountVal) / 100);
   } else {
-    calculatedDiscount = discountVal;
+    calculatedDiscount = roundCents(discountVal);
   }
-  const discountAmount = data.discountAmount !== undefined 
+  const discountAmount = roundCents(data.discountAmount !== undefined 
     ? Number(data.discountAmount) 
-    : (data.totals?.discountAmount !== undefined ? Number(data.totals.discountAmount) : calculatedDiscount);
+    : (data.totals?.discountAmount !== undefined ? Number(data.totals.discountAmount) : calculatedDiscount));
 
-  const taxable = Math.max(0, subtotal - discountAmount);
+  const taxable = roundCents(Math.max(0, subtotal - discountAmount));
   const taxRate = Number(data.taxRate !== undefined ? data.taxRate : (data.tax_rate || 0));
-  const calculatedTax = (taxable * taxRate) / 100;
-  const taxAmount = data.taxAmount !== undefined 
+  const calculatedTax = roundCents((taxable * taxRate) / 100);
+  const taxAmount = roundCents(data.taxAmount !== undefined 
     ? Number(data.taxAmount) 
-    : (data.totals?.taxAmount !== undefined ? Number(data.totals.taxAmount) : calculatedTax);
+    : (data.totals?.taxAmount !== undefined ? Number(data.totals.taxAmount) : calculatedTax));
 
-  const shippingFee = Number(data.shippingFee !== undefined ? data.shippingFee : (data.shipping_fee || 0));
-  const calculatedTotal = taxable + taxAmount + shippingFee;
-  const total = data.total !== undefined 
+  const shippingFee = roundCents(Number(data.shippingFee !== undefined ? data.shippingFee : (data.shipping_fee || 0)));
+  const calculatedTotal = roundCents(taxable + taxAmount + shippingFee);
+  const total = roundCents(data.total !== undefined 
     ? Number(data.total) 
-    : (data.totals?.grandTotal !== undefined ? Number(data.totals.grandTotal) : calculatedTotal);
+    : (data.totals?.grandTotal !== undefined ? Number(data.totals.grandTotal) : calculatedTotal));
 
-  const amountPaid = Number(data.amountPaid !== undefined ? data.amountPaid : (data.amount_paid || 0));
-  const calculatedBalanceDue = Math.max(0, total - amountPaid);
-  const balanceDue = data.balanceDue !== undefined 
+  const amountPaid = roundCents(Number(data.amountPaid !== undefined ? data.amountPaid : (data.amount_paid || 0)));
+  const calculatedBalanceDue = roundCents(Math.max(0, total - amountPaid));
+  const balanceDue = roundCents(data.balanceDue !== undefined 
     ? Number(data.balanceDue) 
-    : (data.totals?.balanceDue !== undefined ? Number(data.totals.balanceDue) : calculatedBalanceDue);
+    : (data.totals?.balanceDue !== undefined ? Number(data.totals.balanceDue) : calculatedBalanceDue));
 
   const stmt = db.prepare(`
     INSERT INTO invoices (
@@ -699,12 +701,13 @@ function updateInvoice(userId, invoiceId, data) {
   const invoiceNumber = data.number || data.invoice_number;
 
   // Server-side financial calculations on update
+  const roundCents = (val) => Math.round((Number(val || 0) + Number.EPSILON) * 100) / 100;
   let subtotal = data.subtotal !== undefined ? Number(data.subtotal) : (data.totals?.subtotal !== undefined ? Number(data.totals.subtotal) : null);
   if (subtotal === null && Array.isArray(data.items)) {
     subtotal = data.items.reduce((sum, it) => sum + (Number(it.quantity || 0) * Number(it.rate || 0)), 0);
   }
 
-  const effectiveSubtotal = subtotal !== null ? subtotal : Number(existing.subtotal || 0);
+  const effectiveSubtotal = roundCents(subtotal !== null ? subtotal : Number(existing.subtotal || 0));
 
   const discountType = data.discountType || data.discount_type || existing.discount_type || 'percent';
   const discountVal = data.discountValue !== undefined ? Number(data.discountValue) : (data.discount_value !== undefined ? Number(data.discount_value) : Number(existing.discount_value || 0));
@@ -714,8 +717,8 @@ function updateInvoice(userId, invoiceId, data) {
     discountAmount = discountType === 'percent' ? (effectiveSubtotal * discountVal) / 100 : discountVal;
   }
 
-  const effectiveDiscountAmount = discountAmount !== null ? discountAmount : Number(existing.discount_amount || 0);
-  const taxable = Math.max(0, effectiveSubtotal - effectiveDiscountAmount);
+  const effectiveDiscountAmount = roundCents(discountAmount !== null ? discountAmount : Number(existing.discount_amount || 0));
+  const taxable = roundCents(Math.max(0, effectiveSubtotal - effectiveDiscountAmount));
 
   const taxRate = data.taxRate !== undefined ? Number(data.taxRate) : (data.tax_rate !== undefined ? Number(data.tax_rate) : Number(existing.tax_rate || 0));
   let taxAmount = data.taxAmount !== undefined ? Number(data.taxAmount) : (data.totals?.taxAmount !== undefined ? Number(data.totals.taxAmount) : null);
@@ -723,21 +726,22 @@ function updateInvoice(userId, invoiceId, data) {
     taxAmount = (taxable * taxRate) / 100;
   }
 
-  const effectiveTaxAmount = taxAmount !== null ? taxAmount : Number(existing.tax_amount || 0);
-  const shippingFee = data.shippingFee !== undefined ? Number(data.shippingFee) : (data.shipping_fee !== undefined ? Number(data.shipping_fee) : Number(existing.shipping_fee || 0));
+  const effectiveTaxAmount = roundCents(taxAmount !== null ? taxAmount : Number(existing.tax_amount || 0));
+  const shippingFee = roundCents(data.shippingFee !== undefined ? Number(data.shippingFee) : (data.shipping_fee !== undefined ? Number(data.shipping_fee) : Number(existing.shipping_fee || 0)));
 
   let total = data.total !== undefined ? Number(data.total) : (data.totals?.grandTotal !== undefined ? Number(data.totals.grandTotal) : null);
   if (total === null && (subtotal !== null || taxAmount !== null || discountAmount !== null || data.shippingFee !== undefined || data.shipping_fee !== undefined)) {
     total = taxable + effectiveTaxAmount + shippingFee;
   }
 
-  const effectiveTotal = total !== null ? total : Number(existing.total || 0);
-  const amountPaid = data.amountPaid !== undefined ? Number(data.amountPaid) : (data.amount_paid !== undefined ? Number(data.amount_paid) : Number(existing.amount_paid || 0));
+  const effectiveTotal = roundCents(total !== null ? total : Number(existing.total || 0));
+  const amountPaid = roundCents(data.amountPaid !== undefined ? Number(data.amountPaid) : (data.amount_paid !== undefined ? Number(data.amount_paid) : Number(existing.amount_paid || 0)));
 
   let balanceDue = data.balanceDue !== undefined ? Number(data.balanceDue) : (data.totals?.balanceDue !== undefined ? Number(data.totals.balanceDue) : null);
   if (balanceDue === null && (total !== null || data.amountPaid !== undefined || data.amount_paid !== undefined)) {
     balanceDue = Math.max(0, effectiveTotal - amountPaid);
   }
+  balanceDue = roundCents(balanceDue);
 
   const stmt = db.prepare(`
     UPDATE invoices SET

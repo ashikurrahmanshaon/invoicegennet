@@ -2611,7 +2611,7 @@
       document.getElementById('btnSignoutAllDevices')?.addEventListener('click', () => {
         if (confirm('Sign out of all sessions?')) {
           if (window.Auth) window.Auth.logout();
-          else window.location.replace('login.html');
+          else window.location.replace('/login');
         }
       });
 
@@ -2653,7 +2653,7 @@
               loadNotifications();
               checkRouteHash();
             } else if (state === 'UNAUTHENTICATED') {
-              window.location.replace('login.html?redirect=dashboard.html');
+              window.location.replace('/login?redirect=/dashboard');
             }
           });
         } else {
@@ -2666,11 +2666,11 @@
                 loadNotifications();
                 checkRouteHash();
               } else {
-                window.location.replace('login.html?redirect=dashboard.html');
+                window.location.replace('/login?redirect=/dashboard');
               }
             })
             .catch(() => {
-              window.location.replace('login.html?redirect=dashboard.html');
+              window.location.replace('/login?redirect=/dashboard');
             });
         }
       }
