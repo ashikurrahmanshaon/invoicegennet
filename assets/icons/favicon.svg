@@ -1,10 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" fill="none">
-  <!-- Squircle Base for Infinite Tab Contrast -->
   <rect width="48" height="48" rx="10" fill="#0F172A" />
-  <!-- Document G in White -->
-  <path d="M 28 8 L 14 8 C 11.2 8 9 10.2 9 13 L 9 35 C 9 37.8 11.2 40 14 40 L 32 40 C 34.8 40 37 37.8 37 35 L 37 24 C 37 23.2 36.3 22.5 35.5 22.5 L 21 22.5 C 20.2 22.5 19.5 23.2 19.5 24 C 19.5 24.8 20.2 25.5 21 25.5 L 32.5 25.5 L 32.5 34.5 C 32.5 35.3 31.8 36 31 36 L 14.5 36 C 13.7 36 13 35.3 13 34.5 L 13 13.5 C 13 12.7 13.7 12 14.5 12 L 26.5 12 C 27.3 12 28 11.3 28 10.5 L 28 8 Z" fill="#FFFFFF" />
-  <!-- Emerald Fold Flap -->
-  <path d="M 29.5 8 L 29.5 13.5 C 29.5 14.3 30.2 15 31 15 L 37 15 Z" fill="#059669" />
-  <!-- Emerald Invoice Ledger Crossbar -->
-  <rect x="21" y="22.5" width="16" height="4.5" rx="2.25" fill="#059669" />
+  <g transform="translate(4, 4) scale(0.8333)">
+    <path d="M 28 4 L 12 4 C 7.58 4 4 7.58 4 12 L 4 36 C 4 40.42 7.58 44 12 44 L 36 44 C 40.42 44 44 40.42 44 36 L 44 24 C 44 22.34 42.66 21 41 21 L 28 21 C 26.34 21 25 22.34 25 24 C 25 25.66 26.34 27 28 27 L 36 27 L 36 34 C 36 35.1 35.1 36 34 36 L 14 36 C 12.9 36 12 35.1 12 34 L 12 14 C 12 12.9 12.9 12 14 12 L 28 12 C 29.66 12 31 10.66 31 9 L 31 4 Z" fill="#FFFFFF" />
+    <path d="M 31 4 L 31 11 C 31 12.66 32.34 14 34 14 L 44 14 Z" fill="#10B981" />
+    <rect x="16" y="17" width="14" height="4.5" rx="2.25" fill="#10B981" />
+    <rect x="16" y="25" width="10" height="4.5" rx="2.25" fill="#10B981" />
+  </g>
 </svg>

@@ -1527,7 +1527,20 @@
 
 .brand-text-block {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brand-tagline {
+  font-family: var(--font-sans);
+  font-size: 0.53125rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #64748b;
+  line-height: 1;
+  margin-top: 2px;
+  white-space: nowrap;
 }
 
 .brand-name {

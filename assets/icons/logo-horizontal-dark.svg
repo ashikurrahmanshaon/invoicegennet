@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 56" width="280" height="56" fill="none">
+  <!-- Mark -->
+  <g transform="translate(4, 4)">
+    <path d="M 28 4 L 12 4 C 7.58 4 4 7.58 4 12 L 4 36 C 4 40.42 7.58 44 12 44 L 36 44 C 40.42 44 44 40.42 44 36 L 44 24 C 44 22.34 42.66 21 41 21 L 28 21 C 26.34 21 25 22.34 25 24 C 25 25.66 26.34 27 28 27 L 36 27 L 36 34 C 36 35.1 35.1 36 34 36 L 14 36 C 12.9 36 12 35.1 12 34 L 12 14 C 12 12.9 12.9 12 14 12 L 28 12 C 29.66 12 31 10.66 31 9 L 31 4 Z" fill="#FFFFFF" />
+    <path d="M 31 4 L 31 11 C 31 12.66 32.34 14 34 14 L 44 14 Z" fill="#10B981" />
+    <path d="M 31 4 L 44 14 L 44 4 Z" fill="#10B981" opacity="0.3" />
+    <rect x="16" y="17" width="14" height="4.5" rx="2.25" fill="#10B981" />
+    <rect x="16" y="25" width="10" height="4.5" rx="2.25" fill="#10B981" />
+  </g>
+  <!-- Wordmark -->
+  <text x="60" y="30" font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800" letter-spacing="-0.5px" fill="#FFFFFF">
+    Invoice-Gen<tspan font-weight="800" fill="#10B981">.net</tspan>
+  </text>
+  <!-- Tagline -->
+  <text x="60" y="44" font-family="-apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="700" letter-spacing="2.6px" fill="#94A3B8">
+    INVOICING MADE SIMPLE
+  </text>
+</svg>

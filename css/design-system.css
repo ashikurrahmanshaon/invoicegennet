@@ -1567,6 +1567,24 @@ textarea:disabled {
   flex-shrink: 0 !important;
 }
 
+.brand-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.brand-tagline {
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif) !important;
+  font-size: 0.53125rem !important; /* 8.5px */
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #64748b !important;
+  line-height: 1 !important;
+  margin-top: 2px !important;
+  white-space: nowrap !important;
+}
+
 .brand-name .accent,
 .brand-name .brand-accent {
   color: inherit !important;
