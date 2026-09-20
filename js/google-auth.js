@@ -54,8 +54,8 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
   }
 
   const Auth = {
-    // 3 Strict States: 'AUTH_LOADING', 'AUTHENTICATED', 'UNAUTHENTICATED'
-    state: (initialUser && initialSessionId) ? 'AUTHENTICATED' : 'AUTH_LOADING',
+    // 3 Strict States: 'INITIALIZING', 'AUTHENTICATED', 'UNAUTHENTICATED'
+    state: (initialUser && initialSessionId) ? 'AUTHENTICATED' : 'INITIALIZING',
     user: initialUser,
     sessionId: initialSessionId,
     _listeners: [],
@@ -75,7 +75,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
 
     onReady: function (callback) {
       if (typeof callback !== 'function') return;
-      if (this.state !== 'AUTH_LOADING') {
+      if (this.state !== 'INITIALIZING' && this.state !== 'AUTH_LOADING') {
         try { callback(this.state, this.user); } catch (e) {}
       } else {
         this._listeners.push(callback);
@@ -482,15 +482,23 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         const res = await this.authFetch('/api/auth/me');
         const data = await res.json();
         if (data && data.authenticated && data.user) {
-          this.setSession(data.user, this.sessionId);
+          this.setSession(data.user, data.user.session_id || this.sessionId);
+          if (['/login', '/signup'].includes(window.location.pathname)) {
+            const urlParams = new URLSearchParams(window.location.search);
+            let redirect = urlParams.get('redirect') || '/dashboard';
+            if (redirect.endsWith('.html')) redirect = redirect.replace(/\.html$/, '');
+            if (!redirect.startsWith('/')) redirect = '/' + redirect;
+            window.location.replace(redirect);
+          }
         } else {
           this.clearSession();
-          const isProtected = window.location.pathname.includes('dashboard') || window.location.pathname.includes('invoice-details');
+          const isProtected = window.location.pathname.includes('dashboard') || window.location.pathname.includes('invoice-details') || window.location.pathname.includes('client-details');
           if (isProtected) {
+            const redirectTarget = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
             if (window.router && typeof window.router.navigate === 'function') {
-              window.router.navigate('/login?redirect=' + encodeURIComponent(window.location.pathname));
+              window.router.navigate(redirectTarget);
             } else {
-              window.location.replace('/login?redirect=' + encodeURIComponent(window.location.pathname));
+              window.location.replace(redirectTarget);
             }
           }
         }
@@ -589,11 +597,8 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
     } else if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
       google.accounts.id.prompt();
     } else {
-      if (window.showToast) {
-        window.showToast('Google OAuth is initializing. Please configure your Client ID or use Email/Password to sign in.', 'warning');
-      } else {
-        alert('Google OAuth is initializing. Please configure your Client ID or use Email/Password to sign in.');
-      }
+      // Direct server-side Google OAuth 2.0 flow
+      window.location.href = '/api/auth/google/login';
     }
   };
 

@@ -24,240 +24,200 @@
 </head>
 <body class="saas-body">
 
-  <div class="saas-shell" id="saasAppShell">
-
-    <!-- ==================================================================== -->
-    <!-- 1. DESKTOP LEFT SIDEBAR (240px wide)                                 -->
-    <!-- ==================================================================== -->
-    <aside class="saas-sidebar" id="saasSidebar">
-      <!-- Brand Logo Lockup -->
-      <a href="/dashboard" class="saas-sidebar-brand" title="Invoice-Gen.net Workspace">
-        <div class="saas-sidebar-brand-logo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-          </svg>
-        </div>
-        <div class="saas-sidebar-brand-name">
-          Invoice-Gen<span class="accent-dot">.net</span>
-        </div>
+  <!-- ==================================================================== -->
+  <!-- 1. UNIVERSAL TOP APPLICATION HEADER                                 -->
+  <!-- ==================================================================== -->
+  <header class="saas-top-header" id="mainHeader">
+    <div class="saas-header-container">
+      <!-- Left: Brand Lockup -->
+      <a href="/dashboard" class="saas-brand-wrap" title="Invoice-Gen.net Workspace">
+        <img src="/assets/icons/logo.svg?v=8.0" alt="Invoice-Gen.net Logo" class="saas-brand-logo-img" width="32" height="32">
+        <span class="saas-brand-title">Invoice-Gen<span class="accent-dot">.net</span></span>
       </a>
 
-      <!-- Primary Navigation Links -->
-      <nav class="saas-sidebar-nav" aria-label="Main SaaS navigation">
-        <button type="button" class="saas-nav-item active" data-tab="overview" id="sideNavOverview">
+      <!-- Center: Main Workspace Navigation -->
+      <nav class="saas-top-nav" aria-label="Authenticated workspace navigation">
+        <button type="button" class="saas-nav-item active" data-tab="overview" id="navItemOverview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <span>Dashboard</span>
         </button>
-        <button type="button" class="saas-nav-item" data-tab="invoices" id="sideNavInvoices">
+        <button type="button" class="saas-nav-item" data-tab="invoices" id="navItemInvoices">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
           <span>Invoices</span>
-          <span class="saas-nav-badge" id="sideBadgeInvoices">-</span>
         </button>
-        <button type="button" class="saas-nav-item" data-tab="clients" id="sideNavClients">
+        <button type="button" class="saas-nav-item" data-tab="clients" id="navItemClients">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           <span>Clients</span>
-          <span class="saas-nav-badge" id="sideBadgeClients">-</span>
         </button>
-        <button type="button" class="saas-nav-item" data-tab="templates" id="sideNavTemplates">
+        <a href="/templates" class="saas-nav-item" id="navItemTemplates">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
           <span>Templates</span>
-        </button>
-        <a href="/tools" class="saas-nav-item" id="sideNavTools">
+        </a>
+        <a href="/tools" class="saas-nav-item" id="navItemTools">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
           <span>Tools</span>
         </a>
-        <button type="button" class="saas-nav-item" data-tab="payments" id="sideNavPayments">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-          <span>Payments</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="files" id="sideNavFiles">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-          <span>Files</span>
-        </button>
-
-        <div class="saas-sidebar-divider"></div>
-
-        <button type="button" class="saas-nav-item" data-tab="billing" id="sideNavBilling">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg>
-          <span>Billing</span>
-        </button>
       </nav>
 
-      <!-- Bottom: Settings, Help & User Profile -->
-      <div class="saas-sidebar-footer">
-        <button type="button" class="saas-nav-item" data-tab="settings" id="sideNavSettings">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          <span>Settings</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="help" id="sideNavHelp">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          <span>Help</span>
+      <!-- Right: Search, Notifications, Language, Avatar -->
+      <div class="saas-header-actions">
+        <!-- Global Search Button -->
+        <button type="button" class="saas-header-search-btn" id="btnTopbarSearch" title="Global Search (Ctrl+K)" aria-label="Global Search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span class="search-text">Search...</span>
+          <kbd class="search-kbd">⌘K</kbd>
         </button>
 
-        <div class="saas-user-capsule" id="sidebarUserCapsule">
-          <div class="saas-user-avatar" id="sidebarUserAvatar">U</div>
-          <div class="saas-user-meta">
-            <div class="saas-user-name" id="sidebarUserName">User</div>
-            <div class="saas-user-role" id="sidebarUserTier">Free Forever</div>
-          </div>
-          <button type="button" class="saas-user-logout-btn" id="btnSidebarLogout" title="Log Out" aria-label="Log Out">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        <!-- Notifications Bell & Dropdown -->
+        <div class="saas-header-notif-wrap" style="position: relative;">
+          <button type="button" class="saas-icon-btn" id="btnTopbarNotif" title="Notifications" aria-label="Notifications">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="saas-badge-dot" id="topbarNotifDot" style="display: none;"></span>
           </button>
+          <div class="saas-dropdown-menu" id="notifDropdown">
+            <div class="saas-dropdown-header">
+              <span class="saas-dropdown-title">Notifications</span>
+              <button type="button" class="saas-dropdown-btn-link" id="btnMarkAllNotifsRead">Mark all read</button>
+            </div>
+            <div class="saas-notif-list" id="notifDropdownList">
+              <div style="padding: 20px; text-align: center; color: #64748b; font-size: 0.8125rem;">No unread notifications</div>
+            </div>
+          </div>
         </div>
+
+        <!-- Language Selector -->
+        <div class="lang-switcher-container"></div>
+
+        <!-- User Avatar Dropdown -->
+        <div class="saas-user-dropdown-wrap" style="position: relative;">
+          <button type="button" class="saas-user-avatar-btn" id="topbarUserAvatar" aria-haspopup="true" aria-expanded="false" title="Account menu">
+            <span class="avatar-initial" id="avatarInitialText">U</span>
+          </button>
+          <div class="saas-dropdown-menu saas-user-dropdown" id="userMenuDropdown" role="menu">
+            <div class="saas-user-dropdown-info">
+              <div class="user-menu-name" id="menuUserName">User</div>
+              <div class="user-menu-email" id="menuUserEmail">user@example.com</div>
+            </div>
+            <div class="user-menu-links" style="padding: 6px 0;">
+              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('settings')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                <span>Account Settings</span>
+              </button>
+              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('business')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Business Profile</span>
+              </button>
+              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('billing')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg>
+                <span>Billing &amp; Subscription</span>
+              </button>
+              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('payments')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                <span>Payments Ledger</span>
+              </button>
+              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('files')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                <span>Cloud Files</span>
+              </button>
+              <a href="/help" class="saas-dropdown-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <span>Help &amp; Support</span>
+              </a>
+              <div class="saas-dropdown-divider" style="height: 1px; background: #e2e8f0; margin: 4px 0;"></div>
+              <button type="button" class="saas-dropdown-item danger" id="btnMenuLogout">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" class="saas-mobile-menu-btn" id="btnMobileMenuToggle" aria-label="Toggle navigation menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
       </div>
-    </aside>
+    </div>
+  </header>
 
-    <!-- ==================================================================== -->
-    <!-- 2. MOBILE APP HEADER & SLIDE-IN DRAWER (<= 1024px)                   -->
-    <!-- ==================================================================== -->
-    <header class="saas-mobile-header" id="mobileAppHeader">
-      <button type="button" class="saas-mobile-menu-btn" id="btnMobileMenuToggle" aria-label="Open Navigation Menu">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-      </button>
+  <!-- ==================================================================== -->
+  <!-- 2. MOBILE SLIDE-IN DRAWER & BACKDROP                                 -->
+  <!-- ==================================================================== -->
+  <div class="saas-drawer-backdrop" id="mobileDrawerBackdrop"></div>
 
-      <a href="/dashboard" class="saas-sidebar-brand" style="border:none; padding:0;">
-        <div class="saas-sidebar-brand-name">
-          Invoice-Gen<span class="accent-dot">.net</span>
-        </div>
+  <div class="saas-mobile-drawer" id="mobileDrawer">
+    <div class="saas-drawer-header">
+      <a href="/dashboard" class="saas-brand-wrap">
+        <img src="/assets/icons/logo.svg?v=8.0" alt="Logo" width="28" height="28">
+        <span class="saas-brand-title">Invoice-Gen<span class="accent-dot">.net</span></span>
       </a>
-
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button type="button" class="saas-icon-btn" id="btnMobileSearchTrigger" aria-label="Search" style="width:36px; height:36px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <div class="saas-user-avatar" id="mobileUserAvatar" style="width:32px; height:32px; cursor:pointer;">U</div>
-      </div>
-    </header>
-
-    <!-- Mobile Drawer Backdrop -->
-    <div class="saas-drawer-backdrop" id="mobileDrawerBackdrop"></div>
-
-    <!-- Mobile Drawer Content -->
-    <div class="saas-mobile-drawer" id="mobileDrawer">
-      <div class="saas-drawer-header">
-        <div class="saas-sidebar-brand-name">
-          Invoice-Gen<span class="accent-dot">.net</span>
-        </div>
-        <button type="button" class="saas-mobile-menu-btn" id="btnMobileDrawerClose" aria-label="Close menu" style="width:36px; height:36px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-
-      <nav class="saas-drawer-nav">
-        <button type="button" class="saas-nav-item active" data-tab="overview">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span>Dashboard</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="invoices">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-          <span>Invoices</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="clients">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-          <span>Clients</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="templates">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
-          <span>Templates</span>
-        </button>
-        <a href="/tools" class="saas-nav-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-          <span>Tools</span>
-        </a>
-        <button type="button" class="saas-nav-item" data-tab="payments">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-          <span>Payments</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="files">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-          <span>Files</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="billing">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path></svg>
-          <span>Billing</span>
-        </button>
-
-        <div class="saas-sidebar-divider"></div>
-
-        <button type="button" class="saas-nav-item" data-tab="settings">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          <span>Settings</span>
-        </button>
-        <button type="button" class="saas-nav-item" data-tab="help">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          <span>Help</span>
-        </button>
-        <button type="button" class="saas-nav-item" id="btnMobileLogout" style="color: #ef4444;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          <span>Logout</span>
-        </button>
-      </nav>
+      <button type="button" class="saas-drawer-close-btn" id="btnMobileDrawerClose" aria-label="Close menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
     </div>
 
-    <!-- ==================================================================== -->
-    <!-- 3. MAIN WORKSPACE VIEWPORT                                           -->
-    <!-- ==================================================================== -->
-    <div class="saas-main-viewport" id="saasMainViewport">
+    <nav class="saas-drawer-nav" aria-label="Mobile workspace navigation">
+      <button type="button" class="saas-drawer-link active" data-tab="overview">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Dashboard</span>
+      </button>
+      <button type="button" class="saas-drawer-link" data-tab="invoices">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <span>Invoices</span>
+      </button>
+      <button type="button" class="saas-drawer-link" data-tab="clients">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>Clients</span>
+      </button>
+      <a href="/templates" class="saas-drawer-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
+        <span>Templates</span>
+      </a>
+      <a href="/tools" class="saas-drawer-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        <span>Tools</span>
+      </a>
+      <button type="button" class="saas-drawer-link" data-tab="payments">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        <span>Payments</span>
+      </button>
+      <button type="button" class="saas-drawer-link" data-tab="files">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+        <span>Files</span>
+      </button>
 
-      <!-- Desktop Topbar -->
-      <header class="saas-topbar" id="saasTopbar">
-        <div class="saas-topbar-title" id="saasTopbarTitle">Dashboard</div>
+      <div class="saas-drawer-divider" style="height: 1px; background: #e2e8f0; margin: 8px 12px;"></div>
 
-        <div class="saas-topbar-actions">
-          <!-- Global Search Button -->
-          <button type="button" class="saas-search-trigger" id="btnTopbarSearch" title="Global Search (Ctrl+K)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <span>Search invoices, clients, tools...</span>
-            <kbd>⌘K</kbd>
-          </button>
+      <button type="button" class="saas-drawer-link" data-tab="business">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        <span>Business Profile</span>
+      </button>
+      <button type="button" class="saas-drawer-link" data-tab="billing">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path></svg>
+        <span>Billing &amp; Subscription</span>
+      </button>
+      <button type="button" class="saas-drawer-link" data-tab="settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span>Settings</span>
+      </button>
+      <a href="/help" class="saas-drawer-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        <span>Help</span>
+      </a>
 
-          <!-- Notifications Bell & Dropdown -->
-          <div style="position: relative;">
-            <button type="button" class="saas-icon-btn" id="btnTopbarNotif" title="Notifications" aria-label="Notifications">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-              <span class="saas-badge-dot" id="topbarNotifDot" style="display: none;"></span>
-            </button>
+      <div class="saas-drawer-divider" style="height: 1px; background: #e2e8f0; margin: 8px 12px;"></div>
 
-            <!-- Notifications Dropdown -->
-            <div class="saas-dropdown-menu" id="notifDropdown">
-              <div class="saas-dropdown-header">
-                <span class="saas-dropdown-title">Notifications</span>
-                <button type="button" class="saas-dropdown-btn-link" id="btnMarkAllNotifsRead">Mark all as read</button>
-              </div>
-              <div class="saas-notif-list" id="notifDropdownList">
-                <div style="padding: 20px; text-align: center; color: #64748b; font-size: 0.8125rem;">No unread notifications</div>
-              </div>
-            </div>
-          </div>
+      <button type="button" class="saas-drawer-link danger" id="btnMobileDrawerLogout" style="color: #ef4444;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        <span>Log Out</span>
+      </button>
+    </nav>
+  </div>
 
-          <!-- Language Selector -->
-          <div class="lang-switcher-container"></div>
-
-          <!-- User Avatar Dropdown -->
-          <div style="position: relative;">
-            <div class="saas-user-avatar" id="topbarUserAvatar" style="cursor: pointer;" title="User menu">U</div>
-            <div class="saas-dropdown-menu saas-user-dropdown" id="userMenuDropdown">
-              <div class="saas-user-dropdown-info">
-                <div style="font-weight: 700; color: #0f172a;" id="menuUserName">User</div>
-                <div style="font-size: 0.75rem; color: #64748b;" id="menuUserEmail">user@example.com</div>
-              </div>
-              <div style="padding: 4px 0;">
-                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('settings')">Account Settings</button>
-                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('business')">Business Profile</button>
-                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('billing')">Billing &amp; Subscription</button>
-                <div class="saas-sidebar-divider" style="margin: 4px 0;"></div>
-                <button type="button" class="saas-dropdown-item danger" id="btnMenuLogout">Sign Out</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- Main Scrollable Content Body -->
-      <main class="saas-content-body" id="saasContentBody">
+  <!-- ==================================================================== -->
+  <!-- 3. MAIN WORKSPACE CONTAINER (Centered, Max-Width 1240px)             -->
+  <!-- ==================================================================== -->
+  <main class="saas-main-container" id="saasContentBody">
 
         <!-- ============================================================= -->
         <!-- ============================================================= -->
@@ -1118,8 +1078,6 @@
         </div>
 
       </main>
-    </div>
-  </div>
 
   <!-- ==================================================================== -->
   <!-- MODAL: GLOBAL SEARCH (Ctrl+K)                                        -->
@@ -1390,8 +1348,8 @@
         const topbarTitle = document.getElementById('saasTopbarTitle');
         if (topbarTitle) topbarTitle.textContent = tabTitleMap[target] || 'Dashboard';
 
-        // Update sidebar links
-        document.querySelectorAll('.saas-nav-item').forEach(btn => {
+        // Update top nav and mobile drawer links
+        document.querySelectorAll('.saas-nav-item, .saas-drawer-link').forEach(btn => {
           const isSelected = btn.dataset.tab === target || (target === 'business' && btn.dataset.tab === 'settings');
           btn.classList.toggle('active', isSelected);
         });
@@ -1445,8 +1403,8 @@
       window.switchWorkspaceTab = switchWorkspaceTab;
       window.switchTab = switchWorkspaceTab;
 
-      // Attach click events to all nav buttons
-      document.querySelectorAll('.saas-nav-item[data-tab]').forEach(btn => {
+      // Attach click events to all nav buttons (topbar and drawer)
+      document.querySelectorAll('.saas-nav-item[data-tab], .saas-drawer-link[data-tab]').forEach(btn => {
         btn.addEventListener('click', () => switchWorkspaceTab(btn.dataset.tab));
       });
 
@@ -2623,25 +2581,24 @@
         const firstName = user.name ? user.name.split(' ')[0] : 'User';
         setContextualGreeting(firstName);
 
-        document.getElementById('sidebarUserName').textContent = user.name || 'User';
-        document.getElementById('sidebarUserTier').textContent = user.plan || 'Free Forever';
-        document.getElementById('menuUserName').textContent = user.name || 'User';
-        document.getElementById('menuUserEmail').textContent = user.email || '';
+        const sbName = document.getElementById('sidebarUserName');
+        if (sbName) sbName.textContent = user.name || 'User';
+        const sbTier = document.getElementById('sidebarUserTier');
+        if (sbTier) sbTier.textContent = user.plan || 'Free Forever';
+        const menuName = document.getElementById('menuUserName');
+        if (menuName) menuName.textContent = user.name || 'User';
+        const menuEmail = document.getElementById('menuUserEmail');
+        if (menuEmail) menuEmail.textContent = user.email || '';
 
         const initial = (firstName || 'U').charAt(0).toUpperCase();
-        const sideAvatar = document.getElementById('sidebarUserAvatar');
         const topAvatar = document.getElementById('topbarUserAvatar');
-        const mobAvatar = document.getElementById('mobileUserAvatar');
-
-        [sideAvatar, topAvatar, mobAvatar].forEach(box => {
-          if (box) {
-            if (user.avatar) {
-              box.innerHTML = `<img src="${user.avatar}" alt="${user.name}">`;
-            } else {
-              box.textContent = initial;
-            }
+        if (topAvatar) {
+          if (user.avatar) {
+            topAvatar.innerHTML = `<img src="${user.avatar}" alt="${user.name}">`;
+          } else {
+            topAvatar.innerHTML = `<span class="avatar-initial" id="avatarInitialText">${initial}</span>`;
           }
-        });
+        }
       }
 
       function initAuth() {
@@ -2705,12 +2662,13 @@
           window.Auth.logout();
         } else {
           fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
-            .finally(() => window.location.replace('login.html'));
+            .finally(() => window.location.replace('/login'));
         }
       };
 
       document.getElementById('btnSidebarLogout')?.addEventListener('click', doLogout);
       document.getElementById('btnMobileLogout')?.addEventListener('click', doLogout);
+      document.getElementById('btnMobileDrawerLogout')?.addEventListener('click', doLogout);
       document.getElementById('btnMenuLogout')?.addEventListener('click', doLogout);
 
       initAuth();

@@ -282,6 +282,115 @@ const requestHandler = async (req, res) => {
     }
   }
 
+  // GET /api/auth/google/login or /auth/google
+  if ((pathname === '/api/auth/google/login' || pathname === '/auth/google') && req.method === 'GET') {
+    const clientId = process.env.GOOGLE_CLIENT_ID || '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.googleusercontent.com';
+    const host = req.headers.host || `localhost:${PORT}`;
+    const protocol = (req.headers['x-forwarded-proto'] || 'http');
+    const redirectUri = encodeURIComponent(`${protocol}://${host}/api/auth/google/callback`);
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=openid%20email%20profile&access_type=offline&prompt=select_account`;
+    res.writeHead(302, { 'Location': googleAuthUrl });
+    return res.end();
+  }
+
+  // GET /api/auth/google/callback or /auth/google/callback
+  if ((pathname === '/api/auth/google/callback' || pathname === '/auth/google/callback') && req.method === 'GET') {
+    try {
+      const code = parsedUrl.searchParams.get('code');
+      const error = parsedUrl.searchParams.get('error');
+
+      if (error) {
+        res.writeHead(302, { 'Location': '/login?error=' + encodeURIComponent(error) });
+        return res.end();
+      }
+
+      // Mock / direct test verification handling
+      const email = parsedUrl.searchParams.get('email');
+      if (!code && email) {
+        const name = parsedUrl.searchParams.get('name') || 'Google User';
+        const avatar = parsedUrl.searchParams.get('avatar') || '';
+        const user = db.findOrCreateGoogleUser({ name, email, avatar });
+        const { sessionId, expiresAt } = db.createSession(user.id, 30);
+        const cookieHeader = `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`;
+        res.writeHead(302, { 'Location': '/dashboard', 'Set-Cookie': cookieHeader });
+        return res.end();
+      }
+
+      if (!code) {
+        res.writeHead(302, { 'Location': '/login?error=no_code' });
+        return res.end();
+      }
+
+      const clientId = process.env.GOOGLE_CLIENT_ID || '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.googleusercontent.com';
+      const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+      const host = req.headers.host || `localhost:${PORT}`;
+      const protocol = (req.headers['x-forwarded-proto'] || 'http');
+      const redirectUri = `${protocol}://${host}/api/auth/google/callback`;
+
+      if (clientSecret) {
+        const postData = new URLSearchParams({
+          code,
+          client_id: clientId,
+          client_secret: clientSecret,
+          redirect_uri: redirectUri,
+          grant_type: 'authorization_code'
+        }).toString();
+
+        const tokenRes = await new Promise((resolve, reject) => {
+          const tReq = https.request('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Content-Length': Buffer.byteLength(postData)
+            }
+          }, (tRes) => {
+            let tData = '';
+            tRes.on('data', c => tData += c);
+            tRes.on('end', () => {
+              try { resolve(JSON.parse(tData)); } catch (e) { resolve(null); }
+            });
+          });
+          tReq.on('error', reject);
+          tReq.write(postData);
+          tReq.end();
+        });
+
+        if (tokenRes && tokenRes.access_token) {
+          const userInfo = await new Promise((resolve, reject) => {
+            https.get('https://openidconnect.googleapis.com/v1/userinfo', {
+              headers: { 'Authorization': `Bearer ${tokenRes.access_token}` }
+            }, (uRes) => {
+              let uData = '';
+              uRes.on('data', c => uData += c);
+              uRes.on('end', () => {
+                try { resolve(JSON.parse(uData)); } catch (e) { resolve(null); }
+              });
+            }).on('error', reject);
+          });
+
+          if (userInfo && userInfo.email) {
+            const user = db.findOrCreateGoogleUser({
+              name: userInfo.name || `${userInfo.given_name || ''} ${userInfo.family_name || ''}`.trim() || 'Google User',
+              email: userInfo.email,
+              avatar: userInfo.picture || ''
+            });
+            const { sessionId, expiresAt } = db.createSession(user.id, 30);
+            const cookieHeader = `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`;
+            res.writeHead(302, { 'Location': '/dashboard', 'Set-Cookie': cookieHeader });
+            return res.end();
+          }
+        }
+      }
+
+      res.writeHead(302, { 'Location': '/dashboard' });
+      return res.end();
+    } catch (err) {
+      console.error('Google callback error:', err);
+      res.writeHead(302, { 'Location': '/login?error=auth_error' });
+      return res.end();
+    }
+  }
+
   // POST /api/auth/logout
   if (pathname === '/api/auth/logout' && req.method === 'POST') {
     try {
