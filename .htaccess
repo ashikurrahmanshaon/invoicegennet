@@ -28,7 +28,31 @@ DirectoryIndex index.html
   RewriteRule ^sitemap\.xml$ - [L]
   RewriteRule ^sitemap$ sitemap.html [L]
 
-  # 1d. Clean HTML URLs internal rewrite
+  # 1c. Tool Route Aliases
+  RewriteRule ^tools/invoice-generator/?$ index.html [L]
+  RewriteRule ^tools/pdf-invoice-generator/?$ pdf-invoice-generator.html [L]
+  RewriteRule ^tools/gst-tax-invoice/?$ gst-tax-invoice.html [L]
+  RewriteRule ^tools/freelancer-invoice/?$ invoice-generator-for-freelancers.html [L]
+  RewriteRule ^tools/invoice-number-generator/?$ invoice-number-generator.html [L]
+  RewriteRule ^tools/pdf-to-jpg/?$ pdf-to-jpg.html [L]
+  RewriteRule ^tools/jpg-to-pdf/?$ jpg-to-pdf.html [L]
+  RewriteRule ^tools/image-compressor/?$ image-compressor.html [L]
+  RewriteRule ^tools/pdf-merger/?$ pdf-merger.html [L]
+  RewriteRule ^tools/pdf-splitter/?$ pdf-splitter.html [L]
+  RewriteRule ^tools/tax-calculator/?$ tax-calculator.html [L]
+  RewriteRule ^tools/payment-calculator/?$ payment-calculator.html [L]
+  RewriteRule ^tools/due-date-calculator/?$ due-date-calculator.html [L]
+  RewriteRule ^tools/currency-converter/?$ currency-converter.html [L]
+  RewriteRule ^tools/online-payments/?$ payments.html [L]
+  RewriteRule ^tools/payment-link/?$ payment-link.html [L]
+  RewriteRule ^cloud/?$ files.html [L]
+
+  # 1d. Fallback asset rewrites for subpaths
+  RewriteRule ^tools/css/(.*)$ css/$1 [L]
+  RewriteRule ^tools/js/(.*)$ js/$1 [L]
+  RewriteRule ^tools/assets/(.*)$ assets/$1 [L]
+
+  # 1e. Clean HTML URLs internal rewrite
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}\.html -f
   RewriteRule ^(.*)$ $1.html [L]

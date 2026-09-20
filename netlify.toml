@@ -43,6 +43,108 @@
   status = 301
   force = true
 
+# Asset fallbacks for subpaths
+[[redirects]]
+  from = "/tools/css/*"
+  to = "/css/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/tools/js/*"
+  to = "/js/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/tools/assets/*"
+  to = "/assets/:splat"
+  status = 200
+
+# Tool route rewrites
+[[redirects]]
+  from = "/tools/invoice-generator"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/pdf-invoice-generator"
+  to = "/pdf-invoice-generator.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/gst-tax-invoice"
+  to = "/gst-tax-invoice.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/freelancer-invoice"
+  to = "/invoice-generator-for-freelancers.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/invoice-number-generator"
+  to = "/invoice-number-generator.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/pdf-to-jpg"
+  to = "/pdf-to-jpg.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/jpg-to-pdf"
+  to = "/jpg-to-pdf.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/image-compressor"
+  to = "/image-compressor.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/pdf-merger"
+  to = "/pdf-merger.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/pdf-splitter"
+  to = "/pdf-splitter.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/tax-calculator"
+  to = "/tax-calculator.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/payment-calculator"
+  to = "/payment-calculator.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/due-date-calculator"
+  to = "/due-date-calculator.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/currency-converter"
+  to = "/currency-converter.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/online-payments"
+  to = "/payments.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/payment-link"
+  to = "/payment-link.html"
+  status = 200
+
+[[redirects]]
+  from = "/cloud"
+  to = "/files.html"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/404.html"
