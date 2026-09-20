@@ -2178,6 +2178,291 @@ textarea:disabled {
   line-height: 1.7;
 }
 
+/* ==========================================================================
+   HELP CENTER & DOCUMENTATION SYSTEM
+   ========================================================================== */
+.help-search-box-wrap {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto 36px;
+  width: 100%;
+}
+
+.help-search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: color 0.15s ease;
+}
+
+.help-search-input {
+  width: 100%;
+  height: 50px;
+  padding: 0 44px 0 48px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.help-search-input:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+}
+
+.help-search-box-wrap:focus-within .help-search-icon {
+  color: #059669;
+}
+
+.help-search-clear-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.help-search-clear-btn:hover {
+  color: #0f172a;
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 52px;
+}
+
+@media (max-width: 1024px) {
+  .help-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .help-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+}
+
+.help-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  box-sizing: border-box;
+}
+
+.help-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.06);
+  transform: translateY(-2px);
+}
+
+.help-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.help-card-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 10px;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #bbf7d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.help-card-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.help-card-title {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+.help-card-desc {
+  font-size: 0.9125rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.help-card-links {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.help-card-links li {
+  margin: 0;
+  padding: 0;
+}
+
+.help-card-link {
+  font-size: 0.875rem;
+  color: #059669;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.help-card-link:hover {
+  color: #047857;
+  text-decoration: underline;
+}
+
+.help-card-link svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.help-card-link:hover svg {
+  transform: translateX(3px);
+}
+
+.help-empty-state {
+  display: none;
+  text-align: center;
+  padding: 48px 24px;
+  background: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  margin-bottom: 48px;
+}
+
+.help-empty-state.active {
+  display: block;
+}
+
+.help-empty-icon {
+  width: 44px;
+  height: 44px;
+  color: #94a3b8;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-empty-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px;
+}
+
+.help-empty-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 16px;
+}
+
+.help-empty-reset-btn {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #bbf7d0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.help-empty-reset-btn:hover {
+  background: #d1fae5;
+}
+
+.popular-topics {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 32px;
+  margin-bottom: 48px;
+}
+
+.popular-topics h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 0;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.contact-banner {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .popular-topics {
+    padding: 22px 18px;
+  }
+  .contact-banner {
+    padding: 22px 18px;
+  }
+}
+
+
 .accordion-panel-inner p {
   margin: 0 0 10px;
 }
@@ -3640,3 +3925,134 @@ td.amount-col,
   margin-bottom: 20px;
   line-height: 1.5;
 }
+
+/* Accessibility Screen Reader Utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ==========================================================================
+   MOBILE-FIRST ACCESSIBILITY, TOUCH TARGETS & ERGONOMICS (<= 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Strict 44px+ Touch Target Minimum for all mobile buttons & actions */
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline,
+  .btn-ghost,
+  .btn-dark,
+  .btn-danger,
+  .btn-sm,
+  .btn-icon,
+  .btn-table-action,
+  .saas-nav-item,
+  .mobile-nav-link,
+  .saas-mobile-menu-btn,
+  .btn-mobile-nav-toggle,
+  .btn-mobile-avatar,
+  .tab-btn,
+  .dashboard-tab-btn {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    box-sizing: border-box;
+  }
+
+  /* Primary CTAs get comfortable 46-48px targets */
+  .btn-primary,
+  .btn-cta-primary,
+  .btn-auth-submit,
+  .btn-dashboard-cta,
+  .btn-mobile-action-primary {
+    min-height: 48px !important;
+  }
+
+  /* Responsive Typography Scale for Mobile Viewports */
+  h1, .h1, .page-title, .hero-title {
+    font-size: clamp(1.75rem, 6vw, 2.1rem) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.025em;
+  }
+
+  h2, .h2, .section-title {
+    font-size: clamp(1.35rem, 5vw, 1.65rem) !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.02em;
+  }
+
+  h3, .h3 {
+    font-size: clamp(1.1rem, 4vw, 1.25rem) !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Responsive Data Tables -> Accessible Mobile Card View */
+  .table-cards-mobile thead {
+    display: none !important;
+  }
+
+  .table-cards-mobile tbody,
+  .table-cards-mobile tr,
+  .table-cards-mobile td {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .table-cards-mobile tr {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  }
+
+  .table-cards-mobile td {
+    padding: 6px 0 !important;
+    border: none !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 0.875rem !important;
+  }
+
+  .table-cards-mobile td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #64748b;
+    font-size: 0.8125rem;
+    margin-right: 12px;
+  }
+
+  /* Mobile Modals & Dialogs (Near-Full-Width Bottom-Sheet UX) */
+  .modal-dialog,
+  .saas-modal-card {
+    width: calc(100% - 24px) !important;
+    max-width: 540px !important;
+    margin: auto 12px 12px 12px !important;
+    border-radius: 16px !important;
+    max-height: calc(100vh - 32px - env(safe-area-inset-bottom, 0px)) !important;
+    overflow-y: auto !important;
+    box-sizing: border-box;
+  }
+
+  /* Mobile Toast Safe-Area Inset */
+  .toast-container,
+  .saas-toast-container,
+  #toastBox {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 16px !important;
+    right: 16px !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+}
+

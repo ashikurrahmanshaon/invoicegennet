@@ -199,9 +199,9 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         window.showToast('Signed out successfully', 'info');
       }
       if (window.router && typeof window.router.navigate === 'function') {
-        window.router.navigate('index.html');
+        window.router.navigate('/');
       } else {
-        window.location.replace('index.html');
+        window.location.replace('/');
       }
     },
 
@@ -226,7 +226,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
             window.showToast(`Welcome back, ${data.user.name}!`, 'success');
           }
           const pendingTpl = sessionStorage.getItem('pending_template');
-          const targetUrl = pendingTpl ? `index.html?template=${pendingTpl}` : 'dashboard.html';
+          const targetUrl = pendingTpl ? `/?template=${pendingTpl}` : '/dashboard';
           if (pendingTpl) sessionStorage.removeItem('pending_template');
           if (window.router && typeof window.router.navigate === 'function') {
             window.router.navigate(targetUrl);
@@ -324,7 +324,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         if (!btnDashboard) {
           btnDashboard = document.createElement('a');
           btnDashboard.id = 'btnHeaderDashboard';
-          btnDashboard.href = 'dashboard.html';
+          btnDashboard.href = '/dashboard';
           btnDashboard.className = 'header-auth-dashboard';
           btnDashboard.textContent = 'Dashboard';
           if (btnSignup && btnSignup.parentNode) {
@@ -352,28 +352,28 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
                 <div class="user-menu-name">${this.user.name || 'User'}</div>
                 <div class="user-menu-email">${this.user.email || ''}</div>
               </div>
-              <a href="dashboard.html#dashboard" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#dashboard" class="user-menu-link" role="menuitem">
                 <span>Dashboard Overview</span>
               </a>
-              <a href="dashboard.html#invoices" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#invoices" class="user-menu-link" role="menuitem">
                 <span>My Invoices</span>
               </a>
-              <a href="dashboard.html#clients" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#clients" class="user-menu-link" role="menuitem">
                 <span>Clients Directory</span>
               </a>
-              <a href="dashboard.html#business" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#business" class="user-menu-link" role="menuitem">
                 <span>Business Profile</span>
               </a>
-              <a href="dashboard.html#billing" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#billing" class="user-menu-link" role="menuitem">
                 <span>Billing &amp; Subscription</span>
               </a>
-              <a href="dashboard.html#settings" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#settings" class="user-menu-link" role="menuitem">
                 <span>Account Settings</span>
               </a>
-              <a href="dashboard.html#security" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#security" class="user-menu-link" role="menuitem">
                 <span>Security &amp; Password</span>
               </a>
-              <a href="dashboard.html#help" class="user-menu-link" role="menuitem">
+              <a href="/dashboard#help" class="user-menu-link" role="menuitem">
                 <span>Help &amp; Support</span>
               </a>
               <div class="user-menu-divider"></div>
@@ -413,7 +413,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         // Mobile Avatar Button sync
         const mobileAvatar = document.getElementById('mobileHeaderAvatarBtn');
         if (mobileAvatar) {
-          mobileAvatar.href = 'dashboard.html#settings';
+          mobileAvatar.href = '/dashboard#settings';
           mobileAvatar.innerHTML = this.user.avatar
             ? `<img src="${this.user.avatar}" alt="${this.user.name}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">`
             : `<span style="width:32px; height:32px; border-radius:50%; background:#10b981; color:#ffffff; font-weight:700; font-size:0.875rem; display:flex; align-items:center; justify-content:center;">${initial}</span>`;
@@ -462,15 +462,15 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
 
         const mobileAvatar = document.getElementById('mobileHeaderAvatarBtn');
         if (mobileAvatar) {
-          mobileAvatar.href = 'login.html';
+          mobileAvatar.href = '/login';
           mobileAvatar.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
         }
 
         const mobileAuth = document.querySelector('.mobile-nav-auth');
         if (mobileAuth) {
           mobileAuth.innerHTML = `
-            <a href="login.html" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Log In</a>
-            <a href="signup.html" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Sign Up Free</a>
+            <a href="/login" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Log In</a>
+            <a href="/signup" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Sign Up Free</a>
           `;
         }
       }
@@ -488,9 +488,9 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
           const isProtected = window.location.pathname.includes('dashboard') || window.location.pathname.includes('invoice-details');
           if (isProtected) {
             if (window.router && typeof window.router.navigate === 'function') {
-              window.router.navigate('login.html?redirect=' + encodeURIComponent(window.location.pathname));
+              window.router.navigate('/login?redirect=' + encodeURIComponent(window.location.pathname));
             } else {
-              window.location.replace('login.html?redirect=' + encodeURIComponent(window.location.pathname));
+              window.location.replace('/login?redirect=' + encodeURIComponent(window.location.pathname));
             }
           }
         }
@@ -726,7 +726,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         html += `<div class="search-category-title">Invoices (${invoices.length})</div>`;
         invoices.forEach(inv => {
           html += `
-            <a href="index.html?id=${inv.id}" class="search-row-item" onclick="window.closeGlobalSearch();">
+            <a href="/?id=${inv.id}" class="search-row-item" onclick="window.closeGlobalSearch();">
               <div class="search-row-main">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
                 <div>
@@ -744,7 +744,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         html += `<div class="search-category-title">Clients (${clients.length})</div>`;
         clients.forEach(c => {
           html += `
-            <a href="dashboard.html#clients" class="search-row-item" onclick="window.closeGlobalSearch();">
+            <a href="/dashboard#clients" class="search-row-item" onclick="window.closeGlobalSearch();">
               <div class="search-row-main">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <div>

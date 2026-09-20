@@ -244,6 +244,13 @@ db.exec(`
     created_at TEXT NOT NULL
   );
 
+  CREATE TABLE IF NOT EXISTS stripe_events (
+    id TEXT PRIMARY KEY,
+    type TEXT NOT NULL,
+    processed_at TEXT NOT NULL,
+    payload TEXT
+  );
+
   CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoices_user ON invoices(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
@@ -260,6 +267,7 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_invoice_payments_user ON invoice_payments(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoice_payments_invoice ON invoice_payments(invoice_id);
   CREATE INDEX IF NOT EXISTS idx_contact_messages_email ON contact_messages(email);
+  CREATE INDEX IF NOT EXISTS idx_stripe_events_type ON stripe_events(type);
 `);
 
 // Safe column migrations for users table
@@ -273,7 +281,14 @@ const userMigrations = [
   "ALTER TABLE users ADD COLUMN business_country TEXT DEFAULT ''",
   "ALTER TABLE users ADD COLUMN default_tax_rate REAL DEFAULT 0",
   "ALTER TABLE users ADD COLUMN plan TEXT DEFAULT 'Free Forever Tier'",
-  "ALTER TABLE users ADD COLUMN billing_cycle TEXT DEFAULT 'Monthly'"
+  "ALTER TABLE users ADD COLUMN billing_cycle TEXT DEFAULT 'Monthly'",
+  "ALTER TABLE users ADD COLUMN stripe_customer_id TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN stripe_subscription_id TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN subscription_status TEXT DEFAULT 'active'",
+  "ALTER TABLE users ADD COLUMN subscription_price_id TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN subscription_period_end TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN business_logo TEXT DEFAULT ''",
+  "ALTER TABLE users ADD COLUMN business_payment_info TEXT DEFAULT ''"
 ];
 for (const sql of userMigrations) {
   try { db.exec(sql); } catch (e) {}
@@ -409,6 +424,8 @@ function updateUserProfile(userId, profile) {
       default_tax_rate = COALESCE(?, default_tax_rate),
       plan = COALESCE(?, plan),
       billing_cycle = COALESCE(?, billing_cycle),
+      business_logo = COALESCE(?, business_logo),
+      business_payment_info = COALESCE(?, business_payment_info),
       updated_at = ?
     WHERE id = ?
   `);
@@ -433,6 +450,8 @@ function updateUserProfile(userId, profile) {
     profile.default_tax_rate !== undefined ? Number(profile.default_tax_rate) : null,
     profile.plan !== undefined ? profile.plan : null,
     profile.billing_cycle !== undefined ? profile.billing_cycle : null,
+    profile.business_logo !== undefined ? profile.business_logo : null,
+    profile.business_payment_info !== undefined ? profile.business_payment_info : null,
     now,
     userId
   );
@@ -525,6 +544,48 @@ function createInvoice(userId, data) {
     invoiceNumber = getNextInvoiceNumber(userId);
   }
 
+  // Calculate financials server-side if not explicitly provided
+  const items = Array.isArray(data.items) ? data.items : [];
+  let calculatedSubtotal = 0;
+  items.forEach(it => {
+    calculatedSubtotal += (Number(it.quantity || 0) * Number(it.rate || 0));
+  });
+
+  const subtotal = data.subtotal !== undefined 
+    ? Number(data.subtotal) 
+    : (data.totals?.subtotal !== undefined ? Number(data.totals.subtotal) : calculatedSubtotal);
+
+  const discountType = data.discountType || data.discount_type || 'percent';
+  const discountVal = Number(data.discountValue !== undefined ? data.discountValue : (data.discount_value || 0));
+  let calculatedDiscount = 0;
+  if (discountType === 'percent') {
+    calculatedDiscount = (subtotal * discountVal) / 100;
+  } else {
+    calculatedDiscount = discountVal;
+  }
+  const discountAmount = data.discountAmount !== undefined 
+    ? Number(data.discountAmount) 
+    : (data.totals?.discountAmount !== undefined ? Number(data.totals.discountAmount) : calculatedDiscount);
+
+  const taxable = Math.max(0, subtotal - discountAmount);
+  const taxRate = Number(data.taxRate !== undefined ? data.taxRate : (data.tax_rate || 0));
+  const calculatedTax = (taxable * taxRate) / 100;
+  const taxAmount = data.taxAmount !== undefined 
+    ? Number(data.taxAmount) 
+    : (data.totals?.taxAmount !== undefined ? Number(data.totals.taxAmount) : calculatedTax);
+
+  const shippingFee = Number(data.shippingFee !== undefined ? data.shippingFee : (data.shipping_fee || 0));
+  const calculatedTotal = taxable + taxAmount + shippingFee;
+  const total = data.total !== undefined 
+    ? Number(data.total) 
+    : (data.totals?.grandTotal !== undefined ? Number(data.totals.grandTotal) : calculatedTotal);
+
+  const amountPaid = Number(data.amountPaid !== undefined ? data.amountPaid : (data.amount_paid || 0));
+  const calculatedBalanceDue = Math.max(0, total - amountPaid);
+  const balanceDue = data.balanceDue !== undefined 
+    ? Number(data.balanceDue) 
+    : (data.totals?.balanceDue !== undefined ? Number(data.totals.balanceDue) : calculatedBalanceDue);
+
   const stmt = db.prepare(`
     INSERT INTO invoices (
       id, user_id, invoice_number, status, issue_date, due_date,
@@ -570,23 +631,22 @@ function createInvoice(userId, data) {
     data.shipTo?.name || data.ship_to_name || data.shipToName || '',
     data.shipTo?.address || data.ship_to_address || data.shipToAddress || '',
     data.notes || '',
-    Number(data.subtotal || data.totals?.subtotal || 0),
-    Number(data.taxRate || data.tax_rate || 0),
-    Number(data.taxAmount || data.totals?.taxAmount || 0),
-    data.discountType || data.discount_type || 'percent',
-    Number(data.discountValue || data.discount_value || 0),
-    Number(data.discountAmount || data.totals?.discountAmount || 0),
-    Number(data.shippingFee || data.shipping_fee || 0),
-    Number(data.amountPaid || data.amount_paid || 0),
-    Number(data.total || data.totals?.grandTotal || 0),
-    Number(data.balanceDue || data.totals?.balanceDue || 0),
+    subtotal,
+    taxRate,
+    taxAmount,
+    discountType,
+    discountVal,
+    discountAmount,
+    shippingFee,
+    amountPaid,
+    total,
+    balanceDue,
     data.template || 'emerald',
     now,
     now
   );
 
   // Insert items
-  const items = Array.isArray(data.items) ? data.items : [];
   const insertItem = db.prepare(`
     INSERT INTO invoice_items (
       id, invoice_id, item_order, description, subtext, quantity, rate, amount
@@ -621,7 +681,7 @@ function createInvoice(userId, data) {
       title: 'Invoice Created',
       message: `Invoice #${invoiceNumber} has been saved successfully.`,
       type: 'info',
-      link: 'dashboard.html#invoices'
+      link: '/dashboard#invoices'
     });
   } catch (e) {}
 
@@ -630,13 +690,54 @@ function createInvoice(userId, data) {
 
 function updateInvoice(userId, invoiceId, data) {
   // Security: Confirm ownership
-  const existing = db.prepare('SELECT id FROM invoices WHERE id = ? AND user_id = ?').get(invoiceId, userId);
+  const existing = db.prepare('SELECT * FROM invoices WHERE id = ? AND user_id = ?').get(invoiceId, userId);
   if (!existing) {
     throw new Error('Invoice not found or access denied.');
   }
 
   const now = new Date().toISOString();
   const invoiceNumber = data.number || data.invoice_number;
+
+  // Server-side financial calculations on update
+  let subtotal = data.subtotal !== undefined ? Number(data.subtotal) : (data.totals?.subtotal !== undefined ? Number(data.totals.subtotal) : null);
+  if (subtotal === null && Array.isArray(data.items)) {
+    subtotal = data.items.reduce((sum, it) => sum + (Number(it.quantity || 0) * Number(it.rate || 0)), 0);
+  }
+
+  const effectiveSubtotal = subtotal !== null ? subtotal : Number(existing.subtotal || 0);
+
+  const discountType = data.discountType || data.discount_type || existing.discount_type || 'percent';
+  const discountVal = data.discountValue !== undefined ? Number(data.discountValue) : (data.discount_value !== undefined ? Number(data.discount_value) : Number(existing.discount_value || 0));
+
+  let discountAmount = data.discountAmount !== undefined ? Number(data.discountAmount) : (data.totals?.discountAmount !== undefined ? Number(data.totals.discountAmount) : null);
+  if (discountAmount === null && (subtotal !== null || data.discountValue !== undefined || data.discount_value !== undefined)) {
+    discountAmount = discountType === 'percent' ? (effectiveSubtotal * discountVal) / 100 : discountVal;
+  }
+
+  const effectiveDiscountAmount = discountAmount !== null ? discountAmount : Number(existing.discount_amount || 0);
+  const taxable = Math.max(0, effectiveSubtotal - effectiveDiscountAmount);
+
+  const taxRate = data.taxRate !== undefined ? Number(data.taxRate) : (data.tax_rate !== undefined ? Number(data.tax_rate) : Number(existing.tax_rate || 0));
+  let taxAmount = data.taxAmount !== undefined ? Number(data.taxAmount) : (data.totals?.taxAmount !== undefined ? Number(data.totals.taxAmount) : null);
+  if (taxAmount === null && (subtotal !== null || data.taxRate !== undefined || data.tax_rate !== undefined)) {
+    taxAmount = (taxable * taxRate) / 100;
+  }
+
+  const effectiveTaxAmount = taxAmount !== null ? taxAmount : Number(existing.tax_amount || 0);
+  const shippingFee = data.shippingFee !== undefined ? Number(data.shippingFee) : (data.shipping_fee !== undefined ? Number(data.shipping_fee) : Number(existing.shipping_fee || 0));
+
+  let total = data.total !== undefined ? Number(data.total) : (data.totals?.grandTotal !== undefined ? Number(data.totals.grandTotal) : null);
+  if (total === null && (subtotal !== null || taxAmount !== null || discountAmount !== null || data.shippingFee !== undefined || data.shipping_fee !== undefined)) {
+    total = taxable + effectiveTaxAmount + shippingFee;
+  }
+
+  const effectiveTotal = total !== null ? total : Number(existing.total || 0);
+  const amountPaid = data.amountPaid !== undefined ? Number(data.amountPaid) : (data.amount_paid !== undefined ? Number(data.amount_paid) : Number(existing.amount_paid || 0));
+
+  let balanceDue = data.balanceDue !== undefined ? Number(data.balanceDue) : (data.totals?.balanceDue !== undefined ? Number(data.totals.balanceDue) : null);
+  if (balanceDue === null && (total !== null || data.amountPaid !== undefined || data.amount_paid !== undefined)) {
+    balanceDue = Math.max(0, effectiveTotal - amountPaid);
+  }
 
   const stmt = db.prepare(`
     UPDATE invoices SET
@@ -696,16 +797,16 @@ function updateInvoice(userId, invoiceId, data) {
     data.shipTo?.name || data.ship_to_name || null,
     data.shipTo?.address || data.ship_to_address || null,
     data.notes !== undefined ? data.notes : null,
-    data.subtotal !== undefined ? Number(data.subtotal) : (data.totals?.subtotal !== undefined ? Number(data.totals.subtotal) : null),
+    subtotal !== null ? subtotal : null,
     data.taxRate !== undefined ? Number(data.taxRate) : (data.tax_rate !== undefined ? Number(data.tax_rate) : null),
-    data.taxAmount !== undefined ? Number(data.taxAmount) : (data.totals?.taxAmount !== undefined ? Number(data.totals.taxAmount) : null),
+    taxAmount !== null ? taxAmount : null,
     data.discountType || data.discount_type || null,
     data.discountValue !== undefined ? Number(data.discountValue) : (data.discount_value !== undefined ? Number(data.discount_value) : null),
-    data.discountAmount !== undefined ? Number(data.discountAmount) : (data.totals?.discountAmount !== undefined ? Number(data.totals.discountAmount) : null),
+    discountAmount !== null ? discountAmount : null,
     data.shippingFee !== undefined ? Number(data.shippingFee) : (data.shipping_fee !== undefined ? Number(data.shipping_fee) : null),
     data.amountPaid !== undefined ? Number(data.amountPaid) : (data.amount_paid !== undefined ? Number(data.amount_paid) : null),
-    data.total !== undefined ? Number(data.total) : (data.totals?.grandTotal !== undefined ? Number(data.totals.grandTotal) : null),
-    data.balanceDue !== undefined ? Number(data.balanceDue) : (data.totals?.balanceDue !== undefined ? Number(data.totals.balanceDue) : null),
+    total !== null ? total : null,
+    balanceDue !== null ? balanceDue : null,
     data.template || null,
     now,
     invoiceId,
@@ -821,7 +922,7 @@ function deleteInvoice(userId, invoiceId) {
       title: 'Invoice Deleted',
       message: `Invoice #${existing.invoice_number} was permanently deleted.`,
       type: 'info',
-      link: 'dashboard.html#invoices'
+      link: '/dashboard#invoices'
     });
   } catch (e) {}
   return true;
@@ -833,7 +934,19 @@ function updateInvoiceStatus(userId, invoiceId, status) {
     throw new Error('Invalid invoice status.');
   }
   const now = new Date().toISOString();
-  const res = db.prepare('UPDATE invoices SET status = ?, updated_at = ? WHERE id = ? AND user_id = ?').run(status, now, invoiceId, userId);
+  let res;
+  if (status === 'paid') {
+    res = db.prepare(`
+      UPDATE invoices 
+      SET status = ?, 
+          amount_paid = total, 
+          balance_due = 0, 
+          updated_at = ? 
+      WHERE id = ? AND user_id = ?
+    `).run(status, now, invoiceId, userId);
+  } else {
+    res = db.prepare('UPDATE invoices SET status = ?, updated_at = ? WHERE id = ? AND user_id = ?').run(status, now, invoiceId, userId);
+  }
   if (res.changes === 0) {
     throw new Error('Invoice not found or access denied.');
   }
@@ -850,7 +963,7 @@ function updateInvoiceStatus(userId, invoiceId, status) {
         title: 'Payment Recorded',
         message: `Invoice #${inv.number} has been marked as Paid!`,
         type: 'success',
-        link: 'dashboard.html#invoices'
+        link: '/dashboard#invoices'
       });
     }
   } catch (e) {}
@@ -1317,15 +1430,32 @@ function getBillingSummary(userId) {
     LIMIT 20
   `).all(userId);
 
-  const nextRenewal = new Date(Date.now() + 26 * 24 * 60 * 60 * 1000);
-  const formattedRenewal = nextRenewal.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const rawPeriodEnd = user.subscription_period_end;
+  let formattedRenewal = 'N/A (Free Forever)';
+  if (rawPeriodEnd) {
+    try {
+      formattedRenewal = new Date(rawPeriodEnd).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {}
+  } else if (user.plan && !user.plan.toLowerCase().includes('free')) {
+    const nextRenewal = new Date(Date.now() + 26 * 24 * 60 * 60 * 1000);
+    formattedRenewal = nextRenewal.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  const isPro = user.plan && user.plan.toLowerCase().includes('pro');
+  const isBusiness = user.plan && user.plan.toLowerCase().includes('business');
+  const priceDisplay = isBusiness ? '$29.00 / month' : isPro ? '$12.00 / month' : '$0.00 / month';
+
+  const stripeConfigured = Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PUBLISHABLE_KEY);
 
   return {
     plan: user.plan || 'Free Forever Tier',
     billingCycle: user.billing_cycle || 'Monthly',
-    status: 'Active',
+    status: user.subscription_status || 'active',
     nextBillingDate: formattedRenewal,
-    price: user.plan && user.plan.includes('Pro') ? '$12.00 / month' : '$0.00 / month',
+    price: priceDisplay,
+    stripeCustomerId: user.stripe_customer_id || '',
+    stripeSubscriptionId: user.stripe_subscription_id || '',
+    stripeConfigured,
     paymentMethods: methods.map(m => ({
       id: m.id,
       brand: m.brand,
@@ -1499,7 +1629,7 @@ function getDashboardSummary(userId) {
       type: 'overdue',
       dueDate: inv.due_date,
       actionText: 'View Invoice',
-      actionUrl: `index.html?id=${inv.id}`
+      actionUrl: `/?id=${inv.id}`
     });
   });
 
@@ -1521,7 +1651,7 @@ function getDashboardSummary(userId) {
       type: 'pending',
       dueDate: inv.due_date,
       actionText: 'Record Payment',
-      actionUrl: `index.html?id=${inv.id}`
+      actionUrl: `/?id=${inv.id}`
     });
   });
 
@@ -1542,7 +1672,7 @@ function getDashboardSummary(userId) {
       amount: inv.total,
       type: 'draft',
       actionText: 'Edit & Send',
-      actionUrl: `index.html?id=${inv.id}`
+      actionUrl: `/?id=${inv.id}`
     });
   });
 
@@ -1649,21 +1779,21 @@ function globalSearch(userId, rawQuery) {
   `).all(userId, pattern, pattern, pattern, pattern);
 
   const systemTemplates = [
-    { id: 'emerald', name: 'Emerald Green', desc: 'Standard business layout with modern emerald accents', url: 'index.html?template=emerald' },
-    { id: 'charcoal', name: 'Minimal Slate', desc: 'High-contrast monochrome for consultants & engineers', url: 'index.html?template=charcoal' },
-    { id: 'corporate', name: 'Corporate Navy', desc: 'Enterprise formal layout with strict tabular structure', url: 'index.html?template=corporate' },
-    { id: 'creative', name: 'Creative Indigo', desc: 'Vibrant modern header for agencies and designers', url: 'index.html?template=creative' }
+    { id: 'emerald', name: 'Emerald Green', desc: 'Standard business layout with modern emerald accents', url: '/?template=emerald' },
+    { id: 'charcoal', name: 'Minimal Slate', desc: 'High-contrast monochrome for consultants & engineers', url: '/?template=charcoal' },
+    { id: 'corporate', name: 'Corporate Navy', desc: 'Enterprise formal layout with strict tabular structure', url: '/?template=corporate' },
+    { id: 'creative', name: 'Creative Indigo', desc: 'Vibrant modern header for agencies and designers', url: '/?template=creative' }
   ];
   const matchedTemplates = systemTemplates.filter(t =>
     t.name.toLowerCase().includes(q.toLowerCase()) || t.desc.toLowerCase().includes(q.toLowerCase())
   );
 
   const systemTools = [
-    { id: 'tool-pdf', name: 'PDF Invoice Generator', desc: 'Instant 0ms client-side vector PDF generation', url: 'pdf-invoice-generator.html' },
-    { id: 'tool-num', name: 'Invoice Number Generator', desc: 'Auto-sequential numbering system', url: 'invoice-number-generator.html' },
-    { id: 'tool-gst', name: 'GST & Tax Calculator', desc: 'Calculate CGST, SGST, IGST & VAT amounts', url: 'gst-invoice-generator.html' },
-    { id: 'tool-freelance', name: 'Freelance Invoicing Tool', desc: 'Hourly rates & milestone billing structure', url: 'invoice-generator-for-freelancers.html' },
-    { id: 'tool-payments', name: 'Payment Fee Simulator', desc: 'Calculate Stripe, PayPal, and gateway fees', url: 'payments.html' }
+    { id: 'tool-pdf', name: 'PDF Invoice Generator', desc: 'Instant 0ms client-side vector PDF generation', url: '/tools/pdf-invoice-generator' },
+    { id: 'tool-num', name: 'Invoice Number Generator', desc: 'Auto-sequential numbering system', url: '/tools/invoice-number-generator' },
+    { id: 'tool-gst', name: 'GST & Tax Calculator', desc: 'Calculate CGST, SGST, IGST & VAT amounts', url: '/tools/gst-tax-invoice' },
+    { id: 'tool-freelance', name: 'Freelance Invoicing Tool', desc: 'Hourly rates & milestone billing structure', url: '/tools/freelancer-invoice' },
+    { id: 'tool-payments', name: 'Payment Fee Simulator', desc: 'Calculate Stripe, PayPal, and gateway fees', url: '/tools/online-payments' }
   ];
   const matchedTools = systemTools.filter(t =>
     t.name.toLowerCase().includes(q.toLowerCase()) || t.desc.toLowerCase().includes(q.toLowerCase())
@@ -1677,14 +1807,14 @@ function globalSearch(userId, rawQuery) {
       total: i.total,
       status: i.status,
       date: i.issue_date,
-      url: `index.html?id=${i.id}`
+      url: `/?id=${i.id}`
     })),
     clients: clients.map(c => ({
       id: c.id,
       name: c.name,
       company: c.company,
       email: c.email,
-      url: `dashboard.html#clients`
+      url: `/dashboard#clients`
     })),
     templates: matchedTemplates,
     tools: matchedTools
@@ -1912,13 +2042,27 @@ function recordInvoicePayment(userId, data = {}) {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(id, userId, invoiceId, numAmount, currency, gateway, normalizedStatus, reference, payerName, payerEmail, notes, now);
 
-  if (invoiceId && normalizedStatus === 'Paid') {
+  if (invoiceId) {
     try {
-      db.prepare("UPDATE invoices SET status = 'paid', updated_at = ? WHERE id = ? AND user_id = ?").run(now, invoiceId, userId);
-    } catch (e) {}
-  } else if (invoiceId && normalizedStatus === 'Partially Paid') {
-    try {
-      db.prepare("UPDATE invoices SET status = 'partially_paid', updated_at = ? WHERE id = ? AND user_id = ?").run(now, invoiceId, userId);
+      const inv = db.prepare('SELECT id, total, amount_paid, balance_due, invoice_number FROM invoices WHERE id = ? AND user_id = ?').get(invoiceId, userId);
+      if (inv) {
+        const total = Number(inv.total || 0);
+        const currentPaid = Number(inv.amount_paid || 0);
+        const newAmountPaid = Math.min(total, currentPaid + numAmount);
+        const newBalanceDue = Math.max(0, total - newAmountPaid);
+        let newStatus = inv.status;
+        if (normalizedStatus === 'Paid') {
+          newStatus = newBalanceDue <= 0.001 ? 'paid' : 'partially_paid';
+        } else if (normalizedStatus === 'Partially Paid') {
+          newStatus = 'partially_paid';
+        }
+
+        db.prepare(`
+          UPDATE invoices
+          SET amount_paid = ?, balance_due = ?, status = ?, updated_at = ?
+          WHERE id = ? AND user_id = ?
+        `).run(newAmountPaid, newBalanceDue, newStatus, now, invoiceId, userId);
+      }
     } catch (e) {}
   }
 
@@ -1932,6 +2076,312 @@ function recordInvoicePayment(userId, data = {}) {
   } catch (e) {}
 
   return db.prepare('SELECT * FROM invoice_payments WHERE id = ?').get(id);
+}
+
+function recordManualPayment(userId, data = {}) {
+  const invoiceId = data.invoiceId || data.invoice_id;
+  if (!invoiceId) throw new Error('Invoice selection is required to record a manual payment.');
+
+  const inv = db.prepare('SELECT * FROM invoices WHERE id = ? AND user_id = ?').get(invoiceId, userId);
+  if (!inv) throw new Error('Invoice not found or access denied.');
+
+  const numAmount = parseFloat(data.amount);
+  if (isNaN(numAmount) || numAmount <= 0) throw new Error('Payment amount must be greater than zero.');
+
+  const total = Number(inv.total || 0);
+  const currentPaid = Number(inv.amount_paid || 0);
+  const currentBalance = Number(inv.balance_due !== undefined && inv.balance_due !== null ? inv.balance_due : Math.max(0, total - currentPaid));
+
+  if (numAmount > currentBalance + 0.01) {
+    throw new Error(`Payment amount (${inv.currency_symbol || '$'}${numAmount.toFixed(2)}) cannot exceed outstanding balance (${inv.currency_symbol || '$'}${currentBalance.toFixed(2)}).`);
+  }
+
+  const method = data.method || data.gateway || 'Bank Transfer';
+  const notes = data.notes || '';
+  const paymentDate = data.paymentDate || data.date || new Date().toISOString();
+  const reference = data.reference || `MAN-${Date.now()}`;
+  const now = new Date().toISOString();
+
+  const newAmountPaid = Math.min(total, currentPaid + numAmount);
+  const newBalanceDue = Math.max(0, total - newAmountPaid);
+  const newStatus = newBalanceDue <= 0.001 ? 'paid' : 'partially_paid';
+
+  const id = `pay_${crypto.randomBytes(8).toString('hex')}`;
+
+  db.prepare(`
+    INSERT INTO invoice_payments (
+      id, user_id, invoice_id, amount, currency, gateway, status, reference, payer_name, payer_email, notes, created_at
+    ) VALUES (?, ?, ?, ?, ?, ?, 'Paid', ?, ?, ?, ?, ?)
+  `).run(
+    id,
+    userId,
+    invoiceId,
+    numAmount,
+    inv.currency || 'USD',
+    method,
+    reference,
+    inv.client_name || '',
+    inv.client_email || '',
+    notes,
+    paymentDate.includes('T') ? paymentDate : new Date(paymentDate).toISOString()
+  );
+
+  db.prepare(`
+    UPDATE invoices
+    SET amount_paid = ?, balance_due = ?, status = ?, updated_at = ?
+    WHERE id = ? AND user_id = ?
+  `).run(newAmountPaid, newBalanceDue, newStatus, now, invoiceId, userId);
+
+  try {
+    logActivity(userId, {
+      type: 'payment_recorded',
+      description: `Recorded manual payment of ${inv.currency_symbol || '$'}${numAmount.toFixed(2)} for Invoice #${inv.invoice_number} via ${method}`,
+      entityType: 'payment',
+      entityId: id
+    });
+    createNotification(userId, {
+      title: 'Payment Received',
+      message: `Received ${inv.currency_symbol || '$'}${numAmount.toFixed(2)} for Invoice #${inv.invoice_number}.`,
+      type: 'success',
+      link: '/dashboard#payments'
+    });
+  } catch (e) {}
+
+  return {
+    payment: db.prepare('SELECT * FROM invoice_payments WHERE id = ?').get(id),
+    invoice: getInvoice(userId, invoiceId)
+  };
+}
+
+// --------------------------------------------------------------------------
+// STRIPE INTEGRATION & WEBHOOK IDEMPOTENT PROCESSING
+// --------------------------------------------------------------------------
+
+function updateUserStripeCustomer(userId, stripeCustomerId) {
+  const now = new Date().toISOString();
+  db.prepare('UPDATE users SET stripe_customer_id = ?, updated_at = ? WHERE id = ?')
+    .run(stripeCustomerId, now, userId);
+  return getUserById(userId);
+}
+
+function getUserByStripeCustomerId(customerId) {
+  if (!customerId) return null;
+  const user = db.prepare('SELECT * FROM users WHERE stripe_customer_id = ?').get(customerId);
+  if (!user) return null;
+  delete user.password_hash;
+  delete user.salt;
+  return user;
+}
+
+function updateUserSubscription(userId, { subscriptionId, priceId, status, periodEnd, plan }) {
+  const now = new Date().toISOString();
+  db.prepare(`
+    UPDATE users SET
+      stripe_subscription_id = COALESCE(?, stripe_subscription_id),
+      subscription_price_id = COALESCE(?, subscription_price_id),
+      subscription_status = COALESCE(?, subscription_status),
+      subscription_period_end = COALESCE(?, subscription_period_end),
+      plan = COALESCE(?, plan),
+      updated_at = ?
+    WHERE id = ?
+  `).run(
+    subscriptionId || null,
+    priceId || null,
+    status || null,
+    periodEnd || null,
+    plan || null,
+    now,
+    userId
+  );
+  return getUserById(userId);
+}
+
+function isStripeEventProcessed(eventId) {
+  const row = db.prepare('SELECT id FROM stripe_events WHERE id = ?').get(eventId);
+  return Boolean(row);
+}
+
+function recordStripeEvent(eventId, eventType, payload) {
+  const now = new Date().toISOString();
+  const payloadStr = typeof payload === 'string' ? payload : JSON.stringify(payload);
+  db.prepare(`
+    INSERT INTO stripe_events (id, type, processed_at, payload)
+    VALUES (?, ?, ?, ?)
+  `).run(eventId, eventType, now, payloadStr);
+}
+
+function handleStripeWebhookEvent(event) {
+  if (!event || !event.id) {
+    throw new Error('Invalid Stripe event object');
+  }
+
+  // Check idempotency
+  if (isStripeEventProcessed(event.id)) {
+    return { received: true, duplicate: true, eventId: event.id };
+  }
+
+  const now = new Date().toISOString();
+  const eventType = event.type;
+  const dataObj = event.data?.object || {};
+
+  switch (eventType) {
+    case 'checkout.session.completed': {
+      const userId = dataObj.client_reference_id || dataObj.metadata?.userId;
+      const stripeCustomerId = dataObj.customer;
+      const subscriptionId = dataObj.subscription;
+      const planName = dataObj.metadata?.plan || (dataObj.amount_total === 2900 ? 'Business Tier' : 'Pro Workspace Tier');
+
+      let targetUser = null;
+      if (userId) {
+        targetUser = getUserById(userId);
+      } else if (stripeCustomerId) {
+        targetUser = getUserByStripeCustomerId(stripeCustomerId);
+      }
+
+      if (targetUser) {
+        const uId = targetUser.id;
+        db.prepare(`
+          UPDATE users SET
+            stripe_customer_id = COALESCE(?, stripe_customer_id),
+            stripe_subscription_id = COALESCE(?, stripe_subscription_id),
+            subscription_status = 'active',
+            plan = ?,
+            updated_at = ?
+          WHERE id = ?
+        `).run(stripeCustomerId || null, subscriptionId || null, planName, now, uId);
+
+        // Record billing transaction
+        const amount = (dataObj.amount_total || 1200) / 100;
+        const txId = `tx_${crypto.randomBytes(8).toString('hex')}`;
+        db.prepare(`
+          INSERT INTO billing_transactions (id, user_id, description, amount, payment_method, status, receipt_id, created_at)
+          VALUES (?, ?, ?, ?, 'Stripe', 'paid', ?, ?)
+        `).run(txId, uId, `${planName} Subscription`, amount, dataObj.payment_intent || subscriptionId || `chk_${event.id}`, now);
+
+        logActivity(uId, {
+          type: 'subscription_upgraded',
+          description: `Subscribed to ${planName} via Stripe Checkout`,
+          entityType: 'billing',
+          entityId: subscriptionId || event.id
+        });
+
+        createNotification(uId, {
+          title: 'Subscription Activated! 🎉',
+          message: `Your account is now upgraded to ${planName}. Thank you for supporting Invoice-Gen.net!`,
+          type: 'success',
+          link: '/dashboard#billing'
+        });
+      }
+      break;
+    }
+
+    case 'customer.subscription.updated':
+    case 'customer.subscription.created': {
+      const stripeCustomerId = dataObj.customer;
+      const status = dataObj.status; // active, past_due, trialing, canceled, etc.
+      const priceId = dataObj.items?.data?.[0]?.price?.id || '';
+      const periodEnd = dataObj.current_period_end ? new Date(dataObj.current_period_end * 1000).toISOString() : '';
+
+      const targetUser = getUserByStripeCustomerId(stripeCustomerId);
+      if (targetUser) {
+        const uId = targetUser.id;
+        let plan = targetUser.plan;
+        if (priceId && process.env.STRIPE_BUSINESS_PRICE_ID && priceId === process.env.STRIPE_BUSINESS_PRICE_ID) {
+          plan = 'Business Tier';
+        } else if (priceId && process.env.STRIPE_PRO_PRICE_ID && priceId === process.env.STRIPE_PRO_PRICE_ID) {
+          plan = 'Pro Workspace Tier';
+        }
+
+        db.prepare(`
+          UPDATE users SET
+            stripe_subscription_id = ?,
+            subscription_price_id = ?,
+            subscription_status = ?,
+            subscription_period_end = ?,
+            plan = COALESCE(?, plan),
+            updated_at = ?
+          WHERE id = ?
+        `).run(dataObj.id, priceId, status, periodEnd, plan, now, uId);
+
+        logActivity(uId, {
+          type: 'subscription_updated',
+          description: `Subscription status updated to "${status}"`,
+          entityType: 'billing',
+          entityId: dataObj.id
+        });
+      }
+      break;
+    }
+
+    case 'customer.subscription.deleted': {
+      const stripeCustomerId = dataObj.customer;
+      const targetUser = getUserByStripeCustomerId(stripeCustomerId);
+      if (targetUser) {
+        const uId = targetUser.id;
+        db.prepare(`
+          UPDATE users SET
+            subscription_status = 'canceled',
+            plan = 'Free Forever Tier',
+            updated_at = ?
+          WHERE id = ?
+        `).run(now, uId);
+
+        logActivity(uId, {
+          type: 'subscription_canceled',
+          description: 'Subscription canceled. Account reverted to Free Tier.',
+          entityType: 'billing',
+          entityId: dataObj.id
+        });
+
+        createNotification(uId, {
+          title: 'Subscription Ended',
+          message: 'Your plan has been reverted to the Free Forever Tier.',
+          type: 'warning',
+          link: '/dashboard#billing'
+        });
+      }
+      break;
+    }
+
+    case 'invoice.payment_failed': {
+      const stripeCustomerId = dataObj.customer;
+      const targetUser = getUserByStripeCustomerId(stripeCustomerId);
+      if (targetUser) {
+        const uId = targetUser.id;
+        db.prepare(`UPDATE users SET subscription_status = 'past_due', updated_at = ? WHERE id = ?`).run(now, uId);
+        createNotification(uId, {
+          title: 'Subscription Payment Failed',
+          message: 'A renewal charge for your subscription failed. Please update your payment method.',
+          type: 'danger',
+          link: '/dashboard#billing'
+        });
+      }
+      break;
+    }
+
+    case 'invoice.paid': {
+      const stripeCustomerId = dataObj.customer;
+      const targetUser = getUserByStripeCustomerId(stripeCustomerId);
+      if (targetUser && dataObj.amount_paid > 0) {
+        const uId = targetUser.id;
+        const amount = dataObj.amount_paid / 100;
+        const txId = `tx_${crypto.randomBytes(8).toString('hex')}`;
+        db.prepare(`
+          INSERT INTO billing_transactions (id, user_id, description, amount, payment_method, status, receipt_id, created_at)
+          VALUES (?, ?, ?, ?, 'Stripe', 'paid', ?, ?)
+        `).run(txId, uId, `Subscription Invoice ${dataObj.number || ''}`, amount, dataObj.payment_intent || `inv_${event.id}`, now);
+      }
+      break;
+    }
+
+    default:
+      break;
+  }
+
+  // Idempotently record the event
+  recordStripeEvent(event.id, eventType, event);
+
+  return { received: true, eventId: event.id, type: eventType };
 }
 
 function listInvoicePayments(userId, { status = '', invoiceId = '' } = {}) {
@@ -2040,8 +2490,16 @@ module.exports = {
   getPaymentLink,
   checkInvoiceNumberExists,
   recordInvoicePayment,
+  recordManualPayment,
   listInvoicePayments,
   updatePaymentStatus,
-  saveContactMessage
+  saveContactMessage,
+  // Stripe & Subscriptions
+  updateUserStripeCustomer,
+  getUserByStripeCustomerId,
+  updateUserSubscription,
+  isStripeEventProcessed,
+  recordStripeEvent,
+  handleStripeWebhookEvent
 };
 

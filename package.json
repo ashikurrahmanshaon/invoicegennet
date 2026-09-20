@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
+    "build": "node --check server.js db.js && node scratch/verify_all_pages_cleanliness.js",
     "test": "node scratch/verify_all_pages_cleanliness.js"
   },
   "repository": {
@@ -28,6 +29,7 @@
     "html2pdf.js": "^0.14.0",
     "jszip": "^3.10.1",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "^3.11.174"
+    "pdfjs-dist": "^3.11.174",
+    "stripe": "^22.6.2"
   }
 }

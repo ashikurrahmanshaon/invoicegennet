@@ -72,55 +72,57 @@ const BLANK_INVOICE = {
   notes: ''
 };
 
-// Sample data loaded only when user clicks "Sample Data"
-const SAMPLE_INVOICE = {
+// Realistic Demo Sample data clearly distinguished as demonstration
+const DEMO_INVOICE = {
   title: 'INVOICE',
-  number: '37',
-  date: 'Sep 4, 2026',
-  dueDate: 'Sep 18, 2026',
-  poNumber: 'PO-8921',
-  paymentTerms: 'Net 14 Days',
+  number: 'DEMO-001',
+  date: getTodayDateString(),
+  dueDate: '',
+  poNumber: '',
+  paymentTerms: 'Due on Receipt',
 
   sender: {
-    name: 'Asif Mehedi',
-    address: 'P.Hans Frankfurthersingel 128, 1060 TN\nAmsterdam, Netherlands',
-    email: 'contact@asifmehedi.com',
-    phone: '+31 20 123 4567'
+    name: 'Demo Business',
+    address: '123 Demo Street\nDemo City, DC 10101',
+    email: 'contact@demobusiness.example',
+    phone: '(555) 000-DEMO'
   },
 
   client: {
-    name: 'Huize Frankendael',
-    address: 'Middenweg 72\n1097BS Amsterdam',
-    email: 'invoices@huizefrankendael.nl',
-    phone: '+31 20 987 6543'
+    name: 'Demo Client',
+    address: '456 Client Avenue\nSuite 200, Metropolis, MP 20202',
+    email: 'billing@democlient.example',
+    phone: '(555) 123-DEMO'
   },
 
   shipTo: {
     enabled: true,
-    name: 'Middenweg 72',
-    address: '1097BS Amsterdam, Netherlands'
+    name: 'Demo Client Delivery',
+    address: '456 Client Avenue, Metropolis, MP 20202'
   },
 
   items: [
     {
       id: 1,
-      description: 'Web Application Consulting & Development',
-      subtext: 'Component architecture, responsive frontend, and client-side PDF export',
-      quantity: 252,
-      rate: 20.00
+      description: 'Website Design',
+      subtext: 'Modern responsive website mockup & UI layout',
+      quantity: 1,
+      rate: 500,
+      amount: 500
     }
   ],
 
   discountType: 'percent',
   discountValue: 0,
-  taxRate: 21,
+  taxRate: 0,
   shippingFee: 0,
   amountPaid: 0,
 
-  currency: 'EUR',
+  currency: 'USD',
   logo: null,
-  notes: 'KvK: 91435382\nVAT Number: NL004890664B78\nBank A/C Name: A. Mehedi\nIBAN: NL54 ABNA 0125632436'
+  notes: 'Thank you for testing the demo invoice. Payment terms: Due on Receipt.'
 };
+const SAMPLE_INVOICE = DEMO_INVOICE;
 
 class InvoiceStore {
   constructor() {
@@ -259,15 +261,102 @@ class InvoiceStore {
     this.notify();
   }
 
+  isFormEmpty() {
+    const s = this.state;
+    if (!s) return true;
+
+    // Check items: if any item has a description or rate > 0, or more than 1 item
+    const items = s.items || [];
+    const hasItemsData = items.some(it => {
+      const desc = (it.description || '').trim();
+      const rate = parseFloat(it.rate) || 0;
+      return desc !== '' || rate > 0;
+    }) || items.length > 1;
+    if (hasItemsData) return false;
+
+    // Check client details
+    if (s.client && ((s.client.name || '').trim() !== '' || (s.client.address || '').trim() !== '' || (s.client.email || '').trim() !== '')) {
+      return false;
+    }
+
+    // Check shipTo details (if enabled)
+    if (s.shipTo && s.shipTo.enabled && ((s.shipTo.name || '').trim() !== '' || (s.shipTo.address || '').trim() !== '')) {
+      return false;
+    }
+
+    // Check notes or signature
+    if ((s.notes || '').trim() !== '' || (s.signature || '').trim() !== '') {
+      return false;
+    }
+
+    // Check rates/adjustments
+    if ((parseFloat(s.taxRate) || 0) > 0 || (parseFloat(s.discountValue) || 0) > 0 || (parseFloat(s.amountPaid) || 0) > 0 || (parseFloat(s.shippingFee) || 0) > 0) {
+      return false;
+    }
+
+    // Check poNumber
+    if ((s.poNumber || '').trim() !== '') {
+      return false;
+    }
+
+    return true;
+  }
+
   loadSample() {
-    this.state = JSON.parse(JSON.stringify(SAMPLE_INVOICE));
+    this.state = JSON.parse(JSON.stringify(DEMO_INVOICE));
+    this.state.date = getTodayDateString();
     this.notify();
+    return this.state;
+  }
+
+  loadDemo() {
+    return this.loadSample();
+  }
+
+  resetInvoice(preserveSavedProfile = true) {
+    let savedSender = null;
+    let savedLogo = null;
+    if (preserveSavedProfile) {
+      try {
+        const rawProfile = localStorage.getItem('invoicegen_business_profile');
+        const rawUser = localStorage.getItem('invoicegen_user');
+        const bp = rawProfile ? JSON.parse(rawProfile) : (rawUser ? JSON.parse(rawUser) : null);
+        if (bp && (bp.businessName || bp.business_name || bp.name)) {
+          savedSender = {
+            name: bp.businessName || bp.business_name || bp.name || '',
+            address: bp.address || bp.business_address || '',
+            email: bp.email || bp.business_email || '',
+            phone: bp.phone || bp.business_phone || ''
+          };
+          if (bp.logo) savedLogo = bp.logo;
+        }
+      } catch (e) {}
+    }
+
+    this.state = JSON.parse(JSON.stringify(BLANK_INVOICE));
+    this.state.date = getTodayDateString();
+    this.state.number = 'INV-001';
+    this.state.items = [{ id: Date.now(), description: '', subtext: '', quantity: 1, rate: 0, amount: 0 }];
+    this.state.taxRate = 0;
+    this.state.discountValue = 0;
+    this.state.amountPaid = 0;
+    this.state.shippingFee = 0;
+    this.state.notes = '';
+    this.state.dueDate = '';
+    this.state.poNumber = '';
+    this.state.paymentTerms = 'Due on Receipt';
+
+    if (savedSender) {
+      this.state.sender = savedSender;
+      this.state.logo = savedLogo;
+    }
+
+    this.notify();
+    return this.state;
   }
 
   clear() {
-    this.state = JSON.parse(JSON.stringify(BLANK_INVOICE));
-    this.state.date = getTodayDateString();
-    this.notify();
+    return this.resetInvoice(true);
   }
 
   createNewInvoice(options = {}) {

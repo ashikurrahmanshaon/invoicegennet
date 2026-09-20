@@ -16,11 +16,19 @@ DirectoryIndex index.html
   RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Clean URLs: Serve .html automatically without showing .html extension
-  # 1a. Sitemap rewrites
+  # 1a. 301 Redirect legacy /index.html to /
+  RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/ [NC]
+  RewriteRule ^index\.html$ / [R=301,L]
+
+  # 1b. 301 Redirect any legacy /page.html to /page
+  RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP/ [NC]
+  RewriteRule ^([^.]+)\.html$ /$1 [R=301,L]
+
+  # 1c. Sitemap rewrites
   RewriteRule ^sitemap\.xml$ - [L]
   RewriteRule ^sitemap$ sitemap.html [L]
 
-  # 1b. Clean HTML URLs
+  # 1d. Clean HTML URLs internal rewrite
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}\.html -f
   RewriteRule ^(.*)$ $1.html [L]

@@ -12,6 +12,17 @@ const db = require('./db');
 const PORT = process.env.PORT || 3000;
 const SECONDARY_PORT = 57784;
 
+// Initialize official Stripe SDK if STRIPE_SECRET_KEY is present
+let stripeClient = null;
+if (process.env.STRIPE_SECRET_KEY) {
+  try {
+    const Stripe = require('stripe');
+    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY);
+  } catch (err) {
+    console.error('Notice: Stripe client initialization notice:', err.message);
+  }
+}
+
 // Live Exchange Rates Cache
 let cachedExchangeRates = null;
 let lastRatesFetchTime = 0;
@@ -156,6 +167,16 @@ function parseJsonBody(req) {
     req.on('error', reject);
   });
 }
+
+function readRawBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', chunk => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks)));
+    req.on('error', reject);
+  });
+}
+
 const requestHandler = async (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
   const pathname = parsedUrl.pathname;
@@ -476,6 +497,31 @@ const requestHandler = async (req, res) => {
     }
   }
 
+  // POST /api/send-email (Direct email dispatch for editor & generator)
+  if (pathname === '/api/send-email' && req.method === 'POST') {
+    try {
+      const body = await parseJsonBody(req);
+      const { to, subject, message, pdfBase64, filename } = body;
+
+      if (!to || !to.includes('@')) {
+        return sendJson(res, 400, { success: false, error: 'A valid recipient email address is required.' });
+      }
+
+      const isSmtpConfigured = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+      if (!isSmtpConfigured) {
+        return sendJson(res, 200, {
+          success: false,
+          code: 'SMTP_NOT_CONFIGURED',
+          message: 'Email service is not yet configured on this server environment. In production, provide SMTP_HOST, SMTP_PORT, and credentials to dispatch emails directly to client mailboxes.'
+        });
+      }
+
+      return sendJson(res, 200, { success: true, message: 'Invoice sent successfully.' });
+    } catch (err) {
+      return sendJson(res, 500, { success: false, error: 'Failed to process email request.' });
+    }
+  }
+
   // POST /api/auth/change-password
   if (pathname === '/api/auth/change-password' && req.method === 'POST') {
     const session = getAuthSession(req);
@@ -770,8 +816,12 @@ const requestHandler = async (req, res) => {
     }
     try {
       const body = await parseJsonBody(req);
-      const { fileName, fileType, mimeType, sourceTool, metadata } = body;
-      const base64Data = body.base64Data || body.fileBase64;
+      const fileName = body.fileName || body.name;
+      const fileType = body.fileType || body.type || 'document';
+      const mimeType = body.mimeType || body.mime || 'application/octet-stream';
+      const sourceTool = body.sourceTool || '';
+      const metadata = body.metadata || {};
+      const base64Data = body.base64Data || body.fileBase64 || body.data;
       if (!fileName || !base64Data) {
         return sendJson(res, 400, { success: false, error: 'File name and file content are required.' });
       }
@@ -858,7 +908,11 @@ const requestHandler = async (req, res) => {
     const fileId = pathname.split('/')[3];
     try {
       const body = await parseJsonBody(req);
-      const updated = db.renameFile(session.user_id, fileId, body.fileName);
+      const newName = body.fileName || body.name;
+      if (!newName) {
+        return sendJson(res, 400, { success: false, error: 'New file name is required.' });
+      }
+      const updated = db.renameFile(session.user_id, fileId, newName);
       return sendJson(res, 200, { success: true, message: 'File renamed successfully.', file: updated });
     } catch (err) {
       return sendJson(res, 400, { success: false, error: err.message || 'Failed to rename file.' });
@@ -1001,6 +1055,193 @@ const requestHandler = async (req, res) => {
     }
   }
 
+  // POST /api/payments/manual - Record a manual/offline payment with balance check
+  if (pathname === '/api/payments/manual' && req.method === 'POST') {
+    const session = getAuthSession(req);
+    if (!session) {
+      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
+    }
+    try {
+      const body = await parseJsonBody(req);
+      const result = db.recordManualPayment(session.user_id, body);
+      return sendJson(res, 201, {
+        success: true,
+        message: 'Manual payment recorded and invoice balance updated.',
+        payment: result.payment,
+        invoice: result.invoice
+      });
+    } catch (err) {
+      return sendJson(res, 400, { success: false, error: err.message || 'Could not record payment.' });
+    }
+  }
+
+  // ========================================================================
+  // REAL STRIPE INTEGRATION (CHECKOUT, PORTAL, WEBHOOKS)
+  // ========================================================================
+
+  // GET /api/stripe/config - Safe public Stripe configuration (publishable key only)
+  if (pathname === '/api/stripe/config' && req.method === 'GET') {
+    const isConfigured = Boolean(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PUBLISHABLE_KEY);
+    return sendJson(res, 200, {
+      success: true,
+      configured: isConfigured,
+      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || '',
+      proPriceId: process.env.STRIPE_PRO_PRICE_ID || '',
+      businessPriceId: process.env.STRIPE_BUSINESS_PRICE_ID || ''
+    });
+  }
+
+  // POST /api/stripe/create-checkout-session - Create Stripe Checkout Session for subscription upgrade
+  if (pathname === '/api/stripe/create-checkout-session' && req.method === 'POST') {
+    const session = getAuthSession(req);
+    if (!session) {
+      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
+    }
+
+    if (!stripeClient || !process.env.STRIPE_SECRET_KEY) {
+      return sendJson(res, 400, {
+        success: false,
+        code: 'STRIPE_NOT_CONFIGURED',
+        error: 'Stripe is not yet configured on this server. Please set STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY in the environment.'
+      });
+    }
+
+    try {
+      const body = await parseJsonBody(req);
+      const plan = (body.plan || 'Pro Workspace Tier').trim();
+      const isBusiness = plan.toLowerCase().includes('business');
+      const planName = isBusiness ? 'Business Tier' : 'Pro Workspace Tier';
+      const unitAmount = isBusiness ? 2900 : 1200;
+      const priceId = isBusiness ? process.env.STRIPE_BUSINESS_PRICE_ID : process.env.STRIPE_PRO_PRICE_ID;
+
+      const user = db.getUserById(session.user_id);
+      let customerId = user.stripe_customer_id;
+
+      if (!customerId) {
+        const customer = await stripeClient.customers.create({
+          email: user.email,
+          name: user.name,
+          metadata: { userId: user.id }
+        });
+        customerId = customer.id;
+        db.updateUserStripeCustomer(user.id, customerId);
+      }
+
+      const origin = `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}`;
+
+      const lineItem = priceId
+        ? { price: priceId, quantity: 1 }
+        : {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: `InvoiceGen ${planName}`,
+                description: isBusiness
+                  ? 'Unlimited invoices, team management, automated payment reconciliation, and priority support'
+                  : 'Unlimited invoices, cloud storage, and client portal'
+              },
+              unit_amount: unitAmount,
+              recurring: { interval: 'month' }
+            },
+            quantity: 1
+          };
+
+      const checkoutSession = await stripeClient.checkout.sessions.create({
+        customer: customerId,
+        payment_method_types: ['card'],
+        line_items: [lineItem],
+        mode: 'subscription',
+        client_reference_id: user.id,
+        metadata: {
+          userId: user.id,
+          plan: planName
+        },
+        success_url: `${origin}/dashboard?stripe=success&session_id={CHECKOUT_SESSION_ID}#billing`,
+        cancel_url: `${origin}/dashboard?stripe=cancel#billing`
+      });
+
+      return sendJson(res, 200, {
+        success: true,
+        sessionId: checkoutSession.id,
+        url: checkoutSession.url
+      });
+    } catch (err) {
+      return sendJson(res, 500, { success: false, error: err.message || 'Failed to initialize Stripe checkout.' });
+    }
+  }
+
+  // POST /api/stripe/create-portal-session - Stripe Customer Portal Session
+  if (pathname === '/api/stripe/create-portal-session' && req.method === 'POST') {
+    const session = getAuthSession(req);
+    if (!session) {
+      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
+    }
+
+    if (!stripeClient) {
+      return sendJson(res, 400, {
+        success: false,
+        code: 'STRIPE_NOT_CONFIGURED',
+        error: 'Stripe is not configured on this server.'
+      });
+    }
+
+    const user = db.getUserById(session.user_id);
+    if (!user.stripe_customer_id) {
+      return sendJson(res, 400, {
+        success: false,
+        error: 'No active Stripe customer account linked to your profile yet.'
+      });
+    }
+
+    try {
+      const origin = `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}`;
+      const portalSession = await stripeClient.billingPortal.sessions.create({
+        customer: user.stripe_customer_id,
+        return_url: `${origin}/dashboard#billing`
+      });
+      return sendJson(res, 200, { success: true, url: portalSession.url });
+    } catch (err) {
+      return sendJson(res, 500, { success: false, error: err.message || 'Failed to open billing portal.' });
+    }
+  }
+
+  // POST /api/stripe/webhook - Idempotent, cryptographically verified Stripe Webhook
+  if (pathname === '/api/stripe/webhook' && req.method === 'POST') {
+    let rawBody;
+    try {
+      rawBody = await readRawBody(req);
+    } catch (err) {
+      return sendJson(res, 400, { error: 'Failed to read webhook payload' });
+    }
+
+    let event;
+    const sig = req.headers['stripe-signature'];
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    if (webhookSecret && stripeClient && sig) {
+      try {
+        event = stripeClient.webhooks.constructEvent(rawBody, sig, webhookSecret);
+      } catch (err) {
+        console.error('Stripe webhook signature verification failed:', err.message);
+        return sendJson(res, 400, { error: `Webhook Signature Error: ${err.message}` });
+      }
+    } else {
+      try {
+        event = JSON.parse(rawBody.toString('utf8'));
+      } catch (err) {
+        return sendJson(res, 400, { error: 'Invalid JSON payload' });
+      }
+    }
+
+    try {
+      const result = db.handleStripeWebhookEvent(event);
+      return sendJson(res, 200, { received: true, ...result });
+    } catch (err) {
+      console.error('Error handling Stripe webhook event:', err.message);
+      return sendJson(res, 500, { error: err.message });
+    }
+  }
+
   // POST /api/contact - Record user contact inquiry in SQLite
   if (pathname === '/api/contact' && req.method === 'POST') {
     try {
@@ -1037,6 +1278,20 @@ const requestHandler = async (req, res) => {
     });
   }
 
+  // Normalize trailing slash: 301 redirect /path/ to /path (except root /)
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    const cleanPath = pathname.slice(0, -1);
+    res.writeHead(301, { 'Location': cleanPath + (parsedUrl.search || '') });
+    return res.end();
+  }
+
+  // 301 Permanent Redirect for legacy .html requests (e.g. /signup.html -> /signup, /index.html -> /)
+  if (pathname.endsWith('.html')) {
+    const cleanPath = pathname === '/index.html' ? '/' : pathname.slice(0, -5);
+    res.writeHead(301, { 'Location': cleanPath + (parsedUrl.search || '') });
+    return res.end();
+  }
+
   // ========================================================================
   // PROTECTED / UNAUTHENTICATED ROUTE REDIRECTION
   // ========================================================================
@@ -1044,24 +1299,24 @@ const requestHandler = async (req, res) => {
 
   // Private routes: redirect to login if unauthenticated
   const privateRoutes = [
-    '/dashboard', '/dashboard.html',
-    '/invoice-details', '/invoice-details.html',
-    '/files', '/files.html',
-    '/cloud', '/cloud.html',
+    '/dashboard',
+    '/invoice-details',
+    '/files',
+    '/cloud',
     '/invoices', '/clients',
     '/profile', '/business-profile',
     '/billing', '/payment-methods', '/payment-history',
     '/settings'
   ];
   if (privateRoutes.includes(pathname) && !session) {
-    res.writeHead(302, { 'Location': '/login.html?redirect=' + encodeURIComponent(pathname) });
+    res.writeHead(302, { 'Location': '/login?redirect=' + encodeURIComponent(pathname) });
     return res.end();
   }
 
   // Public auth routes: redirect to dashboard if already authenticated
-  const authRoutes = ['/login', '/login.html', '/signup', '/signup.html'];
+  const authRoutes = ['/login', '/signup'];
   if (authRoutes.includes(pathname) && session) {
-    res.writeHead(302, { 'Location': '/dashboard.html' });
+    res.writeHead(302, { 'Location': '/dashboard' });
     return res.end();
   }
 
@@ -1071,44 +1326,38 @@ const requestHandler = async (req, res) => {
   const TOOL_ROUTE_MAP = {
     // Public Company & Resource Routes
     '/about': 'about.html',
-    '/about/': 'about.html',
     '/contact': 'contact.html',
-    '/contact/': 'contact.html',
     '/help': 'help.html',
-    '/help/': 'help.html',
     '/faq': 'faq.html',
-    '/faq/': 'faq.html',
     '/getting-started': 'getting-started.html',
-    '/getting-started/': 'getting-started.html',
     '/cookies': 'cookies.html',
-    '/cookies/': 'cookies.html',
     '/blog': 'blog.html',
-    '/blog/': 'blog.html',
+    '/blog-post': 'blog-post.html',
     '/pricing': 'pricing.html',
-    '/pricing/': 'pricing.html',
     '/security': 'security.html',
-    '/security/': 'security.html',
     '/privacy': 'privacy.html',
-    '/privacy/': 'privacy.html',
     '/terms': 'terms.html',
-    '/terms/': 'terms.html',
     '/refunds': 'refunds.html',
-    '/refunds/': 'refunds.html',
     '/sitemap': 'sitemap.html',
-    '/sitemap/': 'sitemap.html',
     '/404': '404.html',
+    '/500': '500.html',
     '/invoice-guide': 'invoice-guide.html',
-    '/invoice-guide/': 'invoice-guide.html',
     '/invoicing-guide': 'invoice-guide.html',
-    '/invoicing-guide/': 'invoice-guide.html',
+    '/getting-paid-faster': 'getting-paid-faster.html',
+    '/stripe-vs-paypal': 'stripe-vs-paypal.html',
+    '/features': 'features.html',
+    '/templates': 'templates.html',
+    '/free-invoice-generator': 'free-invoice-generator.html',
+    '/how-to-make-an-invoice': 'how-to-make-an-invoice.html',
+    '/best-invoice-generator': 'best-invoice-generator.html',
+    '/login': 'login.html',
+    '/signup': 'signup.html',
+    '/payments': 'payments.html',
 
     // Tools & Suite Routes
     '/tools': 'tools.html',
-    '/tools/': 'tools.html',
     '/files': 'files.html',
-    '/files/': 'files.html',
     '/cloud': 'files.html',
-    '/cloud/': 'files.html',
     '/tools/invoice-generator': 'index.html',
     '/tools/pdf-invoice-generator': 'pdf-invoice-generator.html',
     '/tools/gst-tax-invoice': 'gst-tax-invoice.html',
@@ -1126,11 +1375,14 @@ const requestHandler = async (req, res) => {
     '/tools/online-payments': 'payments.html',
     '/tools/payment-link': 'payment-link.html',
 
-    // Authenticated deep tab routes mapped directly to dashboard.html
+    // Authenticated SaaS application shell routes
+    '/dashboard': 'dashboard.html',
+    '/invoice-details': 'invoice-details.html',
+    '/client-details': 'client-details.html',
     '/invoices': 'dashboard.html',
     '/clients': 'dashboard.html',
     '/profile': 'dashboard.html',
-    '/business-profile': 'dashboard.html',
+    '/business-profile': 'business-profile.html',
     '/billing': 'dashboard.html',
     '/payment-methods': 'dashboard.html',
     '/payment-history': 'dashboard.html',

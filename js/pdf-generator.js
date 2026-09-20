@@ -6,6 +6,7 @@
 class PDFEngine {
   constructor() {
     this.isGenerating = false;
+    this.state = 'IDLE';
   }
 
   showToast(message, type = 'success') {
@@ -19,7 +20,7 @@ class PDFEngine {
     let icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
     if (type === 'info') {
       icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
-    } else if (type === 'warning') {
+    } else if (type === 'warning' || type === 'error') {
       icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
     }
     toast.innerHTML = `<span class="toast-icon-badge">${icon}</span><span class="toast-text">${message}</span>`;
@@ -36,12 +37,12 @@ class PDFEngine {
 
   // Ensure html2pdf bundle is loaded
   async ensureLibrary() {
-    if (typeof window.html2pdf !== 'undefined') return true;
+    if (typeof window.html2pdf !== 'undefined' || typeof html2pdf !== 'undefined') return true;
 
     return new Promise((resolve) => {
       const script = document.createElement('script');
       script.src = 'js/html2pdf.bundle.min.js';
-      script.onload = () => resolve(typeof window.html2pdf !== 'undefined');
+      script.onload = () => resolve(typeof window.html2pdf !== 'undefined' || typeof html2pdf !== 'undefined');
       script.onerror = () => resolve(false);
       document.head.appendChild(script);
     });
@@ -63,12 +64,14 @@ class PDFEngine {
 
     const getVal = (id, fallback = '') => {
       const el = document.getElementById(id);
-      return el && el.value !== undefined ? el.value.trim() : fallback;
+      if (!el || el.value === undefined || el.value === null) return fallback;
+      return String(el.value).trim();
     };
 
     const getText = (id, fallback = '') => {
       const el = document.getElementById(id);
-      return el ? el.textContent.trim() : fallback;
+      if (!el || el.textContent === undefined || el.textContent === null) return fallback;
+      return String(el.textContent).trim();
     };
 
     const senderName = getVal('senderName', store.sender?.name || '');
@@ -80,32 +83,44 @@ class PDFEngine {
     const dueDate = getVal('dueDateInput', store.dueDate || '');
     const poNumber = getVal('poNumber', store.poNumber || '');
 
+    const isVisible = (el) => {
+      if (!el) return false;
+      try {
+        if (typeof window.getComputedStyle === 'function') {
+          return window.getComputedStyle(el).display !== 'none';
+        }
+        return el.style.display !== 'none';
+      } catch (e) {
+        return el.style.display !== 'none';
+      }
+    };
+
     const clientName = getVal('clientName', store.client?.name || '');
     const clientAddress = getVal('clientAddress', store.client?.address || '');
 
     const shipToCard = document.getElementById('shipToCardPanel');
-    const isShipToVisible = shipToCard && window.getComputedStyle(shipToCard).display !== 'none';
+    const isShipToVisible = isVisible(shipToCard);
     const shipToName = getVal('shipToName', store.shipTo?.name || '');
     const shipToAddress = getVal('shipToAddress', store.shipTo?.address || '');
 
     const notes = getVal('invoiceNotes', store.notes || '');
 
     const sigWrap = document.getElementById('signatureBlockWrap');
-    const isSigVisible = sigWrap && window.getComputedStyle(sigWrap).display !== 'none';
+    const isSigVisible = isVisible(sigWrap);
     const signature = getVal('signatureInput', '');
 
     // Logo check
     let logoSrc = store.logo || '';
     const logoImg = document.getElementById('logoImg');
     const logoBox = document.getElementById('logoPreviewBox');
-    if (logoBox && window.getComputedStyle(logoBox).display !== 'none' && logoImg && logoImg.src && !logoImg.src.endsWith('#')) {
+    if (isVisible(logoBox) && logoImg && logoImg.src && !logoImg.src.endsWith('#')) {
       logoSrc = logoImg.src;
     }
 
     // Totals
     const subtotal = getText('subtotalDisplay', '$0.00');
     const discountLine = document.getElementById('discountLineRow');
-    const hasDiscount = discountLine && window.getComputedStyle(discountLine).display !== 'none';
+    const hasDiscount = isVisible(discountLine);
     const discountAmt = getText('discountAmountDisplay', '-$0.00');
     const discountRate = getVal('discountRate', store.discountValue || '0');
 
@@ -113,13 +128,13 @@ class PDFEngine {
     const taxRate = getVal('taxRate', getVal('taxRateInput', store.taxRate || '0'));
 
     const shippingLine = document.getElementById('shippingLineRow');
-    const hasShipping = shippingLine && window.getComputedStyle(shippingLine).display !== 'none';
+    const hasShipping = isVisible(shippingLine);
     const shippingAmt = getText('shippingFeeDisplay', '+$0.00');
 
     const grandTotal = getText('grandTotalDisplay', '$0.00');
 
     const amountPaidLine = document.getElementById('amountPaidLineRow') || document.getElementById('amountPaidRow');
-    const hasAmountPaid = amountPaidLine && window.getComputedStyle(amountPaidLine).display !== 'none';
+    const hasAmountPaid = isVisible(amountPaidLine);
     const amountPaidInput = document.getElementById('amountPaidInput');
     const amountPaidVal = amountPaidInput ? (parseFloat(amountPaidInput.value) || 0) : (parseFloat(store.amountPaid) || 0);
     const isPaymentRecorded = hasAmountPaid && amountPaidVal > 0;
@@ -139,10 +154,7 @@ class PDFEngine {
         const rateInput = row.querySelector('.item-rate-field') || row.querySelector('.item-rate-input');
         const amountEl = row.querySelector('.item-amount-col') || row.querySelector('.table-amount-val') || row.querySelector('.item-amount-val');
 
-        const desc = (descInput && descInput.value !== undefined && descInput.value.trim() !== '') 
-          ? descInput.value.trim() 
-          : (storeItem.description || storeItem.desc || '');
-
+        const desc = descInput ? descInput.value.trim() : (storeItem.description || storeItem.desc || '');
         const subtext = storeItem.subtext || '';
 
         const qty = (qtyInput && qtyInput.value !== undefined && qtyInput.value !== '') 
@@ -296,11 +308,9 @@ class PDFEngine {
               <img src="${logoSrc}" alt="Company Logo" style="max-height: 52px; max-width: 170px; object-fit: contain; display: block;">
             </div>
           ` : ''}
-          ${senderName ? `
-            <div style="font-size: 13px; font-weight: 700; color: #111827; line-height: 1.3; margin-bottom: 3px;">
-              ${this.escapeHtml(senderName)}
-            </div>
-          ` : ''}
+          <div style="font-size: 13px; font-weight: 700; color: #111827; line-height: 1.3; margin-bottom: 3px;">
+            ${this.escapeHtml(senderName || 'Your Business Name')}
+          </div>
           ${senderAddress ? `
             <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(senderAddress)}</div>
           ` : ''}
@@ -309,10 +319,10 @@ class PDFEngine {
         <!-- Right: Title & Invoice Number -->
         <div style="text-align: right;">
           <div style="font-size: 30px; font-weight: 300; color: #111827; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1; margin-bottom: 4px;">
-            ${this.escapeHtml(invoiceTitle)}
+            ${this.escapeHtml(invoiceTitle || 'INVOICE')}
           </div>
           <div style="font-size: 13px; font-weight: 400; color: #6b7280; line-height: 1.2;">
-            # ${this.escapeHtml(invoiceNumber)}
+            # ${this.escapeHtml(invoiceNumber || 'INV-001')}
           </div>
         </div>
       </div>
@@ -322,21 +332,17 @@ class PDFEngine {
         
         <!-- Left: Bill To & Optional Ship To -->
         <div style="display: flex; gap: 32px; max-width: 440px;">
-          ${(clientName || clientAddress) ? `
-            <div>
-              <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 3px;">
-                Bill To:
-              </div>
-              ${clientName ? `
-                <div style="font-size: 12px; font-weight: 700; color: #111827; margin-bottom: 2px;">
-                  ${this.escapeHtml(clientName)}
-                </div>
-              ` : ''}
-              ${clientAddress ? `
-                <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(clientAddress)}</div>
-              ` : ''}
+          <div>
+            <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin-bottom: 3px;">
+              Bill To:
             </div>
-          ` : ''}
+            <div style="font-size: 12px; font-weight: 700; color: #111827; margin-bottom: 2px;">
+              ${this.escapeHtml(clientName || 'Client Name')}
+            </div>
+            ${clientAddress ? `
+              <div style="font-size: 10.5px; color: #4b5563; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(clientAddress)}</div>
+            ` : ''}
+          </div>
 
           ${(isShipToVisible && (shipToName || shipToAddress)) ? `
             <div>
@@ -416,7 +422,7 @@ class PDFEngine {
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 14px; page-break-inside: avoid; break-inside: avoid;">
         
         <!-- Left: Notes & Terms Section -->
-        <div style="max-width: 380px;">
+        <div class="notes-section" style="max-width: 380px;">
           ${notes ? `
             <div style="font-size: 10.5px; font-weight: 500; color: #6b7280; margin-bottom: 4px;">
               Notes / Payment Terms:
@@ -426,7 +432,7 @@ class PDFEngine {
 
           <!-- Digital Signature (if active) -->
           ${(isSigVisible && signature) ? `
-            <div style="margin-top: 20px;">
+            <div class="signature-section" style="margin-top: 20px;">
               <div style="font-size: 10px; font-weight: 500; color: #6b7280; margin-bottom: 4px;">
                 Authorized Signature:
               </div>
@@ -439,7 +445,7 @@ class PDFEngine {
         </div>
 
         <!-- Right: Totals Breakdown (Right-Aligned, Perfectly Aligned with Table Amount Column) -->
-        <div style="min-width: 220px;">
+        <div class="totals-section" style="min-width: 220px;">
           <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
             <tr>
               <td style="padding: 3px 0; color: #6b7280; text-align: right; font-weight: 400;">Subtotal:</td>
@@ -500,31 +506,63 @@ class PDFEngine {
     return wrapper;
   }
 
-  async downloadPDF() {
-    if (this.isGenerating) return;
+  setGeneratingState(isGenerating, isError = false) {
+    this.isGenerating = isGenerating;
+    this.state = isGenerating ? 'GENERATING' : (isError ? 'ERROR' : 'READY');
 
-    const downloadBtn = document.getElementById('btnDownloadPDF');
-    const originalContent = downloadBtn ? downloadBtn.innerHTML : 'Download PDF';
+    const downloadButtons = document.querySelectorAll(
+      '#btnDownloadPDF, #btnMobileDownloadPdf, #btnPreviewDownload, .btn-download-pdf-primary, [data-action="download-pdf"]'
+    );
 
-    try {
-      this.isGenerating = true;
-
-      if (downloadBtn) {
-        downloadBtn.disabled = true;
-        downloadBtn.innerHTML = `
-          <svg style="width:16px;height:16px;animation:spin 1s linear infinite;margin-right:8px;vertical-align:middle;" viewBox="0 0 24 24" fill="none">
+    downloadButtons.forEach((btn) => {
+      if (isGenerating) {
+        btn.disabled = true;
+        btn.classList.add('is-generating');
+        if (!btn._origContent) {
+          btn._origContent = btn.innerHTML;
+        }
+        btn.innerHTML = `
+          <svg style="width:16px;height:16px;animation:spin 1s linear infinite;margin-right:8px;vertical-align:middle;display:inline-block;" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-opacity="0.25"></circle>
             <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span>Generating A4 PDF...</span>
+          <span>Generating PDF…</span>
         `;
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('is-generating');
+        if (btn._origContent) {
+          btn.innerHTML = btn._origContent;
+        } else {
+          btn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download PDF</span>
+          `;
+        }
       }
+    });
+  }
 
+  validateForPDF() {
+    return true;
+  }
+
+  async downloadPDF() {
+    if (this.isGenerating) return;
+
+    let printableElement = null;
+    try {
+      this.setGeneratingState(true);
       this.showToast('Assembling high-definition A4 vector PDF...', 'info');
 
       // Ensure library is available (local bundle)
       const isLoaded = await this.ensureLibrary();
-      if (!isLoaded || typeof html2pdf === 'undefined') {
+      const html2pdfLib = (typeof window.html2pdf !== 'undefined') ? window.html2pdf : (typeof html2pdf !== 'undefined' ? html2pdf : null);
+      if (!isLoaded || !html2pdfLib) {
         throw new Error('PDF generation library failed to initialize.');
       }
 
@@ -534,15 +572,15 @@ class PDFEngine {
       }
       await new Promise(r => setTimeout(r, 60));
 
-      // Build isolated, pixel-perfect A4 printable container (clean flow styling)
-      const printableElement = this.buildPrintableA4Element();
+      // Build isolated, pixel-perfect A4 printable container from LIVE data
+      printableElement = this.buildPrintableA4Element();
 
       const state = window.invoiceStore ? window.invoiceStore.getState() : {};
       const rawInvNumber = (document.getElementById('invoiceNumber')?.value || state.number || '001').trim();
       const rawClientName = (document.getElementById('clientName')?.value || state.client?.name || '').trim();
 
-      const cleanInvNumber = rawInvNumber.replace(/[^a-zA-Z0-9-_]/g, '-') || 'INV-001';
-      const cleanClientName = rawClientName.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').slice(0, 40);
+      const cleanInvNumber = rawInvNumber.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '') || 'INV-001';
+      const cleanClientName = rawClientName.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
 
       const filename = cleanClientName ? `Invoice-${cleanInvNumber}-${cleanClientName}.pdf` : `Invoice-${cleanInvNumber}.pdf`;
 
@@ -566,40 +604,49 @@ class PDFEngine {
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      // Generate & save directly without manual DOM pollution
-      await html2pdf().set(opt).from(printableElement).save();
+      await html2pdfLib().set(opt).from(printableElement).save();
 
-      this.showToast('Invoice PDF downloaded successfully!', 'success');
+      this.showToast('PDF downloaded successfully.', 'success');
+      this.setGeneratingState(false, false);
     } catch (err) {
       console.error('PDF Generation Error:', err);
-      this.showToast('Could not generate PDF. Please try again.', 'warning');
+      this.showToast("We couldn't generate your PDF. Please try again.", 'warning');
+      window.print();
+      this.setGeneratingState(false, true);
     } finally {
-      this.isGenerating = false;
-      if (downloadBtn) {
-        downloadBtn.disabled = false;
-        downloadBtn.innerHTML = originalContent;
+      if (printableElement && printableElement.parentNode) {
+        printableElement.parentNode.removeChild(printableElement);
       }
     }
   }
 
   async generatePDFBlob() {
     const isLoaded = await this.ensureLibrary();
-    if (!isLoaded || typeof html2pdf === 'undefined') {
+    const html2pdfLib = (typeof window.html2pdf !== 'undefined') ? window.html2pdf : (typeof html2pdf !== 'undefined' ? html2pdf : null);
+    if (!isLoaded || !html2pdfLib) {
       throw new Error('PDF generation library failed to initialize.');
     }
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
     }
     await new Promise(r => setTimeout(r, 60));
+
     const printableElement = this.buildPrintableA4Element();
-    const opt = {
-      margin: [15, 15, 15, 15],
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true, backgroundColor: '#ffffff' },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
-    return await html2pdf().set(opt).from(printableElement).outputPdf('blob');
+
+    try {
+      const opt = {
+        margin: [15, 15, 15, 15],
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+      return await html2pdfLib().set(opt).from(printableElement).outputPdf('blob');
+    } finally {
+      if (printableElement && printableElement.parentNode) {
+        printableElement.parentNode.removeChild(printableElement);
+      }
+    }
   }
 
   async saveToCloud() {
@@ -617,8 +664,8 @@ class PDFEngine {
       const state = window.invoiceStore ? window.invoiceStore.getState() : {};
       const rawInvNumber = (document.getElementById('invoiceNumber')?.value || state.number || '001').trim();
       const rawClientName = (document.getElementById('clientName')?.value || state.client?.name || '').trim();
-      const cleanInvNumber = rawInvNumber.replace(/[^a-zA-Z0-9-_]/g, '-') || 'INV-001';
-      const cleanClientName = rawClientName.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').slice(0, 40);
+      const cleanInvNumber = rawInvNumber.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '') || 'INV-001';
+      const cleanClientName = rawClientName.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
       const filename = cleanClientName ? `Invoice-${cleanInvNumber}-${cleanClientName}.pdf` : `Invoice-${cleanInvNumber}.pdf`;
 
       if (window.saveFileToCloud) {

@@ -235,7 +235,7 @@
         const nums = generateNumbers();
         if (nums && nums.length) {
           localStorage.setItem('pending_invoice_number', nums[0]);
-          window.location.href = 'index.html';
+          window.location.href = '/';
         }
       };
     }
@@ -421,7 +421,7 @@
           discountPercent: d.discountPct
         };
         sessionStorage.setItem('pending_invoice_preset', JSON.stringify(pending));
-        window.location.href = 'index.html';
+        window.location.href = '/';
       };
     }
 
@@ -521,7 +521,7 @@
         }
         const pending = { items, taxPercent: d.taxRate };
         sessionStorage.setItem('pending_invoice_preset', JSON.stringify(pending));
-        window.location.href = 'index.html';
+        window.location.href = '/';
       };
     }
 
@@ -625,7 +625,7 @@
           items: [{ description: 'Professional Invoice Settlement', quantity: 1, rate: d.grossUpTarget || d.amount }]
         };
         sessionStorage.setItem('pending_invoice_preset', JSON.stringify(pending));
-        window.location.href = 'index.html';
+        window.location.href = '/';
       };
     }
 
@@ -720,7 +720,7 @@
         // Save redirect and open login prompt
         setTimeout(() => {
           if (confirm('You need an account to save files to Cloud. Would you like to log in now?')) {
-            window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+            window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
           }
         }, 300);
         return false;
@@ -2112,7 +2112,7 @@
         e.preventDefault();
         const d = calculate();
         sessionStorage.setItem('pending_invoice_due_date', d.isoFormatted);
-        window.location.href = 'index.html';
+        window.location.href = '/';
       };
     }
 
@@ -2394,7 +2394,7 @@
         const data = await res.json();
 
         if (res.status === 401) {
-          window.location.href = '/login.html?redirect=/files';
+          window.location.href = '/login?redirect=/files';
           return;
         }
 
