@@ -265,6 +265,18 @@
       // 1. Swap <main> content seamlessly
       currentMain.replaceWith(newMain);
 
+      // 1b. Synchronize page-specific styles from newDoc
+      try {
+        const oldPjaxStyles = document.querySelectorAll('style[data-pjax-style]');
+        oldPjaxStyles.forEach(s => s.remove());
+        const incomingStyles = newDoc.querySelectorAll('style');
+        incomingStyles.forEach(s => {
+          const clone = s.cloneNode(true);
+          clone.setAttribute('data-pjax-style', 'true');
+          document.head.appendChild(clone);
+        });
+      } catch (e) {}
+
       // 2. Subtle Entrance Micro-Transition (opacity 0.98 -> 1, translateY 3px -> 0, 160ms)
       if (!isReducedMotion()) {
         newMain.classList.remove('page-content-enter');
