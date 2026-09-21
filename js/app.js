@@ -44,11 +44,11 @@ window.initInvoiceEditorPage = function () {
   function setAutoSaveStatus(status) {
     if (!saveStatusSubtext) return;
     if (status === 'saving') {
-      saveStatusSubtext.textContent = 'Saving…';
+      saveStatusSubtext.textContent = 'Saving to cloud…';
     } else if (status === 'saved') {
-      saveStatusSubtext.textContent = 'All changes saved ✓';
+      saveStatusSubtext.textContent = 'Cloud saved ✓';
     } else {
-      saveStatusSubtext.textContent = 'Saves invoice to your account';
+      saveStatusSubtext.textContent = 'Saves automatically to your cloud account';
     }
   }
 
@@ -226,39 +226,58 @@ window.initInvoiceEditorPage = function () {
     clearTimeout(autoSaveTimer);
     setAutoSaveStatus('saving');
     autoSaveTimer = setTimeout(() => {
-      if (activeInvoiceId) {
-        autoSaveDraftSilently();
-      } else {
-        setAutoSaveStatus('saved');
-        setTimeout(() => setAutoSaveStatus('ready'), 2200);
-      }
-    }, 1200);
+      autoSaveDraftSilently();
+    }, 800);
   }
 
   async function autoSaveDraftSilently() {
-    if (!activeInvoiceId) return;
     try {
       const payload = buildInvoicePayload('draft');
-      const errs = validateInvoice(payload);
-      if (errs.length > 0) return;
+      if (store.isFormEmpty()) {
+        setAutoSaveStatus('ready');
+        return;
+      }
 
-      const res = await fetch(`/api/invoices/${activeInvoiceId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        setAutoSaveStatus('saved');
-        setTimeout(() => setAutoSaveStatus('ready'), 2200);
-        if (btnSaveInvoiceText && !btnSaveInvoiceText.textContent.includes('...')) {
-          const original = btnSaveInvoiceText.textContent;
-          btnSaveInvoiceText.textContent = 'Saved (Draft)';
-          setTimeout(() => {
-            if (btnSaveInvoiceText) btnSaveInvoiceText.textContent = original;
-          }, 1500);
+      if (activeInvoiceId && !String(activeInvoiceId).startsWith('inv-draft-')) {
+        const res = await fetch(`/api/invoices/${activeInvoiceId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          setAutoSaveStatus('saved');
+          setTimeout(() => setAutoSaveStatus('ready'), 2200);
+          if (btnSaveInvoiceText && !btnSaveInvoiceText.textContent.includes('...')) {
+            const original = btnSaveInvoiceText.textContent;
+            btnSaveInvoiceText.textContent = 'Saved (Draft)';
+            setTimeout(() => {
+              if (btnSaveInvoiceText) btnSaveInvoiceText.textContent = original;
+            }, 1500);
+          }
+        } else {
+          setAutoSaveStatus('ready');
+        }
+      } else {
+        // Sync working draft to Cloud SQLite Database
+        const res = await fetch('/api/user/draft', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          setAutoSaveStatus('saved');
+          setTimeout(() => setAutoSaveStatus('ready'), 2200);
+        } else {
+          // Unauthenticated fallback to localStorage
+          try {
+            localStorage.setItem('invoicegen_draft', JSON.stringify(payload));
+          } catch (e) {}
+          setAutoSaveStatus('ready');
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      setAutoSaveStatus('ready');
+    }
   }
 
   // Helper to build a single row element with bound event handlers
@@ -538,37 +557,37 @@ window.initInvoiceEditorPage = function () {
   // ---------------------------------------------------------------------------
   // 6. Primary PDF Export & Print Actions
   // ---------------------------------------------------------------------------
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (window.pdfEngine) {
       window.pdfEngine.downloadPDF();
     }
-    // Record to saved invoices in localStorage for Dashboard visibility
+    // Automatically persist invoice to Cloud Database upon download
     try {
-      const state = store.getState();
-      const totals = store.calculateTotals();
-      const rawInvoices = localStorage.getItem('invoicegen_invoices');
-      let invoices = rawInvoices ? JSON.parse(rawInvoices) : [];
-      const curSymbol = CURRENCIES[state.currency]?.symbol || '$';
-      const invRecord = {
-        id: 'inv-' + Date.now(),
-        number: `INV-${state.number || '001'}`,
-        clientName: state.client?.name || 'Client',
-        clientEmail: state.client?.email || '',
-        issueDate: state.date || 'Today',
-        dueDate: state.dueDate || 'Upon Receipt',
-        amount: totals.grandTotal || 0,
-        currency: state.currency || 'USD',
-        currencySymbol: curSymbol,
-        status: totals.balanceDue <= 0 ? 'paid' : 'pending'
-      };
-      const existingIdx = invoices.findIndex(i => i.number === invRecord.number);
-      if (existingIdx >= 0) {
-        invoices[existingIdx] = { ...invoices[existingIdx], ...invRecord };
-      } else {
-        invoices.unshift(invRecord);
+      const payload = buildInvoicePayload('pending');
+      const authRes = await fetch('/api/auth/me');
+      const authData = await authRes.json();
+      if (authData && authData.authenticated) {
+        const isUpdate = Boolean(activeInvoiceId && !String(activeInvoiceId).startsWith('inv-draft-'));
+        const endpoint = isUpdate ? `/api/invoices/${activeInvoiceId}` : '/api/invoices';
+        const method = isUpdate ? 'PUT' : 'POST';
+        const res = await fetch(endpoint, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          activeInvoiceId = data.id || (data.invoice && data.invoice.id) || activeInvoiceId;
+          // Clear working draft since invoice is now generated & saved to database
+          fetch('/api/user/draft', { method: 'DELETE' }).catch(() => {});
+          if (window.loadDashboardSummary) window.loadDashboardSummary();
+          if (window.loadInvoicesTable) window.loadInvoicesTable();
+          if (window.showToast) window.showToast(`Invoice #${payload.number} saved to your cloud account!`, 'success');
+        }
       }
-      localStorage.setItem('invoicegen_invoices', JSON.stringify(invoices));
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Cloud auto-save on download notice:', e);
+    }
 
     // Log PDF download activity if logged in
     try {
@@ -1523,38 +1542,52 @@ window.initInvoiceEditorPage = function () {
         }
       } catch (e) {}
 
-      // Restore saved draft if present and form is at default state
-      try {
-        const rawDraft = localStorage.getItem('invoicegen_draft');
-        if (rawDraft && store.isFormEmpty()) {
-          const draft = JSON.parse(rawDraft);
-          if (draft && draft.number) {
-            activeInvoiceId = draft.id || null;
-            if (btnSaveInvoiceText && activeInvoiceId) btnSaveInvoiceText.textContent = 'Update Invoice';
-            store.updateState('number', draft.number);
-            if (draft.date) store.updateState('date', draft.date);
-            if (draft.dueDate) store.updateState('dueDate', draft.dueDate);
-            if (draft.poNumber) store.updateState('poNumber', draft.poNumber);
-            if (draft.paymentTerms) store.updateState('paymentTerms', draft.paymentTerms);
-            if (draft.currency) store.updateState('currency', draft.currency);
-            if (draft.sender?.name) store.updateState('sender.name', draft.sender.name);
-            if (draft.sender?.address) store.updateState('sender.address', draft.sender.address);
-            if (draft.client?.name) store.updateState('client.name', draft.client.name);
-            if (draft.client?.address) store.updateState('client.address', draft.client.address);
-            if (draft.client?.email) store.updateState('client.email', draft.client.email);
-            if (draft.shipTo?.name) store.updateState('shipTo.name', draft.shipTo.name);
-            if (draft.shipTo?.address) store.updateState('shipTo.address', draft.shipTo.address);
-            if (draft.notes) store.updateState('notes', draft.notes);
-            if (draft.taxRate !== undefined) store.updateState('taxRate', draft.taxRate);
-            if (draft.discountValue !== undefined) store.updateState('discountValue', draft.discountValue);
-            if (draft.amountPaid !== undefined) store.updateState('amountPaid', draft.amountPaid);
-            if (Array.isArray(draft.items) && draft.items.length > 0) {
-              store.updateState('items', draft.items);
+      // Restore saved draft (Cloud draft has priority, with fallback to local draft)
+      (async () => {
+        try {
+          if (!activeInvoiceId && store.isFormEmpty()) {
+            const cloudDraft = await store.loadFromCloud();
+            if (cloudDraft) {
+              syncUIFromState(store.getState());
+              if (saveStatusSubtext) saveStatusSubtext.textContent = 'Restored cloud draft ✓';
+              return;
             }
-            syncUIFromState(store.getState());
           }
-        }
-      } catch (e) {}
+        } catch (e) {}
+
+        // Fallback: check localStorage for offline users
+        try {
+          const rawDraft = localStorage.getItem('invoicegen_draft');
+          if (rawDraft && store.isFormEmpty()) {
+            const draft = JSON.parse(rawDraft);
+            if (draft && draft.number) {
+              activeInvoiceId = draft.id || null;
+              if (btnSaveInvoiceText && activeInvoiceId) btnSaveInvoiceText.textContent = 'Update Invoice';
+              store.updateState('number', draft.number);
+              if (draft.date) store.updateState('date', draft.date);
+              if (draft.dueDate) store.updateState('dueDate', draft.dueDate);
+              if (draft.poNumber) store.updateState('poNumber', draft.poNumber);
+              if (draft.paymentTerms) store.updateState('paymentTerms', draft.paymentTerms);
+              if (draft.currency) store.updateState('currency', draft.currency);
+              if (draft.sender?.name) store.updateState('sender.name', draft.sender.name);
+              if (draft.sender?.address) store.updateState('sender.address', draft.sender.address);
+              if (draft.client?.name) store.updateState('client.name', draft.client.name);
+              if (draft.client?.address) store.updateState('client.address', draft.client.address);
+              if (draft.client?.email) store.updateState('client.email', draft.client.email);
+              if (draft.shipTo?.name) store.updateState('shipTo.name', draft.shipTo.name);
+              if (draft.shipTo?.address) store.updateState('shipTo.address', draft.shipTo.address);
+              if (draft.notes) store.updateState('notes', draft.notes);
+              if (draft.taxRate !== undefined) store.updateState('taxRate', draft.taxRate);
+              if (draft.discountValue !== undefined) store.updateState('discountValue', draft.discountValue);
+              if (draft.amountPaid !== undefined) store.updateState('amountPaid', draft.amountPaid);
+              if (Array.isArray(draft.items) && draft.items.length > 0) {
+                store.updateState('items', draft.items);
+              }
+              syncUIFromState(store.getState());
+            }
+          }
+        } catch (e) {}
+      })();
     }
 
     // Check if client_id was passed in URL

@@ -21,206 +21,272 @@
   <link rel="stylesheet" href="/css/invoice-editor.css?v=8.0">
   <link rel="stylesheet" href="/css/app-shell.css?v=8.0">
   <script src="/js/google-auth.js?v=8.0"></script>
+  <script src="/js/cloud-sync.js?v=8.0"></script>
+  <script src="/js/html2pdf.bundle.min.js"></script>
+  <script src="/js/invoice-state.js?v=8.0"></script>
+  <script src="/js/pdf-generator.js?v=8.0"></script>
+  <script src="/js/app.js?v=8.0"></script>
 </head>
 <body class="saas-body">
 
-  <!-- ==================================================================== -->
-  <!-- 1. UNIVERSAL TOP APPLICATION HEADER                                 -->
-  <!-- ==================================================================== -->
-  <header class="saas-top-header" id="mainHeader">
-    <div class="saas-header-container">
-      <!-- Left: Brand Lockup -->
-      <a href="/dashboard" class="saas-brand-wrap" title="Invoice-Gen.net Workspace">
-        <img src="/assets/icons/logo.svg?v=9.0" alt="Invoice-Gen.net Logo" class="saas-brand-logo-img" width="34" height="34">
-        <div class="saas-brand-text-block">
-          <span class="saas-brand-title">Invoice-Gen<span class="accent-dot">.net</span></span>
-          <span class="saas-brand-tagline">INVOICING MADE SIMPLE</span>
+  <div class="saas-shell">
+    <!-- ================================================================== -->
+    <!-- 1. AUTHENTICATED DESKTOP SIDEBAR (240px Fixed)                      -->
+    <!-- ================================================================== -->
+    <aside class="saas-sidebar" id="desktopSidebar">
+      <!-- Brand Lockup -->
+      <a href="/dashboard" class="saas-sidebar-brand" title="Invoice-Gen.net Workspace">
+        <div class="saas-sidebar-brand-logo">
+          <img src="/assets/icons/logo.svg?v=9.0" alt="Logo" width="22" height="22">
         </div>
+        <span class="saas-sidebar-brand-name">Invoice-Gen<span class="accent-dot">.net</span></span>
       </a>
 
-      <!-- Center: Main Workspace Navigation -->
-      <nav class="saas-top-nav" aria-label="Authenticated workspace navigation">
-        <button type="button" class="saas-nav-item active" data-tab="overview" id="navItemOverview">
+      <!-- Primary Sidebar Navigation -->
+      <div class="saas-sidebar-nav">
+        <button type="button" class="saas-nav-item active" data-tab="overview" id="sideNavOverview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           <span>Dashboard</span>
         </button>
-        <button type="button" class="saas-nav-item" data-tab="invoices" id="navItemInvoices">
+
+        <button type="button" class="saas-nav-item btn-nav-create" data-tab="create" id="sideNavCreate" onclick="window.switchWorkspaceTab('create')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Create Invoice</span>
+        </button>
+
+        <button type="button" class="saas-nav-item" data-tab="invoices" id="sideNavInvoices">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
           <span>Invoices</span>
         </button>
-        <button type="button" class="saas-nav-item" data-tab="clients" id="navItemClients">
+
+        <button type="button" class="saas-nav-item" data-tab="clients" id="sideNavClients">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           <span>Clients</span>
         </button>
-        <a href="/templates" class="saas-nav-item" id="navItemTemplates">
+
+        <button type="button" class="saas-nav-item" data-tab="templates" id="sideNavTemplates">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
           <span>Templates</span>
-        </a>
-        <a href="/tools" class="saas-nav-item" id="navItemTools">
+        </button>
+
+        <a href="/tools" class="saas-nav-item" id="sideNavTools">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
           <span>Tools</span>
         </a>
-      </nav>
 
-      <!-- Right: Search, Notifications, Language, Avatar -->
-      <div class="saas-header-actions">
-        <!-- Global Search Button -->
-        <button type="button" class="saas-header-search-btn" id="btnTopbarSearch" title="Global Search (Ctrl+K)" aria-label="Global Search">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <span class="search-text">Search...</span>
-          <kbd class="search-kbd">⌘K</kbd>
+        <button type="button" class="saas-nav-item" data-tab="files" id="sideNavFiles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+          <span>Files</span>
         </button>
 
-        <!-- Notifications Bell & Dropdown -->
-        <div class="saas-header-notif-wrap" style="position: relative;">
-          <button type="button" class="saas-icon-btn" id="btnTopbarNotif" title="Notifications" aria-label="Notifications">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-            <span class="saas-badge-dot" id="topbarNotifDot" style="display: none;"></span>
-          </button>
-          <div class="saas-dropdown-menu" id="notifDropdown">
-            <div class="saas-dropdown-header">
-              <span class="saas-dropdown-title">Notifications</span>
-              <button type="button" class="saas-dropdown-btn-link" id="btnMarkAllNotifsRead">Mark all read</button>
-            </div>
-            <div class="saas-notif-list" id="notifDropdownList">
-              <div style="padding: 20px; text-align: center; color: #64748b; font-size: 0.8125rem;">No unread notifications</div>
-            </div>
-          </div>
-        </div>
+        <button type="button" class="saas-nav-item" data-tab="payments" id="sideNavPayments">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+          <span>Payments</span>
+        </button>
 
-        <!-- Language Selector -->
-        <div class="lang-switcher-container"></div>
+        <div class="saas-sidebar-divider"></div>
 
-        <!-- User Avatar Dropdown -->
-        <div class="saas-user-dropdown-wrap" style="position: relative;">
-          <button type="button" class="saas-user-avatar-btn" id="topbarUserAvatar" aria-haspopup="true" aria-expanded="false" title="Account menu">
-            <span class="avatar-initial" id="avatarInitialText">U</span>
-          </button>
-          <div class="saas-dropdown-menu saas-user-dropdown" id="userMenuDropdown" role="menu">
-            <div class="saas-user-dropdown-info">
-              <div class="user-menu-name" id="menuUserName">User</div>
-              <div class="user-menu-email" id="menuUserEmail">user@example.com</div>
-            </div>
-            <div class="user-menu-links" style="padding: 6px 0;">
-              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('settings')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                <span>Account Settings</span>
-              </button>
-              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('business')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span>Business Profile</span>
-              </button>
-              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('billing')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><line x1="12" y1="6" x2="12" y2="8"></line><line x1="12" y1="16" x2="12" y2="18"></line></svg>
-                <span>Billing &amp; Subscription</span>
-              </button>
-              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('payments')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                <span>Payments Ledger</span>
-              </button>
-              <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('files')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-                <span>Cloud Files</span>
-              </button>
-              <a href="/help" class="saas-dropdown-item">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                <span>Help &amp; Support</span>
-              </a>
-              <div class="saas-dropdown-divider" style="height: 1px; background: #e2e8f0; margin: 4px 0;"></div>
-              <button type="button" class="saas-dropdown-item danger" id="btnMenuLogout">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                <span>Sign Out</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        <button type="button" class="saas-nav-item" data-tab="settings" id="sideNavSettings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
+        </button>
 
-        <!-- Mobile Menu Toggle Button -->
-        <button type="button" class="saas-mobile-menu-btn" id="btnMobileMenuToggle" aria-label="Toggle navigation menu">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <button type="button" class="saas-nav-item" data-tab="help" id="sideNavHelp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Help</span>
         </button>
       </div>
-    </div>
-  </header>
 
-  <!-- ==================================================================== -->
-  <!-- 2. MOBILE SLIDE-IN DRAWER & BACKDROP                                 -->
-  <!-- ==================================================================== -->
-  <div class="saas-drawer-backdrop" id="mobileDrawerBackdrop"></div>
+      <!-- Sidebar Bottom User Capsule -->
+      <div class="saas-sidebar-footer">
+        <div class="saas-user-capsule">
+          <div class="saas-user-avatar" id="sideUserAvatar">U</div>
+          <div class="saas-user-meta">
+            <div class="saas-user-name" id="sideUserName">User</div>
+            <div class="saas-user-role" id="sideUserEmail">user@example.com</div>
+          </div>
+          <button type="button" id="btnSidebarLogout" title="Sign Out" aria-label="Sign Out" style="width: 28px; height: 28px; color: #ef4444; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
 
-  <div class="saas-mobile-drawer" id="mobileDrawer">
-    <div class="saas-drawer-header">
-      <a href="/dashboard" class="saas-brand-wrap">
-        <img src="/assets/icons/logo.svg?v=9.0" alt="Logo" width="28" height="28">
-        <span class="saas-brand-title">Invoice-Gen<span class="accent-dot">.net</span></span>
-      </a>
-      <button type="button" class="saas-drawer-close-btn" id="btnMobileDrawerClose" aria-label="Close menu">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-    </div>
+    <!-- ================================================================== -->
+    <!-- 2. MAIN WORKSPACE LAYOUT (Fluid, offset 240px on desktop)          -->
+    <!-- ================================================================== -->
+    <div class="saas-main-layout">
+      <!-- Universal Top Application Header -->
+      <header class="saas-top-header" id="mainHeader">
+        <div class="saas-topbar-left">
+          <!-- Mobile Menu Toggle Button -->
+          <button type="button" class="saas-mobile-menu-btn" id="btnMobileMenuToggle" aria-label="Toggle navigation menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
 
-    <nav class="saas-drawer-nav" aria-label="Mobile workspace navigation">
-      <button type="button" class="saas-drawer-link active" data-tab="overview">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-        <span>Dashboard</span>
-      </button>
-      <button type="button" class="saas-drawer-link" data-tab="invoices">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-        <span>Invoices</span>
-      </button>
-      <button type="button" class="saas-drawer-link" data-tab="clients">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-        <span>Clients</span>
-      </button>
-      <a href="/templates" class="saas-drawer-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
-        <span>Templates</span>
-      </a>
-      <a href="/tools" class="saas-drawer-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-        <span>Tools</span>
-      </a>
-      <button type="button" class="saas-drawer-link" data-tab="payments">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-        <span>Payments</span>
-      </button>
-      <button type="button" class="saas-drawer-link" data-tab="files">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
-        <span>Files</span>
-      </button>
+          <!-- Mobile Brand Lockup -->
+          <a href="/dashboard" class="saas-mobile-brand-wrap" title="Invoice-Gen.net Workspace">
+            <img src="/assets/icons/logo.svg?v=9.0" alt="Logo" width="28" height="28">
+            <span class="saas-brand-title" style="font-weight: 800; font-size: 1rem; color: #0f172a;">Invoice-Gen<span class="accent-dot" style="color: #059669;">.net</span></span>
+          </a>
 
-      <div class="saas-drawer-divider" style="height: 1px; background: #e2e8f0; margin: 8px 12px;"></div>
+          <!-- Active Section Title -->
+          <h1 class="saas-active-page-title" id="saasActivePageTitle">Dashboard</h1>
+        </div>
 
-      <button type="button" class="saas-drawer-link" data-tab="business">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-        <span>Business Profile</span>
-      </button>
-      <button type="button" class="saas-drawer-link" data-tab="billing">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path></svg>
-        <span>Billing &amp; Subscription</span>
-      </button>
-      <button type="button" class="saas-drawer-link" data-tab="settings">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        <span>Settings</span>
-      </button>
-      <a href="/help" class="saas-drawer-link">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <span>Help</span>
-      </a>
+        <!-- Right: Search, Notifications, Language, Avatar -->
+        <div class="saas-header-actions">
+          <!-- Global Search Button -->
+          <button type="button" class="saas-header-search-btn" id="btnTopbarSearch" title="Global Search (Ctrl+K)" aria-label="Global Search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span class="search-text">Search...</span>
+            <kbd class="search-kbd">⌘K</kbd>
+          </button>
 
-      <div class="saas-drawer-divider" style="height: 1px; background: #e2e8f0; margin: 8px 12px;"></div>
+          <!-- Notifications Bell & Dropdown -->
+          <div class="saas-header-notif-wrap" style="position: relative;">
+            <button type="button" class="saas-icon-btn" id="btnTopbarNotif" title="Notifications" aria-label="Notifications">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span class="saas-badge-dot" id="topbarNotifDot" style="display: none;"></span>
+            </button>
+            <div class="saas-dropdown-menu" id="notifDropdown">
+              <div class="saas-dropdown-header">
+                <span class="saas-dropdown-title">Notifications</span>
+                <button type="button" class="saas-dropdown-btn-link" id="btnMarkAllNotifsRead">Mark all read</button>
+              </div>
+              <div class="saas-notif-list" id="notifDropdownList">
+                <div style="padding: 20px; text-align: center; color: #64748b; font-size: 0.8125rem;">No unread notifications</div>
+              </div>
+            </div>
+          </div>
 
-      <button type="button" class="saas-drawer-link danger" id="btnMobileDrawerLogout" style="color: #ef4444;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-        <span>Log Out</span>
-      </button>
-    </nav>
-  </div>
+          <!-- Language Selector -->
+          <div class="lang-switcher-container"></div>
 
-  <!-- ==================================================================== -->
-  <!-- 3. MAIN WORKSPACE CONTAINER (Centered, Max-Width 1240px)             -->
-  <!-- ==================================================================== -->
-  <main class="saas-main-container" id="saasContentBody">
+          <!-- User Avatar Dropdown (NO Billing/Subscription UI) -->
+          <div class="saas-user-dropdown-wrap" style="position: relative;">
+            <button type="button" class="saas-user-avatar-btn" id="topbarUserAvatar" aria-haspopup="true" aria-expanded="false" title="Account menu">
+              <span class="avatar-initial" id="avatarInitialText">U</span>
+            </button>
+            <div class="saas-dropdown-menu saas-user-dropdown" id="userMenuDropdown" role="menu">
+              <div class="saas-user-dropdown-info">
+                <div class="user-menu-name" id="menuUserName">User</div>
+                <div class="user-menu-email" id="menuUserEmail">user@example.com</div>
+              </div>
+              <div class="user-menu-links" style="padding: 6px 0;">
+                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('settings')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                  <span>Account Settings</span>
+                </button>
+                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('business')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                  <span>Business Profile</span>
+                </button>
+                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('invoices')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  <span>My Invoices</span>
+                </button>
+                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('payments')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                  <span>Payments Ledger</span>
+                </button>
+                <button type="button" class="saas-dropdown-item" onclick="window.switchWorkspaceTab('files')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                  <span>Cloud Files</span>
+                </button>
+                <a href="/help" class="saas-dropdown-item">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                  <span>Help &amp; Support</span>
+                </a>
+                <div class="saas-dropdown-divider" style="height: 1px; background: #e2e8f0; margin: 4px 0;"></div>
+                <button type="button" class="saas-dropdown-item danger" id="btnMenuLogout">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ================================================================ -->
+      <!-- 3. MOBILE SLIDE-IN DRAWER & BACKDROP                             -->
+      <!-- ================================================================ -->
+      <div class="saas-drawer-backdrop" id="mobileDrawerBackdrop"></div>
+
+      <div class="saas-mobile-drawer" id="mobileDrawer">
+        <div class="saas-drawer-header">
+          <a href="/dashboard" class="saas-brand-wrap">
+            <img src="/assets/icons/logo.svg?v=9.0" alt="Logo" width="28" height="28">
+            <span class="saas-brand-title">Invoice-Gen<span class="accent-dot">.net</span></span>
+          </a>
+          <button type="button" class="saas-drawer-close-btn" id="btnMobileDrawerClose" aria-label="Close menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <nav class="saas-drawer-nav" aria-label="Mobile workspace navigation">
+          <button type="button" class="saas-drawer-link active" data-tab="overview">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Dashboard</span>
+          </button>
+          <button type="button" class="saas-drawer-link" data-tab="create" style="font-weight: 700; color: #059669;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Create Invoice</span>
+          </button>
+          <button type="button" class="saas-drawer-link" data-tab="invoices">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span>Invoices</span>
+          </button>
+          <button type="button" class="saas-drawer-link" data-tab="clients">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span>Clients</span>
+          </button>
+          <button type="button" class="saas-drawer-link" data-tab="templates">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
+            <span>Templates</span>
+          </button>
+          <a href="/tools" class="saas-drawer-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            <span>Tools</span>
+          </a>
+          <button type="button" class="saas-drawer-link" data-tab="files">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+            <span>Files</span>
+          </button>
+          <button type="button" class="saas-drawer-link" data-tab="payments">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            <span>Payments</span>
+          </button>
+
+          <div class="saas-drawer-divider" style="height: 1px; background: #e2e8f0; margin: 8px 12px;"></div>
+
+          <button type="button" class="saas-drawer-link" data-tab="business">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Business Profile</span>
+          </button>
+          <button type="button" class="saas-drawer-link" data-tab="settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Settings</span>
+          </button>
+          <a href="/help" class="saas-drawer-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span>Help</span>
+          </a>
+
+          <div class="saas-drawer-divider" style="height: 1px; background: #e2e8f0; margin: 8px 12px;"></div>
+
+          <button type="button" class="saas-drawer-link danger" id="btnMobileDrawerLogout" style="color: #ef4444;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Log Out</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ================================================================ -->
+      <!-- 4. MAIN WORKSPACE CONTAINER                                      -->
+      <!-- ================================================================ -->
+      <main class="saas-main-container" id="saasContentBody">
 
         <!-- ============================================================= -->
         <!-- ============================================================= -->
@@ -235,10 +301,10 @@
               <p class="dash-greeting-sub">Manage your invoices, clients, and payments from one place.</p>
             </div>
             <div class="dash-header-actions">
-              <a href="/" class="btn-dash-primary" id="btnHeroCreateInvoice">
+              <button type="button" class="btn-dash-primary" id="btnHeroCreateInvoice" onclick="window.switchWorkspaceTab('create')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                <span>+ Create Invoice</span>
-              </a>
+                <span>Create Invoice</span>
+              </button>
               <button type="button" class="btn-dash-secondary" onclick="window.switchWorkspaceTab('invoices')">
                 View Invoices
               </button>
@@ -257,10 +323,10 @@
                 <h2 class="dash-welcome-title">Create your first invoice</h2>
                 <p class="dash-welcome-sub">Create a professional invoice in a few minutes.</p>
                 <div class="dash-welcome-actions">
-                  <a href="/" class="btn-dash-primary">
+                  <button type="button" class="btn-dash-primary" onclick="window.switchWorkspaceTab('create')">
                     <span>Create Invoice</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                  </a>
+                  </button>
                   <button type="button" class="btn-dash-secondary" onclick="window.switchWorkspaceTab('templates')">
                     Explore Templates
                   </button>
@@ -288,14 +354,14 @@
                   </div>
                   <svg class="step-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </div>
-                <a href="/" class="onboarding-step-card">
+                <div class="onboarding-step-card" onclick="window.switchWorkspaceTab('create')" style="cursor: pointer;">
                   <div class="step-num">03</div>
                   <div class="step-info">
                     <div class="step-title">Create your first invoice</div>
                     <div class="step-desc">Generate a professional PDF in minutes.</div>
                   </div>
                   <svg class="step-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </a>
+                </div>
               </div>
             </div>
 
@@ -303,10 +369,10 @@
             <div class="dash-quick-actions-wrap">
               <div class="dash-section-eyebrow">QUICK ACTIONS</div>
               <div class="dash-quick-actions-bar">
-                <a href="/" class="quick-action-pill primary">
+                <button type="button" class="quick-action-pill primary" onclick="window.switchWorkspaceTab('create')">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                   <span>Create Invoice</span>
-                </a>
+                </button>
                 <button type="button" class="quick-action-pill" onclick="window.openAddClientModal()">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                   <span>Add Client</span>
@@ -330,7 +396,7 @@
                   <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('business')">Edit &rarr;</button>
                 </div>
                 <div class="dash-biz-summary" id="firstTimeBizSummary">
-                  <div class="biz-detail-name" id="ftBizName">Ashikur Rahman Shaon</div>
+                  <div class="biz-detail-name" id="ftBizName">Your Business</div>
                   <div class="biz-detail-row">
                     <span class="biz-meta-label">Currency:</span>
                     <span class="biz-meta-val" id="ftBizCurrency">USD ($)</span>
@@ -348,17 +414,17 @@
                   <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('templates')">View all &rarr;</button>
                 </div>
                 <div class="dash-template-mini-list">
-                  <a href="/?template=emerald" class="template-mini-pill">
+                  <a href="/create-invoice?template=emerald" class="template-mini-pill" onclick="window.loadTemplateAndCreate('emerald'); return false;">
                     <span class="template-dot emerald"></span>
                     <span class="template-mini-name">Emerald Modern</span>
                     <span class="template-mini-cta">Use &rarr;</span>
                   </a>
-                  <a href="/?template=charcoal" class="template-mini-pill">
+                  <a href="/create-invoice?template=charcoal" class="template-mini-pill" onclick="window.loadTemplateAndCreate('charcoal'); return false;">
                     <span class="template-dot slate"></span>
                     <span class="template-mini-name">Minimal Slate</span>
                     <span class="template-mini-cta">Use &rarr;</span>
                   </a>
-                  <a href="/?template=corporate" class="template-mini-pill">
+                  <a href="/create-invoice?template=corporate" class="template-mini-pill" onclick="window.loadTemplateAndCreate('corporate'); return false;">
                     <span class="template-dot navy"></span>
                     <span class="template-mini-name">Corporate Navy</span>
                     <span class="template-mini-cta">Use &rarr;</span>
@@ -423,10 +489,10 @@
 
             <!-- 2. Compact Quick Actions Row -->
             <div class="dash-quick-actions-bar">
-              <a href="/" class="quick-action-pill primary">
+              <button type="button" class="quick-action-pill primary" onclick="window.switchWorkspaceTab('create')">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 <span>Create Invoice</span>
-              </a>
+              </button>
               <button type="button" class="quick-action-pill" onclick="window.openAddClientModal()">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                 <span>Add Client</span>
@@ -546,17 +612,17 @@
                     <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('templates')">View all &rarr;</button>
                   </div>
                   <div class="dash-template-mini-list">
-                    <a href="/?template=emerald" class="template-mini-pill">
+                    <a href="/create-invoice?template=emerald" class="template-mini-pill" onclick="window.loadTemplateAndCreate('emerald'); return false;">
                       <span class="template-dot emerald"></span>
                       <span class="template-mini-name">Emerald Modern</span>
                       <span class="template-mini-cta">Use &rarr;</span>
                     </a>
-                    <a href="/?template=charcoal" class="template-mini-pill">
+                    <a href="/create-invoice?template=charcoal" class="template-mini-pill" onclick="window.loadTemplateAndCreate('charcoal'); return false;">
                       <span class="template-dot slate"></span>
                       <span class="template-mini-name">Minimal Slate</span>
                       <span class="template-mini-cta">Use &rarr;</span>
                     </a>
-                    <a href="/?template=corporate" class="template-mini-pill">
+                    <a href="/create-invoice?template=corporate" class="template-mini-pill" onclick="window.loadTemplateAndCreate('corporate'); return false;">
                       <span class="template-dot navy"></span>
                       <span class="template-mini-name">Corporate Navy</span>
                       <span class="template-mini-cta">Use &rarr;</span>
@@ -581,10 +647,10 @@
               <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 4px;">Invoices</h2>
               <p style="font-size: 0.84rem; color: #64748b; margin: 0;">Create, filter, download vector PDFs, and manage invoice settlement statuses.</p>
             </div>
-            <a href="/" class="btn btn-primary btn-sm" style="font-weight: 700;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="window.switchWorkspaceTab('create')" style="font-weight: 700;">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
               + Create Invoice
-            </a>
+            </button>
           </div>
 
           <div class="dashboard-filter-bar">
@@ -626,7 +692,7 @@
             </div>
             <div class="empty-title">No invoices found</div>
             <div class="empty-desc">Create your first invoice to bill clients and collect payments.</div>
-            <a href="/" class="btn btn-primary" style="margin-top: 12px;">+ Create Invoice</a>
+            <button type="button" class="btn btn-primary" onclick="window.switchWorkspaceTab('create')" style="margin-top: 12px;">+ Create Invoice</button>
           </div>
         </div>
 
@@ -708,98 +774,364 @@
         </div>
 
         <!-- ============================================================= -->
-        <!-- PANEL 5: BILLING & STRIPE SUBSCRIPTION                        -->
+        <!-- PANEL: CREATE INVOICE EDITOR (Integrated Workspace)          -->
         <!-- ============================================================= -->
-        <div id="panelBilling" class="workspace-panel dashboard-card" role="tabpanel" style="display: none;">
-          <div style="margin-bottom: 24px;">
-            <h2 style="font-size: 1.25rem; font-weight: 800; color: #0f172a; margin: 0 0 6px;">Billing &amp; Subscription</h2>
-            <p style="font-size: 0.84rem; color: #64748b; margin: 0;">Manage your workspace subscription tier, Stripe customer portal, and payment history.</p>
-          </div>
+        <div id="panelCreateInvoice" class="workspace-panel" role="tabpanel" style="display: none;">
+          <!-- Editor Workspace Layout (Balanced 70% Editor + 30% Actions) -->
+          <div class="editor-workspace-layout" id="workspace">
 
-          <!-- Stripe Status Alert Banner -->
-          <div id="stripeConfigAlert" style="display: none; padding: 14px 18px; border-radius: 8px; background: #fffbeb; border: 1px solid #fef3c7; color: #92400e; font-size: 0.84rem; margin-bottom: 20px;">
-            <strong>Stripe Integration Notice:</strong> Stripe payment credentials are not yet configured in this environment. In production, provide your Stripe credentials in your secure server environment.
-          </div>
+            <!-- Primary Invoice Sheet Card Canvas -->
+            <div class="invoice-sheet-card" id="invoicePaper">
+              <!-- Top Section: Sender Details & Document Meta -->
+              <div class="sheet-top-grid">
 
-          <!-- Subscription Plan Card -->
-          <div style="padding: 24px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 28px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-              <div>
-                <div style="font-size: 0.75rem; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">CURRENT WORKSPACE TIER</div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #0f172a;" id="billingPlanName">Free Forever Tier</div>
-                <div style="font-size: 0.84rem; color: #64748b; margin-top: 4px;">
-                  Status: <strong id="billingPlanStatus" style="color: #059669; text-transform: capitalize;">Active</strong> &bull; Renewal: <span id="billingNextDate">N/A</span>
+                <!-- Sender Block (Left) -->
+                <div class="sender-info-box">
+                  <div class="sheet-section-header">
+                    <div class="sheet-section-heading-wrap">
+                      <span class="sheet-section-title">FROM</span>
+                      <span class="sheet-section-subtitle">Your business information</span>
+                    </div>
+                  </div>
+
+                  <!-- Logo Slot -->
+                  <div class="logo-slot-wrap">
+                    <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
+                    <button type="button" class="logo-uploader-card" id="btnUploadLogo" title="Upload company or brand logo">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                      <span>+ Add Logo</span>
+                    </button>
+                    <div class="logo-preview-container" id="logoPreviewBox" style="display: none;">
+                      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" alt="Uploaded Logo" id="logoImg">
+                      <div class="logo-actions-overlay">
+                        <button type="button" class="btn-logo-action" id="btnReplaceLogo" title="Replace logo">Replace</button>
+                        <button type="button" class="btn-logo-action btn-logo-remove" id="btnRemoveLogo" title="Remove logo">Remove</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sheet-field-group">
+                    <label class="sheet-input-label sr-only" for="senderName">Business Name</label>
+                    <input type="text" id="senderName" class="form-input sheet-paper-input sheet-sender-name" placeholder="e.g. Your Business Name">
+                  </div>
+                  <div class="sheet-field-group">
+                    <label class="sheet-input-label sr-only" for="senderAddress">Business Address</label>
+                    <textarea id="senderAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. 123 Innovation Way, Suite 400&#10;San Francisco, CA 94105&#10;contact@yourbusiness.com"></textarea>
+                  </div>
+                </div>
+
+                <!-- Document Title & Meta (Right) -->
+                <div class="doc-meta-box">
+                  <input type="text" id="invoiceTitleHeading" class="invoice-title-heading-input" value="INVOICE" placeholder="INVOICE" title="Click to rename document title">
+
+                  <div class="meta-inputs-grid">
+                    <label class="meta-field-label" for="invoiceNumber">Invoice Number</label>
+                    <input type="text" id="invoiceNumber" class="form-input sheet-paper-input" placeholder="INV-001">
+
+                    <label class="meta-field-label" for="invoiceDate">Issue Date</label>
+                    <input type="date" id="invoiceDate" class="form-input sheet-paper-input">
+
+                    <label class="meta-field-label" for="paymentTerms">Payment Terms</label>
+                    <select id="paymentTerms" class="form-select sheet-paper-select">
+                      <option value="Due on Receipt">Due on Receipt</option>
+                      <option value="Net 7 Days">Net 7 Days</option>
+                      <option value="Net 15 Days">Net 15 Days</option>
+                      <option value="Net 30 Days">Net 30 Days</option>
+                      <option value="Net 60 Days">Net 60 Days</option>
+                    </select>
+
+                    <label class="meta-field-label due-date-field-row" for="dueDateInput" style="display: none;">Payment Due Date</label>
+                    <input type="date" id="dueDateInput" class="form-input sheet-paper-input due-date-field-row" style="display: none;">
+
+                    <label class="meta-field-label po-field-row" for="poNumber" style="display: none;">Purchase Order (PO#)</label>
+                    <input type="text" id="poNumber" class="form-input sheet-paper-input po-field-row" placeholder="e.g. PO-8921" style="display: none;">
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Bill To & Ship To Side-by-Side -->
+              <div class="sheet-billing-row" id="sheetBillingRow">
+                <div class="sheet-billing-col" id="billToCol">
+                  <div class="sheet-section-header">
+                    <div class="sheet-section-heading-wrap">
+                      <span class="sheet-section-title">BILL TO</span>
+                      <span class="sheet-section-subtitle">Customer information</span>
+                    </div>
+                    <div class="sheet-client-quick-select-wrap" id="clientSelectWrap">
+                      <select id="clientPickerSelect" class="sheet-client-picker-select" aria-label="Select saved client">
+                        <option value="">Select Client ▼</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="sheet-field-group">
+                    <label class="sheet-input-label sr-only" for="clientName">Client or Company Name</label>
+                    <input type="text" id="clientName" class="form-input sheet-paper-input sheet-client-name" placeholder="e.g. Client or Company Name">
+                  </div>
+                  <div class="sheet-field-group">
+                    <label class="sheet-input-label sr-only" for="clientAddress">Billing Address</label>
+                    <textarea id="clientAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. 742 Evergreen Terrace&#10;Springfield, OR 97477"></textarea>
+                  </div>
+                </div>
+
+                <div class="sheet-billing-col" id="shipToCardPanel">
+                  <div class="sheet-section-header">
+                    <div class="sheet-section-heading-wrap">
+                      <div class="sheet-title-with-badge">
+                        <span class="sheet-section-title">SHIP TO</span>
+                        <span class="sheet-optional-badge">Optional</span>
+                      </div>
+                      <span class="sheet-section-subtitle">Delivery address</span>
+                    </div>
+                  </div>
+                  <div class="sheet-field-group">
+                    <label class="sheet-input-label sr-only" for="shipToName">Recipient Name</label>
+                    <input type="text" id="shipToName" class="form-input sheet-paper-input" placeholder="e.g. Warehouse or Recipient">
+                  </div>
+                  <div class="sheet-field-group">
+                    <label class="sheet-input-label sr-only" for="shipToAddress">Shipping Address</label>
+                    <textarea id="shipToAddress" class="form-textarea sheet-paper-textarea" rows="3" placeholder="e.g. Shipping destination address..."></textarea>
+                  </div>
                 </div>
               </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <button type="button" class="btn btn-primary" id="btnUpgradeProStripe" onclick="window.startStripeUpgrade('pro')">
-                  Upgrade to Pro ($12/mo)
-                </button>
-                <button type="button" class="btn btn-secondary" id="btnManagePortalStripe" onclick="window.openStripeCustomerPortal()" style="display: none;">
-                  Manage Billing (Stripe Portal)
-                </button>
+
+              <!-- Items Section Header -->
+              <div class="sheet-section-header items-section-header">
+                <div class="sheet-section-heading-wrap">
+                  <span class="sheet-section-title">ITEMS</span>
+                  <span class="sheet-section-subtitle">Products or services provided</span>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Plan Comparison Tiers -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 32px;">
-            <div style="padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff;">
-              <div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">Free Forever</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin: 8px 0;">$0 <span style="font-size: 0.8125rem; font-weight: 500; color: #64748b;">/ mo</span></div>
-              <ul style="padding-left: 18px; font-size: 0.8125rem; color: #475569; line-height: 1.6; margin: 12px 0;">
-                <li>Unlimited standard invoices</li>
-                <li>0ms client-side vector PDF downloads</li>
-                <li>Single business profile</li>
-              </ul>
+              <!-- Items Table -->
+              <div class="table-wrapper-box">
+                <table class="invoice-items-table" id="refTable">
+                  <thead>
+                    <tr>
+                      <th class="col-desc" style="width: 48%;">DESCRIPTION</th>
+                      <th class="col-qty" style="width: 13%;">QTY</th>
+                      <th class="col-rate" style="width: 17%;">RATE</th>
+                      <th class="col-amount" style="width: 17%;">AMOUNT</th>
+                      <th class="col-action" style="width: 5%;"><span class="sr-only">ACTION</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="itemsTableBody"></tbody>
+                </table>
+              </div>
+
+              <!-- Add Item Bar -->
+              <div class="items-table-footer-bar">
+                <button type="button" class="btn-add-item-bar" id="btnAddItem">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>+ Add Item</span>
+                </button>
+                <span class="items-calc-hint">Amount is calculated automatically (Qty &times; Rate)</span>
+              </div>
+
+              <!-- Notes & Calculations Summary -->
+              <div class="sheet-bottom-section">
+                <div class="sheet-notes-col">
+                  <div class="sheet-section-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 12px;">
+                    <div class="sheet-section-heading-wrap">
+                      <span class="sheet-section-title">NOTES / PAYMENT TERMS</span>
+                      <span class="sheet-section-subtitle">Payment instructions or thank-you note</span>
+                    </div>
+                  </div>
+                  <div class="sheet-field-group">
+                    <label class="sheet-input-label sr-only" for="invoiceNotes">Invoice Notes and Terms</label>
+                    <textarea id="invoiceNotes" class="form-textarea sheet-paper-textarea sheet-notes-textarea" rows="4" placeholder="e.g. Payment due within 14 days via wire transfer. Thank you for your business!"></textarea>
+                  </div>
+
+                  <div class="signature-block-wrap" id="signatureBlockWrap" style="display: none; margin-top: 16px;">
+                    <label class="sheet-field-label" for="signatureInput">Authorized Signature</label>
+                    <div style="border-top: 1.5px solid #cbd5e1; width: 220px; padding-top: 6px;">
+                      <input type="text" id="signatureInput" class="form-input sheet-paper-input" placeholder="Signer full name" style="padding: 6px 10px; font-weight: 700;">
+                      <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Authorized Representative</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="totals-summary-card">
+                  <div class="total-line">
+                    <span class="total-line-label">Subtotal</span>
+                    <span class="val" id="subtotalDisplay">$0.00</span>
+                  </div>
+
+                  <div class="total-line discount-line-row" id="discountLineRow" style="display: none;">
+                    <div class="discount-edit-group">
+                      <span class="total-line-label">Discount</span>
+                      <span class="pct-pill"><input type="number" id="discountRate" class="discount-edit-input" min="0" max="100" step="1" value="0" placeholder="0" aria-label="Discount percentage"><i>%</i></span>
+                    </div>
+                    <span class="val" id="discountAmountDisplay">-$0.00</span>
+                  </div>
+
+                  <div class="total-line tax-line-row">
+                    <div class="tax-edit-group">
+                      <span class="total-line-label">Tax</span>
+                      <span class="pct-pill"><input type="number" id="taxRate" class="tax-edit-input" min="0" step="1" value="0" placeholder="0" aria-label="Tax rate percentage"><i>%</i></span>
+                    </div>
+                    <span class="val" id="taxAmountDisplay">$0.00</span>
+                  </div>
+
+                  <div class="total-line grand-total-line">
+                    <span class="lbl">TOTAL</span>
+                    <span class="val" id="grandTotalDisplay">$0.00</span>
+                  </div>
+
+                  <div class="total-line amount-paid-row" id="amountPaidLineRow" style="display: none;">
+                    <span class="total-line-label">Amount Paid:</span>
+                    <input type="number" id="amountPaidInput" class="amount-paid-input" min="0" step="0.01" value="0" placeholder="0.00" aria-label="Amount paid">
+                  </div>
+
+                  <div class="total-line balance-due-line-row" id="balanceDueLineRow" style="display: none;">
+                    <span class="lbl">Balance Due:</span>
+                    <span class="val" id="balanceDueDisplay">$0.00</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            <div style="padding: 20px; border: 2px solid #059669; border-radius: 10px; background: #ffffff; position: relative;">
-              <span style="position: absolute; top: -10px; right: 16px; background: #059669; color: #fff; font-size: 0.6875rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">RECOMMENDED</span>
-              <div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">Pro Workspace</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin: 8px 0;">$12 <span style="font-size: 0.8125rem; font-weight: 500; color: #64748b;">/ mo</span></div>
-              <ul style="padding-left: 18px; font-size: 0.8125rem; color: #475569; line-height: 1.6; margin: 12px 0;">
-                <li>Private Cloud Storage sync</li>
-                <li>Unlimited client directory &amp; autofill</li>
-                <li>Direct email dispatch</li>
-                <li>Priority Stripe payment links</li>
-              </ul>
-              <button type="button" class="btn btn-primary" onclick="window.startStripeUpgrade('pro')" style="width: 100%; justify-content: center; margin-top: 10px;">Select Pro</button>
-            </div>
+            <!-- Right Sidebar: Unified Studio Inspector Panel -->
+            <aside class="action-sidebar-panel studio-inspector">
+              <div class="inspector-section inspector-hero-section">
+                <div class="inspector-section-header">
+                  <span class="inspector-eyebrow">Document Actions</span>
+                </div>
 
-            <div style="padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff;">
-              <div style="font-weight: 800; font-size: 1.1rem; color: #0f172a;">Business Scaling</div>
-              <div style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin: 8px 0;">$29 <span style="font-size: 0.8125rem; font-weight: 500; color: #64748b;">/ mo</span></div>
-              <ul style="padding-left: 18px; font-size: 0.8125rem; color: #475569; line-height: 1.6; margin: 12px 0;">
-                <li>Everything in Pro</li>
-                <li>Multi-currency auto-reconciliation</li>
-                <li>Multi-business trading identities</li>
-                <li>Dedicated SLA support</li>
-              </ul>
-              <button type="button" class="btn btn-secondary" onclick="window.startStripeUpgrade('business')" style="width: 100%; justify-content: center; margin-top: 10px;">Select Business</button>
-            </div>
-          </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <button type="button" class="btn-download-pdf-primary" id="btnDownloadPDF" title="Download professional A4 vector PDF">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Download PDF</span>
+                  </button>
 
-          <!-- Billing Transactions History -->
-          <div>
-            <h3 style="font-size: 1rem; font-weight: 700; color: #0f172a; margin: 0 0 12px;">Billing &amp; Payment History</h3>
-            <div class="dashboard-table-wrap">
-              <table class="dashboard-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Method</th>
-                    <th>Status</th>
-                    <th style="text-align: right;">Receipt</th>
-                  </tr>
-                </thead>
-                <tbody id="billingHistoryTableBody">
-                  <tr><td colspan="6" style="text-align: center; padding: 20px; color: #64748b;">No billing transactions recorded.</td></tr>
-                </tbody>
-              </table>
-            </div>
+                  <div class="sidebar-secondary-row">
+                    <button type="button" class="btn-secondary-action" id="btnSaveDraft" title="Save as draft">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                      <span>Draft</span>
+                    </button>
+                    <button type="button" class="btn-secondary-action btn-preview-trigger" id="btnPreviewInvoice" title="Live Preview">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      <span>Preview</span>
+                    </button>
+                    <button type="button" class="btn-secondary-action" id="btnSaveToCloud" style="color:#059669; border-color:#a7f3d0; background:#ecfdf5; font-weight:700;" title="Save to Private Cloud Storage">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                      <span>Cloud</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="inspector-subtools-grid">
+                  <button type="button" class="inspector-tool-btn-compact" id="btnPrintSidebar" title="Print Invoice">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    <span>Print</span>
+                  </button>
+                  <button type="button" class="inspector-tool-btn-compact" id="btnOpenSendEmail" title="Send via Email">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span>Email</span>
+                  </button>
+                  <button type="button" class="inspector-tool-btn-compact" id="btnLoadSample" title="Demo Sample">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Demo</span>
+                  </button>
+                  <button type="button" class="inspector-tool-btn-compact tool-btn-danger" id="btnClearInvoice" title="Reset Form">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    <span>Reset</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="inspector-divider"></div>
+
+              <!-- Currency Settings -->
+              <div class="inspector-section">
+                <div class="inspector-section-header">
+                  <span class="inspector-eyebrow">Currency</span>
+                </div>
+                <div class="inspector-inline-control" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                  <label for="currencySelector" class="inspector-control-label sr-only">Billing Currency</label>
+                  <div class="custom-currency-wrap">
+                    <select id="currencySelector" class="custom-currency-select">
+                      <option value="USD">$ — US Dollar (USD)</option>
+                      <option value="EUR">€ — Euro (EUR)</option>
+                      <option value="GBP">£ — British Pound (GBP)</option>
+                      <option value="BDT">৳ — Bangladeshi Taka (BDT)</option>
+                      <option value="INR">₹ — Indian Rupee (INR)</option>
+                      <option value="CAD">CA$ — Canadian Dollar (CAD)</option>
+                      <option value="AUD">AU$ — Australian Dollar (AUD)</option>
+                      <option value="JPY">¥ — Japanese Yen (JPY)</option>
+                      <option value="AED">د.إ — UAE Dirham (AED)</option>
+                      <option value="SAR">﷼ — Saudi Riyal (SAR)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="inspector-divider"></div>
+
+              <!-- Document Options -->
+              <div class="inspector-section">
+                <div class="inspector-section-header">
+                  <span class="inspector-eyebrow">Document Options</span>
+                </div>
+                <div class="inspector-toggle-list">
+                  <label class="inspector-toggle-row" for="toggleShipTo">
+                    <span class="toggle-text">Shipping details</span>
+                    <div class="switch-box">
+                      <input type="checkbox" id="toggleShipTo" checked>
+                      <span class="switch-slider"></span>
+                    </div>
+                  </label>
+                  <label class="inspector-toggle-row" for="togglePoNumber">
+                    <span class="toggle-text">Purchase Order (PO#)</span>
+                    <div class="switch-box">
+                      <input type="checkbox" id="togglePoNumber">
+                      <span class="switch-slider"></span>
+                    </div>
+                  </label>
+                  <label class="inspector-toggle-row" for="toggleDueDate">
+                    <span class="toggle-text">Payment Due Date</span>
+                    <div class="switch-box">
+                      <input type="checkbox" id="toggleDueDate">
+                      <span class="switch-slider"></span>
+                    </div>
+                  </label>
+                  <label class="inspector-toggle-row" for="toggleDiscount">
+                    <span class="toggle-text">Discount percentage</span>
+                    <div class="switch-box">
+                      <input type="checkbox" id="toggleDiscount">
+                      <span class="switch-slider"></span>
+                    </div>
+                  </label>
+                  <label class="inspector-toggle-row" for="toggleAmountPaid">
+                    <span class="toggle-text">Deposit / Amount paid</span>
+                    <div class="switch-box">
+                      <input type="checkbox" id="toggleAmountPaid">
+                      <span class="switch-slider"></span>
+                    </div>
+                  </label>
+                  <label class="inspector-toggle-row" for="toggleSignature">
+                    <span class="toggle-text">Signature line</span>
+                    <div class="switch-box">
+                      <input type="checkbox" id="toggleSignature">
+                      <span class="switch-slider"></span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="inspector-divider"></div>
+
+              <!-- Save Invoice Action -->
+              <div class="inspector-section inspector-bottom-save-section">
+                <button type="button" class="btn-save-invoice-bottom" id="btnSaveInvoice" title="Save invoice to cloud database">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  <span id="btnSaveInvoiceText">Save Invoice</span>
+                </button>
+                <span class="save-status-subtext" id="saveStatusSubtext">Saves invoice to your cloud database</span>
+              </div>
+            </aside>
+
           </div>
         </div>
 
@@ -863,7 +1195,7 @@
               </div>
               <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 6px;">Emerald Green</h3>
               <p style="font-size: 0.8125rem; color: #64748b; margin: 0 0 14px;">Clean, trustworthy layout tailored for digital services and SaaS.</p>
-              <a href="/?template=emerald" class="btn btn-primary btn-sm" style="width: 100%; justify-content: center;">Use Template</a>
+              <button type="button" class="btn btn-primary btn-sm" onclick="window.loadTemplateAndCreate('emerald')" style="width: 100%; justify-content: center;">Use Template</button>
             </div>
 
             <div style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; background: #ffffff;">
@@ -872,7 +1204,7 @@
               </div>
               <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 6px;">Minimal Slate</h3>
               <p style="font-size: 0.8125rem; color: #64748b; margin: 0 0 14px;">High-contrast monochrome for legal, consultants and engineering firms.</p>
-              <a href="/?template=charcoal" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">Use Template</a>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="window.loadTemplateAndCreate('charcoal')" style="width: 100%; justify-content: center;">Use Template</button>
             </div>
 
             <div style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; background: #ffffff;">
@@ -881,7 +1213,7 @@
               </div>
               <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 6px;">Corporate Navy</h3>
               <p style="font-size: 0.8125rem; color: #64748b; margin: 0 0 14px;">Formal enterprise layout with strict tabular ledger hierarchy.</p>
-              <a href="/?template=corporate" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">Use Template</a>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="window.loadTemplateAndCreate('corporate')" style="width: 100%; justify-content: center;">Use Template</button>
             </div>
 
             <div style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; background: #ffffff;">
@@ -890,7 +1222,7 @@
               </div>
               <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 6px;">Creative Indigo</h3>
               <p style="font-size: 0.8125rem; color: #64748b; margin: 0 0 14px;">Vibrant modern layout built for creative studios and designers.</p>
-              <a href="/?template=creative" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">Use Template</a>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="window.loadTemplateAndCreate('creative')" style="width: 100%; justify-content: center;">Use Template</button>
             </div>
           </div>
         </div>
@@ -1078,9 +1410,35 @@
               <a href="/contact" class="btn btn-primary btn-sm">Contact Support &rarr;</a>
             </div>
           </div>
-        </div>
-
       </main>
+    </div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- 5. MOBILE BOTTOM NAVIGATION (5 Targets, 48px+ touch targets)          -->
+  <!-- ==================================================================== -->
+  <nav class="saas-bottom-nav" aria-label="Mobile workspace navigation">
+    <button type="button" class="saas-bottom-nav-item active" data-tab="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Dashboard</span>
+    </button>
+    <button type="button" class="saas-bottom-nav-item" data-tab="invoices">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+      <span>Invoices</span>
+    </button>
+    <button type="button" class="saas-bottom-nav-item" data-tab="clients">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+      <span>Clients</span>
+    </button>
+    <button type="button" class="saas-bottom-nav-item" data-tab="templates">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
+      <span>Templates</span>
+    </button>
+    <a href="/tools" class="saas-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      <span>Tools</span>
+    </a>
+  </nav>
 
   <!-- ==================================================================== -->
   <!-- MODAL: GLOBAL SEARCH (Ctrl+K)                                        -->
@@ -1277,6 +1635,110 @@
     </div>
   </div>
 
+  <!-- Send via Email Modal -->
+  <div class="modal-overlay" id="sendEmailModal" role="dialog" aria-modal="true" aria-labelledby="sendEmailModalTitle" style="display: none;">
+    <div class="auth-modal-card send-email-card">
+      <button type="button" class="btn-close-modal" id="btnCloseSendEmail" aria-label="Close modal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      
+      <div class="auth-header">
+        <div class="modal-badge-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        </div>
+        <h3 class="auth-title" id="sendEmailModalTitle">Send via Email</h3>
+        <p class="auth-sub">Dispatch your invoice with attached A4 PDF document</p>
+      </div>
+
+      <form id="sendEmailForm" novalidate onsubmit="event.preventDefault(); window.handleSendEmailSubmit ? window.handleSendEmailSubmit() : null;">
+        <div class="form-group" style="position: relative;">
+          <label class="form-label" for="clientSendEmail">Recipient Email <span style="color:#ef4444;">*</span></label>
+          <input type="email" id="clientSendEmail" class="form-input" placeholder="client@company.com" autocomplete="email">
+          <div id="emailErrorMsg" class="inline-error-msg" aria-live="polite"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="emailSubject">Subject</label>
+          <input type="text" id="emailSubject" class="form-input" value="Invoice from My Business">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="emailMessage">Message</label>
+          <textarea id="emailMessage" class="form-textarea" rows="3">Hi, please find attached your invoice. Thank you for your business!</textarea>
+        </div>
+
+        <div class="form-group email-attachment-group">
+          <label class="form-label">Attachment</label>
+          <div class="email-attachment-badge" id="emailAttachmentBadge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span id="emailAttachmentName">Invoice-INV-001.pdf</span>
+            <span class="attachment-tag">A4 PDF</span>
+          </div>
+        </div>
+
+        <div class="modal-form-actions">
+          <button type="button" class="btn-modal-cancel" id="btnCancelSendEmail">Cancel</button>
+          <button type="submit" class="btn-auth-submit btn-send-invoice-action" id="btnSubmitSendEmail">
+            <span>Send Invoice</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirmation Modal for Demo Sample & Reset Form -->
+  <div class="modal-overlay confirm-modal-overlay" id="confirmActionModal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle" style="display: none;">
+    <div class="auth-modal-card confirm-modal-card">
+      <div class="confirm-modal-header">
+        <div class="confirm-modal-icon-badge" id="confirmModalIconBadge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        </div>
+        <h3 class="confirm-modal-title" id="confirmModalTitle">Reset this invoice?</h3>
+        <p class="confirm-modal-msg" id="confirmModalMsg">Your current invoice information will be cleared.</p>
+      </div>
+      <div class="confirm-modal-actions">
+        <button type="button" class="btn-confirm-cancel" id="btnConfirmCancel">Cancel</button>
+        <button type="button" class="btn-confirm-proceed" id="btnConfirmProceed">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Invoice Preview Modal -->
+  <div class="modal-overlay preview-modal-overlay" id="previewModal" role="dialog" aria-modal="true" style="display: none;">
+    <div class="preview-modal-card">
+      <div class="preview-modal-header">
+        <div class="preview-modal-title-wrap">
+          <div class="preview-icon-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path></svg>
+          </div>
+          <div>
+            <h3 class="preview-modal-title">Live Document Preview</h3>
+            <span class="preview-modal-sub">Exact A4 vector print &amp; PDF preview</span>
+          </div>
+        </div>
+        <div class="preview-modal-actions">
+          <button type="button" class="btn-preview-tool" id="btnPreviewPrint" title="Print document">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <span>Print</span>
+          </button>
+          <button type="button" class="btn-preview-tool btn-preview-primary" id="btnPreviewDownload" title="Download vector PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download PDF</span>
+          </button>
+          <button type="button" class="btn-close-modal" id="btnClosePreviewModal" aria-label="Close preview modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div class="preview-modal-body" id="previewModalBody">
+        <!-- Exact rendered invoice document injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notice -->
+  <div class="toast-notice" id="toastNotice"></div>
+
   <!-- ==================================================================== -->
   <!-- APPLICATION SCRIPT & EVENT CONTROLLER                                -->
   <!-- ==================================================================== -->
@@ -1318,12 +1780,12 @@
       // -----------------------------------------------------------------------
       const tabTitleMap = {
         overview: 'Dashboard',
+        create: 'Create Invoice',
         invoices: 'Invoices',
         clients: 'Clients',
         templates: 'Invoice Templates',
         payments: 'Payments Ledger',
         files: 'Cloud Documents',
-        billing: 'Billing & Plans',
         settings: 'Settings & Business Profile',
         business: 'Business Profile',
         help: 'Help Center'
@@ -1331,12 +1793,12 @@
 
       const panels = {
         overview: document.getElementById('panelOverview'),
+        create: document.getElementById('panelCreateInvoice'),
         invoices: document.getElementById('panelInvoices'),
         clients: document.getElementById('panelClients'),
         templates: document.getElementById('panelTemplates'),
         payments: document.getElementById('panelPayments'),
         files: document.getElementById('panelFiles'),
-        billing: document.getElementById('panelBilling'),
         settings: document.getElementById('panelSettings'),
         business: document.getElementById('panelSettings'),
         help: document.getElementById('panelHelp')
@@ -1345,14 +1807,15 @@
       function switchWorkspaceTab(tabName) {
         let target = panels[tabName] ? tabName : 'overview';
         if (tabName === 'dashboard') target = 'overview';
+        if (tabName === 'create-invoice') target = 'create';
         activeTab = target;
 
         // Update Topbar Title
-        const topbarTitle = document.getElementById('saasTopbarTitle');
+        const topbarTitle = document.getElementById('saasActivePageTitle') || document.getElementById('saasTopbarTitle');
         if (topbarTitle) topbarTitle.textContent = tabTitleMap[target] || 'Dashboard';
 
-        // Update top nav and mobile drawer links
-        document.querySelectorAll('.saas-nav-item, .saas-drawer-link').forEach(btn => {
+        // Update desktop sidebar, mobile drawer, and bottom nav links
+        document.querySelectorAll('.saas-nav-item, .saas-drawer-link, .saas-bottom-nav-item').forEach(btn => {
           const isSelected = btn.dataset.tab === target || (target === 'business' && btn.dataset.tab === 'settings');
           btn.classList.toggle('active', isSelected);
         });
@@ -1370,6 +1833,37 @@
         // Load data based on tab
         if (target === 'overview') {
           loadDashboardSummary();
+        } else if (target === 'create') {
+          if (window.initInvoiceEditorPage && !window._editorPageInitialized) {
+            window.initInvoiceEditorPage();
+            window._editorPageInitialized = true;
+          }
+          // Populate default next invoice number if empty
+          const invNumInput = document.getElementById('invoiceNumber');
+          if (invNumInput && (!invNumInput.value || invNumInput.value === 'INV-001')) {
+            fetch('/api/invoices/next-number')
+              .then(r => r.json())
+              .then(d => {
+                if (d && d.nextNumber) {
+                  invNumInput.value = d.nextNumber;
+                  if (window.invoiceStore) window.invoiceStore.updateState('number', d.nextNumber);
+                }
+              }).catch(() => {});
+          }
+          // Populate sender if empty
+          if (currentUser) {
+            const sName = document.getElementById('senderName');
+            const sAddr = document.getElementById('senderAddress');
+            if (sName && !sName.value && (currentUser.business_name || currentUser.name)) {
+              const bName = currentUser.business_name || currentUser.name;
+              sName.value = bName;
+              if (window.invoiceStore) window.invoiceStore.updateState('sender.name', bName);
+            }
+            if (sAddr && !sAddr.value && currentUser.business_address) {
+              sAddr.value = currentUser.business_address;
+              if (window.invoiceStore) window.invoiceStore.updateState('sender.address', currentUser.business_address);
+            }
+          }
         } else if (target === 'invoices') {
           loadInvoicesTable();
         } else if (target === 'clients') {
@@ -1378,8 +1872,6 @@
           loadPaymentsTable();
         } else if (target === 'files') {
           loadFilesList();
-        } else if (target === 'billing') {
-          loadBillingDetails();
         } else if (target === 'settings' || target === 'business') {
           loadPersonalSettings();
           loadBusinessProfile();
@@ -1389,12 +1881,12 @@
         // Clean URL update
         const pathMap = {
           overview: '/dashboard',
+          create: '/create-invoice',
           invoices: '/invoices',
           clients: '/clients',
           templates: '/templates',
           payments: '/payments',
           files: '/files',
-          billing: '/billing',
           settings: '/settings',
           business: '/business-profile'
         };
@@ -1406,8 +1898,87 @@
       window.switchWorkspaceTab = switchWorkspaceTab;
       window.switchTab = switchWorkspaceTab;
 
-      // Attach click events to all nav buttons (topbar and drawer)
-      document.querySelectorAll('.saas-nav-item[data-tab], .saas-drawer-link[data-tab]').forEach(btn => {
+      // Helper: Load template and open in editor
+      window.loadTemplateAndCreate = function (tplKey) {
+        switchWorkspaceTab('create');
+        if (window.invoiceStore && typeof window.invoiceStore.setTheme === 'function') {
+          window.invoiceStore.setTheme(tplKey);
+        }
+        if (typeof window.applyTheme === 'function') {
+          window.applyTheme(tplKey);
+        }
+        window.showToast(`Switched to "${tplKey}" template style.`);
+      };
+
+      // Helper: Create invoice pre-filled with client
+      window.createInvoiceForClient = function (clientId) {
+        switchWorkspaceTab('create');
+        fetch(`/api/clients/${clientId}`)
+          .then(r => r.json())
+          .then(d => {
+            if (d && d.success && d.client) {
+              const cl = d.client;
+              const displayName = cl.company ? `${cl.name} (${cl.company})` : cl.name;
+              const nameEl = document.getElementById('clientName');
+              const addrEl = document.getElementById('clientAddress');
+              if (nameEl) {
+                nameEl.value = displayName;
+                if (window.invoiceStore) window.invoiceStore.updateState('client.name', displayName);
+              }
+              if (addrEl) {
+                addrEl.value = cl.billing_address || '';
+                if (window.invoiceStore) window.invoiceStore.updateState('client.address', cl.billing_address || '');
+              }
+              window.showToast(`Prepared invoice for ${cl.name}`);
+            }
+          })
+          .catch(() => {});
+      };
+
+      // Helper: Edit invoice in workspace editor
+      window.editInvoiceInWorkspace = function (invoiceId) {
+        switchWorkspaceTab('create');
+        fetch(`/api/invoices/${invoiceId}`)
+          .then(r => r.json())
+          .then(data => {
+            if (data && data.success && data.invoice) {
+              const inv = data.invoice;
+              const store = window.invoiceStore;
+              if (store) {
+                store.updateState('number', inv.number || inv.invoice_number);
+                store.updateState('date', inv.date || inv.issue_date);
+                store.updateState('dueDate', inv.dueDate || inv.due_date);
+                store.updateState('poNumber', inv.poNumber || inv.po_number || '');
+                store.updateState('paymentTerms', inv.paymentTerms || inv.payment_terms || 'Due on Receipt');
+                store.updateState('currency', inv.currency || 'USD');
+                store.updateState('sender.name', inv.sender_name || (inv.sender && inv.sender.name) || '');
+                store.updateState('sender.address', inv.sender_address || (inv.sender && inv.sender.address) || '');
+                store.updateState('client.name', inv.client_name || (inv.client && inv.client.name) || '');
+                store.updateState('client.address', inv.client_address || (inv.client && inv.client.address) || '');
+                store.updateState('notes', inv.notes || '');
+                store.updateState('taxRate', inv.tax_rate !== undefined ? inv.tax_rate : (inv.taxRate || 0));
+                store.updateState('discountValue', inv.discount_value !== undefined ? inv.discount_value : (inv.discountValue || 0));
+                store.updateState('amountPaid', inv.amount_paid !== undefined ? inv.amount_paid : (inv.amountPaid || 0));
+                if (Array.isArray(inv.items) && inv.items.length > 0) {
+                  store.updateState('items', inv.items);
+                }
+                if (typeof window.syncUIFromState === 'function') {
+                  window.syncUIFromState(store.getState());
+                }
+                if (inv.template && typeof window.applyTheme === 'function') {
+                  window.applyTheme(inv.template);
+                }
+              }
+              const saveBtnText = document.getElementById('btnSaveInvoiceText');
+              if (saveBtnText) saveBtnText.textContent = 'Update Invoice';
+              window.showToast(`Loaded invoice #${inv.number} into editor.`);
+            }
+          })
+          .catch(() => {});
+      };
+
+      // Attach click events to all nav buttons (sidebar, drawer, and mobile bottom nav)
+      document.querySelectorAll('.saas-nav-item[data-tab], .saas-drawer-link[data-tab], .saas-bottom-nav-item[data-tab]').forEach(btn => {
         btn.addEventListener('click', () => switchWorkspaceTab(btn.dataset.tab));
       });
 
@@ -1734,14 +2305,14 @@
 
                     return `
                       <tr>
-                        <td><a href="/?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
+                        <td><a href="/invoice-details?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
                         <td><strong>${inv.clientName || 'Client'}</strong></td>
                         <td>${inv.date || '—'}</td>
                         <td>${inv.dueDate || '—'}</td>
                         <td><strong>$${Number(inv.total || 0).toFixed(2)}</strong></td>
                         <td><span class="status-badge ${badgeClass}">${inv.status}</span></td>
                         <td style="text-align: right;">
-                          <a href="/?id=${inv.id}" class="btn-table-action" style="text-decoration: none;">View &rarr;</a>
+                          <a href="/invoice-details?id=${inv.id}" class="btn-table-action" style="text-decoration: none;">View &rarr;</a>
                         </td>
                       </tr>
                     `;
@@ -1764,7 +2335,7 @@
                     return `
                       <div class="dash-mobile-invoice-card">
                         <div class="mob-inv-row-top">
-                          <a href="/?id=${inv.id}" class="mob-inv-number">#${inv.number}</a>
+                          <a href="/invoice-details?id=${inv.id}" class="mob-inv-number">#${inv.number}</a>
                           <span class="status-badge ${badgeClass}">${inv.status}</span>
                         </div>
                         <div class="mob-inv-client">${inv.clientName || 'Client'}</div>
@@ -1773,7 +2344,7 @@
                             <div class="mob-inv-amount">$${Number(inv.total || 0).toFixed(2)}</div>
                             <div class="mob-inv-due">Due ${inv.dueDate || inv.date || '—'}</div>
                           </div>
-                          <a href="/?id=${inv.id}" class="btn-dash-secondary" style="min-height: 38px; padding: 6px 14px; font-size: 0.8125rem;">View &rarr;</a>
+                          <a href="/invoice-details?id=${inv.id}" class="btn-dash-secondary" style="min-height: 38px; padding: 6px 14px; font-size: 0.8125rem;">View &rarr;</a>
                         </div>
                       </div>
                     `;
@@ -1863,7 +2434,7 @@
 
             return `
               <tr>
-                <td><a href="/?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
+                <td><a href="/invoice-details?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
                 <td>
                   <div style="font-weight: 600; color: #0f172a;">${inv.clientName || 'Client'}</div>
                   <div style="font-size: 0.78rem; color: #64748b;">${inv.clientEmail || ''}</div>
@@ -1874,10 +2445,14 @@
                 <td><span class="status-badge ${badgeClass}">${inv.status}</span></td>
                 <td style="text-align: right;">
                   <div class="table-action-group" style="justify-content: flex-end; gap: 4px;">
-                    <a href="/?id=${inv.id}" class="btn-table-action" title="Edit invoice">
+                    <a href="/invoice-details?id=${inv.id}" class="btn-table-action" title="View invoice details">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path></svg>
+                      <span>View</span>
+                    </a>
+                    <button type="button" class="btn-table-action" onclick="window.editInvoiceInWorkspace('${inv.id}')" title="Edit invoice">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                       <span>Edit</span>
-                    </a>
+                    </button>
                     <button type="button" class="btn-table-action" onclick="window.duplicateInvoice('${inv.id}')" title="Duplicate invoice">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                       <span>Copy</span>
@@ -2089,7 +2664,7 @@
 
               <div class="client-card-actions">
                 <button type="button" class="btn btn-secondary" onclick="window.viewClientDetails('${c.id}')" style="flex: 1; min-height: 38px; height: 38px; font-size: 0.8125rem; border-radius: 8px;">Details</button>
-                <a href="/?client_id=${c.id}" class="btn btn-primary" style="flex: 1; min-height: 38px; height: 38px; font-size: 0.8125rem; border-radius: 8px; text-decoration: none; justify-content: center;">+ Invoice</a>
+                <button type="button" class="btn btn-primary" onclick="window.createInvoiceForClient('${c.id}')" style="flex: 1; min-height: 38px; height: 38px; font-size: 0.8125rem; border-radius: 8px; justify-content: center;">+ Invoice</button>
                 <button type="button" class="btn-table-action" onclick='window.openAddClientModal(${JSON.stringify(c)})' title="Edit client" style="min-height: 38px; min-width: 38px; justify-content: center; border-radius: 8px;">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                 </button>
@@ -2120,17 +2695,24 @@
             document.getElementById('cdStatPaid').textContent = `$${Number(c.stats?.amountPaid || 0).toFixed(2)}`;
             document.getElementById('cdStatOutstanding').textContent = `$${Number(c.stats?.outstandingBalance || 0).toFixed(2)}`;
 
-            document.getElementById('btnCreateInvoiceForClient').href = `index.html?client_id=${c.id}`;
+            const btnClientInv = document.getElementById('btnCreateInvoiceForClient');
+            if (btnClientInv) {
+              btnClientInv.onclick = (e) => {
+                e.preventDefault();
+                modalClientDetails.style.display = 'none';
+                window.createInvoiceForClient(c.id);
+              };
+            }
 
             const tbody = document.getElementById('clientInvoicesTableBody');
             if (c.invoices && c.invoices.length > 0) {
               tbody.innerHTML = c.invoices.map(inv => `
                 <tr>
-                  <td><a href="/?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
+                  <td><a href="/invoice-details?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
                   <td>${inv.date || '—'}</td>
                   <td><strong>$${Number(inv.total || 0).toFixed(2)}</strong></td>
                   <td><span class="status-badge badge-${inv.status || 'draft'}">${inv.status}</span></td>
-                  <td style="text-align: right;"><a href="/?id=${inv.id}" class="btn-table-action">View &rarr;</a></td>
+                  <td style="text-align: right;"><a href="/invoice-details?id=${inv.id}" class="btn-table-action">View &rarr;</a></td>
                 </tr>
               `).join('');
             } else {
@@ -2280,7 +2862,7 @@
           tbody.innerHTML = data.payments.map(p => `
             <tr>
               <td><strong style="color: #0f172a;">${p.id}</strong></td>
-              <td>${p.invoice_number ? `<a href="/?id=${p.invoice_id}" class="doc-number-link">#${p.invoice_number}</a>` : '—'}</td>
+              <td>${p.invoice_number ? `<a href="/invoice-details?id=${p.invoice_id}" class="doc-number-link">#${p.invoice_number}</a>` : '—'}</td>
               <td><strong>${p.client_name || p.payer_name || 'Client'}</strong></td>
               <td style="font-weight: 700; color: #059669;">$${Number(p.amount || 0).toFixed(2)}</td>
               <td>${new Date(p.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</td>
@@ -2292,86 +2874,7 @@
       }
 
       // -----------------------------------------------------------------------
-      // 10. Billing & Real Stripe Integration
-      // -----------------------------------------------------------------------
-      async function loadBillingDetails() {
-        try {
-          const configRes = await apiFetch('/api/stripe/config');
-          const configData = await configRes.json();
-          const isStripeConfigured = configData && configData.configured;
-
-          const alertEl = document.getElementById('stripeConfigAlert');
-          if (!isStripeConfigured && alertEl) {
-            alertEl.style.display = 'block';
-          } else if (alertEl) {
-            alertEl.style.display = 'none';
-          }
-
-          const res = await apiFetch('/api/billing');
-          const data = await res.json();
-          if (res.ok && data.success && data.billing) {
-            const b = data.billing;
-            document.getElementById('billingPlanName').textContent = b.plan || 'Free Forever Tier';
-            document.getElementById('billingPlanStatus').textContent = b.status || 'Active';
-            document.getElementById('billingNextDate').textContent = b.nextBillingDate || 'N/A';
-
-            if (b.stripeCustomerId) {
-              document.getElementById('btnManagePortalStripe').style.display = 'inline-flex';
-            }
-
-            // Transactions
-            const tbody = document.getElementById('billingHistoryTableBody');
-            if (b.transactions && b.transactions.length > 0) {
-              tbody.innerHTML = b.transactions.map(t => `
-                <tr>
-                  <td>${t.date}</td>
-                  <td><strong>${t.description}</strong></td>
-                  <td>$${Number(t.amount || 0).toFixed(2)}</td>
-                  <td>${t.paymentMethod || 'Stripe'}</td>
-                  <td><span class="status-badge badge-paid">${t.status}</span></td>
-                  <td style="text-align: right;"><button type="button" class="btn-table-action" onclick="alert('Receipt ID: ${t.receiptId || 'REC-001'}')">Receipt</button></td>
-                </tr>
-              `).join('');
-            } else {
-              tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px; color: #64748b;">No billing transactions recorded.</td></tr>`;
-            }
-          }
-        } catch (e) {}
-      }
-
-      window.startStripeUpgrade = async function (tier = 'pro') {
-        const planName = tier === 'business' ? 'Business Scaling Tier' : 'Pro Workspace Tier';
-        try {
-          const res = await apiFetch('/api/stripe/create-checkout-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plan: planName })
-          });
-          const data = await res.json();
-          if (res.ok && data.success && data.url) {
-            window.location.href = data.url;
-          } else {
-            window.showToast(data.error || 'Stripe credentials unconfigured on server.', 'warning');
-          }
-        } catch (e) {
-          window.showToast('Could not initiate Stripe checkout', 'warning');
-        }
-      };
-
-      window.openStripeCustomerPortal = async function () {
-        try {
-          const res = await apiFetch('/api/stripe/create-portal-session', { method: 'POST' });
-          const data = await res.json();
-          if (res.ok && data.success && data.url) {
-            window.location.href = data.url;
-          } else {
-            window.showToast(data.error || 'Portal unavailable', 'warning');
-          }
-        } catch (e) {}
-      };
-
-      // -----------------------------------------------------------------------
-      // 11. Cloud File Storage (/api/files)
+      // 10. Cloud File Storage (/api/files)
       // -----------------------------------------------------------------------
       async function loadFilesList() {
         const tbody = document.getElementById('filesTableBody');
@@ -2577,23 +3080,32 @@
       });
 
       // -----------------------------------------------------------------------
-      // 13. Authentication Bootstrapping & User Data
+      // 12. Authentication Bootstrapping & User Data
       // -----------------------------------------------------------------------
       function renderUserData(user) {
         currentUser = user;
         const firstName = user.name ? user.name.split(' ')[0] : 'User';
         setContextualGreeting(firstName);
 
-        const sbName = document.getElementById('sidebarUserName');
+        const sbName = document.getElementById('sideUserName');
         if (sbName) sbName.textContent = user.name || 'User';
-        const sbTier = document.getElementById('sidebarUserTier');
-        if (sbTier) sbTier.textContent = user.plan || 'Free Forever';
+        const sbEmail = document.getElementById('sideUserEmail');
+        if (sbEmail) sbEmail.textContent = user.email || '';
+        const sbAvatar = document.getElementById('sideUserAvatar');
+
         const menuName = document.getElementById('menuUserName');
         if (menuName) menuName.textContent = user.name || 'User';
         const menuEmail = document.getElementById('menuUserEmail');
         if (menuEmail) menuEmail.textContent = user.email || '';
 
         const initial = (firstName || 'U').charAt(0).toUpperCase();
+        if (sbAvatar) {
+          if (user.avatar) {
+            sbAvatar.innerHTML = `<img src="${user.avatar}" alt="${user.name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+          } else {
+            sbAvatar.textContent = initial;
+          }
+        }
         const topAvatar = document.getElementById('topbarUserAvatar');
         if (topAvatar) {
           if (user.avatar) {
@@ -2643,18 +3155,39 @@
 
         let target = tabParam || hash;
         if (!target) {
-          if (path === '/invoices') target = 'invoices';
+          if (path === '/create-invoice') target = 'create';
+          else if (path === '/invoices') target = 'invoices';
           else if (path === '/clients') target = 'clients';
           else if (path === '/templates') target = 'templates';
           else if (path === '/payments') target = 'payments';
           else if (path === '/files') target = 'files';
-          else if (path === '/billing') target = 'billing';
           else if (path === '/settings') target = 'settings';
           else if (path === '/business-profile') target = 'business';
+          else if (path === '/billing') target = 'overview';
           else target = 'overview';
         }
 
         switchWorkspaceTab(target);
+
+        // Process query parameters for invoice creation & editing
+        const tplParam = urlParams.get('template');
+        if (tplParam && (target === 'create' || path === '/create-invoice')) {
+          setTimeout(() => {
+            if (window.loadTemplateAndCreate) window.loadTemplateAndCreate(tplParam);
+          }, 150);
+        }
+        const clientParam = urlParams.get('client_id') || urlParams.get('client');
+        if (clientParam && (target === 'create' || path === '/create-invoice')) {
+          setTimeout(() => {
+            if (window.createInvoiceForClient) window.createInvoiceForClient(clientParam);
+          }, 150);
+        }
+        const invIdParam = urlParams.get('id') || urlParams.get('load');
+        if (invIdParam && (target === 'create' || path === '/create-invoice')) {
+          setTimeout(() => {
+            if (window.editInvoiceInWorkspace) window.editInvoiceInWorkspace(invIdParam);
+          }, 150);
+        }
       }
 
       window.addEventListener('popstate', checkRouteHash);

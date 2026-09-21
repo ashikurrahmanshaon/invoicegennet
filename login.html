@@ -32,12 +32,12 @@
   <!-- Preload Local Fonts for Zero-Shift Instant Rendering -->
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/design-system.css?v=8.0">
-  <link rel="stylesheet" href="/css/invoice-editor.css?v=8.0">
+  <link rel="stylesheet" href="/css/design-system.css?v=9.0">
+  <link rel="stylesheet" href="/css/invoice-editor.css?v=9.0">
 
   <!-- Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="/js/google-auth.js?v=8.0"></script>
+  <script src="/js/google-auth.js?v=9.0"></script>
 </head>
 <body style="background-color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
 
@@ -577,11 +577,32 @@
         submitBtn.disabled = true;
 
         try {
-          const result = await window.Auth.login(email, password, rememberMe);
-          if (result.success) {
+          let result = null;
+          if (window.Auth && typeof window.Auth.login === 'function') {
+            result = await window.Auth.login(email, password, rememberMe);
+          } else {
+            const res = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email, password, rememberMe }),
+              credentials: 'include'
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              result = { success: true, user: data.user, sessionId: data.sessionId };
+              try {
+                localStorage.setItem('invoicegen_user', JSON.stringify(data.user));
+                if (data.sessionId) localStorage.setItem('invoicegen_session_id', data.sessionId);
+              } catch (e) {}
+            } else {
+              result = { success: false, error: data.error || 'Invalid credentials.' };
+            }
+          }
+
+          if (result && result.success) {
             completeLogin(result.user);
           } else {
-            const msg = result.error || 'Invalid email or password.';
+            const msg = (result && result.error) || 'Invalid email or password.';
             if (pwdErr) pwdErr.textContent = msg;
             pwdInput?.classList.add('is-invalid');
             showToast(msg, 'warning');
@@ -590,7 +611,8 @@
             pwdInput?.focus();
           }
         } catch (err) {
-          showToast('Unable to connect to server. Please try again.', 'warning');
+          console.error('Login submit error:', err);
+          showToast((err && err.message) || 'Unable to connect to server. Please try again.', 'warning');
           submitBtn.classList.remove('is-loading');
           submitBtn.disabled = false;
         }

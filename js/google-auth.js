@@ -99,6 +99,35 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
       });
     },
 
+    // Universal resilient fetch with cross-port dev fallback
+    _resilientFetch: async function (urlPath, options = {}) {
+      if (urlPath.startsWith('http://') || urlPath.startsWith('https://')) {
+        return fetch(urlPath, options);
+      }
+
+      const port = window.location.port;
+      const candidates = ['']; // 1. Current origin
+      if (port && ['5500', '5501', '5502', '5173', '8080'].includes(port)) {
+        candidates.unshift('http://localhost:3000', 'http://localhost:3001');
+      } else {
+        candidates.push('http://localhost:3000', 'http://localhost:3001', 'http://localhost:57784');
+      }
+
+      let lastError = null;
+      for (const base of candidates) {
+        try {
+          const fullUrl = base ? `${base}${urlPath}` : urlPath;
+          const res = await fetch(fullUrl, options);
+          if (res.ok || res.status < 500) {
+            return res;
+          }
+        } catch (err) {
+          lastError = err;
+        }
+      }
+      throw lastError || new Error('Network connection failed');
+    },
+
     // Universal fetch wrapper attaching session token and credentials
     authFetch: function (url, options = {}) {
       const headers = Object.assign({}, options.headers || {});
@@ -106,9 +135,9 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
       if (token && !headers['Authorization']) {
         headers['Authorization'] = `Bearer ${token}`;
       }
-      return fetch(url, Object.assign({}, options, {
+      return this._resilientFetch(url, Object.assign({}, options, {
         headers,
-        credentials: 'same-origin'
+        credentials: 'include'
       }));
     },
 
@@ -148,11 +177,11 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
     // Centralized login
     login: async function (email, password, rememberMe = true) {
       try {
-        const res = await fetch('/api/auth/login', {
+        const res = await this._resilientFetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password, rememberMe }),
-          credentials: 'same-origin'
+          credentials: 'include'
         });
         const data = await res.json();
         if (res.ok && data.success && data.user) {
@@ -169,11 +198,11 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
     // Centralized signup
     signup: async function (name, email, password) {
       try {
-        const res = await fetch('/api/auth/signup', {
+        const res = await this._resilientFetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, password }),
-          credentials: 'same-origin'
+          credentials: 'include'
         });
         const data = await res.json();
         if (res.ok && data.success && data.user) {
@@ -213,11 +242,11 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
         const email = profile.email;
         const avatar = profile.picture || '';
 
-        const res = await fetch('/api/auth/google', {
+        const res = await this._resilientFetch('/api/auth/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, avatar }),
-          credentials: 'same-origin'
+          credentials: 'include'
         });
         const data = await res.json();
 
@@ -226,13 +255,11 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
           if (window.showToast) {
             window.showToast(`Welcome back, ${data.user.name}!`, 'success');
           }
-          const pendingTpl = sessionStorage.getItem('pending_template');
-          const targetUrl = pendingTpl ? `/?template=${pendingTpl}` : '/dashboard';
-          if (pendingTpl) sessionStorage.removeItem('pending_template');
+          if (sessionStorage.getItem('pending_template')) sessionStorage.removeItem('pending_template');
           if (window.router && typeof window.router.clearCache === 'function') {
             window.router.clearCache();
           }
-          window.location.href = targetUrl;
+          window.location.href = '/dashboard';
         } else {
           if (window.showToast) {
             window.showToast(data.error || 'Google login failed.', 'warning');
@@ -352,28 +379,25 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
                 <div class="user-menu-name">${this.user.name || 'User'}</div>
                 <div class="user-menu-email">${this.user.email || ''}</div>
               </div>
-              <a href="/dashboard#dashboard" class="user-menu-link" role="menuitem">
+              <a href="/dashboard" class="user-menu-link" role="menuitem">
                 <span>Dashboard Overview</span>
               </a>
-              <a href="/dashboard#invoices" class="user-menu-link" role="menuitem">
+              <a href="/invoices" class="user-menu-link" role="menuitem">
                 <span>My Invoices</span>
               </a>
-              <a href="/dashboard#clients" class="user-menu-link" role="menuitem">
+              <a href="/clients" class="user-menu-link" role="menuitem">
                 <span>Clients Directory</span>
               </a>
-              <a href="/dashboard#business" class="user-menu-link" role="menuitem">
+              <a href="/business-profile" class="user-menu-link" role="menuitem">
                 <span>Business Profile</span>
               </a>
-              <a href="/dashboard#billing" class="user-menu-link" role="menuitem">
-                <span>Billing &amp; Subscription</span>
-              </a>
-              <a href="/dashboard#settings" class="user-menu-link" role="menuitem">
+              <a href="/settings" class="user-menu-link" role="menuitem">
                 <span>Account Settings</span>
               </a>
-              <a href="/dashboard#security" class="user-menu-link" role="menuitem">
+              <a href="/security" class="user-menu-link" role="menuitem">
                 <span>Security &amp; Password</span>
               </a>
-              <a href="/dashboard#help" class="user-menu-link" role="menuitem">
+              <a href="/help" class="user-menu-link" role="menuitem">
                 <span>Help &amp; Support</span>
               </a>
               <div class="user-menu-divider"></div>

@@ -33,13 +33,14 @@
 
   const NON_PJAX_ROUTES = [
     '/dashboard',
+    '/create-invoice',
     '/invoice-details',
     '/client-details',
     '/invoices',
     '/clients',
     '/business-profile',
     '/profile',
-    '/billing',
+    '/payments',
     '/settings',
     '/security',
     '/login',

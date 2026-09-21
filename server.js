@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const db = require('./db');
+const firebase = require('./firebase');
 const PORT = process.env.PORT || 3000;
 const SECONDARY_PORT = 57784;
 
@@ -166,11 +167,13 @@ function getAuthSession(req) {
 }
 
 function sendJson(res, statusCode, data, extraHeaders = {}) {
+  const origin = (res._req && res._req.headers && res._req.headers.origin) ? res._req.headers.origin : '*';
   const headers = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+    'Access-Control-Allow-Credentials': 'true',
     ...extraHeaders
   };
   res.writeHead(statusCode, headers);
@@ -208,16 +211,19 @@ function readRawBody(req) {
 }
 
 const requestHandler = async (req, res) => {
+  res._req = req;
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
   const pathname = parsedUrl.pathname;
 
   // Handle CORS Preflight
   if (req.method === 'OPTIONS') {
+    const origin = req.headers.origin || '*';
     res.writeHead(204, {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': origin,
       'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      'Access-Control-Allow-Credentials': 'true'
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+      'Access-Control-Allow-Credentials': 'true',
+      'Access-Control-Max-Age': '86400'
     });
     return res.end();
   }
@@ -243,6 +249,7 @@ const requestHandler = async (req, res) => {
       }
 
       const user = db.createUser({ name, email, password });
+      try { firebase.syncUser(user); } catch (e) {}
       const { sessionId, expiresAt } = db.createSession(user.id);
 
       const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
@@ -271,6 +278,7 @@ const requestHandler = async (req, res) => {
       if (!user) {
         return sendJson(res, 401, { success: false, error: 'Invalid email or password. Please check your credentials.' });
       }
+      try { firebase.syncUser(user); } catch (e) {}
 
       const days = rememberMe ? 30 : 1;
       const { sessionId, expiresAt } = db.createSession(user.id, days);
@@ -298,6 +306,7 @@ const requestHandler = async (req, res) => {
       }
 
       const user = db.findOrCreateGoogleUser({ name, email, avatar });
+      try { firebase.syncUser(user); } catch (e) {}
       const { sessionId, expiresAt } = db.createSession(user.id, 30);
 
       const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
@@ -404,6 +413,7 @@ const requestHandler = async (req, res) => {
               email: userInfo.email,
               avatar: userInfo.picture || ''
             });
+            try { firebase.syncUser(user); } catch (e) {}
             const { sessionId, expiresAt } = db.createSession(user.id, 30);
             const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
             res.writeHead(302, { 'Location': '/dashboard', 'Set-Cookie': cookieHeader });
@@ -460,10 +470,60 @@ const requestHandler = async (req, res) => {
     try {
       const body = await parseJsonBody(req);
       const updated = db.updateUserProfile(session.id, body);
+      try { firebase.syncUser(updated); } catch (e) {}
       return sendJson(res, 200, { success: true, message: 'Profile updated successfully!', user: updated });
     } catch (err) {
       return sendJson(res, 400, { success: false, error: err.message || 'Failed to update profile.' });
     }
+  }
+
+  // ========================================================================
+  // CLOUD USER WORKING DRAFT API ROUTES (Auto-Save & Cross-Device Sync)
+  // ========================================================================
+
+  // GET /api/user/draft
+  if (pathname === '/api/user/draft' && req.method === 'GET') {
+    const session = getAuthSession(req);
+    if (!session) {
+      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
+    }
+    const result = db.getUserDraft(session.id);
+    return sendJson(res, 200, {
+      success: true,
+      draft: result ? result.draft : null,
+      updated_at: result ? result.updated_at : null
+    });
+  }
+
+  // PUT /api/user/draft
+  if (pathname === '/api/user/draft' && req.method === 'PUT') {
+    const session = getAuthSession(req);
+    if (!session) {
+      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
+    }
+    try {
+      const body = await parseJsonBody(req);
+      const result = db.saveUserDraft(session.id, body);
+      try { firebase.syncDraft(session.id, body); } catch (e) {}
+      return sendJson(res, 200, {
+        success: true,
+        message: 'Draft synced to cloud',
+        updated_at: result.updated_at
+      });
+    } catch (err) {
+      return sendJson(res, 400, { success: false, error: err.message || 'Failed to sync draft.' });
+    }
+  }
+
+  // DELETE /api/user/draft
+  if (pathname === '/api/user/draft' && req.method === 'DELETE') {
+    const session = getAuthSession(req);
+    if (!session) {
+      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
+    }
+    db.deleteUserDraft(session.id);
+    try { firebase.deleteDraft(session.id); } catch (e) {}
+    return sendJson(res, 200, { success: true, message: 'Cloud draft cleared' });
   }
 
   // ========================================================================
@@ -514,6 +574,11 @@ const requestHandler = async (req, res) => {
     try {
       const body = await parseJsonBody(req);
       const invoice = db.createInvoice(session.id, body);
+      try { firebase.syncInvoice(invoice); } catch (e) {}
+      try {
+        db.deleteUserDraft(session.id);
+        firebase.deleteDraft(session.id);
+      } catch (e) {}
       return sendJson(res, 201, {
         success: true,
         message: 'Invoice saved successfully to database!',
@@ -564,6 +629,7 @@ const requestHandler = async (req, res) => {
     try {
       const body = await parseJsonBody(req);
       const updated = db.updateInvoice(session.id, id, body);
+      try { firebase.syncInvoice(updated); } catch (e) {}
       return sendJson(res, 200, { success: true, message: 'Invoice updated successfully!', invoice: updated });
     } catch (err) {
       return sendJson(res, 400, { success: false, error: err.message || 'Failed to update invoice.' });
@@ -579,6 +645,7 @@ const requestHandler = async (req, res) => {
     const id = pathname.replace('/api/invoices/', '');
     try {
       db.deleteInvoice(session.id, id);
+      try { firebase.deleteInvoice(id); } catch (e) {}
       return sendJson(res, 200, { success: true, message: 'Invoice permanently deleted from database.' });
     } catch (err) {
       return sendJson(res, 404, { success: false, error: err.message || 'Failed to delete invoice.' });
@@ -756,6 +823,7 @@ const requestHandler = async (req, res) => {
     try {
       const body = await parseJsonBody(req);
       const client = db.createClient(session.id, body);
+      try { firebase.syncClient(client); } catch (e) {}
       return sendJson(res, 201, { success: true, message: 'Client added successfully!', client });
     } catch (err) {
       return sendJson(res, 400, { success: false, error: err.message || 'Failed to add client.' });
@@ -786,6 +854,7 @@ const requestHandler = async (req, res) => {
     try {
       const body = await parseJsonBody(req);
       const updated = db.updateClient(session.id, id, body);
+      try { firebase.syncClient(updated); } catch (e) {}
       return sendJson(res, 200, { success: true, message: 'Client updated successfully!', client: updated });
     } catch (err) {
       return sendJson(res, 400, { success: false, error: err.message || 'Failed to update client.' });
@@ -801,10 +870,30 @@ const requestHandler = async (req, res) => {
     const id = pathname.replace('/api/clients/', '');
     try {
       db.deleteClient(session.id, id);
+      try { firebase.deleteClient(id); } catch (e) {}
       return sendJson(res, 200, { success: true, message: 'Client deleted successfully.' });
     } catch (err) {
       return sendJson(res, 400, { success: false, error: err.message || 'Failed to delete client.' });
     }
+  }
+
+  // ========================================================================
+  // FIREBASE CLOUD FIRESTORE INTEGRATION API ROUTES
+  // ========================================================================
+
+  // GET /api/firebase/status
+  if (pathname === '/api/firebase/status' && req.method === 'GET') {
+    return sendJson(res, 200, { success: true, ...firebase.getStatus() });
+  }
+
+  // POST /api/firebase/sync - Manual full sync trigger
+  if (pathname === '/api/firebase/sync' && req.method === 'POST') {
+    const session = getAuthSession(req);
+    if (!session) {
+      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
+    }
+    const result = await firebase.bulkSyncAll(db);
+    return sendJson(res, 200, result);
   }
 
   // ========================================================================
@@ -1230,124 +1319,24 @@ const requestHandler = async (req, res) => {
     return sendJson(res, 200, {
       success: true,
       configured: isConfigured,
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || '',
-      proPriceId: process.env.STRIPE_PRO_PRICE_ID || '',
-      businessPriceId: process.env.STRIPE_BUSINESS_PRICE_ID || ''
+      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || ''
     });
   }
 
-  // POST /api/stripe/create-checkout-session - Create Stripe Checkout Session for subscription upgrade
+  // POST /api/stripe/create-checkout-session - Safely disabled SaaS subscription upgrade
   if (pathname === '/api/stripe/create-checkout-session' && req.method === 'POST') {
-    const session = getAuthSession(req);
-    if (!session) {
-      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
-    }
-
-    if (!stripeClient || !process.env.STRIPE_SECRET_KEY) {
-      return sendJson(res, 400, {
-        success: false,
-        code: 'STRIPE_NOT_CONFIGURED',
-        error: 'Stripe is not yet configured on this server. Please set STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY in the environment.'
-      });
-    }
-
-    try {
-      const body = await parseJsonBody(req);
-      const plan = (body.plan || 'Pro Workspace Tier').trim();
-      const isBusiness = plan.toLowerCase().includes('business');
-      const planName = isBusiness ? 'Business Tier' : 'Pro Workspace Tier';
-      const unitAmount = isBusiness ? 2900 : 1200;
-      const priceId = isBusiness ? process.env.STRIPE_BUSINESS_PRICE_ID : process.env.STRIPE_PRO_PRICE_ID;
-
-      const user = db.getUserById(session.user_id);
-      let customerId = user.stripe_customer_id;
-
-      if (!customerId) {
-        const customer = await stripeClient.customers.create({
-          email: user.email,
-          name: user.name,
-          metadata: { userId: user.id }
-        });
-        customerId = customer.id;
-        db.updateUserStripeCustomer(user.id, customerId);
-      }
-
-      const origin = `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}`;
-
-      const lineItem = priceId
-        ? { price: priceId, quantity: 1 }
-        : {
-            price_data: {
-              currency: 'usd',
-              product_data: {
-                name: `InvoiceGen ${planName}`,
-                description: isBusiness
-                  ? 'Unlimited invoices, team management, automated payment reconciliation, and priority support'
-                  : 'Unlimited invoices, cloud storage, and client portal'
-              },
-              unit_amount: unitAmount,
-              recurring: { interval: 'month' }
-            },
-            quantity: 1
-          };
-
-      const checkoutSession = await stripeClient.checkout.sessions.create({
-        customer: customerId,
-        payment_method_types: ['card'],
-        line_items: [lineItem],
-        mode: 'subscription',
-        client_reference_id: user.id,
-        metadata: {
-          userId: user.id,
-          plan: planName
-        },
-        success_url: `${origin}/dashboard?stripe=success&session_id={CHECKOUT_SESSION_ID}#billing`,
-        cancel_url: `${origin}/dashboard?stripe=cancel#billing`
-      });
-
-      return sendJson(res, 200, {
-        success: true,
-        sessionId: checkoutSession.id,
-        url: checkoutSession.url
-      });
-    } catch (err) {
-      return sendJson(res, 500, { success: false, error: err.message || 'Failed to initialize Stripe checkout.' });
-    }
+    return sendJson(res, 400, {
+      success: false,
+      error: 'SaaS subscriptions have been removed. All invoicing features are completely free.'
+    });
   }
 
-  // POST /api/stripe/create-portal-session - Stripe Customer Portal Session
+  // POST /api/stripe/create-portal-session - Safely disabled SaaS billing portal
   if (pathname === '/api/stripe/create-portal-session' && req.method === 'POST') {
-    const session = getAuthSession(req);
-    if (!session) {
-      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
-    }
-
-    if (!stripeClient) {
-      return sendJson(res, 400, {
-        success: false,
-        code: 'STRIPE_NOT_CONFIGURED',
-        error: 'Stripe is not configured on this server.'
-      });
-    }
-
-    const user = db.getUserById(session.user_id);
-    if (!user.stripe_customer_id) {
-      return sendJson(res, 400, {
-        success: false,
-        error: 'No active Stripe customer account linked to your profile yet.'
-      });
-    }
-
-    try {
-      const origin = `${req.headers['x-forwarded-proto'] || 'http'}://${req.headers.host}`;
-      const portalSession = await stripeClient.billingPortal.sessions.create({
-        customer: user.stripe_customer_id,
-        return_url: `${origin}/dashboard#billing`
-      });
-      return sendJson(res, 200, { success: true, url: portalSession.url });
-    } catch (err) {
-      return sendJson(res, 500, { success: false, error: err.message || 'Failed to open billing portal.' });
-    }
+    return sendJson(res, 400, {
+      success: false,
+      error: 'Subscription management portal is disabled.'
+    });
   }
 
   // POST /api/stripe/webhook - Idempotent, cryptographically verified Stripe Webhook
@@ -1449,6 +1438,19 @@ const requestHandler = async (req, res) => {
     return res.end();
   }
 
+  // Private application routes: redirect to login if unauthenticated
+  const protectedRoutes = ['/dashboard', '/create-invoice', '/invoices', '/clients', '/client-details'];
+  if (protectedRoutes.includes(pathname) && !session) {
+    res.writeHead(302, { 'Location': '/login?redirect=' + encodeURIComponent(pathname + (parsedUrl.search || '')) });
+    return res.end();
+  }
+
+  // If user visits deprecated /billing route, redirect to /dashboard
+  if (pathname === '/billing') {
+    res.writeHead(302, { 'Location': '/dashboard' });
+    return res.end();
+  }
+
   // ========================================================================
   // STATIC ASSET SERVING & CLEAN URL ROUTING
   // ========================================================================
@@ -1506,13 +1508,13 @@ const requestHandler = async (req, res) => {
 
     // Authenticated SaaS application shell routes
     '/dashboard': 'dashboard.html',
+    '/create-invoice': 'dashboard.html',
     '/invoice-details': 'invoice-details.html',
     '/client-details': 'dashboard.html',
     '/invoices': 'dashboard.html',
     '/clients': 'dashboard.html',
     '/profile': 'dashboard.html',
     '/business-profile': 'dashboard.html',
-    '/billing': 'dashboard.html',
     '/payment-methods': 'dashboard.html',
     '/payment-history': 'dashboard.html',
     '/settings': 'dashboard.html'
@@ -1587,17 +1589,18 @@ const requestHandler = async (req, res) => {
   });
 };
 
-const server = http.createServer(requestHandler);
+const activePorts = [Number(PORT), 3001, Number(SECONDARY_PORT)];
+const uniquePorts = [...new Set(activePorts)];
 
-server.listen(PORT, () => {
-  console.log(`InvoiceGen server running with SQLite DB & Auth API at http://localhost:${PORT}`);
+uniquePorts.forEach(p => {
+  try {
+    const s = http.createServer(requestHandler);
+    s.listen(p, () => {
+      console.log(`InvoiceGen server running at http://localhost:${p}`);
+    }).on('error', (err) => {
+      if (err.code !== 'EADDRINUSE') {
+        console.log(`Port ${p} notice: ${err.message}`);
+      }
+    });
+  } catch (e) {}
 });
-
-if (Number(PORT) !== Number(SECONDARY_PORT)) {
-  const secondaryServer = http.createServer(requestHandler);
-  secondaryServer.listen(SECONDARY_PORT, () => {
-    console.log(`InvoiceGen also listening on secondary port http://localhost:${SECONDARY_PORT}`);
-  }).on('error', (err) => {
-    console.log(`Secondary port ${SECONDARY_PORT} notice: ${err.message}`);
-  });
-}

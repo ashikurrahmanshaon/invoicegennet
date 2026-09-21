@@ -251,7 +251,15 @@ db.exec(`
     payload TEXT
   );
 
+  CREATE TABLE IF NOT EXISTS user_drafts (
+    user_id TEXT PRIMARY KEY,
+    draft_json TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
   CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+  CREATE INDEX IF NOT EXISTS idx_user_drafts_user ON user_drafts(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoices_user ON invoices(user_id);
   CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
   CREATE INDEX IF NOT EXISTS idx_invoice_items_invoice ON invoice_items(invoice_id);
@@ -512,6 +520,68 @@ function changePassword(userId, currentPassword, newPassword) {
     });
   } catch (e) {}
 
+  return true;
+}
+
+// --------------------------------------------------------------------------
+// CLOUD USER WORKING DRAFT SYNC
+// --------------------------------------------------------------------------
+
+function saveUserDraft(userIdOrSessionId, draftData) {
+  let userId = userIdOrSessionId;
+  const session = getSession(userIdOrSessionId);
+  if (session) {
+    userId = session.user_id;
+  }
+  if (!userId) throw new Error('User not found');
+
+  const draftJson = typeof draftData === 'string' ? draftData : JSON.stringify(draftData);
+  const now = new Date().toISOString();
+
+  const stmt = db.prepare(`
+    INSERT INTO user_drafts (user_id, draft_json, updated_at)
+    VALUES (?, ?, ?)
+    ON CONFLICT(user_id) DO UPDATE SET
+      draft_json = excluded.draft_json,
+      updated_at = excluded.updated_at
+  `);
+  stmt.run(userId, draftJson, now);
+  return { success: true, updated_at: now };
+}
+
+function getUserDraft(userIdOrSessionId) {
+  let userId = userIdOrSessionId;
+  const session = getSession(userIdOrSessionId);
+  if (session) {
+    userId = session.user_id;
+  }
+  if (!userId) return null;
+
+  const row = db.prepare('SELECT draft_json, updated_at FROM user_drafts WHERE user_id = ?').get(userId);
+  if (!row) return null;
+
+  try {
+    return {
+      draft: JSON.parse(row.draft_json),
+      updated_at: row.updated_at
+    };
+  } catch (e) {
+    return {
+      draft: null,
+      updated_at: row.updated_at
+    };
+  }
+}
+
+function deleteUserDraft(userIdOrSessionId) {
+  let userId = userIdOrSessionId;
+  const session = getSession(userIdOrSessionId);
+  if (session) {
+    userId = session.user_id;
+  }
+  if (!userId) return false;
+
+  db.prepare('DELETE FROM user_drafts WHERE user_id = ?').run(userId);
   return true;
 }
 
@@ -2497,7 +2567,10 @@ module.exports = {
   recordManualPayment,
   listInvoicePayments,
   updatePaymentStatus,
-  saveContactMessage,
+  // User Drafts (Cloud Auto-Save)
+  saveUserDraft,
+  getUserDraft,
+  deleteUserDraft,
   // Stripe & Subscriptions
   updateUserStripeCustomer,
   getUserByStripeCustomerId,

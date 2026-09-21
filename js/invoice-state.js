@@ -318,6 +318,92 @@ class InvoiceStore {
     return this.loadSample();
   }
 
+  async loadCloudProfile() {
+    try {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      if (data && data.authenticated && data.user) {
+        const u = data.user;
+        const bizName = u.business_name || u.name || '';
+        const bizAddr = u.business_address || '';
+        const bizEmail = u.business_email || u.email || '';
+        const bizPhone = u.business_phone || u.phone || '';
+        let fullAddr = bizAddr;
+        const contactLine = [bizEmail, bizPhone].filter(Boolean).join(' • ');
+        if (contactLine && !fullAddr.includes(bizEmail) && !fullAddr.includes(bizPhone)) {
+          fullAddr = fullAddr ? `${fullAddr}\n${contactLine}` : contactLine;
+        }
+        if (u.business_tax_id && !fullAddr.includes(u.business_tax_id)) {
+          fullAddr = `${fullAddr}\nTax ID: ${u.business_tax_id}`;
+        }
+
+        if (bizName && (!this.state.sender || !this.state.sender.name)) {
+          this.state.sender = {
+            name: bizName,
+            address: fullAddr,
+            email: bizEmail,
+            phone: bizPhone
+          };
+        }
+        if (u.default_currency && (!this.state.currency || this.state.currency === 'USD')) {
+          this.state.currency = u.default_currency;
+        }
+        if (u.default_payment_terms && (!this.state.paymentTerms || this.state.paymentTerms === 'Due on Receipt')) {
+          this.state.paymentTerms = u.default_payment_terms;
+        }
+        if (u.default_notes && !this.state.notes) {
+          this.state.notes = u.default_notes;
+        }
+        this.notify();
+        return u;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  async loadFromCloud() {
+    try {
+      const res = await fetch('/api/user/draft');
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data && data.success && data.draft) {
+        const draft = data.draft;
+        if (draft.number) this.state.number = draft.number;
+        if (draft.date) this.state.date = draft.date;
+        if (draft.dueDate !== undefined) this.state.dueDate = draft.dueDate;
+        if (draft.poNumber !== undefined) this.state.poNumber = draft.poNumber;
+        if (draft.paymentTerms) this.state.paymentTerms = draft.paymentTerms;
+        if (draft.currency) this.state.currency = draft.currency;
+        if (draft.sender) this.state.sender = draft.sender;
+        if (draft.client) this.state.client = draft.client;
+        if (draft.shipTo) this.state.shipTo = draft.shipTo;
+        if (draft.notes !== undefined) this.state.notes = draft.notes;
+        if (draft.taxRate !== undefined) this.state.taxRate = draft.taxRate;
+        if (draft.discountValue !== undefined) this.state.discountValue = draft.discountValue;
+        if (draft.amountPaid !== undefined) this.state.amountPaid = draft.amountPaid;
+        if (Array.isArray(draft.items) && draft.items.length > 0) {
+          this.state.items = draft.items;
+        }
+        this.notify();
+        return this.state;
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  async syncToCloud() {
+    try {
+      const res = await fetch('/api/user/draft', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.state)
+      });
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
   resetInvoice(preserveSavedProfile = true) {
     let savedSender = null;
     let savedLogo = null;
@@ -356,11 +442,16 @@ class InvoiceStore {
       this.state.logo = savedLogo;
     }
 
+    // Try populating from cloud user profile as primary source of truth
+    this.loadCloudProfile();
+
     this.notify();
     return this.state;
   }
 
   clear() {
+    // Clear cloud draft when resetting form
+    fetch('/api/user/draft', { method: 'DELETE' }).catch(() => {});
     return this.resetInvoice(true);
   }
 
@@ -390,10 +481,12 @@ class InvoiceStore {
   }
 
   saveToStorage() {
+    // Also sync to cloud
+    this.syncToCloud();
     try {
       localStorage.setItem('invoicegen_active_v3', JSON.stringify(this.state));
     } catch (e) {
-      console.warn('LocalStorage save failed:', e);
+      console.warn('LocalStorage save fallback notice:', e);
     }
   }
 

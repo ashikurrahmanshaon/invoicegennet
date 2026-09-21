@@ -34,133 +34,163 @@ body.saas-body {
 
 /* Shell Layout Container */
 .saas-shell {
-  display: block;
+  display: flex;
   min-height: 100vh;
   background-color: var(--shell-bg);
   color: var(--shell-text-main);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
+  position: relative;
 }
 
 /* ==========================================================================
-   UNIVERSAL AUTHENTICATED APP SHELL
-   Unified top header, centered workspace container, and drawer
+   AUTHENTICATED DESKTOP SIDEBAR (240px Fixed)
    ========================================================================== */
+.saas-sidebar {
+  width: var(--shell-sidebar-width, 240px);
+  background: var(--shell-surface, #ffffff);
+  border-right: 1px solid var(--shell-border, #e2e8f0);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  box-shadow: 1px 0 3px rgba(15, 23, 42, 0.03);
+}
 
-/* Top Universal Header */
+.saas-sidebar-brand {
+  height: 60px;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--shell-border-subtle, #f1f5f9);
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.saas-sidebar-brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ecfdf5;
+  color: var(--shell-accent);
+  flex-shrink: 0;
+}
+
+.saas-sidebar-brand-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--shell-text-main);
+}
+
+.saas-sidebar-brand-name .accent-dot {
+  color: var(--shell-accent);
+}
+
+.saas-sidebar-nav {
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.saas-nav-btn.btn-nav-create {
+  background: #059669 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  margin: 2px 0 8px;
+  box-shadow: 0 1px 3px rgba(5, 150, 105, 0.25);
+  border-radius: 8px;
+}
+
+.saas-nav-btn.btn-nav-create:hover {
+  background: #047857 !important;
+  color: #ffffff !important;
+}
+
+.saas-nav-btn.btn-nav-create svg {
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   MAIN CONTENT AREA & TOPBAR
+   ========================================================================== */
+.saas-main-layout {
+  margin-left: var(--shell-sidebar-width, 240px);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--shell-bg);
+}
+
 .saas-top-header {
   position: sticky;
   top: 0;
-  z-index: 95;
-  height: 64px;
+  z-index: 90;
+  height: 60px;
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
   width: 100%;
   box-sizing: border-box;
 }
 
-.saas-header-container {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 100%;
+.saas-topbar-left {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  box-sizing: border-box;
+  gap: 14px;
 }
 
-.saas-brand-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  flex-shrink: 0;
-}
-
-.saas-brand-logo-img {
-  width: 32px;
-  height: 32px;
-  display: block;
-}
-
-.saas-brand-text-block {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.saas-brand-title {
-  font-size: 1.125rem;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-
-.saas-brand-title .accent-dot {
-  color: #10b981;
-}
-
-.saas-brand-tagline {
-  font-size: 0.5rem;
+.saas-active-page-title {
+  font-size: 1.0625rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #64748b;
-  line-height: 1;
-  margin-top: 2px;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  margin: 0;
 }
 
-/* Center Nav */
-.saas-top-nav {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.saas-top-nav .saas-nav-item {
-  display: inline-flex;
+.saas-mobile-brand-wrap {
+  display: none;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  color: #475569;
-  font-size: 0.875rem;
-  font-weight: 600;
   text-decoration: none;
+}
+
+.saas-mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
   background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  min-height: 40px;
-  white-space: nowrap;
-}
-
-.saas-top-nav .saas-nav-item:hover {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   color: #0f172a;
-  background: #f1f5f9;
+  cursor: pointer;
+  padding: 0;
+  min-height: 44px;
+  min-width: 44px;
 }
 
-.saas-top-nav .saas-nav-item.active {
-  color: #059669;
-  background: #ecfdf5;
-  font-weight: 700;
-}
-
-.saas-top-nav .saas-nav-item svg {
-  width: 17px;
-  height: 17px;
-  stroke-width: 2.2;
-}
-
-/* Right Header Actions */
 .saas-header-actions {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-shrink: 0;
 }
 
 .saas-header-search-btn {
@@ -224,6 +254,70 @@ body.saas-body {
   object-fit: cover;
 }
 
+/* Main Workspace Body Container */
+.saas-main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 32px 64px;
+  width: 100%;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM NAVIGATION (5 Targets, 48px+ Touch Targets)
+   ========================================================================== */
+.saas-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  z-index: 95;
+  justify-content: space-around;
+  align-items: center;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-shadow: 0 -2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.saas-bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  height: 100%;
+  min-height: 48px;
+  color: #64748b;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  transition: color 0.15s ease;
+}
+
+.saas-bottom-nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.2;
+}
+
+.saas-bottom-nav-item:hover {
+  color: #0f172a;
+}
+
+.saas-bottom-nav-item.active {
+  color: #059669;
+  font-weight: 700;
+}
+
 /* Mobile Drawer Links */
 .saas-drawer-link {
   display: flex;
@@ -239,7 +333,7 @@ body.saas-body {
   border: none;
   cursor: pointer;
   transition: all 0.15s ease;
-  min-height: 46px;
+  min-height: 48px;
   width: 100%;
   box-sizing: border-box;
   text-align: left;
@@ -269,7 +363,7 @@ body.saas-body {
   border: none;
   color: #64748b;
   cursor: pointer;
-  padding: 6px;
+  padding: 8px;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -278,47 +372,21 @@ body.saas-body {
   min-height: 44px;
 }
 
-/* Main Workspace Body Container */
-.saas-main-container {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 32px 24px 80px;
-  width: 100%;
-  box-sizing: border-box;
+/* ==========================================================================
+   INTEGRATED INVOICE EDITOR RESPONSIVE GRID
+   ========================================================================== */
+.editor-workspace-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
 }
 
 @media (max-width: 1024px) {
-  .saas-top-nav {
-    display: none !important;
+  .editor-workspace-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-  .saas-header-search-btn .search-text,
-  .saas-header-search-btn .search-kbd {
-    display: none !important;
-  }
-  .saas-header-search-btn {
-    padding: 7px 10px;
-    min-width: auto;
-  }
-  .saas-mobile-menu-btn {
-    display: inline-flex !important;
-  }
-}
-
-@media (min-width: 1025px) {
-  .saas-mobile-menu-btn {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .saas-main-container {
-    padding: 20px 16px 60px;
-  }
-}
-
-/* Hide legacy sidebar elements if still referenced */
-.saas-sidebar {
-  display: none !important;
 }
 
 .saas-sidebar-brand {
@@ -942,27 +1010,48 @@ body.saas-body {
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
   .saas-sidebar {
-    display: none;
+    display: none !important;
   }
-  .saas-topbar {
-    display: none;
+  .saas-main-layout {
+    margin-left: 0 !important;
+    width: 100% !important;
   }
-  .saas-mobile-header {
-    display: flex;
+  .saas-top-header {
+    padding: 0 16px !important;
+    height: 56px !important;
   }
-  .saas-content-body {
-    padding: 18px 16px;
+  .saas-mobile-menu-btn {
+    display: inline-flex !important;
   }
-  .saas-welcome-hero {
-    flex-direction: column;
-    align-items: flex-start;
+  .saas-mobile-brand-wrap {
+    display: inline-flex !important;
+  }
+  .saas-active-page-title {
+    display: none !important;
+  }
+  .saas-header-search-btn {
+    display: none !important;
+  }
+  .lang-switcher-container {
+    display: none !important;
+  }
+  .saas-header-actions {
+    gap: 8px !important;
+  }
+  .saas-bottom-nav {
+    display: flex !important;
+  }
+  .saas-main-container {
+    padding: 16px 14px 84px !important;
   }
 }
 
 @media (min-width: 1025px) {
-  .saas-mobile-header,
+  .saas-mobile-menu-btn,
+  .saas-mobile-brand-wrap,
   .saas-mobile-drawer,
-  .saas-drawer-backdrop {
+  .saas-drawer-backdrop,
+  .saas-bottom-nav {
     display: none !important;
   }
 }
