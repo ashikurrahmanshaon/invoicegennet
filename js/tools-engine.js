@@ -852,7 +852,7 @@
       fileReader.onload = async function () {
         try {
           const typedarray = new Uint8Array(this.result);
-          currentPdfDoc = await window.pdfjsLib.getDocument({ data: typedarray }).promise;
+          currentPdfDoc = await window.pdfjsLib.getDocument({ data: typedarray, isEvalSupported: false }).promise;
           pageCountEl.textContent = `${currentPdfDoc.numPages} ${currentPdfDoc.numPages === 1 ? 'Page' : 'Pages'}`;
           convertBtn.disabled = false;
         } catch (err) {
