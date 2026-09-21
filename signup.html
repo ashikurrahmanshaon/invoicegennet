@@ -585,23 +585,14 @@
         let redirectPage = urlParams.get('redirect') || '/dashboard';
         if (redirectPage.endsWith('.html')) redirectPage = redirectPage.replace(/\.html$/, '');
         if (!redirectPage.startsWith('/')) redirectPage = '/' + redirectPage;
-        const pendingTpl = urlParams.get('template') || sessionStorage.getItem('pending_template');
+        const target = pendingTpl ? `/?template=${pendingTpl}` : redirectPage;
+        if (pendingTpl) sessionStorage.removeItem('pending_template');
 
-        if (pendingTpl) {
-          sessionStorage.removeItem('pending_template');
-          const target = `/?template=${pendingTpl}`;
-          if (window.router && typeof window.router.navigate === 'function') {
-            window.router.navigate(target);
-          } else {
-            window.location.replace(target);
-          }
-        } else {
-          if (window.router && typeof window.router.navigate === 'function') {
-            window.router.navigate(redirectPage);
-          } else {
-            window.location.replace(redirectPage);
-          }
+        if (window.router && typeof window.router.clearCache === 'function') {
+          window.router.clearCache();
         }
+
+        window.location.href = target;
       }
 
       // Sign Up Form Submission
@@ -710,11 +701,7 @@
           let redirect = urlParams.get('redirect') || '/dashboard';
           if (redirect.endsWith('.html')) redirect = redirect.replace(/\.html$/, '');
           if (!redirect.startsWith('/')) redirect = '/' + redirect;
-          if (window.router && typeof window.router.navigate === 'function') {
-            window.router.navigate(redirect);
-          } else {
-            window.location.replace(redirect);
-          }
+          window.location.href = redirect;
         }
       });
     };

@@ -102,8 +102,9 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
     // Universal fetch wrapper attaching session token and credentials
     authFetch: function (url, options = {}) {
       const headers = Object.assign({}, options.headers || {});
-      if (this.sessionId && !headers['Authorization']) {
-        headers['Authorization'] = `Bearer ${this.sessionId}`;
+      const token = this.sessionId || localStorage.getItem('invoicegen_session_id');
+      if (token && !headers['Authorization']) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
       return fetch(url, Object.assign({}, options, {
         headers,
@@ -228,11 +229,10 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
           const pendingTpl = sessionStorage.getItem('pending_template');
           const targetUrl = pendingTpl ? `/?template=${pendingTpl}` : '/dashboard';
           if (pendingTpl) sessionStorage.removeItem('pending_template');
-          if (window.router && typeof window.router.navigate === 'function') {
-            window.router.navigate(targetUrl);
-          } else {
-            window.location.replace(targetUrl);
+          if (window.router && typeof window.router.clearCache === 'function') {
+            window.router.clearCache();
           }
+          window.location.href = targetUrl;
         } else {
           if (window.showToast) {
             window.showToast(data.error || 'Google login failed.', 'warning');
@@ -495,11 +495,7 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
           const isProtected = window.location.pathname.includes('dashboard') || window.location.pathname.includes('invoice-details') || window.location.pathname.includes('client-details');
           if (isProtected) {
             const redirectTarget = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
-            if (window.router && typeof window.router.navigate === 'function') {
-              window.router.navigate(redirectTarget);
-            } else {
-              window.location.replace(redirectTarget);
-            }
+            window.location.replace(redirectTarget);
           }
         }
       } catch (e) {

@@ -27,15 +27,37 @@
   }
   pinFavicon();
 
-  // 2. In-Memory Document Cache (Instantaneous 0ms page swapping)
+  // 2. In-Memory Document Cache (Instantaneous 0ms page swapping for public content)
   const pageCache = new Map();
   const prefetchedUrls = new Set();
+
+  const NON_PJAX_ROUTES = [
+    '/dashboard',
+    '/invoice-details',
+    '/client-details',
+    '/invoices',
+    '/clients',
+    '/business-profile',
+    '/profile',
+    '/billing',
+    '/settings',
+    '/security',
+    '/login',
+    '/signup'
+  ];
+
+  function isNonPjaxRoute(pathname) {
+    if (!pathname) return false;
+    const clean = pathname.toLowerCase().replace(/\/$/, '') || '/';
+    return NON_PJAX_ROUTES.some(r => clean === r || clean.startsWith(r + '/') || clean.startsWith(r + '#') || clean.startsWith(r + '?'));
+  }
 
   async function prefetchUrl(url) {
     try {
       const parsed = new URL(url, window.location.href);
       if (parsed.origin !== window.location.origin) return;
       const cleanPath = parsed.pathname;
+      if (isNonPjaxRoute(cleanPath)) return;
       if (prefetchedUrls.has(cleanPath)) return;
       prefetchedUrls.add(cleanPath);
 
@@ -61,13 +83,11 @@
             urls: [
               '/',
               '/templates',
-              '/dashboard',
               '/pricing',
               '/features',
               '/blog',
               '/contact',
-              '/login',
-              '/signup'
+              '/tools'
             ]
           }
         ]
@@ -200,23 +220,15 @@
       const targetPath = parsed.pathname;
       const fullTarget = parsed.pathname + parsed.search + parsed.hash;
 
+      // DO NOT use PJAX for Dashboard or Auth pages!
+      // They have unique DOM layouts, sidebars, and authentication lifecycles.
+      if (isNonPjaxRoute(targetPath) || isNonPjaxRoute(window.location.pathname)) {
+        window.location.href = targetUrl;
+        return;
+      }
+
       // Avoid redundant navigation to exact same URL (unless anchor scroll)
       if (window.location.pathname === parsed.pathname && window.location.search === parsed.search && !parsed.hash && !options.force) {
-        return;
-      }
-
-      // Check Route Guards
-      const isAuth = window.Auth && window.Auth.isAuthenticated();
-      const isPrivate = targetPath.includes('dashboard') || targetPath.includes('invoice-details');
-      const isAuthRoute = targetPath.includes('login') || targetPath.includes('signup');
-
-      if (isPrivate && !isAuth && window.Auth && window.Auth.state === 'UNAUTHENTICATED') {
-        navigateTo(`/login?redirect=${encodeURIComponent(fullTarget)}`, { pushState: true });
-        return;
-      }
-
-      if (isAuthRoute && isAuth) {
-        navigateTo('/dashboard', { pushState: true });
         return;
       }
 
@@ -423,6 +435,10 @@
       const parsed = new URL(href, window.location.href);
       // Only intercept same-origin internal links
       if (parsed.origin === window.location.origin) {
+        if (isNonPjaxRoute(parsed.pathname) || isNonPjaxRoute(window.location.pathname)) {
+          // Native browser navigation for dashboard and auth
+          return;
+        }
         e.preventDefault();
         navigateTo(href, { pushState: true });
       }
@@ -665,9 +681,16 @@
 
   // Expose Router API Globally
   window.router = {
-    navigate: navigateTo,
+    navigate: (url, opts) => {
+      if (isNonPjaxRoute(url)) {
+        window.location.href = url;
+      } else {
+        navigateTo(url, opts);
+      }
+    },
     prefetch: prefetchUrl,
-    cache: pageCache
+    cache: pageCache,
+    clearCache: () => pageCache.clear()
   };
 
   function initAll() {

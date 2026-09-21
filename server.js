@@ -109,30 +109,60 @@ function parseCookies(req) {
   if (!cookieHeader) return list;
 
   cookieHeader.split(';').forEach(cookie => {
-    let [name, ...rest] = cookie.split('=');
-    name = name?.trim();
-    if (!name) return;
-    const value = rest.join('=').trim();
-    list[name] = decodeURIComponent(value);
+    try {
+      let [name, ...rest] = cookie.split('=');
+      name = name?.trim();
+      if (!name) return;
+      let value = rest.join('=').trim();
+      if (value.startsWith('"') && value.endsWith('"')) {
+        value = value.slice(1, -1);
+      }
+      try {
+        list[name] = decodeURIComponent(value);
+      } catch (e) {
+        list[name] = value;
+      }
+    } catch (err) {}
   });
   return list;
 }
 
-function getAuthSession(req) {
-  // 1. Check Cookie
-  const cookies = parseCookies(req);
-  let sessionId = cookies['session_id'];
+function createSessionCookie(sessionId, expiresAt, req) {
+  const isHttps = req && (
+    req.headers['x-forwarded-proto'] === 'https' ||
+    (req.socket && req.socket.encrypted)
+  );
+  const secureFlag = isHttps ? '; Secure' : '';
+  return `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax${secureFlag}; Expires=${new Date(expiresAt).toUTCString()}`;
+}
 
-  // 2. Check Authorization Header fallback
-  if (!sessionId && req.headers.authorization) {
-    const parts = req.headers.authorization.split(' ');
-    if (parts.length === 2 && parts[0] === 'Bearer') {
-      sessionId = parts[1];
+function getAuthSession(req) {
+  let session = null;
+  let sessionId = null;
+
+  // 1. Check Cookie
+  try {
+    const cookies = parseCookies(req);
+    sessionId = cookies['session_id'];
+    if (sessionId) {
+      session = db.getSession(sessionId);
     }
+  } catch (err) {}
+
+  // 2. Check Authorization Header fallback (Bearer ses_...)
+  if (!session && req.headers && req.headers.authorization) {
+    try {
+      const parts = req.headers.authorization.split(' ');
+      if (parts.length === 2 && parts[0] === 'Bearer') {
+        sessionId = parts[1].trim();
+        if (sessionId) {
+          session = db.getSession(sessionId);
+        }
+      }
+    } catch (err) {}
   }
 
-  if (!sessionId) return null;
-  return db.getSession(sessionId);
+  return session;
 }
 
 function sendJson(res, statusCode, data, extraHeaders = {}) {
@@ -215,7 +245,7 @@ const requestHandler = async (req, res) => {
       const user = db.createUser({ name, email, password });
       const { sessionId, expiresAt } = db.createSession(user.id);
 
-      const cookieHeader = `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`;
+      const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
       return sendJson(res, 201, {
         success: true,
         message: 'Account created successfully!',
@@ -245,7 +275,7 @@ const requestHandler = async (req, res) => {
       const days = rememberMe ? 30 : 1;
       const { sessionId, expiresAt } = db.createSession(user.id, days);
 
-      const cookieHeader = `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`;
+      const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
       return sendJson(res, 200, {
         success: true,
         message: 'Logged in successfully!',
@@ -270,7 +300,7 @@ const requestHandler = async (req, res) => {
       const user = db.findOrCreateGoogleUser({ name, email, avatar });
       const { sessionId, expiresAt } = db.createSession(user.id, 30);
 
-      const cookieHeader = `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`;
+      const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
       return sendJson(res, 200, {
         success: true,
         message: 'Google login successful!',
@@ -311,7 +341,7 @@ const requestHandler = async (req, res) => {
         const avatar = parsedUrl.searchParams.get('avatar') || '';
         const user = db.findOrCreateGoogleUser({ name, email, avatar });
         const { sessionId, expiresAt } = db.createSession(user.id, 30);
-        const cookieHeader = `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`;
+        const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
         res.writeHead(302, { 'Location': '/dashboard', 'Set-Cookie': cookieHeader });
         return res.end();
       }
@@ -375,7 +405,7 @@ const requestHandler = async (req, res) => {
               avatar: userInfo.picture || ''
             });
             const { sessionId, expiresAt } = db.createSession(user.id, 30);
-            const cookieHeader = `session_id=${sessionId}; Path=/; HttpOnly; SameSite=Lax; Expires=${new Date(expiresAt).toUTCString()}`;
+            const cookieHeader = createSessionCookie(sessionId, expiresAt, req);
             res.writeHead(302, { 'Location': '/dashboard', 'Set-Cookie': cookieHeader });
             return res.end();
           }
@@ -412,7 +442,13 @@ const requestHandler = async (req, res) => {
     if (!session) {
       return sendJson(res, 200, { success: false, authenticated: false, user: null });
     }
-    return sendJson(res, 200, { success: true, authenticated: true, user: session });
+    const cookies = parseCookies(req);
+    let extraHeaders = {};
+    if (!cookies['session_id'] && session.session_id) {
+      const expiresAt = session.expires_at || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+      extraHeaders['Set-Cookie'] = createSessionCookie(session.session_id, expiresAt, req);
+    }
+    return sendJson(res, 200, { success: true, authenticated: true, user: session }, extraHeaders);
   }
 
   // PUT /api/auth/profile
@@ -1406,24 +1442,7 @@ const requestHandler = async (req, res) => {
   // ========================================================================
   const session = getAuthSession(req);
 
-  // Private routes: redirect to login if unauthenticated
-  const privateRoutes = [
-    '/dashboard',
-    '/invoice-details',
-    '/files',
-    '/cloud',
-    '/invoices', '/clients',
-    '/payments',
-    '/profile', '/business-profile',
-    '/billing', '/payment-methods', '/payment-history',
-    '/settings'
-  ];
-  if (privateRoutes.includes(pathname) && !session) {
-    res.writeHead(302, { 'Location': '/login?redirect=' + encodeURIComponent(pathname) });
-    return res.end();
-  }
-
-  // Public auth routes: redirect to dashboard if already authenticated
+  // Public auth routes: redirect to dashboard if already authenticated on server
   const authRoutes = ['/login', '/signup'];
   if (authRoutes.includes(pathname) && session) {
     res.writeHead(302, { 'Location': '/dashboard' });
@@ -1488,14 +1507,12 @@ const requestHandler = async (req, res) => {
     // Authenticated SaaS application shell routes
     '/dashboard': 'dashboard.html',
     '/invoice-details': 'invoice-details.html',
+    '/client-details': 'dashboard.html',
     '/invoices': 'dashboard.html',
     '/clients': 'dashboard.html',
     '/profile': 'dashboard.html',
     '/business-profile': 'dashboard.html',
     '/billing': 'dashboard.html',
-    '/payments': 'dashboard.html',
-    '/files': 'dashboard.html',
-    '/cloud': 'dashboard.html',
     '/payment-methods': 'dashboard.html',
     '/payment-history': 'dashboard.html',
     '/settings': 'dashboard.html'
