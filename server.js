@@ -1413,6 +1413,7 @@ const requestHandler = async (req, res) => {
     '/files',
     '/cloud',
     '/invoices', '/clients',
+    '/payments',
     '/profile', '/business-profile',
     '/billing', '/payment-methods', '/payment-history',
     '/settings'
@@ -1487,12 +1488,14 @@ const requestHandler = async (req, res) => {
     // Authenticated SaaS application shell routes
     '/dashboard': 'dashboard.html',
     '/invoice-details': 'invoice-details.html',
-    '/client-details': 'client-details.html',
     '/invoices': 'dashboard.html',
     '/clients': 'dashboard.html',
     '/profile': 'dashboard.html',
-    '/business-profile': 'business-profile.html',
+    '/business-profile': 'dashboard.html',
     '/billing': 'dashboard.html',
+    '/payments': 'dashboard.html',
+    '/files': 'dashboard.html',
+    '/cloud': 'dashboard.html',
     '/payment-methods': 'dashboard.html',
     '/payment-history': 'dashboard.html',
     '/settings': 'dashboard.html'
@@ -1502,7 +1505,9 @@ const requestHandler = async (req, res) => {
   if (assetPath.startsWith('/tools/js/') || assetPath.startsWith('/tools/css/') || assetPath.startsWith('/tools/assets/')) {
     assetPath = assetPath.replace('/tools', '');
   }
-  let targetFilename = TOOL_ROUTE_MAP[pathname] || (pathname === '/' ? 'index.html' : assetPath);
+  let targetFilename = (pathname === '/security' && session)
+    ? 'dashboard.html'
+    : (TOOL_ROUTE_MAP[pathname] || (pathname === '/' ? 'index.html' : assetPath));
   let filePath = path.join(__dirname, targetFilename);
 
   // Security: Prevent directory traversal
