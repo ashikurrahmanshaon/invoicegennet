@@ -7,25 +7,25 @@
   <meta name="description" content="Manage your invoices, clients, billing history, and business profile defaults in your unified SaaS workspace.">
   <meta name="robots" content="noindex, nofollow">
   <!-- Favicon & Brand Icons -->
-  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=8.0">
-  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=6.0?v=8.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png?v=6.0?v=8.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png?v=6.0?v=8.0">
-  <link rel="shortcut icon" href="/favicon.ico?v=8.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=6.0?v=8.0">
-  <link rel="manifest" href="/site.webmanifest?v=8.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=9.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=9.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png?v=9.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png?v=9.0">
+  <link rel="shortcut icon" href="/favicon.ico?v=9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=9.0">
+  <link rel="manifest" href="/site.webmanifest?v=9.0">
 
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/design-system.css?v=8.0">
-  <link rel="stylesheet" href="/css/invoice-editor.css?v=8.0">
-  <link rel="stylesheet" href="/css/app-shell.css?v=8.0">
-  <script src="/js/google-auth.js?v=8.0"></script>
-  <script src="/js/cloud-sync.js?v=8.0"></script>
+  <link rel="stylesheet" href="/css/design-system.css?v=9.0">
+  <link rel="stylesheet" href="/css/invoice-editor.css?v=9.0">
+  <link rel="stylesheet" href="/css/app-shell.css?v=9.0">
+  <script src="/js/google-auth.js?v=9.0"></script>
+  <script src="/js/cloud-sync.js?v=9.0"></script>
   <script src="/js/html2pdf.bundle.min.js"></script>
-  <script src="/js/invoice-state.js?v=8.0"></script>
-  <script src="/js/pdf-generator.js?v=8.0"></script>
-  <script src="/js/app.js?v=8.0"></script>
+  <script src="/js/invoice-state.js?v=9.0"></script>
+  <script src="/js/pdf-generator.js?v=9.0"></script>
+  <script src="/js/app.js?v=9.0"></script>
 </head>
 <body class="saas-body">
 
@@ -311,103 +311,185 @@
             </div>
           </div>
 
-          <!-- =========================================================== -->
-          <!-- A. FIRST-TIME USER VIEW (When Total Invoices = 0)          -->
-          <!-- =========================================================== -->
-          <div id="dashFirstTimeView" style="display: none;">
+          <!-- 1. Top 4-Card Consolidated KPI Row (Always clean, accurate & visible) -->
+          <div class="dash-kpi-row" id="dashKpiRow">
+            <div class="dash-kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Total Invoiced</span>
+                <div class="kpi-icon-wrap blue">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                </div>
+              </div>
+              <div class="kpi-val" id="kpiTotalInvoiced">$0.00</div>
+              <div class="kpi-subtext" id="kpiTotalCount">0 invoices issued</div>
+            </div>
+
+            <div class="dash-kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Amount Paid</span>
+                <div class="kpi-icon-wrap emerald">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+              </div>
+              <div class="kpi-val emerald-val" id="kpiAmountPaid">$0.00</div>
+              <div class="kpi-subtext" id="kpiPaidCount">0 collected</div>
+            </div>
+
+            <div class="dash-kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Outstanding</span>
+                <div class="kpi-icon-wrap amber">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+              </div>
+              <div class="kpi-val amber-val" id="kpiOutstanding">$0.00</div>
+              <div class="kpi-subtext" id="kpiPendingCount">0 pending</div>
+            </div>
+
+            <div class="dash-kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Overdue</span>
+                <div class="kpi-icon-wrap rose">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
+                </div>
+              </div>
+              <div class="kpi-val rose-val" id="kpiOverdue">$0.00</div>
+              <div class="kpi-subtext" id="kpiOverdueCount">0 overdue</div>
+            </div>
+          </div>
+
+          <!-- 2. Compact Quick Actions Row -->
+          <div class="dash-quick-actions-bar">
+            <button type="button" class="quick-action-pill primary" onclick="window.switchWorkspaceTab('create')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Create Invoice</span>
+            </button>
+            <button type="button" class="quick-action-pill" onclick="window.openAddClientModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+              <span>Add Client</span>
+            </button>
+            <button type="button" class="quick-action-pill" onclick="window.switchWorkspaceTab('invoices')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+              <span>View Invoices</span>
+            </button>
+            <button type="button" class="quick-action-pill" onclick="window.switchWorkspaceTab('templates')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
+              <span>Templates</span>
+            </button>
+            <a href="/tools" class="quick-action-pill">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+              <span>Tools</span>
+            </a>
+          </div>
+
+          <!-- 3. Two-Column Workspace Layout (Primary Left 68% / Secondary Rail Right 32%) -->
+          <div class="dash-workspace-grid">
             
-            <!-- Compact First Invoice Welcome Card -->
-            <div class="dash-welcome-card">
-              <div class="dash-welcome-content">
-                <div class="dash-welcome-badge">Getting Started</div>
-                <h2 class="dash-welcome-title">Create your first invoice</h2>
-                <p class="dash-welcome-sub">Create a professional invoice in a few minutes.</p>
-                <div class="dash-welcome-actions">
-                  <button type="button" class="btn-dash-primary" onclick="window.switchWorkspaceTab('create')">
-                    <span>Create Invoice</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            <!-- LEFT / PRIMARY COLUMN -->
+            <div class="dash-main-col">
+              
+              <!-- Recent Invoices Card -->
+              <div class="dash-widget-card" style="margin-bottom: 24px;">
+                <div class="dash-widget-header">
+                  <h2 class="dash-widget-title">Recent Invoices</h2>
+                  <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('invoices')">View all &rarr;</button>
+                </div>
+
+                <!-- Clean Zero-Invoice Empty State -->
+                <div id="overviewEmptyInvoicesBox" class="dash-invoices-empty-box" style="display: none;">
+                  <div class="empty-icon-ring">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                  </div>
+                  <div class="empty-box-title">No invoices created yet</div>
+                  <p class="empty-box-desc">Create your first invoice to bill clients and automatically track settlement status in real-time.</p>
+                  <button type="button" class="btn-dash-primary" onclick="window.switchWorkspaceTab('create')" style="margin: 0 auto;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Create Your First Invoice</span>
                   </button>
-                  <button type="button" class="btn-dash-secondary" onclick="window.switchWorkspaceTab('templates')">
-                    Explore Templates
-                  </button>
+                </div>
+
+                <!-- Desktop Invoices Table -->
+                <div class="dash-desktop-table-wrap" id="overviewDesktopTableWrap">
+                  <table class="dashboard-table">
+                    <thead>
+                      <tr>
+                        <th>Invoice #</th>
+                        <th>Client</th>
+                        <th>Date</th>
+                        <th>Due Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="overviewRecentInvoicesBody">
+                      <tr><td colspan="7" style="text-align:center; padding: 24px; color: #64748b;">Loading recent documents...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Mobile Invoices Card List (<= 768px) -->
+                <div class="dash-mobile-invoice-list" id="overviewRecentInvoicesMobile">
+                  <div style="padding: 16px; text-align: center; color: #64748b; font-size: 0.84rem;">Loading invoices...</div>
                 </div>
               </div>
-            </div>
 
-            <!-- Compact 3-Step Onboarding Grid -->
-            <div class="dash-onboarding-section">
-              <div class="dash-section-eyebrow">GETTING STARTED</div>
-              <div class="dash-onboarding-grid">
-                <div class="onboarding-step-card" onclick="window.switchWorkspaceTab('business')">
-                  <div class="step-num">01</div>
-                  <div class="step-info">
-                    <div class="step-title">Business profile</div>
-                    <div class="step-desc">Add your business details once.</div>
-                  </div>
-                  <svg class="step-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
-                <div class="onboarding-step-card" onclick="window.openAddClientModal()">
-                  <div class="step-num">02</div>
-                  <div class="step-info">
-                    <div class="step-title">Add a client</div>
-                    <div class="step-desc">Save client details for faster invoicing.</div>
-                  </div>
-                  <svg class="step-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
-                <div class="onboarding-step-card" onclick="window.switchWorkspaceTab('create')" style="cursor: pointer;">
-                  <div class="step-num">03</div>
-                  <div class="step-info">
-                    <div class="step-title">Create your first invoice</div>
-                    <div class="step-desc">Generate a professional PDF in minutes.</div>
-                  </div>
-                  <svg class="step-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
-              </div>
-            </div>
-
-            <!-- Quick Actions Bar for New User -->
-            <div class="dash-quick-actions-wrap">
-              <div class="dash-section-eyebrow">QUICK ACTIONS</div>
-              <div class="dash-quick-actions-bar">
-                <button type="button" class="quick-action-pill primary" onclick="window.switchWorkspaceTab('create')">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                  <span>Create Invoice</span>
-                </button>
-                <button type="button" class="quick-action-pill" onclick="window.openAddClientModal()">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                  <span>Add Client</span>
-                </button>
-                <button type="button" class="quick-action-pill" onclick="window.switchWorkspaceTab('templates')">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
-                  <span>Templates</span>
-                </button>
-                <a href="/tools" class="quick-action-pill">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                  <span>Tools</span>
-                </a>
-              </div>
-            </div>
-
-            <!-- Two-column Bottom: Business Profile completion & Quick Templates -->
-            <div class="dash-workspace-grid">
+              <!-- Recent Activity Card (Real audit log from DB) -->
               <div class="dash-widget-card">
+                <div class="dash-widget-header">
+                  <h2 class="dash-widget-title">Recent Activity</h2>
+                  <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Live audit log</span>
+                </div>
+                <div class="activity-timeline" id="overviewActivityList">
+                  <div style="padding: 16px 0; color: #64748b; font-size: 0.8125rem;">No recent activities recorded yet.</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT / SECONDARY RAIL -->
+            <div class="dash-rail-col">
+
+              <!-- Attention Needed Card -->
+              <div class="dash-widget-card" id="attentionWidgetCard" style="margin-bottom: 20px;">
+                <div class="dash-widget-header">
+                  <div class="dash-widget-title" style="display:flex; align-items:center; gap:6px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:#e11d48;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <span>Attention Needed</span>
+                  </div>
+                  <span style="font-size: 0.75rem; font-weight: 700; color: #e11d48;" id="attentionBadgeCount"></span>
+                </div>
+
+                <!-- When Caught Up -->
+                <div class="attention-caught-up-box" id="attentionAllCaughtUp">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  <span>You're all caught up. No overdue or urgent items.</span>
+                </div>
+
+                <!-- When Items Require Attention -->
+                <div class="attention-items-list" id="attentionItemsList" style="display: none;"></div>
+              </div>
+
+              <!-- Business Profile Widget -->
+              <div class="dash-widget-card" style="margin-bottom: 20px;">
                 <div class="dash-widget-header">
                   <div class="dash-widget-title">Business Profile</div>
                   <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('business')">Edit &rarr;</button>
                 </div>
-                <div class="dash-biz-summary" id="firstTimeBizSummary">
-                  <div class="biz-detail-name" id="ftBizName">Your Business</div>
+                <div class="dash-biz-summary" id="normalBizSummary">
+                  <div class="biz-detail-name" id="normBizName">Your Business</div>
                   <div class="biz-detail-row">
                     <span class="biz-meta-label">Currency:</span>
-                    <span class="biz-meta-val" id="ftBizCurrency">USD ($)</span>
+                    <span class="biz-meta-val" id="normBizCurrency">USD ($)</span>
                   </div>
                   <div class="biz-detail-row">
                     <span class="biz-meta-label">Terms:</span>
-                    <span class="biz-meta-val" id="ftBizTerms">Due on Receipt</span>
+                    <span class="biz-meta-val" id="normBizTerms">Due on Receipt</span>
                   </div>
                 </div>
               </div>
 
+              <!-- Quick Invoice Templates Widget -->
               <div class="dash-widget-card">
                 <div class="dash-widget-header">
                   <div class="dash-widget-title">Invoice Templates</div>
@@ -430,206 +512,6 @@
                     <span class="template-mini-cta">Use &rarr;</span>
                   </a>
                 </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- =========================================================== -->
-          <!-- B. NORMAL DATA-FOCUSED VIEW (When Total Invoices > 0)       -->
-          <!-- =========================================================== -->
-          <div id="dashNormalView">
-
-            <!-- 1. Top 4-Card Consolidated KPI Row -->
-            <div class="dash-kpi-row" id="dashKpiRow">
-              <div class="dash-kpi-card">
-                <div class="kpi-top">
-                  <span class="kpi-label">Total Invoiced</span>
-                  <div class="kpi-icon-wrap blue">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                  </div>
-                </div>
-                <div class="kpi-val" id="kpiTotalInvoiced">$0.00</div>
-                <div class="kpi-subtext" id="kpiTotalCount">0 invoices issued</div>
-              </div>
-
-              <div class="dash-kpi-card">
-                <div class="kpi-top">
-                  <span class="kpi-label">Amount Paid</span>
-                  <div class="kpi-icon-wrap emerald">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                  </div>
-                </div>
-                <div class="kpi-val emerald-val" id="kpiAmountPaid">$0.00</div>
-                <div class="kpi-subtext" id="kpiPaidCount">0 collected</div>
-              </div>
-
-              <div class="dash-kpi-card">
-                <div class="kpi-top">
-                  <span class="kpi-label">Outstanding</span>
-                  <div class="kpi-icon-wrap amber">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  </div>
-                </div>
-                <div class="kpi-val amber-val" id="kpiOutstanding">$0.00</div>
-                <div class="kpi-subtext" id="kpiPendingCount">0 pending</div>
-              </div>
-
-              <div class="dash-kpi-card">
-                <div class="kpi-top">
-                  <span class="kpi-label">Overdue</span>
-                  <div class="kpi-icon-wrap rose">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
-                  </div>
-                </div>
-                <div class="kpi-val rose-val" id="kpiOverdue">$0.00</div>
-                <div class="kpi-subtext" id="kpiOverdueCount">0 overdue</div>
-              </div>
-            </div>
-
-            <!-- 2. Compact Quick Actions Row -->
-            <div class="dash-quick-actions-bar">
-              <button type="button" class="quick-action-pill primary" onclick="window.switchWorkspaceTab('create')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                <span>Create Invoice</span>
-              </button>
-              <button type="button" class="quick-action-pill" onclick="window.openAddClientModal()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                <span>Add Client</span>
-              </button>
-              <button type="button" class="quick-action-pill" onclick="window.switchWorkspaceTab('invoices')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-                <span>View Invoices</span>
-              </button>
-              <button type="button" class="quick-action-pill" onclick="window.switchWorkspaceTab('templates')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
-                <span>Templates</span>
-              </button>
-              <a href="/tools" class="quick-action-pill">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                <span>Tools</span>
-              </a>
-            </div>
-
-            <!-- 3. Two-Column Workspace Layout (Primary Left 68% / Secondary Rail Right 32%) -->
-            <div class="dash-workspace-grid">
-              
-              <!-- LEFT / PRIMARY COLUMN -->
-              <div class="dash-main-col">
-                
-                <!-- Recent Invoices Card -->
-                <div class="dash-widget-card" style="margin-bottom: 24px;">
-                  <div class="dash-widget-header">
-                    <h2 class="dash-widget-title">Recent Invoices</h2>
-                    <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('invoices')">View all &rarr;</button>
-                  </div>
-
-                  <!-- Desktop Invoices Table -->
-                  <div class="dash-desktop-table-wrap">
-                    <table class="dashboard-table">
-                      <thead>
-                        <tr>
-                          <th>Invoice #</th>
-                          <th>Client</th>
-                          <th>Date</th>
-                          <th>Due Date</th>
-                          <th>Amount</th>
-                          <th>Status</th>
-                          <th style="text-align: right;">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody id="overviewRecentInvoicesBody">
-                        <tr><td colspan="7" style="text-align:center; padding: 24px; color: #64748b;">Loading recent documents...</td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <!-- Mobile Invoices Card List (<= 768px) -->
-                  <div class="dash-mobile-invoice-list" id="overviewRecentInvoicesMobile">
-                    <div style="padding: 16px; text-align: center; color: #64748b; font-size: 0.84rem;">Loading invoices...</div>
-                  </div>
-                </div>
-
-                <!-- Recent Activity Card (Real audit log from DB) -->
-                <div class="dash-widget-card">
-                  <div class="dash-widget-header">
-                    <h2 class="dash-widget-title">Recent Activity</h2>
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">Live audit log</span>
-                  </div>
-                  <div class="activity-timeline" id="overviewActivityList">
-                    <div style="padding: 16px 0; color: #64748b; font-size: 0.8125rem;">No recent activities recorded yet.</div>
-                  </div>
-                </div>
-
-              </div>
-
-              <!-- RIGHT / SECONDARY RAIL -->
-              <div class="dash-rail-col">
-
-                <!-- Attention Needed Card -->
-                <div class="dash-widget-card" id="attentionWidgetCard" style="margin-bottom: 20px;">
-                  <div class="dash-widget-header">
-                    <div class="dash-widget-title" style="display:flex; align-items:center; gap:6px;">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:#e11d48;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                      <span>Attention Needed</span>
-                    </div>
-                    <span style="font-size: 0.75rem; font-weight: 700; color: #e11d48;" id="attentionBadgeCount"></span>
-                  </div>
-
-                  <!-- When Caught Up -->
-                  <div class="attention-caught-up-box" id="attentionAllCaughtUp">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    <span>You're all caught up. No overdue or urgent items.</span>
-                  </div>
-
-                  <!-- When Items Require Attention -->
-                  <div class="attention-items-list" id="attentionItemsList" style="display: none;"></div>
-                </div>
-
-                <!-- Business Profile Widget -->
-                <div class="dash-widget-card" style="margin-bottom: 20px;">
-                  <div class="dash-widget-header">
-                    <div class="dash-widget-title">Business Profile</div>
-                    <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('business')">Edit &rarr;</button>
-                  </div>
-                  <div class="dash-biz-summary" id="normalBizSummary">
-                    <div class="biz-detail-name" id="normBizName">Your Business</div>
-                    <div class="biz-detail-row">
-                      <span class="biz-meta-label">Currency:</span>
-                      <span class="biz-meta-val" id="normBizCurrency">USD ($)</span>
-                    </div>
-                    <div class="biz-detail-row">
-                      <span class="biz-meta-label">Terms:</span>
-                      <span class="biz-meta-val" id="normBizTerms">Due on Receipt</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Quick Invoice Templates Widget -->
-                <div class="dash-widget-card">
-                  <div class="dash-widget-header">
-                    <div class="dash-widget-title">Invoice Templates</div>
-                    <button type="button" class="dash-widget-link" onclick="window.switchWorkspaceTab('templates')">View all &rarr;</button>
-                  </div>
-                  <div class="dash-template-mini-list">
-                    <a href="/create-invoice?template=emerald" class="template-mini-pill" onclick="window.loadTemplateAndCreate('emerald'); return false;">
-                      <span class="template-dot emerald"></span>
-                      <span class="template-mini-name">Emerald Modern</span>
-                      <span class="template-mini-cta">Use &rarr;</span>
-                    </a>
-                    <a href="/create-invoice?template=charcoal" class="template-mini-pill" onclick="window.loadTemplateAndCreate('charcoal'); return false;">
-                      <span class="template-dot slate"></span>
-                      <span class="template-mini-name">Minimal Slate</span>
-                      <span class="template-mini-cta">Use &rarr;</span>
-                    </a>
-                    <a href="/create-invoice?template=corporate" class="template-mini-pill" onclick="window.loadTemplateAndCreate('corporate'); return false;">
-                      <span class="template-dot navy"></span>
-                      <span class="template-mini-name">Corporate Navy</span>
-                      <span class="template-mini-cta">Use &rarr;</span>
-                    </a>
-                  </div>
-                </div>
-
               </div>
 
             </div>
@@ -2215,163 +2097,160 @@
             const s = data.summary;
             const stats = s.stats || {};
             const totalInvoices = Number(stats.totalInvoices || 0);
-            const isFirstTime = totalInvoices === 0;
 
-            const firstTimeView = document.getElementById('dashFirstTimeView');
-            const normalView = document.getElementById('dashNormalView');
+            // 1. Populate 4 Consolidated KPI Cards (Always visible & live)
+            const kpiTotalInvoiced = document.getElementById('kpiTotalInvoiced');
+            const kpiTotalCount = document.getElementById('kpiTotalCount');
+            const kpiAmountPaid = document.getElementById('kpiAmountPaid');
+            const kpiPaidCount = document.getElementById('kpiPaidCount');
+            const kpiOutstanding = document.getElementById('kpiOutstanding');
+            const kpiPendingCount = document.getElementById('kpiPendingCount');
+            const kpiOverdue = document.getElementById('kpiOverdue');
+            const kpiOverdueCount = document.getElementById('kpiOverdueCount');
 
-            if (isFirstTime) {
-              if (firstTimeView) firstTimeView.style.display = 'block';
-              if (normalView) normalView.style.display = 'none';
+            if (kpiTotalInvoiced) kpiTotalInvoiced.textContent = `$${Number(stats.totalBilled || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            if (kpiTotalCount) kpiTotalCount.textContent = `${totalInvoices} invoice${totalInvoices === 1 ? '' : 's'} issued`;
 
-              // Populate Business Profile info in first-time view
-              const ftBizName = document.getElementById('ftBizName');
-              const ftBizCurrency = document.getElementById('ftBizCurrency');
-              const ftBizTerms = document.getElementById('ftBizTerms');
-              if (ftBizName) ftBizName.textContent = (s.user && (s.user.businessName || s.user.name)) || 'Your Business';
-              if (ftBizCurrency) ftBizCurrency.textContent = (s.user && s.user.defaultCurrency) ? `${s.user.defaultCurrency}` : 'USD ($)';
-              if (ftBizTerms) ftBizTerms.textContent = (s.user && s.user.defaultPaymentTerms) || 'Due on Receipt';
+            if (kpiAmountPaid) kpiAmountPaid.textContent = `$${Number(stats.paidAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            if (kpiPaidCount) kpiPaidCount.textContent = `${stats.paidCount || 0} collected`;
+
+            if (kpiOutstanding) kpiOutstanding.textContent = `$${Number(stats.outstandingAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            if (kpiPendingCount) kpiPendingCount.textContent = `${stats.pendingCount || 0} pending`;
+
+            if (kpiOverdue) kpiOverdue.textContent = `$${Number(stats.overdueAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            if (kpiOverdueCount) kpiOverdueCount.textContent = `${stats.overdueCount || 0} overdue`;
+
+            // 2. Business Profile summary in rail
+            const normBizName = document.getElementById('normBizName');
+            const normBizCurrency = document.getElementById('normBizCurrency');
+            const normBizTerms = document.getElementById('normBizTerms');
+            if (normBizName) normBizName.textContent = (s.user && (s.user.businessName || s.user.name)) || 'Your Business';
+            if (normBizCurrency) normBizCurrency.textContent = (s.user && s.user.defaultCurrency) ? `${s.user.defaultCurrency}` : 'USD ($)';
+            if (normBizTerms) normBizTerms.textContent = (s.user && s.user.defaultPaymentTerms) || 'Due on Receipt';
+
+            // 3. Attention Needed
+            const caughtUp = document.getElementById('attentionAllCaughtUp');
+            const attnList = document.getElementById('attentionItemsList');
+            const attnBadge = document.getElementById('attentionBadgeCount');
+
+            if (s.attentionNeeded && s.attentionNeeded.length > 0) {
+              if (caughtUp) caughtUp.style.display = 'none';
+              if (attnList) {
+                attnList.style.display = 'flex';
+                attnList.innerHTML = s.attentionNeeded.map(it => `
+                  <div class="attention-item-row">
+                    <div>
+                      <strong style="color: #9f1239; font-size: 0.8125rem;">#${it.invoiceNumber} &bull; ${it.clientName}</strong>
+                      <div style="color: #64748b; font-size: 0.75rem; margin-top: 2px;">${it.title} &bull; $${Number(it.amount || 0).toFixed(2)}</div>
+                    </div>
+                    <a href="${it.actionUrl}" class="btn-dash-secondary" style="min-height: 32px; padding: 4px 10px; font-size: 0.75rem; color: #9f1239; font-weight: 700;">
+                      ${it.actionText} &rarr;
+                    </a>
+                  </div>
+                `).join('');
+              }
+              if (attnBadge) attnBadge.textContent = `${s.attentionNeeded.length} action item${s.attentionNeeded.length > 1 ? 's' : ''}`;
             } else {
-              if (firstTimeView) firstTimeView.style.display = 'none';
-              if (normalView) normalView.style.display = 'block';
+              if (caughtUp) caughtUp.style.display = 'flex';
+              if (attnList) attnList.style.display = 'none';
+              if (attnBadge) attnBadge.textContent = '';
+            }
 
-              // Populate 4 Consolidated KPI Cards
-              const kpiTotalInvoiced = document.getElementById('kpiTotalInvoiced');
-              const kpiTotalCount = document.getElementById('kpiTotalCount');
-              const kpiAmountPaid = document.getElementById('kpiAmountPaid');
-              const kpiPaidCount = document.getElementById('kpiPaidCount');
-              const kpiOutstanding = document.getElementById('kpiOutstanding');
-              const kpiPendingCount = document.getElementById('kpiPendingCount');
-              const kpiOverdue = document.getElementById('kpiOverdue');
-              const kpiOverdueCount = document.getElementById('kpiOverdueCount');
+            // 4. Recent Invoices: Desktop Table & Mobile vs Zero Empty State
+            const emptyInvoicesBox = document.getElementById('overviewEmptyInvoicesBox');
+            const desktopWrap = document.getElementById('overviewDesktopTableWrap');
+            const recentBody = document.getElementById('overviewRecentInvoicesBody');
+            const recentMobile = document.getElementById('overviewRecentInvoicesMobile');
 
-              if (kpiTotalInvoiced) kpiTotalInvoiced.textContent = `$${Number(stats.totalBilled || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-              if (kpiTotalCount) kpiTotalCount.textContent = `${totalInvoices} invoice${totalInvoices === 1 ? '' : 's'} issued`;
+            const hasRecent = Array.isArray(s.recentInvoices) && s.recentInvoices.length > 0;
+            if (!hasRecent) {
+              if (emptyInvoicesBox) emptyInvoicesBox.style.display = 'block';
+              if (desktopWrap) desktopWrap.style.display = 'none';
+              if (recentMobile) recentMobile.style.display = 'none';
+            } else {
+              if (emptyInvoicesBox) emptyInvoicesBox.style.display = 'none';
+              if (desktopWrap) desktopWrap.style.display = 'block';
+              if (recentMobile) recentMobile.style.display = 'flex';
 
-              if (kpiAmountPaid) kpiAmountPaid.textContent = `$${Number(stats.paidAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-              if (kpiPaidCount) kpiPaidCount.textContent = `${stats.paidCount || 0} collected`;
-
-              if (kpiOutstanding) kpiOutstanding.textContent = `$${Number(stats.outstandingAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-              if (kpiPendingCount) kpiPendingCount.textContent = `${stats.pendingCount || 0} pending`;
-
-              if (kpiOverdue) kpiOverdue.textContent = `$${Number(stats.overdueAmount || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-              if (kpiOverdueCount) kpiOverdueCount.textContent = `${stats.overdueCount || 0} overdue`;
-
-              // Populate Business Profile summary in normal view
-              const normBizName = document.getElementById('normBizName');
-              const normBizCurrency = document.getElementById('normBizCurrency');
-              const normBizTerms = document.getElementById('normBizTerms');
-              if (normBizName) normBizName.textContent = (s.user && (s.user.businessName || s.user.name)) || 'Your Business';
-              if (normBizCurrency) normBizCurrency.textContent = (s.user && s.user.defaultCurrency) ? `${s.user.defaultCurrency}` : 'USD ($)';
-              if (normBizTerms) normBizTerms.textContent = (s.user && s.user.defaultPaymentTerms) || 'Due on Receipt';
-
-              // Attention Needed
-              const caughtUp = document.getElementById('attentionAllCaughtUp');
-              const attnList = document.getElementById('attentionItemsList');
-              const attnBadge = document.getElementById('attentionBadgeCount');
-
-              if (s.attentionNeeded && s.attentionNeeded.length > 0) {
-                if (caughtUp) caughtUp.style.display = 'none';
-                if (attnList) {
-                  attnList.style.display = 'flex';
-                  attnList.innerHTML = s.attentionNeeded.map(it => `
-                    <div class="attention-item-row">
-                      <div>
-                        <strong style="color: #9f1239; font-size: 0.8125rem;">#${it.invoiceNumber} &bull; ${it.clientName}</strong>
-                        <div style="color: #64748b; font-size: 0.75rem; margin-top: 2px;">${it.title} &bull; $${Number(it.amount || 0).toFixed(2)}</div>
-                      </div>
-                      <a href="${it.actionUrl}" class="btn-dash-secondary" style="min-height: 32px; padding: 4px 10px; font-size: 0.75rem; color: #9f1239; font-weight: 700;">
-                        ${it.actionText} &rarr;
-                      </a>
-                    </div>
-                  `).join('');
-                }
-                if (attnBadge) attnBadge.textContent = `${s.attentionNeeded.length} action item${s.attentionNeeded.length > 1 ? 's' : ''}`;
-              } else {
-                if (caughtUp) caughtUp.style.display = 'flex';
-                if (attnList) attnList.style.display = 'none';
-                if (attnBadge) attnBadge.textContent = '';
-              }
-
-              // Recent Invoices: Desktop Table
-              const recentBody = document.getElementById('overviewRecentInvoicesBody');
               if (recentBody) {
-                if (s.recentInvoices && s.recentInvoices.length > 0) {
-                  recentBody.innerHTML = s.recentInvoices.slice(0, 5).map(inv => {
-                    let badgeClass = 'badge-draft';
-                    if (inv.status === 'paid') badgeClass = 'badge-paid';
-                    else if (inv.status === 'pending') badgeClass = 'badge-pending';
-                    else if (inv.status === 'overdue') badgeClass = 'badge-overdue';
+                recentBody.innerHTML = s.recentInvoices.slice(0, 6).map(inv => {
+                  let badgeClass = 'badge-draft';
+                  if (inv.status === 'paid') badgeClass = 'badge-paid';
+                  else if (inv.status === 'pending') badgeClass = 'badge-pending';
+                  else if (inv.status === 'overdue') badgeClass = 'badge-overdue';
 
-                    return `
-                      <tr>
-                        <td><a href="/invoice-details?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
-                        <td><strong>${inv.clientName || 'Client'}</strong></td>
-                        <td>${inv.date || '—'}</td>
-                        <td>${inv.dueDate || '—'}</td>
-                        <td><strong>$${Number(inv.total || 0).toFixed(2)}</strong></td>
-                        <td><span class="status-badge ${badgeClass}">${inv.status}</span></td>
-                        <td style="text-align: right;">
-                          <a href="/invoice-details?id=${inv.id}" class="btn-table-action" style="text-decoration: none;">View &rarr;</a>
-                        </td>
-                      </tr>
-                    `;
-                  }).join('');
-                } else {
-                  recentBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: #64748b;">No recent invoices.</td></tr>`;
-                }
+                  return `
+                    <tr id="overview-row-${inv.id}" data-invoice-id="${inv.id}">
+                      <td><a href="/invoice-details?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
+                      <td><strong>${inv.clientName || 'Client'}</strong></td>
+                      <td>${inv.date || '—'}</td>
+                      <td>${inv.dueDate || '—'}</td>
+                      <td><strong>$${Number(inv.total || 0).toFixed(2)}</strong></td>
+                      <td><span class="status-badge ${badgeClass}">${inv.status}</span></td>
+                      <td style="text-align: right;">
+                        <div class="table-action-group" style="justify-content: flex-end; gap: 4px;">
+                          <a href="/invoice-details?id=${inv.id}" class="btn-table-action" style="text-decoration: none;">View</a>
+                          <button type="button" class="btn-table-action btn-action-danger" onclick="window.openDeleteModal('${inv.id}')" title="Delete invoice">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  `;
+                }).join('');
               }
 
-              // Recent Invoices: Mobile Card List
-              const recentMobile = document.getElementById('overviewRecentInvoicesMobile');
               if (recentMobile) {
-                if (s.recentInvoices && s.recentInvoices.length > 0) {
-                  recentMobile.innerHTML = s.recentInvoices.slice(0, 5).map(inv => {
-                    let badgeClass = 'badge-draft';
-                    if (inv.status === 'paid') badgeClass = 'badge-paid';
-                    else if (inv.status === 'pending') badgeClass = 'badge-pending';
-                    else if (inv.status === 'overdue') badgeClass = 'badge-overdue';
+                recentMobile.innerHTML = s.recentInvoices.slice(0, 6).map(inv => {
+                  let badgeClass = 'badge-draft';
+                  if (inv.status === 'paid') badgeClass = 'badge-paid';
+                  else if (inv.status === 'pending') badgeClass = 'badge-pending';
+                  else if (inv.status === 'overdue') badgeClass = 'badge-overdue';
 
-                    return `
-                      <div class="dash-mobile-invoice-card">
-                        <div class="mob-inv-row-top">
-                          <a href="/invoice-details?id=${inv.id}" class="mob-inv-number">#${inv.number}</a>
-                          <span class="status-badge ${badgeClass}">${inv.status}</span>
-                        </div>
-                        <div class="mob-inv-client">${inv.clientName || 'Client'}</div>
-                        <div class="mob-inv-row-bottom">
-                          <div>
-                            <div class="mob-inv-amount">$${Number(inv.total || 0).toFixed(2)}</div>
-                            <div class="mob-inv-due">Due ${inv.dueDate || inv.date || '—'}</div>
-                          </div>
-                          <a href="/invoice-details?id=${inv.id}" class="btn-dash-secondary" style="min-height: 38px; padding: 6px 14px; font-size: 0.8125rem;">View &rarr;</a>
-                        </div>
+                  return `
+                    <div class="dash-mobile-invoice-card" id="overview-mob-${inv.id}" data-invoice-id="${inv.id}">
+                      <div class="mob-inv-row-top">
+                        <a href="/invoice-details?id=${inv.id}" class="mob-inv-number">#${inv.number}</a>
+                        <span class="status-badge ${badgeClass}">${inv.status}</span>
                       </div>
-                    `;
-                  }).join('');
-                } else {
-                  recentMobile.innerHTML = `<div style="padding: 16px; text-align: center; color: #64748b; font-size: 0.84rem;">No recent invoices.</div>`;
-                }
-              }
-
-              // Recent Activity Log
-              const actList = document.getElementById('overviewActivityList');
-              if (actList) {
-                if (s.recentActivities && s.recentActivities.length > 0) {
-                  actList.innerHTML = s.recentActivities.map(a => `
-                    <div class="activity-item">
-                      <div class="activity-bullet"></div>
-                      <div>
-                        <div class="activity-text">${a.description}</div>
-                        <div class="activity-time">${new Date(a.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</div>
+                      <div class="mob-inv-client">${inv.clientName || 'Client'}</div>
+                      <div class="mob-inv-row-bottom">
+                        <div>
+                          <div class="mob-inv-amount">$${Number(inv.total || 0).toFixed(2)}</div>
+                          <div class="mob-inv-due">Due ${inv.dueDate || inv.date || '—'}</div>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                          <a href="/invoice-details?id=${inv.id}" class="btn-dash-secondary" style="min-height: 34px; padding: 4px 12px; font-size: 0.8125rem;">View</a>
+                          <button type="button" class="btn-table-action btn-action-danger" onclick="window.openDeleteModal('${inv.id}')" title="Delete invoice">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  `).join('');
-                } else {
-                  actList.innerHTML = `<div style="padding: 16px 0; color: #64748b; font-size: 0.8125rem;">No recent activities logged yet.</div>`;
-                }
+                  `;
+                }).join('');
               }
             }
+
+            // 5. Recent Activity Log
+            const actList = document.getElementById('overviewActivityList');
+            if (actList) {
+              if (s.recentActivities && s.recentActivities.length > 0) {
+                actList.innerHTML = s.recentActivities.map(a => `
+                  <div class="activity-item">
+                    <div class="activity-bullet"></div>
+                    <div>
+                      <div class="activity-text">${a.description}</div>
+                      <div class="activity-time">${new Date(a.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</div>
+                    </div>
+                  </div>
+                `).join('');
+              } else {
+                actList.innerHTML = `<div style="padding: 16px 0; color: #64748b; font-size: 0.8125rem;">No recent activities logged yet.</div>`;
+              }
+            }
+          }
+
 
             // Sidebar Badge Counts
             const sideInvoices = document.getElementById('sideBadgeInvoices');
@@ -2433,7 +2312,7 @@
             const formatted = `${cur}${Number(inv.total || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 
             return `
-              <tr>
+              <tr id="invoice-row-${inv.id}" data-invoice-id="${inv.id}">
                 <td><a href="/invoice-details?id=${inv.id}" class="doc-number-link">#${inv.number}</a></td>
                 <td>
                   <div style="font-weight: 600; color: #0f172a;">${inv.clientName || 'Client'}</div>
@@ -2535,17 +2414,29 @@
 
       document.getElementById('btnConfirmDelete')?.addEventListener('click', async () => {
         if (!invoicePendingDelete) return;
+        const targetId = invoicePendingDelete;
+        closeDeleteModal();
+
+        // Instant optimistic removal feedback
+        const r1 = document.getElementById(`invoice-row-${targetId}`);
+        const r2 = document.getElementById(`overview-row-${targetId}`);
+        const r3 = document.getElementById(`overview-mob-${targetId}`);
+        if (r1) r1.classList.add('row-deleting');
+        if (r2) r2.classList.add('row-deleting');
+        if (r3) r3.classList.add('row-deleting');
+
         try {
-          const res = await apiFetch(`/api/invoices/${invoicePendingDelete}`, { method: 'DELETE' });
+          const res = await apiFetch(`/api/invoices/${targetId}`, { method: 'DELETE' });
           const data = await res.json();
           if (res.ok && data.success) {
-            window.showToast('Invoice deleted from database.');
-            closeDeleteModal();
-            loadInvoicesTable();
-            loadDashboardSummary();
+            window.showToast('Invoice deleted successfully.', 'success');
+          } else {
+            window.showToast(data.error || 'Failed to delete invoice', 'warning');
           }
         } catch (e) {
           window.showToast('Network error deleting invoice', 'warning');
+        } finally {
+          await Promise.all([loadInvoicesTable(), loadDashboardSummary()]);
         }
       });
 
@@ -2637,7 +2528,7 @@
           empty.style.display = 'none';
 
           grid.innerHTML = data.clients.map(c => `
-            <div class="client-card">
+            <div class="client-card" id="client-card-${c.id}" data-client-id="${c.id}">
               <div class="client-card-top">
                 <div>
                   <div class="client-card-name">${c.name}</div>
@@ -2731,15 +2622,22 @@
 
       window.deleteClientRecord = async function (id) {
         if (!confirm('Are you sure you want to delete this client from your directory?')) return;
+        const card = document.getElementById(`client-card-${id}`);
+        if (card) card.classList.add('card-deleting');
+
         try {
           const res = await apiFetch(`/api/clients/${id}`, { method: 'DELETE' });
           const data = await res.json();
           if (res.ok && data.success) {
-            window.showToast('Client deleted from directory.');
-            loadClientsList();
-            loadDashboardSummary();
+            window.showToast('Client deleted from directory.', 'success');
+          } else {
+            window.showToast(data.error || 'Failed to delete client', 'warning');
           }
-        } catch (e) {}
+        } catch (e) {
+          window.showToast('Network error deleting client', 'warning');
+        } finally {
+          await Promise.all([loadClientsList(), loadDashboardSummary()]);
+        }
       };
 
       // -----------------------------------------------------------------------
@@ -3217,6 +3115,6 @@
     }
   </script>
   <script src="/js/analytics.js"></script>
-  <script src="/js/i18n.js?v=8.0"></script>
+  <script src="/js/i18n.js?v=9.0"></script>
 </body>
 </html>

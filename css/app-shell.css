@@ -1695,3 +1695,52 @@ body.saas-body {
   }
 }
 
+/* Clean Unified Dashboard Empty State for Invoices */
+.dash-invoices-empty-box {
+  text-align: center;
+  padding: 38px 20px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  margin: 4px 0;
+  transition: all 0.2s ease;
+}
+
+.empty-icon-ring {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #10b981;
+  margin-bottom: 14px;
+}
+
+.empty-box-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.empty-box-desc {
+  font-size: 0.84rem;
+  color: #64748b;
+  max-width: 380px;
+  margin: 0 auto 18px;
+  line-height: 1.5;
+}
+
+/* Instant Animated Row / Card Deletion Feedback */
+tr.row-deleting,
+.dash-mobile-invoice-card.row-deleting,
+.client-card.card-deleting {
+  opacity: 0 !important;
+  transform: translateX(16px) scale(0.96) !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  pointer-events: none !important;
+}
+

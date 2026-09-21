@@ -938,6 +938,8 @@ window.initInvoiceEditorPage = function () {
             if (activeInvoiceId && !window.location.search.includes(activeInvoiceId)) {
               window.history.replaceState({}, '', `/?id=${activeInvoiceId}`);
             }
+            if (window.loadDashboardSummary) window.loadDashboardSummary();
+            if (window.loadInvoicesTable) window.loadInvoicesTable();
           }
         } else if (!isDraft) {
           if (window.showToast) window.showToast('Signed out: Invoice saved locally. Sign in to sync with cloud.', 'info');
