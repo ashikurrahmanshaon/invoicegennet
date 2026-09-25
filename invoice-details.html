@@ -356,7 +356,7 @@
           <!-- Status Selector -->
           <div style="display: flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0 10px; height: 38px;">
             <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Status:</span>
-            <select id="statusSelector" style="border: none; background: transparent; font-size: 0.8125rem; font-weight: 700; color: #0f172a; cursor: pointer; outline: none;">
+            <select id="statusSelector" style="border: none; background: transparent; font-size: 0.8125rem; font-weight: 700; color: #0f172a; cursor: pointer; outline: none;" aria-label="Status Selector">
               <option value="draft">Draft</option>
               <option value="sent">Sent</option>
               <option value="pending">Pending</option>
@@ -514,15 +514,15 @@
       <form id="emailForm">
         <div style="margin-bottom: 12px;">
           <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Recipient Email</label>
-          <input type="email" id="emailRecipient" class="form-input" placeholder="client@example.com" required style="width: 100%;">
+          <input type="email" id="emailRecipient" class="form-input" placeholder="client@example.com" required style="width: 100%;" aria-label="client@example.com">
         </div>
         <div style="margin-bottom: 12px;">
           <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Subject</label>
-          <input type="text" id="emailSubjectInput" class="form-input" style="width: 100%;">
+          <input type="text" id="emailSubjectInput" class="form-input" style="width: 100%;" aria-label="Email Subject Input">
         </div>
         <div style="margin-bottom: 18px;">
           <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Message</label>
-          <textarea id="emailBodyText" class="form-textarea" rows="4" style="width: 100%;"></textarea>
+          <textarea id="emailBodyText" class="form-textarea" rows="4" style="width: 100%;" aria-label="Email Body Text"></textarea>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button type="button" class="btn btn-secondary" id="btnCancelEmailModal">Cancel</button>
@@ -958,9 +958,7 @@
 
     })();
   </script>
-  <script src="/js/html2pdf.bundle.min.js"></script>
-  <script src="/js/vendor/pdf-lib.min.js"></script>
-  <script src="/js/i18n.js?v=9.0"></script>
-  <script src="/js/instant-nav.js?v=9.0"></script>
+  <script src="/js/i18n.js?v=9.1" defer></script>
+  <script src="/js/instant-nav.js?v=9.1" defer></script>
 </body>
 </html>

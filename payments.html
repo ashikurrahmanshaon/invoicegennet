@@ -758,7 +758,7 @@
 
       <div style="margin-top: 14px;">
         <label style="display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: #334155; cursor: pointer; font-weight: 600;">
-          <input type="checkbox" id="payGrossUp" style="accent-color: #10b981; width: 16px; height: 16px;">
+          <input type="checkbox" id="payGrossUp" style="accent-color: #10b981; width: 16px; height: 16px;" aria-label="Pay Gross Up">
           <span>Gross up invoice (add processing fee to total so you receive 100% net)</span>
         </label>
       </div>
@@ -1016,7 +1016,7 @@
         <form id="recordPaymentForm">
           <div style="margin-bottom: 12px;">
             <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Connect to Invoice (Optional)</label>
-            <select id="modalInvoiceSelect" class="tool-select" style="width: 100%;">
+            <select id="modalInvoiceSelect" class="tool-select" style="width: 100%;" aria-label="Modal Invoice Select">
               <option value="">-- Standalone Payment --</option>
             </select>
           </div>
@@ -1024,11 +1024,11 @@
           <div style="display: grid; grid-template-columns: 1fr 120px; gap: 12px; margin-bottom: 12px;">
             <div>
               <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Payment Amount *</label>
-              <input type="number" id="modalAmount" class="tool-input" placeholder="0.00" min="0.01" step="0.01" required style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">
+              <input type="number" id="modalAmount" class="tool-input" placeholder="0.00" min="0.01" step="0.01" required style="font-family: 'JetBrains Mono', monospace; font-weight: 700;" aria-label="0.00">
             </div>
             <div>
               <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Currency</label>
-              <select id="modalCurrency" class="tool-select">
+              <select id="modalCurrency" class="tool-select" aria-label="Modal Currency">
                 <option value="USD" selected>USD</option>
                 <option value="EUR">EUR</option>
                 <option value="GBP">GBP</option>
@@ -1042,7 +1042,7 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
             <div>
               <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Payment Gateway / Method</label>
-              <select id="modalGateway" class="tool-select">
+              <select id="modalGateway" class="tool-select" aria-label="Modal Gateway">
                 <option value="Stripe">Stripe</option>
                 <option value="PayPal">PayPal</option>
                 <option value="Bank Transfer">Bank Transfer (ACH / Wire)</option>
@@ -1052,7 +1052,7 @@
             </div>
             <div>
               <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Status</label>
-              <select id="modalStatus" class="tool-select">
+              <select id="modalStatus" class="tool-select" aria-label="Modal Status">
                 <option value="Paid" selected>Paid</option>
                 <option value="Partially Paid">Partially Paid</option>
                 <option value="Pending">Pending</option>
@@ -1063,17 +1063,17 @@
 
           <div style="margin-bottom: 12px;">
             <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Reference / Transaction ID</label>
-            <input type="text" id="modalReference" class="tool-input" placeholder="e.g. ch_3N29kx2eZvKYlo2C or WIRE-9988">
+            <input type="text" id="modalReference" class="tool-input" placeholder="e.g. ch_3N29kx2eZvKYlo2C or WIRE-9988" aria-label="ch_3N29kx2eZvKYlo2C or WIRE-9988">
           </div>
 
           <div style="margin-bottom: 12px;">
             <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Payer Name &amp; Email (Optional)</label>
-            <input type="text" id="modalPayer" class="tool-input" placeholder="e.g. John Doe (john@acme.com)">
+            <input type="text" id="modalPayer" class="tool-input" placeholder="e.g. John Doe (john@acme.com)" aria-label="John Doe (john@acme.com)">
           </div>
 
           <div style="margin-bottom: 20px;">
             <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 4px;">Notes / Remarks</label>
-            <textarea id="modalNotes" class="tool-input" rows="2" placeholder="e.g. Settlement verified in Chase Bank statement"></textarea>
+            <textarea id="modalNotes" class="tool-input" rows="2" placeholder="e.g. Settlement verified in Chase Bank statement" aria-label="Settlement verified in Chase Bank statement"></textarea>
           </div>
 
           <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -1568,7 +1568,7 @@
             <td style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#64748b;">${p.reference || '—'}</td>
             <td style="color:#64748b;font-size:0.8125rem;">${dateStr}</td>
             <td style="text-align:right;">
-              <select class="payment-status-select" data-id="${p.id}" style="padding:3px 6px;border-radius:6px;font-size:0.75rem;border:1px solid #cbd5e1;background:#f8fafc;font-weight:600;">
+              <select class="payment-status-select" data-id="${p.id}" style="padding:3px 6px;border-radius:6px;font-size:0.75rem;border:1px solid #cbd5e1;background:#f8fafc;font-weight:600;" aria-label="${p.id}">
                 <option value="Paid" ${p.status === 'Paid' ? 'selected' : ''}>Paid</option>
                 <option value="Partially Paid" ${p.status === 'Partially Paid' ? 'selected' : ''}>Partially Paid</option>
                 <option value="Pending" ${p.status === 'Pending' ? 'selected' : ''}>Pending</option>

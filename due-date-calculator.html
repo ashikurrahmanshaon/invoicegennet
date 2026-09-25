@@ -436,13 +436,13 @@
 
         <div style="margin-bottom: 16px;">
           <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Invoice Issue Date</label>
-          <input type="date" id="dueIssueDate" class="input-control" style="width: 100%; font-size: 1rem;">
+          <input type="date" id="dueIssueDate" class="input-control" style="width: 100%; font-size: 1rem;" aria-label="Invoice issue date">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
           <div>
             <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Payment Terms</label>
-            <select id="dueTermsSelect" class="input-control" style="width: 100%;">
+            <select id="dueTermsSelect" class="input-control" style="width: 100%;" aria-label="Payment terms">
               <option value="receipt">Due on Receipt (0 Days)</option>
               <option value="net7">Net 7 Days</option>
               <option value="net15">Net 15 Days</option>
@@ -456,7 +456,7 @@
 
           <div>
             <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Calendar Rules</label>
-            <select id="dueCalcMode" class="input-control" style="width: 100%;">
+            <select id="dueCalcMode" class="input-control" style="width: 100%;" aria-label="Calculation mode">
               <option value="calendar" selected>Calendar Days (Standard)</option>
               <option value="business">Business Days Only (Mon-Fri)</option>
             </select>
@@ -465,7 +465,7 @@
 
         <div id="dueCustomDaysGroup" style="display: none; margin-bottom: 16px;">
           <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Number of Days</label>
-          <input type="number" id="dueCustomDays" class="input-control" value="30" min="1" max="365" style="width: 100%;">
+          <input type="number" id="dueCustomDays" class="input-control" value="30" min="1" max="365" style="width: 100%;" aria-label="Custom days until due">
         </div>
 
         <div style="margin-top: 24px; padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">

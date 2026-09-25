@@ -8,6 +8,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const zlib = require('zlib');
 const db = require('./db');
 const firebase = require('./firebase');
 const PORT = process.env.PORT || 3000;
@@ -1585,20 +1586,43 @@ const requestHandler = async (req, res) => {
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
     const headers = { 'Content-Type': contentType };
 
-    // Fonts can stay cached to prevent font flicker and allow cross-origin preload
+    // Intelligent caching headers for high Lighthouse score
     if (['.woff2', '.woff', '.ttf'].includes(ext)) {
       headers['Cache-Control'] = 'public, max-age=31536000, immutable';
       headers['Access-Control-Allow-Origin'] = '*';
+    } else if (['.png', '.jpg', '.jpeg', '.webp', '.ico', '.svg'].includes(ext)) {
+      headers['Cache-Control'] = 'public, max-age=86400, stale-while-revalidate=604800';
+    } else if (['.css', '.js'].includes(ext)) {
+      headers['Cache-Control'] = 'public, max-age=86400, stale-while-revalidate=604800';
+    } else if (ext === '.html') {
+      headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
     } else {
-      // HTML, CSS, JS, SVG, ICO, JSON: Disable caching completely so reloads and edits take effect instantly
-      headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
-      headers['Pragma'] = 'no-cache';
-      headers['Expires'] = '0';
+      headers['Cache-Control'] = 'public, max-age=3600';
     }
 
-    res.writeHead(200, headers);
-    const stream = fs.createReadStream(targetPath);
-    stream.pipe(res);
+    // High-performance Gzip / Deflate text compression
+    const acceptEncoding = (req.headers && req.headers['accept-encoding']) || '';
+    const isCompressible = ['.html', '.css', '.js', '.json', '.svg', '.xml', '.txt'].includes(ext);
+
+    if (isCompressible && /\bgzip\b/i.test(acceptEncoding)) {
+      headers['Content-Encoding'] = 'gzip';
+      headers['Vary'] = 'Accept-Encoding';
+      res.writeHead(200, headers);
+      const stream = fs.createReadStream(targetPath);
+      const gzip = zlib.createGzip({ level: 6 });
+      stream.pipe(gzip).pipe(res);
+    } else if (isCompressible && /\bdeflate\b/i.test(acceptEncoding)) {
+      headers['Content-Encoding'] = 'deflate';
+      headers['Vary'] = 'Accept-Encoding';
+      res.writeHead(200, headers);
+      const stream = fs.createReadStream(targetPath);
+      const deflate = zlib.createDeflate();
+      stream.pipe(deflate).pipe(res);
+    } else {
+      res.writeHead(200, headers);
+      const stream = fs.createReadStream(targetPath);
+      stream.pipe(res);
+    }
   };
 
   fs.stat(filePath, (err, stats) => {

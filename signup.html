@@ -65,15 +65,17 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/design-system.css?v=9.0">
-  <link rel="stylesheet" href="/css/invoice-editor.css?v=9.0">
+  <link rel="stylesheet" href="/css/design-system.css?v=9.1">
+  <link rel="stylesheet" href="/css/invoice-editor.css?v=9.1">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap"></noscript>
 
   <!-- Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="/js/google-auth.js?v=9.0"></script>
+  <script src="/js/google-auth.js?v=9.1" defer></script>
 </head>
 <body style="background-color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column;">
 
@@ -491,7 +493,7 @@
         <!-- Terms and Conditions Agreement Checkbox -->
         <div style="margin-bottom: 20px;">
           <label class="auth-checkbox-label" style="font-size: 0.8125rem;">
-            <input type="checkbox" id="agreeTerms" checked required>
+            <input type="checkbox" id="agreeTerms" checked required aria-label="Agree Terms">
             <span style="color: #475569;" data-i18n="auth_agree_terms">I agree to the <a href="/terms" target="_blank" style="color: #059669; font-weight: 600;">Terms</a> and <a href="/privacy" target="_blank" style="color: #059669; font-weight: 600;">Privacy Policy</a></span>
           </label>
           <div class="form-error-msg" id="termsError"></div>

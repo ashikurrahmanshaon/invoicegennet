@@ -32,15 +32,19 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png?v=9.0">
   <link rel="manifest" href="/site.webmanifest?v=9.0">
 
-  <!-- Core SaaS Stylesheets -->
-  <link rel="stylesheet" href="/css/design-system.css?v=9.0">
-  <link rel="stylesheet" href="/css/invoice-editor.css?v=9.0">
+  <!-- Core SaaS Stylesheets & Non-blocking Fonts -->
+  <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/design-system.css?v=9.1">
+  <link rel="stylesheet" href="/css/invoice-editor.css?v=9.1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"></noscript>
 
-  <!-- Vendor Libraries for PDF Generation -->
-  <script src="/js/vendor/pdf-lib.min.js"></script>
+  <!-- Vendor Libraries for PDF Generation (Deferred) -->
+  <script src="/js/vendor/pdf-lib.min.js" defer></script>
 
   <style>
     .fl-tool-wrap {
@@ -816,11 +820,11 @@
           </div>
           <div class="fl-total-row">
             <span>Reimbursable Expenses:</span>
-            <input type="number" id="flExpensesInput" value="0" min="0" step="1" style="width: 90px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right;">
+            <input type="number" id="flExpensesInput" value="0" min="0" step="1" style="width: 90px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right;" aria-label="Fl Expenses Input">
           </div>
           <div class="fl-total-row">
             <span>Tax Rate (%):</span>
-            <input type="number" id="flTaxPctInput" value="0" min="0" max="100" step="0.5" style="width: 70px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right;">
+            <input type="number" id="flTaxPctInput" value="0" min="0" max="100" step="0.5" style="width: 70px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right;" aria-label="Fl Tax Pct Input">
           </div>
           <div class="fl-total-row" id="flTaxAmountRow" style="display: none; color: #059669;">
             <span>Tax Amount:</span>
@@ -832,7 +836,7 @@
           </div>
           <div class="fl-total-row" style="margin-top: 10px;">
             <span>Deposit / Paid:</span>
-            <input type="number" id="flPaidInput" value="0" min="0" step="0.01" style="width: 100px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right; font-weight: 700;">
+            <input type="number" id="flPaidInput" value="0" min="0" step="0.01" style="width: 100px; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: right; font-weight: 700;" aria-label="Fl Paid Input">
           </div>
           <div class="fl-total-row fl-balance-row">
             <span>Balance Due:</span>
@@ -1188,9 +1192,9 @@
           const amt = item.hours * item.rate;
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}"></td>
-            <td><input type="number" class="fl-item-hours" data-idx="${idx}" value="${item.hours}" min="0.25" step="0.25"></td>
-            <td><input type="number" class="fl-item-rate" data-idx="${idx}" value="${item.rate.toFixed(2)}" min="0" step="1"></td>
+            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}" aria-label="Input field"></td>
+            <td><input type="number" class="fl-item-hours" data-idx="${idx}" value="${item.hours}" min="0.25" step="0.25" aria-label="Input field"></td>
+            <td><input type="number" class="fl-item-rate" data-idx="${idx}" value="${item.rate.toFixed(2)}" min="0" step="1" aria-label="Input field"></td>
             <td style="font-family:'JetBrains Mono',monospace;font-weight:700;">${sym}${amt.toFixed(2)}</td>
             <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
           `;
@@ -1209,8 +1213,8 @@
         modeData.fixed.forEach((item, idx) => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}"></td>
-            <td><input type="number" class="fl-item-amount" data-idx="${idx}" value="${item.amount.toFixed(2)}" min="0" step="10"></td>
+            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}" aria-label="Input field"></td>
+            <td><input type="number" class="fl-item-amount" data-idx="${idx}" value="${item.amount.toFixed(2)}" min="0" step="10" aria-label="Input field"></td>
             <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
           `;
           tbody.appendChild(tr);
@@ -1230,16 +1234,16 @@
         modeData.milestone.forEach((item, idx) => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><input type="text" class="fl-item-name" data-idx="${idx}" value="${item.name}"></td>
-            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}"></td>
+            <td><input type="text" class="fl-item-name" data-idx="${idx}" value="${item.name}" aria-label="Input field"></td>
+            <td><input type="text" class="fl-item-desc" data-idx="${idx}" value="${item.desc}" aria-label="Input field"></td>
             <td>
-              <select class="fl-item-status" data-idx="${idx}">
+              <select class="fl-item-status" data-idx="${idx}" aria-label="Input field">
                 <option value="Completed" ${item.status === 'Completed' ? 'selected' : ''}>Completed</option>
                 <option value="In Progress" ${item.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
                 <option value="Pending" ${item.status === 'Pending' ? 'selected' : ''}>Pending</option>
               </select>
             </td>
-            <td><input type="number" class="fl-item-amount" data-idx="${idx}" value="${item.amount.toFixed(2)}" min="0" step="10"></td>
+            <td><input type="number" class="fl-item-amount" data-idx="${idx}" value="${item.amount.toFixed(2)}" min="0" step="10" aria-label="Input field"></td>
             <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
           `;
           tbody.appendChild(tr);
@@ -1258,9 +1262,9 @@
         modeData.project.forEach((item, idx) => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><input type="text" class="fl-item-name" data-idx="${idx}" value="${item.name}"></td>
-            <td><input type="text" class="fl-item-schedule" data-idx="${idx}" value="${item.schedule}"></td>
-            <td><input type="number" class="fl-item-fee" data-idx="${idx}" value="${item.fee.toFixed(2)}" min="0" step="50"></td>
+            <td><input type="text" class="fl-item-name" data-idx="${idx}" value="${item.name}" aria-label="Input field"></td>
+            <td><input type="text" class="fl-item-schedule" data-idx="${idx}" value="${item.schedule}" aria-label="Input field"></td>
+            <td><input type="number" class="fl-item-fee" data-idx="${idx}" value="${item.fee.toFixed(2)}" min="0" step="50" aria-label="Input field"></td>
             <td style="text-align:center;"><button type="button" class="btn-del" data-idx="${idx}" style="background:none;border:none;color:#dc2626;cursor:pointer;font-size:1.1rem;">&times;</button></td>
           `;
           tbody.appendChild(tr);

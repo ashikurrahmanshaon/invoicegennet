@@ -437,13 +437,13 @@
 
           <div style="margin-bottom: 16px;">
             <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">Amount to Convert</label>
-            <input type="number" id="curAmount" class="input-control" value="100" min="0.01" step="any" style="width: 100%; font-size: 1.25rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;">
+            <input type="number" id="curAmount" class="input-control" value="100" min="0.01" step="any" style="width: 100%; font-size: 1.25rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;" aria-label="Amount to convert">
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 48px 1fr; gap: 10px; align-items: end; margin-bottom: 16px;">
             <div>
               <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">From Currency</label>
-              <select id="curFrom" class="input-control" style="width: 100%;">
+              <select id="curFrom" class="input-control" style="width: 100%;" aria-label="From currency">
                 <option value="USD" selected>USD - US Dollar</option>
                 <option value="EUR">EUR - Euro</option>
                 <option value="GBP">GBP - British Pound</option>
@@ -465,7 +465,7 @@
 
             <div>
               <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #334155; margin-bottom: 6px;">To Currency</label>
-              <select id="curTo" class="input-control" style="width: 100%;">
+              <select id="curTo" class="input-control" style="width: 100%;" aria-label="To currency">
                 <option value="EUR" selected>EUR - Euro</option>
                 <option value="USD">USD - US Dollar</option>
                 <option value="GBP">GBP - British Pound</option>

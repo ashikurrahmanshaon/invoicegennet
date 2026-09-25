@@ -892,3 +892,31 @@ class PDFEngine {
 }
 
 window.pdfEngine = new PDFEngine();
+
+// Non-blocking idle background preloading of PDF rendering engine
+if (typeof window !== 'undefined') {
+  const preloadPdfEngine = () => {
+    if (typeof window.html2pdf === 'undefined') {
+      const s = document.createElement('script');
+      s.src = '/js/html2pdf.bundle.min.js';
+      s.async = true;
+      document.head.appendChild(s);
+    }
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        try {
+          window.requestIdleCallback(preloadPdfEngine, { timeout: 4000 });
+        } catch (e) {
+          preloadPdfEngine();
+        }
+      }, 2500);
+    });
+  } else if (typeof window.addEventListener === 'function') {
+    window.addEventListener('load', () => {
+      setTimeout(preloadPdfEngine, 3500);
+    });
+  }
+}
