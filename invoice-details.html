@@ -847,18 +847,42 @@
 
         try {
           const element = document.getElementById('printableInvoiceCanvas');
-          const filename = `${currentInvoice.number || 'Invoice'}.pdf`;
-          const opt = {
-            margin: 10,
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-          };
-          await html2pdf().set(opt).from(element).save();
-          showToast('PDF downloaded successfully!');
+          const cleanNum = String(currentInvoice.number || '001').replace(/[^a-zA-Z0-9-_]/g, '-');
+          const filename = `Invoice-${cleanNum}.pdf`;
+
+          if (typeof html2pdf !== 'undefined') {
+            const opt = {
+              margin: [10, 10, 10, 10],
+              filename: filename,
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            const worker = html2pdf().set(opt).from(element);
+            const blob = await worker.outputPdf('blob');
+            if (blob && blob.size > 500) {
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = filename;
+              document.body.appendChild(a);
+              a.click();
+              setTimeout(() => {
+                if (a.parentNode) a.parentNode.removeChild(a);
+                URL.revokeObjectURL(url);
+              }, 1200);
+              showToast('PDF downloaded successfully!', 'success');
+            } else {
+              await worker.save();
+              showToast('PDF downloaded successfully!', 'success');
+            }
+          } else {
+            window.print();
+          }
         } catch (err) {
-          showToast('PDF generation completed', 'info');
+          console.error('Invoice details PDF download error:', err);
+          showToast('Direct download unavailable, opening print view...', 'warning');
+          window.print();
         } finally {
           btn.disabled = false;
           btn.innerHTML = origText;
@@ -933,6 +957,8 @@
 
     })();
   </script>
+  <script src="/js/html2pdf.bundle.min.js"></script>
+  <script src="/js/vendor/pdf-lib.min.js"></script>
   <script src="/js/i18n.js?v=9.0"></script>
   <script src="/js/instant-nav.js?v=9.0"></script>
 </body>

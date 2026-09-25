@@ -1359,7 +1359,7 @@
       document.getElementById(id).addEventListener('change', renderModeTable);
     });
 
-    // Real Vector PDF Generation via pdf-lib
+    // Real Vector PDF Generation via pdf-lib with WinAnsi-safe character sanitization
     async function generateFreelancePdfBlob() {
       if (typeof PDFLib === 'undefined') throw new Error('PDF library is not loaded');
       const { PDFDocument, rgb, StandardFonts } = PDFLib;
@@ -1368,17 +1368,26 @@
       const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
       const fontRegular = await doc.embedFont(StandardFonts.Helvetica);
 
-      const sym = document.getElementById('flCurrency').value;
-      const flName = document.getElementById('flName').value || 'Freelancer Studio';
-      const flEmail = document.getElementById('flEmail').value || '';
-      const flAddr = document.getElementById('flAddress').value || '';
-      const clientName = document.getElementById('flClient').value || 'Client Company';
-      const contactPerson = document.getElementById('flContactPerson').value || '';
-      const clientAddr = document.getElementById('flClientAddr').value || '';
-      const invNum = document.getElementById('flInvNum').value || 'INV-2026-FL01';
-      const invDate = document.getElementById('flDate').value || today;
-      const dueDate = document.getElementById('flDue').value || due;
-      const projName = document.getElementById('flProjectName').value || 'Contract Deliverables';
+      const safeText = (s) => String(s || '')
+        .replace(/\u20B9/g, 'INR ')
+        .replace(/\u09F3/g, 'BDT ')
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/[\u2013\u2014]/g, '-')
+        .replace(/[^\x00-\xFF]/g, ' ');
+
+      const rawSym = document.getElementById('flCurrency').value;
+      const sym = safeText(rawSym);
+      const flName = safeText(document.getElementById('flName').value || 'Freelancer Studio');
+      const flEmail = safeText(document.getElementById('flEmail').value || '');
+      const flAddr = safeText(document.getElementById('flAddress').value || '');
+      const clientName = safeText(document.getElementById('flClient').value || 'Client Company');
+      const contactPerson = safeText(document.getElementById('flContactPerson').value || '');
+      const clientAddr = safeText(document.getElementById('flClientAddr').value || '');
+      const invNum = safeText(document.getElementById('flInvNum').value || 'INV-2026-FL01');
+      const invDate = safeText(document.getElementById('flDate').value || today);
+      const dueDate = safeText(document.getElementById('flDue').value || due);
+      const projName = safeText(document.getElementById('flProjectName').value || 'Contract Deliverables');
 
       // Header Banner
       page.drawRectangle({ x: 0, y: 775, width: 595.28, height: 66.89, color: rgb(0.02, 0.59, 0.41) });
@@ -1388,7 +1397,7 @@
       // Parties
       page.drawText('FROM (CONTRACTOR):', { x: 40, y: 750, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
       page.drawText(flName, { x: 40, y: 735, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
-      page.drawText(flEmail, { x: 40, y: 721, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
+      if (flEmail) page.drawText(flEmail, { x: 40, y: 721, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
       page.drawText(flAddr.substring(0, 45), { x: 40, y: 709, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
 
       page.drawText('CLIENT (BILL TO):', { x: 320, y: 750, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
@@ -1416,7 +1425,7 @@
         modeData.hourly.forEach(i => {
           const amt = i.hours * i.rate;
           subtotal += amt;
-          page.drawText(i.desc.substring(0, 48), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText(safeText(i.desc).substring(0, 48), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
           page.drawText(`${i.hours}h @ ${sym}${i.rate.toFixed(2)}/h`, { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
           page.drawText(`${sym}${amt.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
           page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
@@ -1425,7 +1434,7 @@
       } else if (currentMode === 'fixed') {
         modeData.fixed.forEach(i => {
           subtotal += i.amount;
-          page.drawText(i.desc.substring(0, 52), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText(safeText(i.desc).substring(0, 52), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
           page.drawText('Fixed Price', { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
           page.drawText(`${sym}${i.amount.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
           page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
@@ -1434,8 +1443,8 @@
       } else if (currentMode === 'milestone') {
         modeData.milestone.forEach(i => {
           subtotal += i.amount;
-          page.drawText(`${i.name} (${i.status})`.substring(0, 50), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
-          page.drawText(i.status, { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.02, 0.59, 0.41) });
+          page.drawText(`${safeText(i.name)} (${safeText(i.status)})`.substring(0, 50), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText(safeText(i.status), { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.02, 0.59, 0.41) });
           page.drawText(`${sym}${i.amount.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
           page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
           y -= 20;
@@ -1443,8 +1452,8 @@
       } else if (currentMode === 'project') {
         modeData.project.forEach(i => {
           subtotal += i.fee;
-          page.drawText(i.name.substring(0, 48), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
-          page.drawText(i.schedule.substring(0, 20), { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+          page.drawText(safeText(i.name).substring(0, 48), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+          page.drawText(safeText(i.schedule).substring(0, 20), { x: 380, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
           page.drawText(`${sym}${i.fee.toFixed(2)}`, { x: 480, y: y + 4, size: 8, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
           page.drawLine({ start: { x: 40, y: y }, end: { x: 555, y: y }, thickness: 0.5, color: rgb(0.88, 0.9, 0.92) });
           y -= 20;

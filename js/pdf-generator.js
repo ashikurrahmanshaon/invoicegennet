@@ -551,10 +551,146 @@ class PDFEngine {
     return true;
   }
 
+  // Pure vector fallback PDF engine using PDFLib if html2canvas/html2pdf encounters environment issues
+  async generateVectorPdfFallbackBlob() {
+    try {
+      if (typeof window.PDFLib === 'undefined' && typeof PDFLib === 'undefined') {
+        await new Promise((resolve) => {
+          const s = document.createElement('script');
+          s.src = '/js/vendor/pdf-lib.min.js';
+          s.onload = () => resolve(true);
+          s.onerror = () => resolve(false);
+          document.head.appendChild(s);
+        });
+      }
+      const pdfLib = window.PDFLib || (typeof PDFLib !== 'undefined' ? PDFLib : null);
+      if (!pdfLib) throw new Error('PDF library unavailable');
+
+      const { PDFDocument, rgb, StandardFonts } = pdfLib;
+      const doc = await PDFDocument.create();
+      const page = doc.addPage([595.28, 841.89]);
+      const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
+      const fontRegular = await doc.embedFont(StandardFonts.Helvetica);
+
+      const store = window.invoiceStore ? window.invoiceStore.getState() : {};
+      const safeText = (s) => String(s || '')
+        .replace(/\u20B9/g, 'INR ')
+        .replace(/\u09F3/g, 'BDT ')
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/[\u2013\u2014]/g, '-')
+        .replace(/[^\x00-\xFF]/g, ' ');
+
+      const invNum = (document.getElementById('invoiceNumber')?.value || store.number || '001').trim();
+      const invTitle = (document.getElementById('invoiceTitleHeading')?.value || store.title || 'INVOICE').trim();
+      const invDate = (document.getElementById('invoiceDate')?.value || store.date || '').trim();
+      const invDue = (document.getElementById('dueDateInput')?.value || store.dueDate || '').trim();
+      const sender = (document.getElementById('senderName')?.value || store.sender?.name || 'My Business').trim();
+      const senderAddr = (document.getElementById('senderAddress')?.value || store.sender?.address || '').trim();
+      const client = (document.getElementById('clientName')?.value || store.client?.name || 'Client Name').trim();
+      const clientAddr = (document.getElementById('clientAddress')?.value || store.client?.address || '').trim();
+      const notes = (document.getElementById('invoiceNotes')?.value || store.notes || '').trim();
+
+      const subtotal = document.getElementById('subtotalDisplay')?.textContent || '$0.00';
+      const tax = document.getElementById('taxAmountDisplay')?.textContent || '$0.00';
+      const grandTotal = document.getElementById('grandTotalDisplay')?.textContent || subtotal;
+
+      const items = [];
+      const rows = document.querySelectorAll('#itemsTableBody tr.item-row, #itemsTableBody tr');
+      rows.forEach(r => {
+        const descInput = r.querySelector('.item-desc-field') || r.querySelector('.item-desc-input') || r.querySelector('input[type="text"]');
+        const qtyInput = r.querySelector('.item-qty-field') || r.querySelector('.item-qty-input');
+        const rateInput = r.querySelector('.item-rate-field') || r.querySelector('.item-rate-input');
+        const amountEl = r.querySelector('.item-amount-col') || r.querySelector('.table-amount-val') || r.querySelector('.item-amount-val');
+        const d = descInput ? descInput.value.trim() : '';
+        const q = qtyInput ? qtyInput.value.trim() : '1';
+        const rt = rateInput ? rateInput.value.trim() : '0.00';
+        const a = amountEl ? amountEl.textContent.trim() : '0.00';
+        if (d || parseFloat(q) > 0 || parseFloat(rt) > 0) {
+          items.push({ desc: d || 'Deliverable Item', qty: q, rate: rt, amount: a });
+        }
+      });
+
+      page.drawRectangle({ x: 0, y: 770, width: 595.28, height: 71.89, color: rgb(0.06, 0.09, 0.16) });
+      page.drawText(safeText(invTitle.toUpperCase()), { x: 40, y: 796, size: 24, font: fontBold, color: rgb(1, 1, 1) });
+      page.drawText(`# ${safeText(invNum)}`, { x: 400, y: 798, size: 14, font: fontBold, color: rgb(0.9, 0.9, 0.9) });
+
+      page.drawText('FROM:', { x: 40, y: 740, size: 8, font: fontBold, color: rgb(0.4, 0.4, 0.4) });
+      page.drawText(safeText(sender), { x: 40, y: 724, size: 12, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      let sy = 708;
+      safeText(senderAddr).split('\n').slice(0, 3).forEach(l => {
+        page.drawText(l.substring(0, 45), { x: 40, y: sy, size: 9, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+        sy -= 13;
+      });
+
+      page.drawText('BILL TO:', { x: 320, y: 740, size: 8, font: fontBold, color: rgb(0.4, 0.4, 0.4) });
+      page.drawText(safeText(client), { x: 320, y: 724, size: 12, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+      let cy = 708;
+      safeText(clientAddr).split('\n').slice(0, 3).forEach(l => {
+        page.drawText(l.substring(0, 45), { x: 320, y: cy, size: 9, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+        cy -= 13;
+      });
+
+      const metaY = Math.min(sy, cy) - 15;
+      page.drawRectangle({ x: 40, y: metaY, width: 515, height: 22, color: rgb(0.95, 0.96, 0.98) });
+      page.drawText(`Date: ${safeText(invDate || 'Today')}`, { x: 50, y: metaY + 6, size: 9, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+      if (invDue) {
+        page.drawText(`Due Date: ${safeText(invDue)}`, { x: 260, y: metaY + 6, size: 9, font: fontRegular, color: rgb(0.2, 0.2, 0.2) });
+      }
+
+      const tableY = metaY - 30;
+      page.drawRectangle({ x: 40, y: tableY, width: 515, height: 22, color: rgb(0.15, 0.18, 0.22) });
+      page.drawText('Description', { x: 50, y: tableY + 6, size: 9, font: fontBold, color: rgb(1, 1, 1) });
+      page.drawText('Qty', { x: 340, y: tableY + 6, size: 9, font: fontBold, color: rgb(1, 1, 1) });
+      page.drawText('Rate', { x: 410, y: tableY + 6, size: 9, font: fontBold, color: rgb(1, 1, 1) });
+      page.drawText('Amount', { x: 490, y: tableY + 6, size: 9, font: fontBold, color: rgb(1, 1, 1) });
+
+      let rowY = tableY - 22;
+      const displayItems = items.length ? items : [{ desc: 'Invoice Deliverable Item', qty: '1', rate: subtotal, amount: subtotal }];
+      displayItems.forEach(it => {
+        page.drawText(safeText(it.desc).substring(0, 42), { x: 50, y: rowY + 5, size: 9, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(safeText(it.qty), { x: 340, y: rowY + 5, size: 9, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(safeText(it.rate), { x: 410, y: rowY + 5, size: 9, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(safeText(it.amount), { x: 490, y: rowY + 5, size: 9, font: fontBold, color: rgb(0.1, 0.1, 0.1) });
+        page.drawLine({ start: { x: 40, y: rowY }, end: { x: 555, y: rowY }, thickness: 0.5, color: rgb(0.9, 0.92, 0.94) });
+        rowY -= 22;
+      });
+
+      let totY = rowY - 15;
+      page.drawText(`Subtotal: ${safeText(subtotal)}`, { x: 380, y: totY, size: 9, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+      totY -= 16;
+      if (tax && tax !== '$0.00' && tax !== '0') {
+        page.drawText(`Tax: +${safeText(tax)}`, { x: 380, y: totY, size: 9, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+        totY -= 16;
+      }
+      page.drawRectangle({ x: 370, y: totY - 4, width: 185, height: 24, color: rgb(0.02, 0.59, 0.41) });
+      page.drawText(`TOTAL: ${safeText(grandTotal)}`, { x: 380, y: totY + 3, size: 11, font: fontBold, color: rgb(1, 1, 1) });
+
+      if (notes) {
+        page.drawText('Notes / Payment Terms:', { x: 40, y: totY, size: 8, font: fontBold, color: rgb(0.4, 0.4, 0.4) });
+        let ny = totY - 12;
+        safeText(notes).split('\n').slice(0, 4).forEach(nl => {
+          page.drawText(nl.substring(0, 50), { x: 40, y: ny, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+          ny -= 11;
+        });
+      }
+
+      page.drawText('Generated securely via Invoice-Gen.net — Free Online Invoicing Suite', {
+        x: 40, y: 30, size: 8, font: fontRegular, color: rgb(0.55, 0.55, 0.55)
+      });
+
+      const pdfBytes = await doc.save();
+      return new Blob([pdfBytes], { type: 'application/pdf' });
+    } catch (e) {
+      console.error('Vector fallback generator error:', e);
+      return null;
+    }
+  }
+
   async downloadPDF() {
     if (this.isGenerating) return;
 
-    let printableElement = null;
+    let renderMount = null;
     try {
       this.setGeneratingState(true);
       this.showToast('Assembling high-definition A4 vector PDF...', 'info');
@@ -562,18 +698,6 @@ class PDFEngine {
       // Ensure library is available (local bundle)
       const isLoaded = await this.ensureLibrary();
       const html2pdfLib = (typeof window.html2pdf !== 'undefined') ? window.html2pdf : (typeof html2pdf !== 'undefined' ? html2pdf : null);
-      if (!isLoaded || !html2pdfLib) {
-        throw new Error('PDF generation library failed to initialize.');
-      }
-
-      // Ensure web fonts are completely ready before snapshotting
-      if (document.fonts && document.fonts.ready) {
-        await document.fonts.ready;
-      }
-      await new Promise(r => setTimeout(r, 60));
-
-      // Build isolated, pixel-perfect A4 printable container from LIVE data
-      printableElement = this.buildPrintableA4Element();
 
       const state = window.invoiceStore ? window.invoiceStore.getState() : {};
       const rawInvNumber = (document.getElementById('invoiceNumber')?.value || state.number || '001').trim();
@@ -584,69 +708,150 @@ class PDFEngine {
 
       const filename = cleanClientName ? `Invoice-${cleanInvNumber}-${cleanClientName}.pdf` : `Invoice-${cleanInvNumber}.pdf`;
 
-      // ISO A4 exact calibration (210mm x 297mm) with 15mm print margins for high-end designer proportions
-      const opt = {
-        margin: [15, 15, 15, 15],
-        filename: filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-          scale: 2, // 2x Retina high-resolution (crystal clear)
-          useCORS: true,
-          logging: false,
-          letterRendering: true,
-          backgroundColor: '#ffffff'
-        },
-        jsPDF: {
-          unit: 'mm',
-          format: 'a4',
-          orientation: 'portrait'
-        },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      // Helper function for direct reliable browser file download
+      const triggerFileDownload = (blob, downloadName) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = downloadName;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          if (a.parentNode) a.parentNode.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 1200);
       };
 
-      await html2pdfLib().set(opt).from(printableElement).save();
+      let downloadSuccess = false;
 
-      this.showToast('PDF downloaded successfully.', 'success');
-      this.setGeneratingState(false, false);
+      // Method 1: High-fidelity html2pdf raster-vector engine with offscreen DOM mounting
+      if (isLoaded && html2pdfLib) {
+        try {
+          if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+          }
+          await new Promise(r => setTimeout(r, 60));
+
+          const printableElement = this.buildPrintableA4Element();
+          printableElement.style.width = '794px';
+          printableElement.style.maxWidth = '794px';
+          printableElement.style.margin = '0 auto';
+
+          renderMount = document.createElement('div');
+          renderMount.id = 'html2pdf-render-mount';
+          renderMount.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#ffffff;z-index:-9999;overflow:visible;';
+          renderMount.appendChild(printableElement);
+          document.body.appendChild(renderMount);
+
+          const opt = {
+            margin: [8, 8, 8, 8],
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              logging: false,
+              letterRendering: true,
+              backgroundColor: '#ffffff',
+              width: 794,
+              windowWidth: 794,
+              scrollX: 0,
+              scrollY: 0
+            },
+            jsPDF: {
+              unit: 'mm',
+              format: 'a4',
+              orientation: 'portrait'
+            },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+          };
+
+          const worker = html2pdfLib().set(opt).from(printableElement);
+          const pdfBlob = await worker.outputPdf('blob');
+          if (pdfBlob && pdfBlob.size > 500) {
+            triggerFileDownload(pdfBlob, filename);
+            downloadSuccess = true;
+          } else {
+            await worker.save();
+            downloadSuccess = true;
+          }
+        } catch (html2pdfErr) {
+          console.warn('html2pdf primary engine notice, engaging vector fallback:', html2pdfErr);
+        }
+      }
+
+      // Method 2: Pure vector fallback via PDFLib
+      if (!downloadSuccess) {
+        try {
+          const vectorBlob = await this.generateVectorPdfFallbackBlob();
+          if (vectorBlob && vectorBlob.size > 500) {
+            triggerFileDownload(vectorBlob, filename);
+            downloadSuccess = true;
+          }
+        } catch (vecErr) {
+          console.warn('Vector PDF fallback notice:', vecErr);
+        }
+      }
+
+      if (downloadSuccess) {
+        this.showToast('PDF downloaded successfully.', 'success');
+        this.setGeneratingState(false, false);
+      } else {
+        this.showToast("Direct download unavailable. Opening print dialogue...", 'warning');
+        window.print();
+        this.setGeneratingState(false, true);
+      }
     } catch (err) {
       console.error('PDF Generation Error:', err);
-      this.showToast("We couldn't generate your PDF. Please try again.", 'warning');
-      window.print();
+      this.showToast("Could not generate PDF. Please try again.", 'warning');
       this.setGeneratingState(false, true);
     } finally {
-      if (printableElement && printableElement.parentNode) {
-        printableElement.parentNode.removeChild(printableElement);
+      if (renderMount && renderMount.parentNode) {
+        renderMount.parentNode.removeChild(renderMount);
       }
     }
   }
 
   async generatePDFBlob() {
-    const isLoaded = await this.ensureLibrary();
-    const html2pdfLib = (typeof window.html2pdf !== 'undefined') ? window.html2pdf : (typeof html2pdf !== 'undefined' ? html2pdf : null);
-    if (!isLoaded || !html2pdfLib) {
-      throw new Error('PDF generation library failed to initialize.');
-    }
-    if (document.fonts && document.fonts.ready) {
-      await document.fonts.ready;
-    }
-    await new Promise(r => setTimeout(r, 60));
-
-    const printableElement = this.buildPrintableA4Element();
-
+    let renderMount = null;
     try {
-      const opt = {
-        margin: [15, 15, 15, 15],
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-      };
-      return await html2pdfLib().set(opt).from(printableElement).outputPdf('blob');
+      const isLoaded = await this.ensureLibrary();
+      const html2pdfLib = (typeof window.html2pdf !== 'undefined') ? window.html2pdf : (typeof html2pdf !== 'undefined' ? html2pdf : null);
+      if (isLoaded && html2pdfLib) {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        await new Promise(r => setTimeout(r, 60));
+
+        const printableElement = this.buildPrintableA4Element();
+        printableElement.style.width = '794px';
+        printableElement.style.maxWidth = '794px';
+
+        renderMount = document.createElement('div');
+        renderMount.id = 'html2pdf-blob-mount';
+        renderMount.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#ffffff;z-index:-9999;overflow:visible;';
+        renderMount.appendChild(printableElement);
+        document.body.appendChild(renderMount);
+
+        const opt = {
+          margin: [8, 8, 8, 8],
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true, backgroundColor: '#ffffff', width: 794, windowWidth: 794 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+        const blob = await html2pdfLib().set(opt).from(printableElement).outputPdf('blob');
+        if (blob && blob.size > 500) return blob;
+      }
+    } catch (e) {
+      console.warn('generatePDFBlob html2pdf failed, falling back to vector:', e);
     } finally {
-      if (printableElement && printableElement.parentNode) {
-        printableElement.parentNode.removeChild(printableElement);
+      if (renderMount && renderMount.parentNode) {
+        renderMount.parentNode.removeChild(renderMount);
       }
     }
+
+    return await this.generateVectorPdfFallbackBlob();
   }
 
   async saveToCloud() {

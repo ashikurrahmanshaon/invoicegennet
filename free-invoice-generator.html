@@ -1007,6 +1007,21 @@
 
   </main>
 
+  <!-- Mobile Sticky Bottom Action Bar (Consolidated Single Primary Action Surface) -->
+  <div class="mobile-sticky-action-bar" id="mobileStickyActionBar">
+    <button type="button" class="btn-mobile-action-primary" id="btnMobileDownloadPdf" title="Download A4 vector PDF">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <span>Download PDF</span>
+    </button>
+    <button type="button" class="btn-mobile-action-secondary" id="btnMobilePreviewPdf" title="Preview A4 document">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      <span>Preview</span>
+    </button>
+    <button type="button" class="btn-mobile-action-icon" id="btnMobileSaveInvoice" aria-label="Save invoice draft" title="Save draft">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline></svg>
+    </button>
+  </div>
+
   <!-- Educational Guide & FAQ Section Below the Tool -->
   <section class="tool-explanation-section" style="max-width: 1320px; margin: 40px auto 60px; padding: 0 24px;">
     <h2>What is a Free Invoice Generator?</h2>
@@ -1259,6 +1274,7 @@
   <!-- Scripts -->
   <script src="/js/i18n.js?v=9.0"></script>
   <script src="/js/html2pdf.bundle.min.js"></script>
+  <script src="/js/vendor/pdf-lib.min.js"></script>
   <script src="/js/invoice-state.js?v=9.0"></script>
   <script src="/js/pdf-generator.js?v=9.0"></script>
   <script src="/js/app.js?v=9.0"></script>

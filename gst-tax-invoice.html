@@ -1324,7 +1324,7 @@
       document.getElementById(id).addEventListener('change', renderGstTable);
     });
 
-    // Generate Real Vector PDF using pdf-lib
+    // Generate Real Vector PDF using pdf-lib with complete WinAnsi-safe character sanitization
     async function generateGstPdfBlob() {
       if (typeof PDFLib === 'undefined') {
         throw new Error('PDF library is not loaded');
@@ -1335,16 +1335,25 @@
       const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
       const fontRegular = await doc.embedFont(StandardFonts.Helvetica);
 
-      const sym = document.getElementById('currencySelect').value;
-      const bizName = document.getElementById('bizName').value || 'Apex Business';
-      const bizTax = document.getElementById('bizTaxNum').value || '';
-      const bizAddr = document.getElementById('bizAddress').value || '';
-      const clientName = document.getElementById('clientName').value || 'Client Name';
-      const clientTax = document.getElementById('clientTaxNum').value || '';
-      const clientAddr = document.getElementById('clientAddress').value || '';
-      const invNum = document.getElementById('invNumber').value || 'INV-001';
-      const invDate = document.getElementById('invDate').value || today;
-      const dueDate = document.getElementById('dueDate').value || due;
+      const safeText = (s) => String(s || '')
+        .replace(/\u20B9/g, 'INR ')
+        .replace(/\u09F3/g, 'BDT ')
+        .replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"')
+        .replace(/[\u2013\u2014]/g, '-')
+        .replace(/[^\x00-\xFF]/g, ' ');
+
+      const rawSym = document.getElementById('currencySelect').value;
+      const sym = safeText(rawSym);
+      const bizName = safeText(document.getElementById('bizName').value || 'Apex Business');
+      const bizTax = safeText(document.getElementById('bizTaxNum').value || '');
+      const bizAddr = safeText(document.getElementById('bizAddress').value || '');
+      const clientName = safeText(document.getElementById('clientName').value || 'Client Name');
+      const clientTax = safeText(document.getElementById('clientTaxNum').value || '');
+      const clientAddr = safeText(document.getElementById('clientAddress').value || '');
+      const invNum = safeText(document.getElementById('invNumber').value || 'INV-001');
+      const invDate = safeText(document.getElementById('invDate').value || today);
+      const dueDate = safeText(document.getElementById('dueDate').value || due);
 
       // Header Banner
       page.drawRectangle({
@@ -1357,7 +1366,7 @@
       // Seller & Buyer Details
       page.drawText('ISSUED BY:', { x: 40, y: 755, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
       page.drawText(bizName, { x: 40, y: 740, size: 12, font: fontBold, color: rgb(0.06, 0.09, 0.16) });
-      page.drawText(`Tax/GSTIN: ${bizTax}`, { x: 40, y: 726, size: 9, font: fontBold, color: rgb(0.02, 0.59, 0.41) });
+      if (bizTax) page.drawText(`Tax/GSTIN: ${bizTax}`, { x: 40, y: 726, size: 9, font: fontBold, color: rgb(0.02, 0.59, 0.41) });
       page.drawText(bizAddr.substring(0, 45), { x: 40, y: 712, size: 8, font: fontRegular, color: rgb(0.4, 0.4, 0.4) });
 
       page.drawText('BILL TO:', { x: 320, y: 755, size: 9, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
@@ -1393,8 +1402,8 @@
         totalTaxable += taxable;
         totalTax += tax;
 
-        page.drawText(item.desc.substring(0, 32), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
-        page.drawText(item.hsn, { x: 230, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
+        page.drawText(safeText(item.desc).substring(0, 32), { x: 46, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
+        page.drawText(safeText(item.hsn), { x: 230, y: y + 4, size: 8, font: fontRegular, color: rgb(0.3, 0.3, 0.3) });
         page.drawText(String(item.qty), { x: 300, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
         page.drawText(`${sym}${item.rate.toFixed(2)}`, { x: 340, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
         page.drawText(`${sym}${taxable.toFixed(2)}`, { x: 400, y: y + 4, size: 8, font: fontRegular, color: rgb(0.1, 0.1, 0.1) });
