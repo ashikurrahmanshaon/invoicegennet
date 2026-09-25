@@ -1,11 +1,14 @@
 User-agent: *
 Allow: /
 Allow: /tools/
-Allow: /blog/
-Allow: /guides/
+Allow: /blog
 Allow: /about
 Allow: /contact
 Allow: /help
+Allow: /faq
+Allow: /pricing
+Allow: /features
+Allow: /templates
 
 # Disallow private user routes and internal endpoints
 Disallow: /dashboard

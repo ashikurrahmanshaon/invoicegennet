@@ -1405,6 +1405,16 @@ const requestHandler = async (req, res) => {
     });
   }
 
+  // Canonical Domain & HTTPS Redirection: Redirect www.invoice-gen.net to invoice-gen.net
+  const host = (req.headers.host || '').toLowerCase();
+  if (host.startsWith('www.invoice-gen.net')) {
+    res.writeHead(301, {
+      'Location': 'https://invoice-gen.net' + req.url,
+      'Cache-Control': 'public, max-age=31536000'
+    });
+    return res.end();
+  }
+
   // Normalize trailing slash: 301 redirect /path/ to /path (except root / and /tools/)
   if (pathname.length > 1 && pathname.endsWith('/') && pathname !== '/tools/') {
     const cleanPath = pathname.slice(0, -1);
@@ -1449,7 +1459,11 @@ const requestHandler = async (req, res) => {
     '/free-invoice-generator': '/tools/invoice-generator',
     '/free-invoice-generator.html': '/tools/invoice-generator',
     '/cloud-file-storage': '/tools/cloud-file-storage',
-    '/cloud-file-storage.html': '/tools/cloud-file-storage'
+    '/cloud-file-storage.html': '/tools/cloud-file-storage',
+    '/blog-post': '/blog',
+    '/blog-post.html': '/blog',
+    '/online-payments': '/tools/online-payments',
+    '/online-payments.html': '/tools/online-payments'
   };
 
   if (LEGACY_TOOL_REDIRECTS[pathname]) {
@@ -1468,15 +1482,16 @@ const requestHandler = async (req, res) => {
   }
 
   // ========================================================================
-  // ROUTE REDIRECTION FOR DEPRECATED SUB-ROUTES
+  // ROUTE REDIRECTION FOR DEPRECATED SUB-ROUTES (Clean 301 to avoid Soft 404)
   // ========================================================================
-  const deprecatedRoutes = [
-    '/client-details',
-    '/create-invoice'
-  ];
+  const DEPRECATED_SUBROUTES = {
+    '/client-details': '/dashboard',
+    '/create-invoice': '/dashboard',
+    '/billing': '/pricing'
+  };
 
-  if (deprecatedRoutes.includes(pathname)) {
-    res.writeHead(302, { 'Location': '/dashboard' });
+  if (DEPRECATED_SUBROUTES[pathname]) {
+    res.writeHead(301, { 'Location': DEPRECATED_SUBROUTES[pathname] });
     return res.end();
   }
 
@@ -1490,7 +1505,6 @@ const requestHandler = async (req, res) => {
     '/getting-started': 'getting-started.html',
     '/cookies': 'cookies.html',
     '/blog': 'blog.html',
-    '/blog-post': 'blog-post.html',
     '/pricing': 'pricing.html',
     '/security': 'security.html',
     '/privacy': 'privacy.html',
@@ -1498,9 +1512,8 @@ const requestHandler = async (req, res) => {
     '/refunds': 'refunds.html',
     '/sitemap': 'sitemap.html',
     '/404': '404.html',
-    '/500': '500.html',
     '/invoice-guide': 'invoice-guide.html',
-    '/invoicing-guide': 'invoice-guide.html',
+    '/invoicing-guide': 'invoicing-guide.html',
     '/getting-paid-faster': 'getting-paid-faster.html',
     '/stripe-vs-paypal': 'stripe-vs-paypal.html',
     '/features': 'features.html',

@@ -10,26 +10,49 @@ DirectoryIndex index.html
   RewriteEngine On
   RewriteBase /
 
-  # Force HTTPS
+  # 1a. Canonical Domain: Redirect www to non-www
+  RewriteCond %{HTTP_HOST} ^www\.invoice-gen\.net$ [NC]
+  RewriteRule ^(.*)$ https://invoice-gen.net/$1 [R=301,L]
+
+  # 1b. Force HTTPS
   RewriteCond %{HTTPS} off
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
-  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteRule ^(.*)$ https://invoice-gen.net%{REQUEST_URI} [R=301,L]
 
-  # Clean URLs: Serve .html automatically without showing .html extension
-  # 1a. 301 Redirect legacy /index.html to /
+  # 1c. 301 Redirect legacy /index.html to /
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/ [NC]
   RewriteRule ^index\.html$ / [R=301,L]
 
-  # 1b. 301 Redirect any legacy /page.html to /page
+  # 1d. 301 Redirect legacy tool URLs directly to canonical /tools/*
+  RewriteRule ^pdf-to-jpg(\.html)?$ /tools/pdf-to-jpg [R=301,L]
+  RewriteRule ^jpg-to-pdf(\.html)?$ /tools/jpg-to-pdf [R=301,L]
+  RewriteRule ^pdf-merger(\.html)?$ /tools/pdf-merger [R=301,L]
+  RewriteRule ^pdf-splitter(\.html)?$ /tools/pdf-splitter [R=301,L]
+  RewriteRule ^image-compressor(\.html)?$ /tools/image-compressor [R=301,L]
+  RewriteRule ^tax-calculator(\.html)?$ /tools/tax-calculator [R=301,L]
+  RewriteRule ^payment-calculator(\.html)?$ /tools/payment-calculator [R=301,L]
+  RewriteRule ^due-date-calculator(\.html)?$ /tools/due-date-calculator [R=301,L]
+  RewriteRule ^currency-converter(\.html)?$ /tools/currency-converter [R=301,L]
+  RewriteRule ^pdf-invoice-generator(\.html)?$ /tools/pdf-invoice-generator [R=301,L]
+  RewriteRule ^gst-tax-invoice(\.html)?$ /tools/gst-tax-invoice [R=301,L]
+  RewriteRule ^gst-invoice-generator(\.html)?$ /tools/gst-tax-invoice [R=301,L]
+  RewriteRule ^invoice-number-generator(\.html)?$ /tools/invoice-number-generator [R=301,L]
+  RewriteRule ^payment-link(\.html)?$ /tools/payment-link [R=301,L]
+  RewriteRule ^free-invoice-generator(\.html)?$ /tools/invoice-generator [R=301,L]
+  RewriteRule ^invoice-generator-for-freelancers(\.html)?$ /tools/freelancer-invoice [R=301,L]
+  RewriteRule ^cloud-file-storage(\.html)?$ /tools/cloud-file-storage [R=301,L]
+  RewriteRule ^blog-post(\.html)?$ /blog [R=301,L]
+
+  # 1e. 301 Redirect any remaining legacy /page.html to /page
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP/ [NC]
   RewriteRule ^([^.]+)\.html$ /$1 [R=301,L]
 
-  # 1c. Sitemap rewrites
+  # 1f. Sitemap rewrites
   RewriteRule ^sitemap\.xml$ - [L]
   RewriteRule ^sitemap$ sitemap.html [L]
 
-  # 1c. Tool Route Aliases
-  RewriteRule ^tools/invoice-generator/?$ index.html [L]
+  # 1g. Tool Route Aliases (Internal Clean Serving)
+  RewriteRule ^tools/invoice-generator/?$ free-invoice-generator.html [L]
   RewriteRule ^tools/pdf-invoice-generator/?$ pdf-invoice-generator.html [L]
   RewriteRule ^tools/gst-tax-invoice/?$ gst-tax-invoice.html [L]
   RewriteRule ^tools/freelancer-invoice/?$ invoice-generator-for-freelancers.html [L]
@@ -45,14 +68,15 @@ DirectoryIndex index.html
   RewriteRule ^tools/currency-converter/?$ currency-converter.html [L]
   RewriteRule ^tools/online-payments/?$ payments.html [L]
   RewriteRule ^tools/payment-link/?$ payment-link.html [L]
+  RewriteRule ^tools/cloud-file-storage/?$ cloud-file-storage.html [L]
   RewriteRule ^cloud/?$ files.html [L]
 
-  # 1d. Fallback asset rewrites for subpaths
+  # 1h. Fallback asset rewrites for subpaths
   RewriteRule ^tools/css/(.*)$ css/$1 [L]
   RewriteRule ^tools/js/(.*)$ js/$1 [L]
   RewriteRule ^tools/assets/(.*)$ assets/$1 [L]
 
-  # 1e. Clean HTML URLs internal rewrite
+  # 1i. Clean HTML URLs internal rewrite
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}\.html -f
   RewriteRule ^(.*)$ $1.html [L]
