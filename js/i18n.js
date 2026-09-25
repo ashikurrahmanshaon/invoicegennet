@@ -559,24 +559,24 @@
 
     // Pricing Page
     pricing_hero_title: {
-      en: 'Simple, Transparent Pricing',
-      bn: 'সহজ ও স্বচ্ছ প্রাইসিং প্ল্যান',
-      es: 'Precios Simples y Transparentes',
-      fr: 'Tarifs Simples et Transparents',
-      de: 'Einfache & Transparente Preise',
-      ar: 'أسعار بسيطة وشفافة',
-      hi: 'सरल और पारदर्शी मूल्य निर्धारण',
-      zh: '简单透明的价格方案'
+      en: '100% Free Forever',
+      bn: '১০০% সম্পূর্ণ ফ্রি চিরদিনের জন্য',
+      es: '100% Gratis Para Siempre',
+      fr: '100% Gratuit Pour Toujours',
+      de: '100% Für Immer Kostenlos',
+      ar: 'مجاني 100% للأبد',
+      hi: 'हमेशा के लिए 100% मुफ़्त',
+      zh: '永久 100% 免费'
     },
     pricing_hero_sub: {
-      en: 'Start free, upgrade to Pro for just $5/month, or own everything forever for $70.',
-      bn: 'ফ্রিতে শুরু করুন, মাসে মাত্র ৫$ এ প্রো নিন অথবা ৭০$ এ লাইফটাইম আনলক করুন।',
-      es: 'Comience gratis, actualice a Pro por $5/mes o adquiéralo para siempre por $70.',
-      fr: 'Commencez gratuitement, passez à Pro pour 5 $/mois ou accédez à vie pour 70 $.',
-      de: 'Kostenlos starten, Upgrade auf Pro für 5 $/Monat oder Lifetime für 70 $.',
-      ar: 'ابدأ مجاناً، قم بالترقية إلى برو مقابل 5 دولارات شهرياً، أو امتلك كل شيء للأبد مقابل 70 دولاراً.',
-      hi: 'मुफ़्त शुरू करें, $5/माह में प्रो में अपग्रेड करें, या $70 में हमेशा के लिए सब कुछ पाएं।',
-      zh: '免费开启，每月仅需$5升级Pro，或只需$70永久买断畅享全部特权。'
+      en: 'No subscriptions, no credit cards required, and no hidden fees. All templates and tools are completely free for everyone.',
+      bn: 'কোনো সাবস্ক্রিপশন নেই, ক্রেডিট কার্ডের প্রয়োজন নেই এবং কোনো গোপন চার্জ নেই। সব টেমপ্লেট ও টুলস সবার জন্য সম্পূর্ণ ফ্রি।',
+      es: 'Sin suscripciones, sin tarjeta de crédito y sin tarifas ocultas. Todas las plantillas y herramientas son totalmente gratuitas.',
+      fr: 'Aucun abonnement, aucune carte de crédit requise et aucun frais caché. Tous les modèles et outils sont entièrement gratuits.',
+      de: 'Keine Abonnements, keine Kreditkarte erforderlich und keine versteckten Gebühren. Alle Vorlagen und Tools sind völlig kostenlos.',
+      ar: 'بدون اشتراكات، ولا يلزم وجود بطاقة ائتمان، وبدون رسوم خفية. جميع القوالب والأدوات مجانية تماماً للجميع.',
+      hi: 'कोई सदस्यता नहीं, क्रेडिट कार्ड की आवश्यकता नहीं और कोई छिपा हुआ शुल्क नहीं। सभी टेम्पलेट और उपकरण सभी के लिए पूरी तरह से मुफ़्त हैं।',
+      zh: '无订阅制，无需信用卡，绝无隐藏费用。所有发票模板与实用工具对所有人完全免费开放。'
     },
     btn_monthly: {
       en: 'Monthly Billing',
