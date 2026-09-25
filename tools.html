@@ -559,32 +559,35 @@
     </div>
   </header>
 
-  <!-- Tools Hero -->
-  <section class="tools-hero">
-    <div class="container">
-      <div class="tools-hero-badge">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-        <span>Production-Ready Tool Suite</span>
+  <!-- Main Tools Workspace -->
+  <main class="tools-page-main">
+
+    <!-- Tools Hero -->
+    <section class="tools-hero">
+      <div class="container">
+        <div class="tools-hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Production-Ready Tool Suite</span>
+        </div>
+        <h1 class="tools-hero-title">Professional Invoicing Tools</h1>
+        <p class="tools-hero-subtitle">Create, convert, calculate and manage everything you need for professional invoicing.</p>
+
+        <div class="tools-tabs-nav">
+          <button type="button" class="tool-hub-tab active" data-category="all">All Tools (17)</button>
+          <button type="button" class="tool-hub-tab" data-category="invoice">Invoice Tools</button>
+          <button type="button" class="tool-hub-tab" data-category="documents">Document Tools</button>
+          <button type="button" class="tool-hub-tab" data-category="finance">Finance Tools</button>
+          <button type="button" class="tool-hub-tab" data-category="payments">Payment Tools</button>
+          <button type="button" class="tool-hub-tab" data-category="cloud">Account / Cloud</button>
+        </div>
       </div>
-      <h1 class="tools-hero-title">Professional Invoicing Tools</h1>
-      <p class="tools-hero-subtitle">Create, convert, calculate and manage everything you need for professional invoicing.</p>
+    </section>
 
-      <div class="tools-tabs-nav">
-        <button type="button" class="tool-hub-tab active" data-category="all">All Tools (17)</button>
-        <button type="button" class="tool-hub-tab" data-category="invoice">Invoice Tools</button>
-        <button type="button" class="tool-hub-tab" data-category="documents">Document Tools</button>
-        <button type="button" class="tool-hub-tab" data-category="finance">Finance Tools</button>
-        <button type="button" class="tool-hub-tab" data-category="payments">Payment Tools</button>
-        <button type="button" class="tool-hub-tab" data-category="cloud">Account / Cloud</button>
-      </div>
-    </div>
-  </section>
+    <!-- Main Tools Grid -->
+    <div class="container" style="padding-top: 36px;">
 
-  <!-- Main Tools Grid -->
-  <main class="container" style="padding-top: 36px;">
-
-    <!-- Tools Grid Container -->
-    <div class="tools-grid" id="toolsGrid">
+      <!-- Tools Grid Container -->
+      <div class="tools-grid" id="toolsGrid">
 
       <!-- 1. Invoice Generator -->
       <a href="/tools/invoice-generator" class="tool-card-item" data-category="invoice">
@@ -819,6 +822,7 @@
         <div style="color:#94a3b8;font-size:0.875rem;">Loading recent events...</div>
       </div>
     </div>
+  </div>
 
   </main>
 

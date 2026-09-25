@@ -423,9 +423,12 @@
     </div>
   </header>
 
-  <!-- Tool Page Header & Breadcrumb -->
-  <div class="container" style="max-width: 1320px; padding: 24px 24px 0;">
-    <nav class="tool-breadcrumb" aria-label="Breadcrumb">
+  <!-- Main Invoice Application Workspace -->
+  <main class="app-workspace-layout" id="workspace">
+
+    <!-- Tool Page Header & Breadcrumb -->
+    <div class="tool-breadcrumb-header-wrap" style="grid-column: 1 / -1; width: 100%; margin-bottom: -8px;">
+      <nav class="tool-breadcrumb" aria-label="Breadcrumb">
         <a href="/">Home</a>
         <span class="breadcrumb-sep">/</span>
         <a href="/tools">Tools</a>
@@ -433,16 +436,13 @@
         <span class="breadcrumb-current">PDF Invoice Generator</span>
       </nav>
 
-    <div class="tool-page-header" style="text-align: left; margin: 12px 0 20px;">
-      <h1 class="tool-page-title" style="font-size: 2.1rem; margin-bottom: 6px;">PDF Invoice Generator</h1>
-      <p class="tool-page-subtitle" style="font-size: 0.95rem; margin: 0; color: #64748b;">
-        Create a professional vector A4 PDF invoice in seconds. No watermarks, instant client-side download, and 100% free.
-      </p>
+      <div class="tool-page-header" style="text-align: left; margin: 12px 0 0;">
+        <h1 class="tool-page-title" style="font-size: 2.1rem; margin-bottom: 6px;">PDF Invoice Generator</h1>
+        <p class="tool-page-subtitle" style="font-size: 0.95rem; margin: 0; color: #64748b;">
+          Create a professional vector A4 PDF invoice in seconds. No watermarks, instant client-side download, and 100% free.
+        </p>
+      </div>
     </div>
-  </div>
-
-  <!-- Main Invoice Application Workspace -->
-  <main class="app-workspace-layout" id="workspace">
 
     <!-- The Invoice Sheet Card (Blank Canvas) -->
     <div class="invoice-sheet-card" id="invoicePaper">

@@ -277,7 +277,16 @@
         return;
       }
 
-      // 1. Swap <main> content seamlessly
+      // 1. Purge any hero sections if navigating to non-home routes
+      const isTargetHome = (parsed.pathname === '/' || parsed.pathname === '' || parsed.pathname === '/index.html');
+      if (!isTargetHome) {
+        document.querySelectorAll('#heroSection, .invoice-hero-section').forEach(el => el.remove());
+        if (newMain) {
+          newMain.querySelectorAll('#heroSection, .invoice-hero-section').forEach(el => el.remove());
+        }
+      }
+
+      // 1b. Swap <main> content seamlessly
       currentMain.replaceWith(newMain);
 
       // 1b. Synchronize page-specific styles from newDoc
@@ -679,6 +688,11 @@
   };
 
   function initAll() {
+    const isCurrentHome = (window.location.pathname === '/' || window.location.pathname === '' || window.location.pathname === '/index.html');
+    if (!isCurrentHome) {
+      document.querySelectorAll('#heroSection, .invoice-hero-section').forEach(el => el.remove());
+    }
+
     syncHeaderActiveLinks(window.location.pathname);
     initMobileNav();
     initNavDropdowns();

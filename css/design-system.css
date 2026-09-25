@@ -6463,9 +6463,10 @@ td.amount-col,
    HOMEPAGE PURPOSE-DRIVEN HERO SECTION (PHASES 1, 2, 3)
    ========================================================================== */
 .invoice-hero-section {
+  grid-column: 1 / -1;
   width: 100%;
   max-width: 980px;
-  margin: 12px auto 28px;
+  margin: 0 auto;
   padding: 0 16px;
   text-align: center;
 }

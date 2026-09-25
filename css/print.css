@@ -12,6 +12,8 @@
   /* Hide all UI shell, navbars, sidebars, buttons, and footers */
   #mainHeader,
   #mainFooter,
+  #heroSection,
+  .invoice-hero-section,
   .site-header,
   .site-footer,
   .navbar-saas,
