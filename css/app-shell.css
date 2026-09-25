@@ -38,7 +38,7 @@ body.saas-body {
   min-height: 100vh;
   background-color: var(--shell-bg);
   color: var(--shell-text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   overflow-x: hidden;
   position: relative;
 }
@@ -140,14 +140,18 @@ body.saas-body {
   top: 0;
   z-index: 90;
   height: 60px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 28px;
   width: 100%;
   box-sizing: border-box;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .saas-topbar-left {
@@ -1120,22 +1124,24 @@ body.saas-body {
   color: #ffffff !important;
   font-size: 0.875rem;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #047857;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
-  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  background: linear-gradient(180deg, #059669 0%, #047857 100%);
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2), 0 2px 4px rgba(5, 150, 105, 0.1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-dash-primary:hover {
-  background: #047857;
-  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);
+  background: linear-gradient(180deg, #047857 0%, #065f46 100%);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.28);
   color: #ffffff !important;
+  transform: translateY(-1px);
 }
 
 .btn-dash-primary:active {
-  transform: translateY(1px);
+  transform: scale(0.98);
 }
 
 .btn-dash-secondary {
@@ -1149,17 +1155,24 @@ body.saas-body {
   color: #334155;
   font-size: 0.875rem;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #e2e8f0;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-dash-secondary:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
   color: #0f172a;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.05);
+}
+
+.btn-dash-secondary:active {
+  transform: scale(0.98);
 }
 
 /* 2. Top 4-Card Consolidated KPI Row */
@@ -1172,23 +1185,46 @@ body.saas-body {
 
 .dash-kpi-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 18px 20px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
+  position: relative;
+  overflow: hidden;
 }
 
+.dash-kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+.dash-kpi-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.dash-kpi-card:nth-child(2)::before { background: linear-gradient(90deg, #10b981, #34d399); }
+.dash-kpi-card:nth-child(3)::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.dash-kpi-card:nth-child(4)::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+
 .dash-kpi-card:hover {
+  transform: translateY(-3px);
   border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+}
+
+.dash-kpi-card:hover::before {
+  opacity: 1;
 }
 
 .kpi-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .kpi-label {
@@ -1200,12 +1236,17 @@ body.saas-body {
 }
 
 .kpi-icon-wrap {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dash-kpi-card:hover .kpi-icon-wrap {
+  transform: scale(1.08);
 }
 
 .kpi-icon-wrap.blue { background: #eff6ff; color: #2563eb; }
@@ -1214,11 +1255,12 @@ body.saas-body {
 .kpi-icon-wrap.rose { background: #fef2f2; color: #dc2626; }
 
 .kpi-val {
-  font-size: 1.55rem;
+  font-size: 1.65rem;
   font-weight: 800;
   color: #0f172a;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
 }
 
 .kpi-val.emerald-val { color: #059669; }
@@ -1228,7 +1270,7 @@ body.saas-body {
 .kpi-subtext {
   font-size: 0.8125rem;
   color: #64748b;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 /* 3. Compact Quick Actions Bar */
@@ -1243,24 +1285,31 @@ body.saas-body {
 .quick-action-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 14px;
-  min-height: 38px;
+  gap: 8px;
+  padding: 9px 16px;
+  min-height: 40px;
   background: #ffffff;
   color: #475569;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.8125rem;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
 }
 
 .quick-action-pill:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
   color: #0f172a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px -2px rgba(15, 23, 42, 0.06);
+}
+
+.quick-action-pill:active {
+  transform: scale(0.975);
 }
 
 .quick-action-pill.primary {
@@ -1295,10 +1344,16 @@ body.saas-body {
 /* 5. General Widget Card */
 .dash-widget-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 20px 22px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dash-widget-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.05);
 }
 
 .dash-widget-header {
@@ -1698,25 +1753,36 @@ body.saas-body {
 /* Clean Unified Dashboard Empty State for Invoices */
 .dash-invoices-empty-box {
   text-align: center;
-  padding: 38px 20px;
+  padding: 42px 24px;
   background: #f8fafc;
   border: 1px dashed #cbd5e1;
-  border-radius: 12px;
+  border-radius: 14px;
   margin: 4px 0;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dash-invoices-empty-box:hover {
+  border-color: #94a3b8;
+  background: #f1f5f9;
 }
 
 .empty-icon-ring {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #10b981;
+  color: #059669;
   margin-bottom: 14px;
+  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dash-invoices-empty-box:hover .empty-icon-ring {
+  transform: scale(1.06);
 }
 
 .empty-box-title {

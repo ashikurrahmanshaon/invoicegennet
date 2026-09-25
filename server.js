@@ -1032,22 +1032,18 @@ const requestHandler = async (req, res) => {
   // GET /api/files - List user's saved documents with filters and search
   if (pathname === '/api/files' && req.method === 'GET') {
     const session = getAuthSession(req);
-    if (!session) {
-      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
-    }
+    const userId = session ? session.user_id : 'guest';
     const search = parsedUrl.searchParams.get('search') || '';
     const fileType = parsedUrl.searchParams.get('fileType') || 'all';
     const sort = parsedUrl.searchParams.get('sort') || 'newest';
-    const files = db.listFiles(session.user_id, { search, fileType, sort });
-    return sendJson(res, 200, { success: true, files });
+    const files = db.listFiles(userId, { search, fileType, sort });
+    return sendJson(res, 200, { success: true, files: files || [] });
   }
 
   // POST /api/files - Save a generated or uploaded file to user's Cloud Storage
   if (pathname === '/api/files' && req.method === 'POST') {
     const session = getAuthSession(req);
-    if (!session) {
-      return sendJson(res, 401, { success: false, error: 'Authentication required to save files to cloud.' });
-    }
+    const userId = session ? session.user_id : 'guest';
     try {
       const body = await parseJsonBody(req);
       const fileName = body.fileName || body.name;
@@ -1073,7 +1069,7 @@ const requestHandler = async (req, res) => {
 
       fs.writeFileSync(targetDiskPath, buffer);
 
-      const fileRecord = db.saveFileRecord(session.user_id, {
+      const fileRecord = db.saveFileRecord(userId, {
         fileName,
         fileType: fileType || 'document',
         mimeType: mimeType || 'application/octet-stream',
@@ -1092,12 +1088,13 @@ const requestHandler = async (req, res) => {
   // GET /api/files/:id/download - Stream private cloud file to authorized owner
   if (pathname.startsWith('/api/files/') && pathname.endsWith('/download') && req.method === 'GET') {
     const session = getAuthSession(req);
-    if (!session) {
-      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
-    }
+    const userId = session ? session.user_id : 'guest';
     const parts = pathname.split('/');
     const fileId = parts[3];
-    const file = db.getFile(session.user_id, fileId);
+    let file = db.getFile(userId, fileId);
+    if (!file && session) {
+      file = db.getFile('guest', fileId);
+    }
     if (!file) {
       return sendJson(res, 404, { success: false, error: 'File not found or access denied.' });
     }
@@ -1121,12 +1118,10 @@ const requestHandler = async (req, res) => {
   // DELETE /api/files/:id - Remove file from storage and database
   if (pathname.startsWith('/api/files/') && !pathname.endsWith('/download') && !pathname.endsWith('/rename') && req.method === 'DELETE') {
     const session = getAuthSession(req);
-    if (!session) {
-      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
-    }
+    const userId = session ? session.user_id : 'guest';
     const fileId = pathname.split('/')[3];
     try {
-      db.deleteFile(session.user_id, fileId);
+      db.deleteFile(userId, fileId);
       return sendJson(res, 200, { success: true, message: 'File deleted successfully.' });
     } catch (err) {
       return sendJson(res, 404, { success: false, error: err.message || 'File not found or unauthorized.' });
@@ -1136,9 +1131,7 @@ const requestHandler = async (req, res) => {
   // PATCH/POST /api/files/:id/rename - Rename file
   if (pathname.startsWith('/api/files/') && pathname.endsWith('/rename') && (req.method === 'PATCH' || req.method === 'POST')) {
     const session = getAuthSession(req);
-    if (!session) {
-      return sendJson(res, 401, { success: false, error: 'Authentication required.' });
-    }
+    const userId = session ? session.user_id : 'guest';
     const fileId = pathname.split('/')[3];
     try {
       const body = await parseJsonBody(req);
@@ -1146,7 +1139,7 @@ const requestHandler = async (req, res) => {
       if (!newName) {
         return sendJson(res, 400, { success: false, error: 'New file name is required.' });
       }
-      const updated = db.renameFile(session.user_id, fileId, newName);
+      const updated = db.renameFile(userId, fileId, newName);
       return sendJson(res, 200, { success: true, message: 'File renamed successfully.', file: updated });
     } catch (err) {
       return sendJson(res, 400, { success: false, error: err.message || 'Failed to rename file.' });
@@ -1412,14 +1405,62 @@ const requestHandler = async (req, res) => {
     });
   }
 
-  // Normalize trailing slash: 301 redirect /path/ to /path (except root /)
-  if (pathname.length > 1 && pathname.endsWith('/')) {
+  // Normalize trailing slash: 301 redirect /path/ to /path (except root / and /tools/)
+  if (pathname.length > 1 && pathname.endsWith('/') && pathname !== '/tools/') {
     const cleanPath = pathname.slice(0, -1);
     res.writeHead(301, { 'Location': cleanPath + (parsedUrl.search || '') });
     return res.end();
   }
 
-  // 301 Permanent Redirect for legacy .html requests (e.g. /signup.html -> /signup, /index.html -> /)
+  // ========================================================================
+  // 1-HOP 301 PERMANENT REDIRECTS FOR LEGACY TOOL URLS (Avoid redirect chains)
+  // ========================================================================
+  const LEGACY_TOOL_REDIRECTS = {
+    '/pdf-to-jpg': '/tools/pdf-to-jpg',
+    '/pdf-to-jpg.html': '/tools/pdf-to-jpg',
+    '/jpg-to-pdf': '/tools/jpg-to-pdf',
+    '/jpg-to-pdf.html': '/tools/jpg-to-pdf',
+    '/pdf-merger': '/tools/pdf-merger',
+    '/pdf-merger.html': '/tools/pdf-merger',
+    '/pdf-splitter': '/tools/pdf-splitter',
+    '/pdf-splitter.html': '/tools/pdf-splitter',
+    '/image-compressor': '/tools/image-compressor',
+    '/image-compressor.html': '/tools/image-compressor',
+    '/tax-calculator': '/tools/tax-calculator',
+    '/tax-calculator.html': '/tools/tax-calculator',
+    '/payment-calculator': '/tools/payment-calculator',
+    '/payment-calculator.html': '/tools/payment-calculator',
+    '/due-date-calculator': '/tools/due-date-calculator',
+    '/due-date-calculator.html': '/tools/due-date-calculator',
+    '/currency-converter': '/tools/currency-converter',
+    '/currency-converter.html': '/tools/currency-converter',
+    '/pdf-invoice-generator': '/tools/pdf-invoice-generator',
+    '/pdf-invoice-generator.html': '/tools/pdf-invoice-generator',
+    '/invoice-generator-for-freelancers': '/tools/freelancer-invoice',
+    '/invoice-generator-for-freelancers.html': '/tools/freelancer-invoice',
+    '/gst-tax-invoice': '/tools/gst-tax-invoice',
+    '/gst-tax-invoice.html': '/tools/gst-tax-invoice',
+    '/gst-invoice-generator': '/tools/gst-tax-invoice',
+    '/gst-invoice-generator.html': '/tools/gst-tax-invoice',
+    '/invoice-number-generator': '/tools/invoice-number-generator',
+    '/invoice-number-generator.html': '/tools/invoice-number-generator',
+    '/payment-link': '/tools/payment-link',
+    '/payment-link.html': '/tools/payment-link',
+    '/free-invoice-generator': '/tools/invoice-generator',
+    '/free-invoice-generator.html': '/tools/invoice-generator',
+    '/cloud-file-storage': '/tools/cloud-file-storage',
+    '/cloud-file-storage.html': '/tools/cloud-file-storage'
+  };
+
+  if (LEGACY_TOOL_REDIRECTS[pathname]) {
+    res.writeHead(301, {
+      'Location': LEGACY_TOOL_REDIRECTS[pathname],
+      'Cache-Control': 'public, max-age=31536000'
+    });
+    return res.end();
+  }
+
+  // 301 Permanent Redirect for generic legacy .html requests (e.g. /about.html -> /about, /index.html -> /)
   if (pathname.endsWith('.html')) {
     const cleanPath = pathname === '/index.html' ? '/' : pathname.slice(0, -5);
     res.writeHead(301, { 'Location': cleanPath + (parsedUrl.search || '') });
@@ -1427,32 +1468,30 @@ const requestHandler = async (req, res) => {
   }
 
   // ========================================================================
-  // PROTECTED / UNAUTHENTICATED ROUTE REDIRECTION
+  // ROUTE REDIRECTION FOR REMOVED PAGES (Sign Up, Login, Dashboard, Pricing)
   // ========================================================================
-  const session = getAuthSession(req);
+  const removedRoutes = [
+    '/login',
+    '/signup',
+    '/dashboard',
+    '/pricing',
+    '/billing',
+    '/invoices',
+    '/clients',
+    '/client-details',
+    '/profile',
+    '/business-profile',
+    '/payment-methods',
+    '/payment-history',
+    '/settings',
+    '/create-invoice'
+  ];
 
-  // Public auth routes: redirect to dashboard if already authenticated on server
-  const authRoutes = ['/login', '/signup'];
-  if (authRoutes.includes(pathname) && session) {
-    res.writeHead(302, { 'Location': '/dashboard' });
+  if (removedRoutes.includes(pathname)) {
+    res.writeHead(302, { 'Location': '/' });
     return res.end();
   }
 
-  // Private application routes: redirect to login if unauthenticated
-  const protectedRoutes = ['/dashboard', '/create-invoice', '/invoices', '/clients', '/client-details'];
-  if (protectedRoutes.includes(pathname) && !session) {
-    res.writeHead(302, { 'Location': '/login?redirect=' + encodeURIComponent(pathname + (parsedUrl.search || '')) });
-    return res.end();
-  }
-
-  // If user visits deprecated /billing route, redirect to /dashboard
-  if (pathname === '/billing') {
-    res.writeHead(302, { 'Location': '/dashboard' });
-    return res.end();
-  }
-
-  // ========================================================================
-  // STATIC ASSET SERVING & CLEAN URL ROUTING
   // ========================================================================
   const TOOL_ROUTE_MAP = {
     // Public Company & Resource Routes
@@ -1478,33 +1517,34 @@ const requestHandler = async (req, res) => {
     '/stripe-vs-paypal': 'stripe-vs-paypal.html',
     '/features': 'features.html',
     '/templates': 'templates.html',
-    '/free-invoice-generator': 'free-invoice-generator.html',
     '/how-to-make-an-invoice': 'how-to-make-an-invoice.html',
     '/best-invoice-generator': 'best-invoice-generator.html',
     '/login': 'login.html',
     '/signup': 'signup.html',
-    '/payments': 'payments.html',
 
-    // Tools & Suite Routes
+    // 17 Public Tools - Canonical URLs (/tools/<slug>)
     '/tools': 'tools.html',
-    '/files': 'files.html',
-    '/cloud': 'files.html',
-    '/tools/invoice-generator': 'index.html',
+    '/tools/invoice-generator': 'free-invoice-generator.html',
     '/tools/pdf-invoice-generator': 'pdf-invoice-generator.html',
-    '/tools/gst-tax-invoice': 'gst-tax-invoice.html',
     '/tools/freelancer-invoice': 'invoice-generator-for-freelancers.html',
+    '/tools/gst-tax-invoice': 'gst-tax-invoice.html',
     '/tools/invoice-number-generator': 'invoice-number-generator.html',
     '/tools/pdf-to-jpg': 'pdf-to-jpg.html',
     '/tools/jpg-to-pdf': 'jpg-to-pdf.html',
-    '/tools/image-compressor': 'image-compressor.html',
     '/tools/pdf-merger': 'pdf-merger.html',
     '/tools/pdf-splitter': 'pdf-splitter.html',
+    '/tools/image-compressor': 'image-compressor.html',
     '/tools/tax-calculator': 'tax-calculator.html',
     '/tools/payment-calculator': 'payment-calculator.html',
     '/tools/due-date-calculator': 'due-date-calculator.html',
     '/tools/currency-converter': 'currency-converter.html',
     '/tools/online-payments': 'payments.html',
     '/tools/payment-link': 'payment-link.html',
+    '/tools/cloud-file-storage': 'cloud-file-storage.html',
+
+    // Private Files & Cloud App (noindex protected)
+    '/files': 'files.html',
+    '/cloud': 'files.html',
 
     // Authenticated SaaS application shell routes
     '/dashboard': 'dashboard.html',
@@ -1521,12 +1561,16 @@ const requestHandler = async (req, res) => {
   };
 
   let assetPath = pathname;
-  if (assetPath.startsWith('/tools/js/') || assetPath.startsWith('/tools/css/') || assetPath.startsWith('/tools/assets/')) {
-    assetPath = assetPath.replace('/tools', '');
+  if (assetPath.startsWith('/tools/')) {
+    const stripped = assetPath.replace(/^\/tools\//, '/');
+    const possibleAsset = path.join(__dirname, stripped);
+    try {
+      if (fs.existsSync(possibleAsset) && fs.statSync(possibleAsset).isFile()) {
+        assetPath = stripped;
+      }
+    } catch (e) {}
   }
-  let targetFilename = (pathname === '/security' && session)
-    ? 'dashboard.html'
-    : (TOOL_ROUTE_MAP[pathname] || (pathname === '/' ? 'index.html' : assetPath));
+  let targetFilename = TOOL_ROUTE_MAP[pathname] || (pathname === '/' ? 'index.html' : assetPath);
   let filePath = path.join(__dirname, targetFilename);
 
   // Security: Prevent directory traversal

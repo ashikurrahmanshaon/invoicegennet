@@ -4,14 +4,15 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   SELF-HOSTED FONTS & ZERO-SHIFT STABILIZATION
-   Eliminates FOUT, FOIT, and Layout Shifts from Frame 0
+   SUPER SMOOTH TYPOGRAPHY & FONT SYSTEM (Google Fonts + Self-Hosted Fallbacks)
    -------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @font-face {
   font-family: 'Plus Jakarta Sans';
   font-style: normal;
   font-weight: 200 800;
-  font-display: optional;
+  font-display: swap;
   src: url('/assets/fonts/plus-jakarta-sans-variable.woff2') format('woff2');
 }
 
@@ -19,7 +20,7 @@
   font-family: 'JetBrains Mono';
   font-style: normal;
   font-weight: 400 700;
-  font-display: optional;
+  font-display: swap;
   src: url('/assets/fonts/jetbrains-mono-latin.woff2') format('woff2');
 }
 
@@ -260,16 +261,65 @@ html.user-logged-in #btnMobileSignup {
   display: none !important;
 }
 
-@media (min-width: 769px) {
-  html.user-logged-in #btnHeaderDashboard {
-    display: inline-flex !important;
-  }
+html.user-logged-in #btnHeaderDashboard {
+  display: inline-flex !important;
 }
-@media (max-width: 768px) {
-  #btnHeaderDashboard,
-  html.user-logged-in #btnHeaderDashboard {
-    display: none !important;
-  }
+
+/* Logged-In Top Greeting & Cloud Sync Notice Banner */
+.user-logged-in-banner {
+  background: linear-gradient(90deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-bottom: 1px solid #a7f3d0;
+  padding: 8px 0;
+  font-size: 0.84rem;
+  color: #065f46;
+  position: relative;
+  z-index: 100;
+  box-shadow: 0 1px 2px rgba(16, 185, 129, 0.05);
+}
+
+.user-auth-banner-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.user-auth-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  margin-right: 8px;
+  flex-shrink: 0;
+  animation: pulseGreenDot 2.2s infinite ease-in-out;
+}
+
+@keyframes pulseGreenDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.75; }
+}
+
+.btn-banner-dashboard {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 13px;
+  background: #059669;
+  color: #ffffff !important;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 7px;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.btn-banner-dashboard:hover {
+  background: #047857;
+  transform: translateY(-1px);
 }
 
 /* Page Transition (Subtle opacity 0.98 -> 1, translateY 3px -> 0 over 160ms) */
@@ -1204,6 +1254,173 @@ textarea:disabled {
   line-height: 1.45;
 }
 
+/* Tool Breadcrumbs */
+.tool-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+.tool-breadcrumb a {
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.tool-breadcrumb a:hover {
+  color: #059669;
+}
+.tool-breadcrumb .breadcrumb-sep {
+  color: #cbd5e1;
+  font-size: 0.75rem;
+}
+.tool-breadcrumb .breadcrumb-current {
+  color: #059669;
+}
+
+/* Tool Landing Content Sections */
+.tool-landing-section {
+  margin-top: 48px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border-light, #e2e8f0);
+}
+
+.tool-landing-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.tool-landing-subhead {
+  font-size: 0.9375rem;
+  color: #64748b;
+  max-width: 720px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Step-by-Step Grid */
+.tool-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.tool-step-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px 20px;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tool-step-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.tool-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #059669;
+  font-weight: 800;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.tool-step-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.tool-step-desc {
+  font-size: 0.8125rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Feature & Benefit Grid */
+.tool-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.tool-feature-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.tool-feature-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #059669;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.tool-feature-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.tool-feature-desc {
+  font-size: 0.8125rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Tool FAQ Grid */
+.tool-faq-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.tool-faq-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.tool-faq-q {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.tool-faq-a {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+}
+
 .calc-row {
   display: flex;
   justify-content: space-between;
@@ -1693,6 +1910,45 @@ textarea:disabled {
   background-color: #f0fdf4;
   border-color: #059669;
   box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
+}
+
+/* Header Action CTA Button */
+.btn-new-invoice-header {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff !important;
+  border: 1px solid #047857;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(5, 150, 105, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-new-invoice-header:hover {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  border-color: #065f46;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.btn-new-invoice-header:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
+}
+
+.btn-new-invoice-header svg {
+  flex-shrink: 0;
 }
 
 .user-account-dropdown {
@@ -3477,13 +3733,17 @@ textarea:disabled {
    Covers 320px to 768px: Drawer, Header, Form Controls, Modals, Toasts
    ========================================================================== */
 
-/* 1. Mobile Header: [Hamburger] [Invoice-Gen.net Logo] [Avatar] */
+/* 1. Mobile Header: Clean Modern Flex Layout [Brand Logo] ... [Language] [Hamburger] */
 @media (max-width: 768px) {
   .navbar-saas {
     height: 58px !important;
     position: sticky !important;
     top: 0 !important;
     z-index: 999 !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
   }
   .navbar-saas .container,
   .navbar-saas .navbar-container {
@@ -3503,44 +3763,18 @@ textarea:disabled {
   .nav-actions-wrap .btn-header-search,
   .nav-actions-wrap .btn-header-notif,
   .nav-actions-wrap .header-search-wrap,
+  .nav-actions-wrap #headerNotifWrapper,
   .nav-actions-wrap .header-auth-dashboard,
   .nav-actions-wrap .user-account-dropdown,
-  .nav-actions-wrap #headerNotifWrapper,
-  .nav-actions-wrap .lang-switcher-container {
+  .btn-mobile-avatar {
     display: none !important;
   }
-  /* Left Hamburger (Touch Target >= 44px) */
-  .btn-mobile-nav-toggle {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: var(--touch-target-min, 44px) !important;
-    height: var(--touch-target-min, 44px) !important;
-    min-width: var(--touch-target-min, 44px) !important;
-    min-height: var(--touch-target-min, 44px) !important;
-    padding: 0 !important;
-    border: 1px solid var(--border-light, #e2e8f0) !important;
-    border-radius: 10px !important;
-    background: #ffffff !important;
-    color: var(--text-main, #0f172a) !important;
-    cursor: pointer !important;
-    flex-shrink: 0 !important;
-    order: 1 !important;
-    margin: 0 !important;
-    transition: background 0.15s ease, border-color 0.15s ease !important;
-  }
-  .btn-mobile-nav-toggle:hover,
-  .btn-mobile-nav-toggle:active {
-    background: #f8fafc !important;
-    border-color: #cbd5e1 !important;
-  }
-  /* Center Crisp Brand Logo */
+  /* Brand Logo & Name (Normal Left Alignment) */
   .navbar-saas .brand-wrapper {
-    order: 2 !important;
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    display: flex !important;
+    order: 1 !important;
+    position: static !important;
+    transform: none !important;
+    display: inline-flex !important;
     align-items: center !important;
     gap: 8px !important;
     text-decoration: none !important;
@@ -3548,15 +3782,15 @@ textarea:disabled {
     pointer-events: auto !important;
   }
   .navbar-saas .brand-logo-frame {
-    width: 30px !important;
-    height: 30px !important;
+    width: 32px !important;
+    height: 32px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
   .navbar-saas .brand-icon-svg {
-    width: 30px !important;
-    height: 30px !important;
+    width: 32px !important;
+    height: 32px !important;
   }
   .navbar-saas .brand-name {
     font-size: 1.125rem !important;
@@ -3565,43 +3799,47 @@ textarea:disabled {
     color: var(--text-main, #0f172a) !important;
     white-space: nowrap !important;
   }
-  /* Right Avatar / User Touch Target */
+  /* Right Actions Wrap */
   .nav-actions-wrap {
-    order: 3 !important;
-    display: flex !important;
+    order: 2 !important;
+    display: inline-flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
+    gap: 8px !important;
     margin-left: auto !important;
     flex-shrink: 0 !important;
-    min-width: 44px !important;
   }
-  .btn-mobile-avatar {
+  .nav-actions-wrap .lang-switcher-container {
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+  /* Right Hamburger Toggle */
+  .btn-mobile-nav-toggle {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: var(--touch-target-min, 44px) !important;
-    height: var(--touch-target-min, 44px) !important;
-    min-width: var(--touch-target-min, 44px) !important;
-    min-height: var(--touch-target-min, 44px) !important;
-    border-radius: 50% !important;
-    background: #f8fafc !important;
-    border: 1px solid var(--border-light, #e2e8f0) !important;
-    color: #475569 !important;
-    text-decoration: none !important;
-    cursor: pointer !important;
+    width: var(--touch-target-min, 40px) !important;
+    height: var(--touch-target-min, 40px) !important;
+    min-width: var(--touch-target-min, 40px) !important;
+    min-height: var(--touch-target-min, 40px) !important;
     padding: 0 !important;
+    border: 1px solid var(--border-light, #e2e8f0) !important;
+    border-radius: 8px !important;
+    background: #ffffff !important;
+    color: var(--text-main, #0f172a) !important;
+    cursor: pointer !important;
     flex-shrink: 0 !important;
-    transition: all 0.15s ease !important;
+    order: 2 !important;
+    margin: 0 !important;
+    transition: background 0.15s ease, border-color 0.15s ease !important;
   }
-  .btn-mobile-avatar:active {
-    background: #f1f5f9 !important;
-    transform: scale(0.96) !important;
+  .btn-mobile-nav-toggle:hover,
+  .btn-mobile-nav-toggle:active {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
   }
-  .btn-user-avatar {
-    width: var(--touch-target-min, 44px) !important;
-    height: var(--touch-target-min, 44px) !important;
-    min-width: var(--touch-target-min, 44px) !important;
-    min-height: var(--touch-target-min, 44px) !important;
+  .btn-new-invoice-header {
+    display: none !important;
   }
 }
 
@@ -6127,6 +6365,18 @@ td.amount-col,
 
 .workspace-panel {
   display: block;
+  animation: panelFadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes panelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dash-welcome-content {

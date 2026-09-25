@@ -315,6 +315,18 @@ for (const sql of clientMigrations) {
   try { db.exec(sql); } catch (e) {}
 }
 
+// Ensure a default guest user exists so guest file storage and tool operations work seamlessly without authentication
+try {
+  const guestUser = db.prepare('SELECT id FROM users WHERE id = ?').get('guest');
+  if (!guestUser) {
+    const now = new Date().toISOString();
+    db.prepare(`
+      INSERT INTO users (id, name, email, password_hash, salt, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `).run('guest', 'Guest User', 'guest@invoice-gen.net', 'none', 'none', now, now);
+  }
+} catch (e) {}
+
 // --------------------------------------------------------------------------
 // PASSWORD & AUTH UTILITIES
 // --------------------------------------------------------------------------

@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /tools/
+Allow: /blog/
+Allow: /guides/
+Allow: /about
+Allow: /contact
+Allow: /help
 
 # Disallow private user routes and internal endpoints
 Disallow: /dashboard
@@ -18,4 +24,3 @@ Disallow: /api/
 Disallow: /admin
 
 Sitemap: https://invoice-gen.net/sitemap.xml
-

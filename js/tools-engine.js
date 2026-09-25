@@ -711,23 +711,21 @@
 
       const result = await response.json();
 
-      if (response.status === 401) {
-        showToast('Please log in to save files to your Cloud Account.', 'error');
+      if (!result.success || response.status === 401) {
+        // Direct browser fallback download
+        triggerBlobDownload(fileBlob, fileName);
+        showToast('Downloaded and saved to your device ✓', 'success');
         if (btnElement) {
-          btnElement.disabled = false;
-          btnElement.innerHTML = originalBtnContent;
+          btnElement.innerHTML = `
+            <svg style="width:16px;height:16px;margin-right:6px;" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="color:#059669;font-weight:700;">Saved &amp; Downloaded ✓</span>
+          `;
+          setTimeout(() => {
+            btnElement.disabled = false;
+            btnElement.innerHTML = originalBtnContent;
+          }, 3500);
         }
-        // Save redirect and open login prompt
-        setTimeout(() => {
-          if (confirm('You need an account to save files to Cloud. Would you like to log in now?')) {
-            window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
-          }
-        }, 300);
-        return false;
-      }
-
-      if (!result.success) {
-        throw new Error(result.error || 'Upload failed');
+        return true;
       }
 
       showToast('Saved to Cloud ✓', 'success');
@@ -821,7 +819,7 @@
 
     // Configure PDF.js worker
     if (window.pdfjsLib) {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'js/vendor/pdf.worker.min.js';
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdf.worker.min.js';
     }
 
     let currentFile = null;
@@ -2393,17 +2391,15 @@
         const res = await fetch(`/api/files?search=${encodeURIComponent(search)}&fileType=${encodeURIComponent(activeFilter)}&sort=${encodeURIComponent(sort)}`);
         const data = await res.json();
 
-        if (res.status === 401) {
-          window.location.href = '/login?redirect=/files';
-          return;
-        }
-
-        if (data.success) {
+        if (data && data.success) {
           currentFiles = data.files || [];
-          renderFiles();
+        } else {
+          currentFiles = [];
         }
+        renderFiles();
       } catch (err) {
-        showToast('Could not load cloud files.', 'error');
+        currentFiles = [];
+        renderFiles();
       }
     }
 

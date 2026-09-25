@@ -73,12 +73,8 @@ window.initInvoiceEditorPage = function () {
   const invoicePaper = document.getElementById('invoicePaper');
 
   // DOM Elements - Header & Mobile Navigation
-  const btnHeaderLogin = document.getElementById('btnHeaderLogin');
-  const btnHeaderSignup = document.getElementById('btnHeaderSignup');
   const btnMobileNavToggle = document.getElementById('btnMobileNavToggle');
   const mobileNavDrawer = document.getElementById('mobileNavDrawer');
-  const btnMobileLogin = document.getElementById('btnMobileLogin');
-  const btnMobileSignup = document.getElementById('btnMobileSignup');
 
   // DOM Elements - Sidebar Controls
   const btnDownloadPDF = document.getElementById('btnDownloadPDF');
@@ -1150,19 +1146,8 @@ window.initInvoiceEditorPage = function () {
 
   // Mobile Navigation Drawer Toggle is handled universally by instant-nav.js
 
-  if (btnMobileLogin) {
-    btnMobileLogin.addEventListener('click', () => {
-      if (mobileNavDrawer) mobileNavDrawer.classList.remove('active');
-      openAuthModal('login');
-    });
-  }
-
-  if (btnMobileSignup) {
-    btnMobileSignup.addEventListener('click', () => {
-      if (mobileNavDrawer) mobileNavDrawer.classList.remove('active');
-      openAuthModal('signup');
-    });
-  }
+  // Mobile navigation login and signup links navigate directly to dedicated auth pages
+  // (btnMobileLogin and btnMobileSignup link directly to /login and /signup)
 
   // ---------------------------------------------------------------------------
   // 9. Auth Modal (Log In / Sign Up Free)
@@ -1758,7 +1743,7 @@ window.initInvoiceEditorPage = function () {
       });
     }
     const btnHeroCreate = document.getElementById('btnHeroCreateInvoice');
-    if (btnHeroCreate) {
+    if (btnHeroCreate && !window.switchWorkspaceTab) {
       btnHeroCreate.addEventListener('click', (e) => {
         e.preventDefault();
         const paper = document.getElementById('invoicePaper');
@@ -1771,7 +1756,9 @@ window.initInvoiceEditorPage = function () {
         }
       });
     }
-    document.body.classList.add('has-mobile-sticky-actions');
+    if (!document.body.classList.contains('saas-body')) {
+      document.body.classList.add('has-mobile-sticky-actions');
+    }
   } catch (e) {
     console.error('Invoice editor initialization error:', e);
   }

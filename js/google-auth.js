@@ -22,18 +22,11 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
     }
   } catch (e) {}
 
-  // Synchronous pre-auth lock on document element
-  if (initialUser && initialSessionId) {
-    try {
-      document.documentElement.classList.add('user-logged-in');
-      document.documentElement.classList.remove('auth-loading');
-    } catch (e) {}
-  } else {
-    try {
-      document.documentElement.classList.remove('user-logged-in');
-      document.documentElement.classList.add('auth-loading');
-    } catch (e) {}
-  }
+  // Clear any auth locks immediately
+  try {
+    document.documentElement.classList.remove('auth-loading');
+    document.documentElement.classList.remove('user-logged-in');
+  } catch (e) {}
 
   let tokenClient = null;
 
@@ -272,268 +265,51 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
       }
     },
 
-    // Header Renderer (Strictly zero layout shift & consistent sizing)
+    // Header Renderer - Sign up, login, dashboard completely removed from site
     renderHeader: function () {
-      const btnLogin = document.getElementById('btnHeaderLogin');
-      const btnSignup = document.getElementById('btnHeaderSignup');
-      let btnDashboard = document.getElementById('btnHeaderDashboard');
-      let accountDropdown = document.getElementById('headerUserAccountDropdown');
-      let searchBtn = document.getElementById('btnHeaderSearch');
-      let notifWrapper = document.getElementById('headerNotifWrapper');
+      const toRemove = [
+        'btnHeaderLogin',
+        'btnHeaderSignup',
+        'btnHeaderDashboard',
+        'headerUserAccountDropdown',
+        'headerNotifWrapper',
+        'headerNotifPopover',
+        'userAuthBanner',
+        'btnHeaderSearch',
+        'mobileNavAuthArea',
+        'mobileHeaderAvatarBtn',
+        'mobNavLogout',
+        'btnMobileLogin',
+        'btnMobileSignup'
+      ];
+      toRemove.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+      });
 
-      if (this.state === 'AUTHENTICATED' && this.user) {
-        if (btnLogin) btnLogin.style.display = 'none';
-        if (btnSignup) btnSignup.style.display = 'none';
+      document.querySelectorAll('.mobile-nav-auth').forEach(el => el.remove());
+      document.querySelectorAll('.user-account-dropdown').forEach(el => el.remove());
+      document.querySelectorAll('#headerNotifWrapper').forEach(el => el.remove());
+      document.querySelectorAll('.user-logged-in-banner').forEach(el => el.remove());
 
-        // 1. Search button
-        if (!searchBtn && btnSignup && btnSignup.parentNode) {
-          const searchDiv = document.createElement('div');
-          searchDiv.innerHTML = `
-            <button type="button" class="btn-header-search" id="btnHeaderSearch" aria-label="Global search (Ctrl+K)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <span>Search...</span>
-              <span class="kbd-shortcut">⌘K</span>
-            </button>
-          `;
-          searchBtn = searchDiv.firstElementChild;
-          btnSignup.parentNode.insertBefore(searchBtn, btnSignup);
-          searchBtn.onclick = () => window.openGlobalSearch();
-        } else if (searchBtn) {
-          searchBtn.style.display = 'inline-flex';
-        }
-
-        // 2. Notifications button & popover
-        if (!notifWrapper && btnSignup && btnSignup.parentNode) {
-          const notifDiv = document.createElement('div');
-          notifDiv.id = 'headerNotifWrapper';
-          notifDiv.style.position = 'relative';
-          notifDiv.innerHTML = `
-            <button type="button" class="btn-header-notif" id="btnHeaderNotif" aria-label="Notifications" title="Notifications">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-              <span class="notif-badge-pill" id="headerNotifBadge" style="display: none;">0</span>
-            </button>
-            <div class="notif-popover" id="headerNotifPopover">
-              <div class="notif-header">
-                <span class="notif-header-title">Notifications</span>
-                <button type="button" class="notif-header-action" id="btnMarkAllNotifsRead">Mark all read</button>
-              </div>
-              <div class="notif-list" id="headerNotifList">
-                <div class="notif-empty">Loading notifications...</div>
-              </div>
-            </div>
-          `;
-          notifWrapper = notifDiv;
-          btnSignup.parentNode.insertBefore(notifWrapper, btnSignup);
-
-          const notifBtn = document.getElementById('btnHeaderNotif');
-          const popover = document.getElementById('headerNotifPopover');
-          if (notifBtn && popover) {
-            notifBtn.onclick = (e) => {
-              e.stopPropagation();
-              const isOpen = popover.classList.toggle('active');
-              if (isOpen) window.loadHeaderNotifications();
-            };
-          }
-
-          const btnMarkAll = document.getElementById('btnMarkAllNotifsRead');
-          if (btnMarkAll) {
-            btnMarkAll.onclick = async (e) => {
-              e.stopPropagation();
-              await fetch('/api/notifications/read-all', { method: 'POST' });
-              window.loadHeaderNotifications();
-            };
-          }
-        } else if (notifWrapper) {
-          notifWrapper.style.display = 'block';
-        }
-
-        // 3. Dashboard Link
-        if (!btnDashboard) {
-          btnDashboard = document.createElement('a');
-          btnDashboard.id = 'btnHeaderDashboard';
-          btnDashboard.href = '/dashboard';
-          btnDashboard.className = 'header-auth-dashboard';
-          btnDashboard.textContent = 'Dashboard';
-          if (btnSignup && btnSignup.parentNode) {
-            btnSignup.parentNode.insertBefore(btnDashboard, btnSignup);
-          }
-        } else {
-          btnDashboard.style.display = 'inline-flex';
-        }
-
-        // 4. User Avatar & Account Menu
-        const firstName = this.user.name ? this.user.name.split(' ')[0] : 'User';
-        const initial = (firstName || 'U').charAt(0).toUpperCase();
-        const avatarHtml = this.user.avatar
-          ? `<img src="${this.user.avatar}" alt="${this.user.name}" class="user-avatar-img">`
-          : `<span class="user-avatar-placeholder">${initial}</span>`;
-
-        const dropdownHtml = `
-          <div class="user-account-dropdown" id="headerUserAccountDropdown">
-            <button type="button" class="btn-user-avatar" id="btnUserAccountToggle" aria-expanded="false" title="Account: ${this.user.name || ''} (${this.user.email || ''})">
-              ${avatarHtml}
-              <svg class="avatar-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="user-account-menu" id="userAccountMenu" role="menu">
-              <div class="user-menu-header">
-                <div class="user-menu-name">${this.user.name || 'User'}</div>
-                <div class="user-menu-email">${this.user.email || ''}</div>
-              </div>
-              <a href="/dashboard" class="user-menu-link" role="menuitem">
-                <span>Dashboard Overview</span>
-              </a>
-              <a href="/invoices" class="user-menu-link" role="menuitem">
-                <span>My Invoices</span>
-              </a>
-              <a href="/clients" class="user-menu-link" role="menuitem">
-                <span>Clients Directory</span>
-              </a>
-              <a href="/business-profile" class="user-menu-link" role="menuitem">
-                <span>Business Profile</span>
-              </a>
-              <a href="/settings" class="user-menu-link" role="menuitem">
-                <span>Account Settings</span>
-              </a>
-              <a href="/security" class="user-menu-link" role="menuitem">
-                <span>Security &amp; Password</span>
-              </a>
-              <a href="/help" class="user-menu-link" role="menuitem">
-                <span>Help &amp; Support</span>
-              </a>
-              <div class="user-menu-divider"></div>
-              <button type="button" class="user-menu-link user-menu-logout" id="btnLogoutHeader" role="menuitem">
-                <span>Log out</span>
-              </button>
-            </div>
-          </div>
-        `;
-
-        if (accountDropdown) {
-          accountDropdown.outerHTML = dropdownHtml;
-        } else if (btnSignup && btnSignup.parentNode) {
-          const tempDiv = document.createElement('div');
-          tempDiv.innerHTML = dropdownHtml.trim();
-          btnSignup.parentNode.insertBefore(tempDiv.firstChild, btnSignup.nextSibling);
-        }
-
-        const toggleBtn = document.getElementById('btnUserAccountToggle');
-        const menu = document.getElementById('userAccountMenu');
-        if (toggleBtn && menu) {
-          toggleBtn.onclick = (e) => {
-            e.stopPropagation();
-            const isOpen = menu.classList.toggle('active');
-            toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          };
-        }
-
-        const btnLogout = document.getElementById('btnLogoutHeader');
-        if (btnLogout) {
-          btnLogout.onclick = (e) => {
-            e.preventDefault();
-            Auth.logout();
-          };
-        }
-
-        // Mobile Avatar Button sync
-        const mobileAvatar = document.getElementById('mobileHeaderAvatarBtn');
-        if (mobileAvatar) {
-          mobileAvatar.href = '/dashboard#settings';
-          mobileAvatar.innerHTML = this.user.avatar
-            ? `<img src="${this.user.avatar}" alt="${this.user.name}" style="width:32px; height:32px; border-radius:50%; object-fit:cover;">`
-            : `<span style="width:32px; height:32px; border-radius:50%; background:#10b981; color:#ffffff; font-weight:700; font-size:0.875rem; display:flex; align-items:center; justify-content:center;">${initial}</span>`;
-        }
-
-        // Mobile Nav sync
-        const mobileAuth = document.querySelector('.mobile-nav-auth');
-        const mobNavLogout = document.getElementById('mobNavLogout');
-        if (mobNavLogout) mobNavLogout.style.display = 'flex';
-        if (mobileAuth) {
-          mobileAuth.innerHTML = `
-            <div style="padding: 12px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; width:100%; box-sizing:border-box;">
-              <div style="display:flex; align-items:center; gap:10px; padding-bottom:8px; border-bottom:1px solid #e2e8f0;">
-                <div style="width:36px; height:36px; border-radius:50%; background:#10b981; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.875rem;">${initial}</div>
-                <div style="overflow:hidden;">
-                  <div style="font-weight:700; font-size:0.875rem; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.user.name || 'User'}</div>
-                  <div style="font-size:0.75rem; color:#64748b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.user.email || ''}</div>
-                </div>
-              </div>
-              <div style="margin-top: 10px;">
-                <button type="button" class="btn btn-danger" id="btnMobileLogout" style="min-height:44px; height:44px; font-size:0.875rem; border-radius:8px; width:100%; justify-content:center;">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                  Log out
-                </button>
-              </div>
-            </div>
-          `;
-          const btnMobileLogout = document.getElementById('btnMobileLogout');
-          if (btnMobileLogout) {
-            btnMobileLogout.onclick = () => Auth.logout();
-          }
-        }
-
-        // Trigger notifications count
-        window.loadHeaderNotifications();
-      } else if (this.state === 'UNAUTHENTICATED') {
-        if (btnDashboard) btnDashboard.style.display = 'none';
-        if (accountDropdown) accountDropdown.remove();
-        if (searchBtn) searchBtn.style.display = 'none';
-        if (notifWrapper) notifWrapper.style.display = 'none';
-        if (btnLogin) btnLogin.style.display = 'inline-flex';
-        if (btnSignup) btnSignup.style.display = 'inline-flex';
-
-        const mobNavLogout = document.getElementById('mobNavLogout');
-        if (mobNavLogout) mobNavLogout.style.display = 'none';
-
-        const mobileAvatar = document.getElementById('mobileHeaderAvatarBtn');
-        if (mobileAvatar) {
-          mobileAvatar.href = '/login';
-          mobileAvatar.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
-        }
-
-        const mobileAuth = document.querySelector('.mobile-nav-auth');
-        if (mobileAuth) {
-          mobileAuth.innerHTML = `
-            <a href="/login" class="btn btn-secondary" id="btnMobileLogin" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Log In</a>
-            <a href="/signup" class="btn btn-primary" id="btnMobileSignup" style="width:100%; text-align:center; min-height:44px; height:44px; justify-content:center; border-radius:8px;">Sign Up Free</a>
-          `;
-        }
-      }
+      try {
+        document.documentElement.classList.remove('auth-loading');
+        document.documentElement.classList.remove('user-logged-in');
+      } catch (e) {}
     },
 
-    // Verify session asynchronously with SQLite backend
+    // Verify session asynchronously with SQLite backend without redirecting
     verify: async function () {
       try {
         const res = await this.authFetch('/api/auth/me');
         const data = await res.json();
         if (data && data.authenticated && data.user) {
           this.setSession(data.user, data.user.session_id || this.sessionId);
-          if (['/login', '/signup'].includes(window.location.pathname)) {
-            const urlParams = new URLSearchParams(window.location.search);
-            let redirect = urlParams.get('redirect') || '/dashboard';
-            if (redirect.endsWith('.html')) redirect = redirect.replace(/\.html$/, '');
-            if (!redirect.startsWith('/')) redirect = '/' + redirect;
-            window.location.replace(redirect);
-          }
         } else {
           this.clearSession();
-          const isProtected = window.location.pathname.includes('dashboard') || window.location.pathname.includes('invoice-details') || window.location.pathname.includes('client-details');
-          if (isProtected) {
-            const redirectTarget = '/login?redirect=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
-            window.location.replace(redirectTarget);
-          }
         }
       } catch (e) {
-        if (this.user) {
-          this.state = 'AUTHENTICATED';
-          try {
-            document.documentElement.classList.remove('auth-loading');
-            document.documentElement.classList.add('user-logged-in');
-          } catch (e2) {}
-          this.renderHeader();
-          this._notify();
-        } else {
-          this.clearSession();
-        }
+        this.clearSession();
       }
     }
   };
@@ -674,185 +450,17 @@ const GOOGLE_CLIENT_ID = '1029331875701-7km83lfkd6norbl85o6f68qi2u4apt9u.apps.go
   // ---------------------------------------------------------------------------
   // GLOBAL SEARCH MODAL (Ctrl/Cmd + K)
   // ---------------------------------------------------------------------------
-  let searchDebounce = null;
-
-  function ensureSearchModal() {
-    let modal = document.getElementById('globalSearchModal');
-    if (modal) return modal;
-
-    modal = document.createElement('div');
-    modal.id = 'globalSearchModal';
-    modal.className = 'search-modal-backdrop';
-    modal.style.display = 'none';
-    modal.innerHTML = `
-      <div class="search-modal-box" role="dialog" aria-modal="true" aria-label="Global Search">
-        <div class="search-input-header">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" class="search-input-field" id="globalSearchInput" placeholder="Search invoices, clients, tools, or templates..." autocomplete="off">
-          <span class="kbd-shortcut">ESC</span>
-        </div>
-        <div class="search-results-body" id="globalSearchResults">
-          <div style="padding: 24px 18px; text-align: center; color: #64748b; font-size: 0.84rem;">
-            Type to search across your invoices, clients, templates, and tools.
-          </div>
-        </div>
-        <div class="search-footer-info">
-          <span>Navigate with <strong style="color:#0f172a;">↑ ↓</strong> and press <strong style="color:#0f172a;">↵</strong> to open</span>
-          <span>Invoice-Gen.net</span>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
-
-    modal.onclick = (e) => {
-      if (e.target === modal) window.closeGlobalSearch();
-    };
-
-    const input = document.getElementById('globalSearchInput');
-    if (input) {
-      input.oninput = () => {
-        clearTimeout(searchDebounce);
-        searchDebounce = setTimeout(() => executeGlobalSearch(input.value), 200);
-      };
-    }
-
-    return modal;
-  }
-
-  async function executeGlobalSearch(q) {
-    const resultsContainer = document.getElementById('globalSearchResults');
-    if (!resultsContainer) return;
-    if (!q || !q.trim()) {
-      resultsContainer.innerHTML = `<div style="padding: 24px 18px; text-align: center; color: #64748b; font-size: 0.84rem;">Type to search across your invoices, clients, templates, and tools.</div>`;
-      return;
-    }
-
-    resultsContainer.innerHTML = `<div style="padding: 20px 18px; text-align: center; color: #94a3b8; font-size: 0.84rem;">Searching...</div>`;
-
-    try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(q.trim())}`);
-      const data = await res.json();
-      if (!data || !data.success || !data.results) {
-        resultsContainer.innerHTML = `<div style="padding: 20px 18px; text-align: center; color: #64748b;">No results found for "${q}".</div>`;
-        return;
-      }
-
-      const { invoices, clients, templates, tools } = data.results;
-      const totalMatches = (invoices?.length || 0) + (clients?.length || 0) + (templates?.length || 0) + (tools?.length || 0);
-
-      if (totalMatches === 0) {
-        resultsContainer.innerHTML = `<div style="padding: 24px 18px; text-align: center; color: #64748b; font-size: 0.84rem;">No matching documents, clients, or tools found.</div>`;
-        return;
-      }
-
-      let html = '';
-
-      if (invoices && invoices.length > 0) {
-        html += `<div class="search-category-title">Invoices (${invoices.length})</div>`;
-        invoices.forEach(inv => {
-          html += `
-            <a href="/?id=${inv.id}" class="search-row-item" onclick="window.closeGlobalSearch();">
-              <div class="search-row-main">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-                <div>
-                  <div class="search-row-title">#${inv.number} &bull; ${inv.clientName || 'Client'}</div>
-                  <div class="search-row-sub">${inv.date || 'No date'} &bull; $${Number(inv.total || 0).toFixed(2)}</div>
-                </div>
-              </div>
-              <span class="status-badge badge-${inv.status || 'draft'}" style="font-size: 0.6875rem; text-transform: uppercase;">${inv.status || 'draft'}</span>
-            </a>
-          `;
-        });
-      }
-
-      if (clients && clients.length > 0) {
-        html += `<div class="search-category-title">Clients (${clients.length})</div>`;
-        clients.forEach(c => {
-          html += `
-            <a href="/dashboard#clients" class="search-row-item" onclick="window.closeGlobalSearch();">
-              <div class="search-row-main">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <div>
-                  <div class="search-row-title">${c.name} ${c.company ? `(${c.company})` : ''}</div>
-                  <div class="search-row-sub">${c.email || c.phone || 'Client directory'}</div>
-                </div>
-              </div>
-              <span style="font-size: 0.75rem; color: #64748b;">Client &rarr;</span>
-            </a>
-          `;
-        });
-      }
-
-      if (templates && templates.length > 0) {
-        html += `<div class="search-category-title">Templates (${templates.length})</div>`;
-        templates.forEach(t => {
-          html += `
-            <a href="${t.url}" class="search-row-item" onclick="window.closeGlobalSearch();">
-              <div class="search-row-main">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
-                <div>
-                  <div class="search-row-title">${t.name}</div>
-                  <div class="search-row-sub">${t.desc}</div>
-                </div>
-              </div>
-              <span style="font-size: 0.75rem; color: #64748b;">Template &rarr;</span>
-            </a>
-          `;
-        });
-      }
-
-      if (tools && tools.length > 0) {
-        html += `<div class="search-category-title">Tools (${tools.length})</div>`;
-        tools.forEach(tl => {
-          html += `
-            <a href="${tl.url}" class="search-row-item" onclick="window.closeGlobalSearch();">
-              <div class="search-row-main">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                <div>
-                  <div class="search-row-title">${tl.name}</div>
-                  <div class="search-row-sub">${tl.desc}</div>
-                </div>
-              </div>
-              <span style="font-size: 0.75rem; color: #64748b;">Tool &rarr;</span>
-            </a>
-          `;
-        });
-      }
-
-      resultsContainer.innerHTML = html;
-    } catch (e) {
-      resultsContainer.innerHTML = `<div style="padding: 20px 18px; text-align: center; color: #ef4444;">Search request error.</div>`;
-    }
-  }
-
-  window.openGlobalSearch = function () {
-    const modal = ensureSearchModal();
-    modal.style.display = 'flex';
-    const input = document.getElementById('globalSearchInput');
-    if (input) {
-      input.value = '';
-      input.focus();
-    }
-    executeGlobalSearch('');
-  };
-
+  // Global search modal removed per user requirement
+  // ---------------------------------------------------------------------------
+  window.openGlobalSearch = function () {};
   window.closeGlobalSearch = function () {
     const modal = document.getElementById('globalSearchModal');
-    if (modal) modal.style.display = 'none';
+    if (modal) modal.remove();
   };
 
-  // Listen for Ctrl+K or Cmd+K
+  // Close notifications popover on Escape
   document.addEventListener('keydown', (e) => {
-    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
-      e.preventDefault();
-      const modal = document.getElementById('globalSearchModal');
-      if (modal && modal.style.display === 'flex') {
-        window.closeGlobalSearch();
-      } else {
-        window.openGlobalSearch();
-      }
-    } else if (e.key === 'Escape') {
-      window.closeGlobalSearch();
+    if (e.key === 'Escape') {
       const popover = document.getElementById('headerNotifPopover');
       if (popover) popover.classList.remove('active');
     }
