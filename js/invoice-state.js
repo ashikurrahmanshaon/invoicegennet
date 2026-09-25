@@ -22,7 +22,13 @@ const getTodayDateString = () => {
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 };
 
-// Blank default state as requested ("faka rakho")
+const getFutureDateString = (daysAhead = 14) => {
+  const d = new Date();
+  d.setDate(d.getDate() + daysAhead);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};
+
+// Blank default state
 const BLANK_INVOICE = {
   title: 'INVOICE',
   number: 'INV-001',
@@ -72,55 +78,71 @@ const BLANK_INVOICE = {
   notes: ''
 };
 
-// Realistic Demo Sample data clearly distinguished as demonstration
+// Super Realistic Demo Sample Data for instant preview & testing
 const DEMO_INVOICE = {
   title: 'INVOICE',
-  number: 'DEMO-001',
+  number: 'INV-2026-0842',
   date: getTodayDateString(),
-  dueDate: '',
-  poNumber: '',
-  paymentTerms: 'Due on Receipt',
+  dueDate: getFutureDateString(14),
+  poNumber: 'PO-98412',
+  paymentTerms: 'Net 14 Days',
 
   sender: {
-    name: 'Demo Business',
-    address: '123 Demo Street\nDemo City, DC 10101',
-    email: 'contact@demobusiness.example',
-    phone: '(555) 000-DEMO'
+    name: 'Apex Digital Solutions Inc.',
+    address: '742 Montgomery St, Suite 400\nSan Francisco, CA 94111, United States',
+    email: 'billing@apexdigital.io',
+    phone: '+1 (415) 890-2415'
   },
 
   client: {
-    name: 'Demo Client',
-    address: '456 Client Avenue\nSuite 200, Metropolis, MP 20202',
-    email: 'billing@democlient.example',
-    phone: '(555) 123-DEMO'
+    name: 'Stratosphere Technologies LLC',
+    address: '1000 Brickell Ave, Penthouse 12\nMiami, FL 33131, United States',
+    email: 'accounts@stratosphere.tech',
+    phone: '+1 (305) 552-8901'
   },
 
   shipTo: {
     enabled: true,
-    name: 'Demo Client Delivery',
-    address: '456 Client Avenue, Metropolis, MP 20202'
+    name: 'Stratosphere Tech Innovation Lab',
+    address: '1000 Brickell Ave, Floor 14, Miami, FL 33131'
   },
 
   items: [
     {
       id: 1,
-      description: 'Website Design',
-      subtext: 'Modern responsive website mockup & UI layout',
+      description: 'Full-Stack Web Application Development',
+      subtext: 'Phase 2: High-performance REST APIs, database migrations, and responsive UI components',
+      quantity: 40,
+      rate: 85,
+      amount: 3400
+    },
+    {
+      id: 2,
+      description: 'Cloud Infrastructure & DevOps Pipeline',
+      subtext: 'Docker containerization, automated GitHub Actions CI/CD, SSL certificate and edge CDN setup',
       quantity: 1,
-      rate: 500,
-      amount: 500
+      rate: 750,
+      amount: 750
+    },
+    {
+      id: 3,
+      description: 'UI/UX Design Sprint & Mobile Optimization',
+      subtext: 'Figma interactive prototypes, design token alignment, and WCAG 2.1 accessibility audit',
+      quantity: 12,
+      rate: 75,
+      amount: 900
     }
   ],
 
   discountType: 'percent',
-  discountValue: 0,
-  taxRate: 0,
+  discountValue: 5,
+  taxRate: 8.5,
   shippingFee: 0,
-  amountPaid: 0,
+  amountPaid: 1500,
 
   currency: 'USD',
   logo: null,
-  notes: 'Thank you for testing the demo invoice. Payment terms: Due on Receipt.'
+  notes: 'Payment is due within 14 days of invoice issuance. Wire transfer: JPMorgan Chase Bank (Routing: 021000021, Account: 982347192). We sincerely appreciate your business!'
 };
 const SAMPLE_INVOICE = DEMO_INVOICE;
 
@@ -310,6 +332,7 @@ class InvoiceStore {
   loadSample() {
     this.state = JSON.parse(JSON.stringify(DEMO_INVOICE));
     this.state.date = getTodayDateString();
+    this.state.dueDate = getFutureDateString(14);
     this.notify();
     return this.state;
   }

@@ -33,8 +33,39 @@
   <link rel="preload" href="/assets/fonts/plus-jakarta-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/design-system.css?v=9.0">
-  <link rel="stylesheet" href="/css/invoice-editor.css?v=9.0">
-  <script src="/js/google-auth.js?v=9.0"></script>
+  <!-- JSON-LD Structured Data for Features -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://invoice-gen.net/features#webpage",
+        "url": "https://invoice-gen.net/features",
+        "name": "Features & Capabilities | Invoice-Gen.net",
+        "description": "Discover InvoiceGen features: Instant Vector PDF export, multi-currency calculations, client-side privacy, customizable templates, and pixel-perfect printing."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://invoice-gen.net/features#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://invoice-gen.net/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Features",
+            "item": "https://invoice-gen.net/features"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 

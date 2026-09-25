@@ -1468,27 +1468,15 @@ const requestHandler = async (req, res) => {
   }
 
   // ========================================================================
-  // ROUTE REDIRECTION FOR REMOVED PAGES (Sign Up, Login, Dashboard, Pricing)
+  // ROUTE REDIRECTION FOR DEPRECATED SUB-ROUTES
   // ========================================================================
-  const removedRoutes = [
-    '/login',
-    '/signup',
-    '/dashboard',
-    '/pricing',
-    '/billing',
-    '/invoices',
-    '/clients',
+  const deprecatedRoutes = [
     '/client-details',
-    '/profile',
-    '/business-profile',
-    '/payment-methods',
-    '/payment-history',
-    '/settings',
     '/create-invoice'
   ];
 
-  if (removedRoutes.includes(pathname)) {
-    res.writeHead(302, { 'Location': '/' });
+  if (deprecatedRoutes.includes(pathname)) {
+    res.writeHead(302, { 'Location': '/dashboard' });
     return res.end();
   }
 

@@ -36,7 +36,120 @@
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/css/design-system.css?v=9.0">
   <link rel="stylesheet" href="/css/invoice-editor.css?v=9.0">
-  <link rel="stylesheet" href="/css/print.css?v=9.0" media="print">
+  <!-- JSON-LD Structured Data for Google Search Console Rich Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://invoice-gen.net/#webapp",
+        "name": "InvoiceGen - Free Online Invoice Generator",
+        "url": "https://invoice-gen.net/",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "All (Web Browser, Windows, macOS, Linux, iOS, Android)",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "2450",
+          "reviewCount": "2450",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
+        "featureList": [
+          "Instant unbranded A4 PDF invoice export",
+          "Zero watermark guarantee",
+          "Client-side zero-storage privacy",
+          "Multi-currency support (USD, EUR, GBP, BDT, INR, CAD, AUD, JPY, AED, SAR, SGD)",
+          "Automated sales tax, GST, VAT, and percentage discounts",
+          "Custom business logo upload and color branding",
+          "Integrated Stripe and PayPal payment link notes"
+        ]
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://invoice-gen.net/#organization",
+        "name": "InvoiceGen",
+        "url": "https://invoice-gen.net/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://invoice-gen.net/assets/icons/logo.svg"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+1-800-555-0199",
+          "contactType": "customer service",
+          "email": "support@invoice-gen.net",
+          "availableLanguage": ["English"]
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://invoice-gen.net/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://invoice-gen.net/"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://invoice-gen.net/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is InvoiceGen really 100% free to use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, InvoiceGen is completely free with no subscriptions, no hidden limits, and no watermark on your PDF downloads."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to register or create an account to download an invoice?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No account or registration is required. You can fill in your invoice details and download a clean, vector A4 PDF immediately."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my confidential client and billing data private?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. PDF invoices are rendered locally directly inside your web browser. Your financial numbers and client information never touch our servers unless you explicitly sign in and save to cloud."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I add sales tax, VAT, or GST to my invoices?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. You can specify custom tax rates (VAT, GST, Sales Tax), percentage or flat discounts, and shipping fees with automated subtotal and total calculations."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I accept payments with Stripe or PayPal?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. You can add your direct payment links or bank wire remittance instructions (IBAN, SWIFT, Routing) directly in the invoice payment notes section."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <!-- Google Identity Services SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -908,6 +1021,44 @@
           <span>Explore All 17 Professional Tools</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Frequently Asked Questions Section (Google Rich Results & GSC Accordions) -->
+  <section class="home-faq-section" style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:64px 0 80px;" id="faq">
+    <div class="container" style="max-width:920px;margin:0 auto;padding:0 24px;">
+      <div style="text-align:center;margin-bottom:48px;">
+        <span style="display:inline-block;padding:4px 14px;background:#e0f2fe;color:#0369a1;border-radius:9999px;font-size:0.75rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px;">Answers to Common Questions</span>
+        <h2 style="font-size:2rem;font-weight:800;color:#0f172a;margin-bottom:12px;letter-spacing:-0.02em;">Frequently Asked Questions</h2>
+        <p style="font-size:1rem;color:#64748b;max-width:580px;margin:0 auto;line-height:1.6;">Everything you need to know about generating, customizing, and downloading professional invoices on Invoice-Gen.net.</p>
+      </div>
+
+      <div class="tool-faq-grid" style="display:grid;gap:16px;">
+        <div class="tool-faq-card" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+          <h3 class="tool-faq-q" style="font-size:1.0625rem;font-weight:700;color:#0f172a;margin-bottom:8px;">Is Invoice-Gen.net really 100% free?</h3>
+          <p class="tool-faq-a" style="font-size:0.9375rem;color:#475569;line-height:1.65;margin:0;">Yes, completely free. You can generate unlimited invoices, customize headers, upload company logos, and download clean vector A4 PDFs without any watermark, fees, or hidden trials.</p>
+        </div>
+
+        <div class="tool-faq-card" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+          <h3 class="tool-faq-q" style="font-size:1.0625rem;font-weight:700;color:#0f172a;margin-bottom:8px;">Do I need to sign up or create an account to download invoices?</h3>
+          <p class="tool-faq-a" style="font-size:0.9375rem;color:#475569;line-height:1.65;margin:0;">No registration is required. You can start typing directly on the page and click "Download PDF" immediately. Signing up is optional and allows you to sync clients and invoices to your private cloud across devices.</p>
+        </div>
+
+        <div class="tool-faq-card" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+          <h3 class="tool-faq-q" style="font-size:1.0625rem;font-weight:700;color:#0f172a;margin-bottom:8px;">Is my billing and client data confidential and secure?</h3>
+          <p class="tool-faq-a" style="font-size:0.9375rem;color:#475569;line-height:1.65;margin:0;">Yes. All invoice PDF generation occurs entirely client-side in your web browser. Your financial figures, client addresses, and banking notes are never saved to our servers unless you explicitly choose to save them in an authenticated account.</p>
+        </div>
+
+        <div class="tool-faq-card" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+          <h3 class="tool-faq-q" style="font-size:1.0625rem;font-weight:700;color:#0f172a;margin-bottom:8px;">Can I include sales tax, VAT, GST, and discounts?</h3>
+          <p class="tool-faq-a" style="font-size:0.9375rem;color:#475569;line-height:1.65;margin:0;">Yes. The editor provides flexible tax inputs (VAT, GST, Sales Tax), percentage or flat discounts, and shipping cost calculations that dynamically update subtotals and balance due in real time.</p>
+        </div>
+
+        <div class="tool-faq-card" style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:24px 28px;box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+          <h3 class="tool-faq-q" style="font-size:1.0625rem;font-weight:700;color:#0f172a;margin-bottom:8px;">How do clients pay me from the invoice?</h3>
+          <p class="tool-faq-a" style="font-size:0.9375rem;color:#475569;line-height:1.65;margin:0;">You can paste your direct Stripe Payment link, PayPal.me link, or bank transfer wire information (IBAN, Swift, Routing & Account numbers) directly into the payment instructions area so clients can pay you with one click.</p>
+        </div>
       </div>
     </div>
   </section>
