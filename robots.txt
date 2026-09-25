@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Allow: /tools/
+Allow: /tools
 Allow: /blog
 Allow: /about
 Allow: /contact
@@ -9,9 +9,23 @@ Allow: /faq
 Allow: /pricing
 Allow: /features
 Allow: /templates
+Allow: /how-to-make-an-invoice
+Allow: /best-invoice-generator
+Allow: /invoice-guide
+Allow: /invoicing-guide
+Allow: /getting-started
+Allow: /getting-paid-faster
+Allow: /stripe-vs-paypal
+Allow: /security
+Allow: /privacy
+Allow: /terms
+Allow: /cookies
+Allow: /refunds
 
-# Disallow private user routes and internal endpoints
+# Disallow private user routes, app shell, and internal endpoints
 Disallow: /dashboard
+Disallow: /create-invoice
+Disallow: /client-details
 Disallow: /settings
 Disallow: /profile
 Disallow: /business-profile
@@ -25,5 +39,7 @@ Disallow: /payment-methods
 Disallow: /payment-history
 Disallow: /api/
 Disallow: /admin
+Disallow: /404
 
 Sitemap: https://invoice-gen.net/sitemap.xml
+

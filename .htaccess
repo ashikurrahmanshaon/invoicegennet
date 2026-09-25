@@ -19,29 +19,50 @@ DirectoryIndex index.html
   RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^(.*)$ https://invoice-gen.net%{REQUEST_URI} [R=301,L]
 
-  # 1c. 301 Redirect legacy /index.html to /
-  RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/ [NC]
-  RewriteRule ^index\.html$ / [R=301,L]
+  # 1c. 301 Redirect legacy /index.html and /home to /
+  RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /(index|home)\.html\ HTTP/ [NC]
+  RewriteRule ^(index|home)\.html$ / [R=301,L]
+  RewriteRule ^home/?$ / [R=301,L]
+  RewriteRule ^404(\.html)?$ / [R=301,L]
+
+  # Trailing slash removal for all non-directory paths (e.g. /tools/ -> /tools)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} (.+)/$
+  RewriteRule ^ %1 [R=301,L]
+  RewriteRule ^tools/$ /tools [R=301,L]
 
   # 1d. 301 Redirect legacy tool URLs directly to canonical /tools/*
+  RewriteRule ^invoice-generator(\.html)?$ /tools/invoice-generator [R=301,L]
+  RewriteRule ^free-invoice-generator(\.html)?$ /tools/invoice-generator [R=301,L]
+  RewriteRule ^free-invoice(\.html)?$ /tools/invoice-generator [R=301,L]
+  RewriteRule ^freelancer-invoice(\.html)?$ /tools/freelancer-invoice [R=301,L]
+  RewriteRule ^invoice-generator-for-freelancers(\.html)?$ /tools/freelancer-invoice [R=301,L]
+  RewriteRule ^pdf-invoice-generator(\.html)?$ /tools/pdf-invoice-generator [R=301,L]
+  RewriteRule ^pdf-invoice(\.html)?$ /tools/pdf-invoice-generator [R=301,L]
+  RewriteRule ^gst-tax-invoice(\.html)?$ /tools/gst-tax-invoice [R=301,L]
+  RewriteRule ^gst-invoice-generator(\.html)?$ /tools/gst-tax-invoice [R=301,L]
+  RewriteRule ^gst-invoice(\.html)?$ /tools/gst-tax-invoice [R=301,L]
+  RewriteRule ^tax-invoice(\.html)?$ /tools/gst-tax-invoice [R=301,L]
   RewriteRule ^pdf-to-jpg(\.html)?$ /tools/pdf-to-jpg [R=301,L]
   RewriteRule ^jpg-to-pdf(\.html)?$ /tools/jpg-to-pdf [R=301,L]
   RewriteRule ^pdf-merger(\.html)?$ /tools/pdf-merger [R=301,L]
   RewriteRule ^pdf-splitter(\.html)?$ /tools/pdf-splitter [R=301,L]
   RewriteRule ^image-compressor(\.html)?$ /tools/image-compressor [R=301,L]
   RewriteRule ^tax-calculator(\.html)?$ /tools/tax-calculator [R=301,L]
+  RewriteRule ^vat-calculator(\.html)?$ /tools/tax-calculator [R=301,L]
+  RewriteRule ^sales-tax-calculator(\.html)?$ /tools/tax-calculator [R=301,L]
   RewriteRule ^payment-calculator(\.html)?$ /tools/payment-calculator [R=301,L]
   RewriteRule ^due-date-calculator(\.html)?$ /tools/due-date-calculator [R=301,L]
   RewriteRule ^currency-converter(\.html)?$ /tools/currency-converter [R=301,L]
-  RewriteRule ^pdf-invoice-generator(\.html)?$ /tools/pdf-invoice-generator [R=301,L]
-  RewriteRule ^gst-tax-invoice(\.html)?$ /tools/gst-tax-invoice [R=301,L]
-  RewriteRule ^gst-invoice-generator(\.html)?$ /tools/gst-tax-invoice [R=301,L]
   RewriteRule ^invoice-number-generator(\.html)?$ /tools/invoice-number-generator [R=301,L]
   RewriteRule ^payment-link(\.html)?$ /tools/payment-link [R=301,L]
-  RewriteRule ^free-invoice-generator(\.html)?$ /tools/invoice-generator [R=301,L]
-  RewriteRule ^invoice-generator-for-freelancers(\.html)?$ /tools/freelancer-invoice [R=301,L]
+  RewriteRule ^online-payments(\.html)?$ /tools/online-payments [R=301,L]
   RewriteRule ^cloud-file-storage(\.html)?$ /tools/cloud-file-storage [R=301,L]
   RewriteRule ^blog-post(\.html)?$ /blog [R=301,L]
+  RewriteRule ^invoice-templates?(\.html)?$ /templates [R=301,L]
+  RewriteRule ^client-details$ /dashboard [R=301,L]
+  RewriteRule ^create-invoice$ /dashboard [R=301,L]
+  RewriteRule ^billing$ /pricing [R=301,L]
 
   # 1e. 301 Redirect any remaining legacy /page.html to /page
   RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.html\ HTTP/ [NC]
@@ -52,6 +73,7 @@ DirectoryIndex index.html
   RewriteRule ^sitemap$ sitemap.html [L]
 
   # 1g. Tool Route Aliases (Internal Clean Serving)
+  RewriteRule ^tools/?$ tools.html [L]
   RewriteRule ^tools/invoice-generator/?$ free-invoice-generator.html [L]
   RewriteRule ^tools/pdf-invoice-generator/?$ pdf-invoice-generator.html [L]
   RewriteRule ^tools/gst-tax-invoice/?$ gst-tax-invoice.html [L]

@@ -2674,13 +2674,17 @@
               <td>${(f.size / 1024).toFixed(1)} KB</td>
               <td>${new Date(f.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</td>
               <td style="text-align: right;">
-                <a href="/api/files/${f.id}/download" class="btn-table-action" download="${f.file_name}">Download</a>
+                <button type="button" class="btn-table-action" onclick="window.downloadFileRecord('${f.id}')">Download</button>
                 <button type="button" class="btn-table-action btn-action-danger" onclick="window.deleteFileRecord('${f.id}')">Delete</button>
               </td>
             </tr>
           `).join('');
         } catch (e) {}
       }
+
+      window.downloadFileRecord = function (id) {
+        window.location.href = `/api/files/${encodeURIComponent(id)}/download`;
+      };
 
       window.deleteFileRecord = async function (id) {
         if (!confirm('Delete this file?')) return;

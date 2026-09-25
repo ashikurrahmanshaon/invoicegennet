@@ -213,8 +213,15 @@ function readRawBody(req) {
 
 const requestHandler = async (req, res) => {
   res._req = req;
-  const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-  const pathname = parsedUrl.pathname;
+  try {
+    let parsedUrl;
+    try {
+      const rawHost = req.headers.host || 'invoice-gen.net';
+      parsedUrl = new URL(req.url, `http://${rawHost}`);
+    } catch (e) {
+      parsedUrl = new URL(req.url, 'http://invoice-gen.net');
+    }
+    const pathname = parsedUrl.pathname;
 
   // Handle CORS Preflight
   if (req.method === 'OPTIONS') {
@@ -1416,10 +1423,13 @@ const requestHandler = async (req, res) => {
     return res.end();
   }
 
-  // Normalize trailing slash: 301 redirect /path/ to /path (except root / and /tools/)
-  if (pathname.length > 1 && pathname.endsWith('/') && pathname !== '/tools/') {
+  // Normalize trailing slash: 301 redirect /path/ to /path (for all paths except root /)
+  if (pathname.length > 1 && pathname.endsWith('/')) {
     const cleanPath = pathname.slice(0, -1);
-    res.writeHead(301, { 'Location': cleanPath + (parsedUrl.search || '') });
+    res.writeHead(301, {
+      'Location': cleanPath + (parsedUrl.search || ''),
+      'Cache-Control': 'public, max-age=31536000'
+    });
     return res.end();
   }
 
@@ -1447,12 +1457,28 @@ const requestHandler = async (req, res) => {
     '/currency-converter.html': '/tools/currency-converter',
     '/pdf-invoice-generator': '/tools/pdf-invoice-generator',
     '/pdf-invoice-generator.html': '/tools/pdf-invoice-generator',
+    '/invoice-generator': '/tools/invoice-generator',
+    '/invoice-generator.html': '/tools/invoice-generator',
+    '/free-invoice': '/tools/invoice-generator',
+    '/free-invoice.html': '/tools/invoice-generator',
+    '/pdf-invoice': '/tools/pdf-invoice-generator',
+    '/pdf-invoice.html': '/tools/pdf-invoice-generator',
+    '/freelancer-invoice': '/tools/freelancer-invoice',
+    '/freelancer-invoice.html': '/tools/freelancer-invoice',
     '/invoice-generator-for-freelancers': '/tools/freelancer-invoice',
     '/invoice-generator-for-freelancers.html': '/tools/freelancer-invoice',
     '/gst-tax-invoice': '/tools/gst-tax-invoice',
     '/gst-tax-invoice.html': '/tools/gst-tax-invoice',
     '/gst-invoice-generator': '/tools/gst-tax-invoice',
     '/gst-invoice-generator.html': '/tools/gst-tax-invoice',
+    '/gst-invoice': '/tools/gst-tax-invoice',
+    '/gst-invoice.html': '/tools/gst-tax-invoice',
+    '/tax-invoice': '/tools/gst-tax-invoice',
+    '/tax-invoice.html': '/tools/gst-tax-invoice',
+    '/vat-calculator': '/tools/tax-calculator',
+    '/vat-calculator.html': '/tools/tax-calculator',
+    '/sales-tax-calculator': '/tools/tax-calculator',
+    '/sales-tax-calculator.html': '/tools/tax-calculator',
     '/invoice-number-generator': '/tools/invoice-number-generator',
     '/invoice-number-generator.html': '/tools/invoice-number-generator',
     '/payment-link': '/tools/payment-link',
@@ -1464,7 +1490,16 @@ const requestHandler = async (req, res) => {
     '/blog-post': '/blog',
     '/blog-post.html': '/blog',
     '/online-payments': '/tools/online-payments',
-    '/online-payments.html': '/tools/online-payments'
+    '/online-payments.html': '/tools/online-payments',
+    '/invoice-template': '/templates',
+    '/invoice-template.html': '/templates',
+    '/invoice-templates': '/templates',
+    '/invoice-templates.html': '/templates',
+    '/home': '/',
+    '/home.html': '/',
+    '/index': '/',
+    '/404': '/',
+    '/404.html': '/'
   };
 
   if (LEGACY_TOOL_REDIRECTS[pathname]) {
@@ -1512,7 +1547,6 @@ const requestHandler = async (req, res) => {
     '/terms': 'terms.html',
     '/refunds': 'refunds.html',
     '/sitemap': 'sitemap.html',
-    '/404': '404.html',
     '/invoice-guide': 'invoice-guide.html',
     '/invoicing-guide': 'invoicing-guide.html',
     '/getting-paid-faster': 'getting-paid-faster.html',
@@ -1609,18 +1643,23 @@ const requestHandler = async (req, res) => {
       headers['Vary'] = 'Accept-Encoding';
       res.writeHead(200, headers);
       const stream = fs.createReadStream(targetPath);
+      stream.on('error', () => { if (!res.headersSent) res.writeHead(404); res.end(); });
       const gzip = zlib.createGzip({ level: 6 });
+      gzip.on('error', () => res.end());
       stream.pipe(gzip).pipe(res);
     } else if (isCompressible && /\bdeflate\b/i.test(acceptEncoding)) {
       headers['Content-Encoding'] = 'deflate';
       headers['Vary'] = 'Accept-Encoding';
       res.writeHead(200, headers);
       const stream = fs.createReadStream(targetPath);
+      stream.on('error', () => { if (!res.headersSent) res.writeHead(404); res.end(); });
       const deflate = zlib.createDeflate();
+      deflate.on('error', () => res.end());
       stream.pipe(deflate).pipe(res);
     } else {
       res.writeHead(200, headers);
       const stream = fs.createReadStream(targetPath);
+      stream.on('error', () => { if (!res.headersSent) res.writeHead(404); res.end(); });
       stream.pipe(res);
     }
   };
@@ -1646,7 +1685,10 @@ const requestHandler = async (req, res) => {
 
         const notFoundPath = path.join(__dirname, '404.html');
         fs.readFile(notFoundPath, (nfErr, nfData) => {
-          res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+          res.writeHead(404, {
+            'Content-Type': 'text/html; charset=utf-8',
+            'X-Robots-Tag': 'noindex, nofollow'
+          });
           if (!nfErr && nfData) {
             res.end(nfData);
           } else {
@@ -1656,6 +1698,13 @@ const requestHandler = async (req, res) => {
       });
     });
   });
+  } catch (fatalErr) {
+    console.error('Unhandled Server Exception:', fatalErr);
+    if (!res.headersSent) {
+      res.writeHead(500, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end('<h1>500 - Server Error</h1><p>A temporary server error occurred. Please try again.</p>');
+    }
+  }
 };
 
 const activePorts = [Number(PORT), 3001, Number(SECONDARY_PORT)];
