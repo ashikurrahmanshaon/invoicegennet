@@ -6039,6 +6039,19 @@ td.amount-col,
       font-weight: 600;
       color: #065f46;
     }
+    @media (max-width: 768px) {
+      .comp-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .comp-table th, .comp-table td {
+        white-space: nowrap;
+        padding: 10px 12px;
+        font-size: 0.8125rem;
+      }
+    }
     .cta-hero-box {
       background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
       border-radius: 8px;
