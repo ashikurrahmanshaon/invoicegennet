@@ -1447,11 +1447,6 @@
       y -= 16;
       page.drawText(`Balance Due: ${sym}${balanceDue.toFixed(2)}`, { x: 380, y: y, size: 11, font: fontBold, color: rgb(0.02, 0.59, 0.41) });
 
-      // Footer notice
-      page.drawText('Generated securely via Invoice-Gen.net — Professional Tax Invoice Suite', {
-        x: 40, y: 36, size: 8, font: fontRegular, color: rgb(0.6, 0.6, 0.6)
-      });
-
       const pdfBytes = await doc.save();
       return new Blob([pdfBytes], { type: 'application/pdf' });
     }

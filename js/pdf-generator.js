@@ -328,7 +328,7 @@ class PDFEngine {
       </div>
 
       <!-- Second Row: Bill To / Ship To on Left, Date & Meta on Right -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 26px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
         
         <!-- Left: Bill To & Optional Ship To -->
         <div style="display: flex; gap: 32px; max-width: 440px;">
@@ -419,26 +419,26 @@ class PDFEngine {
       </div>
 
       <!-- Bottom Layout: Notes on Left & Financial Totals on Right -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 14px; page-break-inside: avoid; break-inside: avoid;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 16px; page-break-inside: avoid; break-inside: avoid;">
         
         <!-- Left: Notes & Terms Section -->
         <div class="notes-section" style="max-width: 380px;">
           ${notes ? `
-            <div style="font-size: 10.5px; font-weight: 500; color: #6b7280; margin-bottom: 4px;">
+            <div style="font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 4px;">
               Notes / Payment Terms:
             </div>
-            <div style="font-size: 10.5px; color: #374151; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(notes)}</div>
+            <div style="font-size: 10px; color: #475569; white-space: pre-wrap; line-height: 1.45;">${this.escapeHtml(notes)}</div>
           ` : ''}
 
           <!-- Digital Signature (if active) -->
           ${(isSigVisible && signature) ? `
-            <div class="signature-section" style="margin-top: 20px;">
-              <div style="font-size: 10px; font-weight: 500; color: #6b7280; margin-bottom: 4px;">
+            <div class="signature-section" style="margin-top: 18px;">
+              <div style="font-size: 9.5px; font-weight: 600; color: #64748b; margin-bottom: 4px;">
                 Authorized Signature:
               </div>
               <div style="border-top: 1px solid #94a3b8; width: 180px; padding-top: 4px;">
-                <div style="font-weight: 600; font-size: 11px; color: #111827;">${this.escapeHtml(signature)}</div>
-                <div style="font-size: 9.5px; color: #6b7280;">Authorized Representative</div>
+                <div style="font-weight: 700; font-size: 11px; color: #0f172a;">${this.escapeHtml(signature)}</div>
+                <div style="font-size: 9px; color: #64748b;">Authorized Representative</div>
               </div>
             </div>
           ` : ''}
@@ -448,50 +448,44 @@ class PDFEngine {
         <div class="totals-section" style="min-width: 220px;">
           <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
             <tr>
-              <td style="padding: 3px 0; color: #6b7280; text-align: right; font-weight: 400;">Subtotal:</td>
-              <td style="padding: 3px 14px 3px 16px; text-align: right; font-weight: 400; color: #111827; width: 85px;">${this.escapeHtml(subtotal)}</td>
+              <td style="padding: 3px 0; color: #64748b; text-align: right; font-weight: 400;">Subtotal:</td>
+              <td style="padding: 3px 12px 3px 16px; text-align: right; font-weight: 500; color: #0f172a; width: 85px;">${this.escapeHtml(subtotal)}</td>
             </tr>
             ${hasDiscount ? `
               <tr>
                 <td style="padding: 3px 0; color: #6b7280; text-align: right; font-weight: 400;">Discount (${this.escapeHtml(discountRate)}%):</td>
-                <td style="padding: 3px 14px 3px 16px; text-align: right; font-weight: 400; color: #111827;">${this.escapeHtml(discountAmt)}</td>
+                <td style="padding: 3px 12px 3px 16px; text-align: right; font-weight: 500; color: #0f172a;">${this.escapeHtml(discountAmt)}</td>
               </tr>
             ` : ''}
             ${parseFloat(taxRate) > 0 ? `
               <tr>
                 <td style="padding: 3px 0; color: #6b7280; text-align: right; font-weight: 400;">Tax (${this.escapeHtml(taxRate)}%):</td>
-                <td style="padding: 3px 14px 3px 16px; text-align: right; font-weight: 400; color: #111827;">${this.escapeHtml(taxAmt)}</td>
+                <td style="padding: 3px 12px 3px 16px; text-align: right; font-weight: 500; color: #0f172a;">${this.escapeHtml(taxAmt)}</td>
               </tr>
             ` : ''}
             ${hasShipping ? `
               <tr>
                 <td style="padding: 3px 0; color: #6b7280; text-align: right; font-weight: 400;">Shipping:</td>
-                <td style="padding: 3px 14px 3px 16px; text-align: right; font-weight: 400; color: #111827;">${this.escapeHtml(shippingAmt)}</td>
+                <td style="padding: 3px 12px 3px 16px; text-align: right; font-weight: 500; color: #0f172a;">${this.escapeHtml(shippingAmt)}</td>
               </tr>
             ` : ''}
-            <tr>
-              <td style="padding: 6px 0; font-weight: 700; font-size: 11.5px; color: #111827; text-align: right;">Total:</td>
-              <td style="padding: 6px 14px 6px 16px; text-align: right; font-weight: 700; font-size: 11.5px; color: #111827;">${this.escapeHtml(grandTotal)}</td>
+            <tr style="border-top: 1px solid #e2e8f0;">
+              <td style="padding: 6px 0; font-weight: 700; font-size: 12px; color: #0f172a; text-align: right;">Total:</td>
+              <td style="padding: 6px 12px 6px 16px; text-align: right; font-weight: 700; font-size: 12px; color: #0f172a;">${this.escapeHtml(grandTotal)}</td>
             </tr>
             ${(hasAmountPaid && isPaymentRecorded) ? `
               <tr>
                 <td style="padding: 3px 0; color: #6b7280; text-align: right; font-weight: 400;">Amount Paid:</td>
-                <td style="padding: 3px 14px 3px 16px; text-align: right; font-weight: 400; color: #111827;">${this.escapeHtml(amountPaidAmt)}</td>
+                <td style="padding: 3px 12px 3px 16px; text-align: right; font-weight: 500; color: #0f172a;">${this.escapeHtml(amountPaidAmt)}</td>
               </tr>
               <tr style="border-top: 1px dashed #cbd5e1;">
-                <td style="padding: 5px 0 2px; font-weight: 700; font-size: 11px; color: #111827; text-align: right;">Balance Due:</td>
-                <td style="padding: 5px 14px 2px 16px; text-align: right; font-weight: 700; font-size: 11.5px; color: ${themeAccent};">${this.escapeHtml(balanceDue)}</td>
+                <td style="padding: 5px 0 2px; font-weight: 700; font-size: 11px; color: #0f172a; text-align: right;">Balance Due:</td>
+                <td style="padding: 5px 12px 2px 16px; text-align: right; font-weight: 700; font-size: 11.5px; color: ${themeAccent};">${this.escapeHtml(balanceDue)}</td>
               </tr>
             ` : ''}
           </table>
         </div>
 
-      </div>
-
-      <!-- Document Footer Branding -->
-      <div style="margin-top: 36px; padding-top: 14px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; color: #94a3b8; page-break-inside: avoid; break-inside: avoid;">
-        <span>Thank you for your business.</span>
-        <span>Generated via Invoice-Gen.net</span>
       </div>
     `;
 
@@ -675,10 +669,6 @@ class PDFEngine {
         });
       }
 
-      page.drawText('Generated securely via Invoice-Gen.net — Free Online Invoicing Suite', {
-        x: 40, y: 30, size: 8, font: fontRegular, color: rgb(0.55, 0.55, 0.55)
-      });
-
       const pdfBytes = await doc.save();
       return new Blob([pdfBytes], { type: 'application/pdf' });
     } catch (e) {
@@ -733,18 +723,18 @@ class PDFEngine {
           await new Promise(r => setTimeout(r, 60));
 
           const printableElement = this.buildPrintableA4Element();
-          printableElement.style.width = '794px';
-          printableElement.style.maxWidth = '794px';
+          printableElement.style.width = '703px';
+          printableElement.style.maxWidth = '703px';
           printableElement.style.margin = '0 auto';
 
           renderMount = document.createElement('div');
           renderMount.id = 'html2pdf-render-mount';
-          renderMount.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#ffffff;z-index:-9999;overflow:visible;';
+          renderMount.style.cssText = 'position:fixed;left:-9999px;top:0;width:703px;background:#ffffff;z-index:-9999;overflow:visible;';
           renderMount.appendChild(printableElement);
           document.body.appendChild(renderMount);
 
           const opt = {
-            margin: [8, 8, 8, 8],
+            margin: [12, 12, 12, 12],
             filename: filename,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
@@ -753,8 +743,8 @@ class PDFEngine {
               logging: false,
               letterRendering: true,
               backgroundColor: '#ffffff',
-              width: 794,
-              windowWidth: 794,
+              width: 703,
+              windowWidth: 703,
               scrollX: 0,
               scrollY: 0
             },
@@ -824,19 +814,19 @@ class PDFEngine {
         await new Promise(r => setTimeout(r, 60));
 
         const printableElement = this.buildPrintableA4Element();
-        printableElement.style.width = '794px';
-        printableElement.style.maxWidth = '794px';
+        printableElement.style.width = '703px';
+        printableElement.style.maxWidth = '703px';
 
         renderMount = document.createElement('div');
         renderMount.id = 'html2pdf-blob-mount';
-        renderMount.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#ffffff;z-index:-9999;overflow:visible;';
+        renderMount.style.cssText = 'position:fixed;left:-9999px;top:0;width:703px;background:#ffffff;z-index:-9999;overflow:visible;';
         renderMount.appendChild(printableElement);
         document.body.appendChild(renderMount);
 
         const opt = {
-          margin: [8, 8, 8, 8],
+          margin: [12, 12, 12, 12],
           image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true, backgroundColor: '#ffffff', width: 794, windowWidth: 794 },
+          html2canvas: { scale: 2, useCORS: true, logging: false, letterRendering: true, backgroundColor: '#ffffff', width: 703, windowWidth: 703 },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
           pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };

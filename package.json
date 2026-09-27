@@ -8,8 +8,8 @@
     "dev": "node server.js",
     "users": "node admin.js",
     "admin": "node admin.js",
-    "build": "node --check server.js db.js js/tools-engine.js js/instant-nav.js && node scripts/check_routes.js",
-    "test": "node --check server.js db.js admin.js js/tools-engine.js js/instant-nav.js && node scripts/check_routes.js"
+    "build": "node --check server.js db.js js/tools-engine.js js/instant-nav.js js/pdf-generator.js && node scripts/check_routes.js",
+    "test": "node --check server.js db.js admin.js js/tools-engine.js js/instant-nav.js js/pdf-generator.js && node scripts/check_routes.js"
   },
   "repository": {
     "type": "git",
