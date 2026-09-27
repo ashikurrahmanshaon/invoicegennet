@@ -40,6 +40,11 @@
   .btn-mobile-avatar,
   .btn-mobile-nav-toggle,
   .sheet-client-quick-select-wrap,
+  .ad-placement-slot,
+  .adsbygoogle,
+  ins.adsbygoogle,
+  iframe[id^="aswift"],
+  iframe[id^="google_ads"],
   .no-print {
     display: none !important;
   }

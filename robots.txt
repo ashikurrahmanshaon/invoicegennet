@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Allow: /ads.txt
 Allow: /tools
 Allow: /blog
 Allow: /about

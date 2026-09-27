@@ -7694,3 +7694,51 @@ html[dir="rtl"] .lang-item-en {
   }
 }
 
+/* ==========================================================================
+   GOOGLE ADSENSE RESPONSIVE AD PLACEMENT SLOTS
+   ========================================================================== */
+.ad-placement-slot {
+  width: 100%;
+  max-width: 970px;
+  margin: 28px auto;
+  padding: 6px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  background: transparent;
+  position: relative;
+  clear: both;
+}
+
+.ad-placement-slot ins.adsbygoogle {
+  display: block !important;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .ad-placement-slot {
+    margin: 18px auto;
+    padding: 4px;
+    min-height: 60px;
+  }
+}
+
+@media print {
+  .ad-placement-slot,
+  .adsbygoogle,
+  ins.adsbygoogle,
+  iframe[id^="aswift"],
+  iframe[id^="google_ads"] {
+    display: none !important;
+    height: 0 !important;
+    visibility: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
