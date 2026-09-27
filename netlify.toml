@@ -61,8 +61,18 @@
 
 # Tool route rewrites
 [[redirects]]
+  from = "/tools"
+  to = "/tools.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/"
+  to = "/tools.html"
+  status = 200
+
+[[redirects]]
   from = "/tools/invoice-generator"
-  to = "/index.html"
+  to = "/free-invoice-generator.html"
   status = 200
 
 [[redirects]]

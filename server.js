@@ -236,6 +236,14 @@ const requestHandler = async (req, res) => {
     return res.end();
   }
 
+  // GET /api/tools/recent
+  if (pathname === '/api/tools/recent' && req.method === 'GET') {
+    return sendJson(res, 200, {
+      success: true,
+      activities: []
+    });
+  }
+
   // ========================================================================
   // AUTHENTICATION API ROUTES
   // ========================================================================

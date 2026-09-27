@@ -53,6 +53,23 @@
   }
   window.copyToolText = copyText;
 
+  // --- Tool Activity Tracker ---
+  function recordToolActivity(toolName, action) {
+    try {
+      const raw = localStorage.getItem('invoicegen_tool_activity');
+      let list = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(list)) list = [];
+      list.unshift({
+        tool_name: toolName,
+        action: action,
+        created_at: new Date().toISOString()
+      });
+      if (list.length > 20) list = list.slice(0, 20);
+      localStorage.setItem('invoicegen_tool_activity', JSON.stringify(list));
+    } catch (e) {}
+  }
+  window.recordToolActivity = recordToolActivity;
+
   // ==========================================================================
   // 1. INVOICE NUMBER GENERATOR ENGINE
   // ==========================================================================
@@ -2562,6 +2579,7 @@
 
     function filterTools() {
       const q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      let visibleCount = 0;
 
       toolCards.forEach(card => {
         const category = card.dataset.category || '';
@@ -2571,31 +2589,93 @@
         const matchCategory = activeCategory === 'all' || category === activeCategory;
         const matchSearch = !q || name.includes(q) || desc.includes(q);
 
-        card.style.display = matchCategory && matchSearch ? 'flex' : 'none';
+        if (matchCategory && matchSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
       });
+
+      // Show/hide empty state if no tools match
+      let emptyMsg = document.getElementById('hubEmptyMessage');
+      if (visibleCount === 0) {
+        if (!emptyMsg) {
+          emptyMsg = document.createElement('div');
+          emptyMsg.id = 'hubEmptyMessage';
+          emptyMsg.style.cssText = 'grid-column: 1 / -1; padding: 48px 24px; text-align: center; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 14px; margin-top: 12px;';
+          emptyMsg.innerHTML = `
+            <div style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;">No tools found matching "${q}"</div>
+            <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 16px;">Try a different keyword or reset filters to see all 17 tools.</p>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnResetToolFilters" style="cursor:pointer;padding:8px 16px;background:#059669;color:#fff;border:none;border-radius:6px;font-weight:600;">Reset Filters</button>
+          `;
+          const grid = document.getElementById('toolsGrid');
+          if (grid) grid.appendChild(emptyMsg);
+          const resetBtn = emptyMsg.querySelector('#btnResetToolFilters');
+          if (resetBtn) {
+            resetBtn.onclick = () => {
+              if (searchInput) searchInput.value = '';
+              const allTab = document.querySelector('.tool-hub-tab[data-category="all"]');
+              if (allTab) allTab.click();
+              else { activeCategory = 'all'; filterTools(); }
+            };
+          }
+        } else {
+          emptyMsg.style.display = 'block';
+        }
+      } else if (emptyMsg) {
+        emptyMsg.style.display = 'none';
+      }
     }
 
     if (categoryTabs && categoryTabs.length) {
       categoryTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          categoryTabs.forEach(t => t.classList.remove('active', 'border-emerald-600', 'text-emerald-700'));
-          tab.classList.add('active', 'border-emerald-600', 'text-emerald-700');
+        tab.onclick = (e) => {
+          e.preventDefault();
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
           activeCategory = tab.dataset.category || 'all';
           filterTools();
-        });
+        };
       });
     }
 
     if (searchInput) {
-      searchInput.addEventListener('input', filterTools);
+      searchInput.oninput = filterTools;
     }
 
     // Load recent tool activity
     if (recentActivityContainer) {
+      function renderLocalActivity() {
+        try {
+          const raw = localStorage.getItem('invoicegen_tool_activity');
+          if (raw) {
+            const list = JSON.parse(raw);
+            if (Array.isArray(list) && list.length) {
+              recentActivityContainer.innerHTML = '';
+              list.slice(0, 5).forEach(act => {
+                const item = document.createElement('div');
+                item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:8px;';
+                item.innerHTML = `
+                  <div>
+                    <div style="font-weight:700;font-size:0.875rem;color:#0f172a;">${act.tool_name}</div>
+                    <div style="font-size:0.75rem;color:#059669;font-weight:600;text-transform:capitalize;">${act.action}</div>
+                  </div>
+                  <div style="font-size:0.75rem;color:#64748b;">${new Date(act.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                `;
+                recentActivityContainer.appendChild(item);
+              });
+              return;
+            }
+          }
+        } catch (e) {}
+        recentActivityContainer.innerHTML = '<div style="color:#94a3b8;font-size:0.8125rem;padding:8px 0;">No recent activity yet. Open any tool above to get started!</div>';
+      }
+
       fetch('/api/tools/recent')
-        .then(res => res.json())
+        .then(res => res.ok ? res.json() : null)
         .then(data => {
-          if (data.success && data.activities && data.activities.length) {
+          if (data && data.success && data.activities && data.activities.length) {
             recentActivityContainer.innerHTML = '';
             data.activities.forEach(act => {
               const item = document.createElement('div');
@@ -2610,17 +2690,19 @@
               recentActivityContainer.appendChild(item);
             });
           } else {
-            recentActivityContainer.innerHTML = '<div style="color:#94a3b8;font-size:0.8125rem;padding:8px 0;">No recent activity yet. Open any tool to get started!</div>';
+            renderLocalActivity();
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          renderLocalActivity();
+        });
     }
   }
 
   // ==========================================================================
-  // INITIALIZATION ON DOM CONTENT LOADED
+  // INITIALIZATION FOR BOTH DIRECT PAGE LOAD & SEAMLESS ROUTING
   // ==========================================================================
-  document.addEventListener('DOMContentLoaded', () => {
+  function initAllTools() {
     initInvoiceNumberGenerator();
     initGSTCalculator();
     initFreelanceCalculator();
@@ -2638,7 +2720,17 @@
     initPaymentLinkCreator();
     initCloudFilesManager();
     initToolsHub();
-  });
+  }
+
+  // Expose controller globally for instant router and PJAX page updates
+  window.initToolsEngine = initAllTools;
+
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllTools);
+  } else {
+    initAllTools();
+  }
 
   // Global API export
   window.ToolsEngine = {
@@ -2646,7 +2738,9 @@
     triggerBlobDownload,
     formatBytes,
     showToast,
-    copyText
+    copyText,
+    initAllTools,
+    recordToolActivity
   };
 
 })();

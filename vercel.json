@@ -2,6 +2,28 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/tools", "destination": "/tools.html" },
+    { "source": "/tools/invoice-generator", "destination": "/free-invoice-generator.html" },
+    { "source": "/tools/pdf-invoice-generator", "destination": "/pdf-invoice-generator.html" },
+    { "source": "/tools/freelancer-invoice", "destination": "/invoice-generator-for-freelancers.html" },
+    { "source": "/tools/gst-tax-invoice", "destination": "/gst-tax-invoice.html" },
+    { "source": "/tools/invoice-number-generator", "destination": "/invoice-number-generator.html" },
+    { "source": "/tools/pdf-to-jpg", "destination": "/pdf-to-jpg.html" },
+    { "source": "/tools/jpg-to-pdf", "destination": "/jpg-to-pdf.html" },
+    { "source": "/tools/pdf-merger", "destination": "/pdf-merger.html" },
+    { "source": "/tools/pdf-splitter", "destination": "/pdf-splitter.html" },
+    { "source": "/tools/image-compressor", "destination": "/image-compressor.html" },
+    { "source": "/tools/tax-calculator", "destination": "/tax-calculator.html" },
+    { "source": "/tools/payment-calculator", "destination": "/payment-calculator.html" },
+    { "source": "/tools/due-date-calculator", "destination": "/due-date-calculator.html" },
+    { "source": "/tools/currency-converter", "destination": "/currency-converter.html" },
+    { "source": "/tools/online-payments", "destination": "/payments.html" },
+    { "source": "/tools/payment-link", "destination": "/payment-link.html" },
+    { "source": "/tools/cloud-file-storage", "destination": "/cloud-file-storage.html" },
+    { "source": "/cloud", "destination": "/files.html" },
+    { "source": "/files", "destination": "/files.html" }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

@@ -146,6 +146,14 @@
     if (!normalizedPath || normalizedPath === 'index.html') normalizedPath = '';
 
     navLinks.forEach((link) => {
+      if (link.id === 'toolsDropdownBtn') {
+        if (normalizedPath.startsWith('tools')) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+        return;
+      }
       const href = link.getAttribute('href');
       if (!href) return;
       let cleanHref = href.split('#')[0].split('?')[0].replace(/^\//, '');
@@ -334,7 +342,7 @@
       updateHeaderInvoicesBadge();
 
       // 7. Execute Page Lifecycle Initializers
-      executePageScripts(parsed.pathname, newMain, newDoc);
+      await executePageScripts(parsed.pathname, newMain, newDoc);
 
       // 8. Scroll position
       if (parsed.hash) {
@@ -357,9 +365,30 @@
   }
 
   // 7. Page Lifecycle Hook Executor
-  function executePageScripts(pathname, container, newDoc) {
-    // 1. Extract and execute inline scripts from newDoc so page controllers are registered
+  async function executePageScripts(pathname, container, newDoc) {
     if (newDoc) {
+      // 1. Dynamically load missing external scripts (tools-engine.js, pdf-lib, jszip, etc.)
+      const incomingScripts = newDoc.querySelectorAll('script[src]');
+      for (const oldScript of incomingScripts) {
+        const src = oldScript.getAttribute('src');
+        if (!src) continue;
+        const cleanSrc = src.split('?')[0];
+        const alreadyLoaded = Array.from(document.querySelectorAll('script[src]')).some(s => {
+          const sSrc = s.getAttribute('src');
+          return sSrc && sSrc.split('?')[0] === cleanSrc;
+        });
+        if (!alreadyLoaded) {
+          await new Promise((resolve) => {
+            const s = document.createElement('script');
+            Array.from(oldScript.attributes).forEach(attr => s.setAttribute(attr.name, attr.value));
+            s.onload = () => resolve();
+            s.onerror = () => resolve();
+            document.body.appendChild(s);
+          });
+        }
+      }
+
+      // 1b. Extract and execute inline scripts from newDoc so page controllers are registered
       const inlineScripts = newDoc.querySelectorAll('body script:not([src])');
       inlineScripts.forEach(oldScript => {
         try {
@@ -395,8 +424,9 @@
     else if (cleanPath.includes('templates') && typeof window.initTemplatesPage === 'function') {
       try { window.initTemplatesPage(); } catch (e) { console.error('Templates init error:', e); }
     }
-    // 7. Execute Tools Engine Controller
-    else if ((cleanPath.includes('gst') || cleanPath.includes('invoice-number') || cleanPath.includes('freelancer') || cleanPath.includes('payments')) && typeof window.initToolsEngine === 'function') {
+
+    // 7. Execute Tools Engine Controller (for tools page and all individual tools)
+    if (typeof window.initToolsEngine === 'function') {
       try { window.initToolsEngine(); } catch (e) { console.error('Tools init error:', e); }
     }
 
