@@ -7709,14 +7709,14 @@ html[dir="rtl"] .lang-item-en {
   width: 100%;
   max-width: 970px;
   margin: 28px auto;
-  padding: 6px;
+  padding: 0;
   text-align: center;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 90px;
+  min-height: 0;
   background: transparent;
   position: relative;
   clear: both;
@@ -7726,25 +7726,19 @@ html[dir="rtl"] .lang-item-en {
   display: block !important;
   margin: 0 auto;
   max-width: 100%;
+  background: transparent !important;
+  border: none !important;
 }
 
 .ad-slot-label {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #94a3b8;
-  margin-bottom: 6px;
-  text-align: center;
-  user-select: none;
+  display: none !important;
 }
 
 @media (max-width: 768px) {
   .ad-placement-slot {
     margin: 18px auto;
-    padding: 4px;
-    min-height: 60px;
+    padding: 0;
+    min-height: 0;
   }
 }
 
@@ -7758,7 +7752,7 @@ html[dir="rtl"] .lang-item-en {
   position: fixed;
   top: 130px;
   width: 160px;
-  min-height: 600px;
+  min-height: 0;
   z-index: 35;
   text-align: center;
   box-sizing: border-box;
@@ -7771,30 +7765,28 @@ html[dir="rtl"] .lang-item-en {
   align-items: center;
   justify-content: flex-start;
   width: 160px;
-  min-height: 600px;
+  min-height: 0;
   position: relative;
 }
 
 .side-rail-ad .side-rail-label {
-  display: block;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #94a3b8;
-  margin-bottom: 6px;
-  line-height: 1;
-  user-select: none;
+  display: none !important;
 }
 
 .side-rail-ad ins.adsbygoogle {
   display: inline-block !important;
   width: 160px !important;
   height: 600px !important;
-  background: rgba(248, 250, 252, 0.6);
-  border: 1px dashed rgba(226, 232, 240, 0.8);
-  border-radius: 8px;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0;
   overflow: hidden;
+}
+
+ins.adsbygoogle[data-ad-status="unfilled"],
+.side-rail-ad:has(ins[data-ad-status="unfilled"]),
+.ad-placement-slot:has(ins[data-ad-status="unfilled"]) {
+  display: none !important;
 }
 
 /* Wide screen breakpoints - perfectly placed in empty side gutters */

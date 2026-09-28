@@ -7,7 +7,6 @@ const SIDE_RAIL_HTML = `
   <!-- Desktop Left Gutter Side Rail Ad (Empty Left Margin >= 1600px) -->
   <aside class="side-rail-ad side-rail-left no-print" aria-label="Advertisement">
     <div class="side-rail-inner">
-      <span class="side-rail-label">Advertisement</span>
       <ins class="adsbygoogle"
            style="display:inline-block;width:160px;height:600px"
            data-ad-client="${PUB_ID}"
@@ -22,7 +21,6 @@ const SIDE_RAIL_HTML = `
   <!-- Desktop Right Gutter Side Rail Ad (Empty Right Margin >= 1600px) -->
   <aside class="side-rail-ad side-rail-right no-print" aria-label="Advertisement">
     <div class="side-rail-inner">
-      <span class="side-rail-label">Advertisement</span>
       <ins class="adsbygoogle"
            style="display:inline-block;width:160px;height:600px"
            data-ad-client="${PUB_ID}"
@@ -67,15 +65,6 @@ files.forEach(file => {
     }
   }
 
-  // 2. Add ad-slot-label inside .ad-placement-slot if missing
-  if (content.includes('class="ad-placement-slot') && !content.includes('class="ad-slot-label"')) {
-    content = content.replace(
-      /<div class="ad-placement-slot([^>]*)>\s*<ins/g,
-      '<div class="ad-placement-slot$1>\n    <span class="ad-slot-label">Advertisement</span>\n    <ins'
-    );
-    changed = true;
-    updatedAdLabels++;
-  }
 
   if (changed) {
     fs.writeFileSync(filePath, content, 'utf8');
